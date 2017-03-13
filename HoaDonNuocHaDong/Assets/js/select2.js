@@ -447,38 +447,66 @@ $("input[name='soKhoan']").change(function () {
 $(document).on('keyup', function (e) {
     var cachTinhGia = $(".cachTinhGia");
     var focusedElement = $("input[autofocus='autofocus']");
+      if (focusedElement.length > 1) {
+          focusedElement = $(".detail-focused");
+      }
     //lấy vị trí cột dựa theo index
     var index = focusedElement.closest("td").index();
     //nếu nút ấn là nút Enter
-
-    if (e.which == 13) {
+    var ENTERKEYCODE = 13;
+    var UPARROW = 38;
+    if (e.which == ENTERKEYCODE) {
 
         if (focusedElement.hasClass('sanLuong')) {
-            var nextParent = focusedElement.parent().parent().next("tr.traverse");
-            console.log(nextParent);
+            var nextParent = focusedElement.parent().parent().next("tr.traverse");           
             var nextElement = nextParent.find("td:eq(" + index + ")").find("input");
             focusedElement.blur();
             nextElement.attr("autofocus", true).focus();
             nextElement.addClass('detail-focused');
             focusedElement.removeClass('detail-focused');
-
-
             //nếu là áp giá tổng hợp / áp giá đặc biệt thì load 2 dòng cách tính ra, nếu không thì không load và chuyển tới element tiếp theo
             if (nextParent.hasClass('7') || nextParent.hasClass('8')) {
                 var khachHangID = $(".detail-focused").data('khachhangid');
                 var month = $(".detail-focused").data('month');
                 var year = $(".detail-focused").data('year');
                 ajaxApGiaDacBietTongHopFn(khachHangID, month, year, cachTinhGia);
-            }
-            //mất focus ô hiện tại đi và chuyển focus đến ô tiếp theo
-            //alert(nextElement.prop("tagName"));
-        } else {
+            }      
+        }        
+        else {
             var nextParent = focusedElement.parents("tr").next("tr");
             var nextElement = nextParent.find("td:eq(" + index + ")").find("input");
             focusedElement.blur();
             nextElement.attr("autofocus", true).focus();
             nextElement.addClass('detail-focused');
             focusedElement.removeClass('detail-focused');
+        }
+    }
+
+    else if (e.which === UPARROW) {
+        if (focusedElement.hasClass('sanLuong')) {
+         
+            //traverse up
+            var prevParent = focusedElement.parent().parent().prev("tr.traverse");
+            var prevElement = prevParent.find("td:eq(" + index + ")").find("input");
+           
+            focusedElement.blur();
+            prevElement.attr("autofocus", true).focus();            
+            focusedElement.removeClass('detail-focused');
+            prevElement.addClass('detail-focused');
+            //nếu là áp giá tổng hợp / áp giá đặc biệt thì load 2 dòng cách tính ra, nếu không thì không load và chuyển tới element tiếp theo
+            if (prevParent.hasClass('7') || prevParent.hasClass('8')) {
+                var khachHangID = $(".detail-focused").data('khachhangid');
+                var month = $(".detail-focused").data('month');
+                var year = $(".detail-focused").data('year');
+                ajaxApGiaDacBietTongHopFn(khachHangID, month, year, cachTinhGia);
+            }
+        } else {
+            var prevParent = focusedElement.parents("tr").prev("tr");
+            var prevElement = prevParent.find("td:eq(" + index + ")").find("input");
+            focusedElement.blur();
+            prevElement.attr("autofocus", true).focus();
+            focusedElement.removeClass('detail-focused');
+            prevElement.addClass('detail-focused');          
         }
     }
 });
