@@ -32,6 +32,7 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
         public int Thang { get; set; }
         public int Nam { get; set; }
         public int KHID { get; set; }
+        public String SoHoaDon { get; set; }
 
         public DateTime? NgayKiHopDong { get; set; }
     }

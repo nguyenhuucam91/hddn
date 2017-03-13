@@ -2,7 +2,7 @@
     ViewBag.Title = "Xem chi tiết chỉ số của khách hàng";
     var tuyen = ViewBag.tenTuyen;
     var chiSoTieuThu = ViewBag.chiSoTieuThu as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
-
+    int tuyenDuocChot = ViewBag.trangthaiChotTuyen;
     int tongSoLuongHoaDon = ViewBag.soLuongHoaDon;
     int soHoaDonCoSanLuong = ViewBag.soLuongHoaDonCoSanLuong;
     int soHoaDonKhongCoSanLuong = ViewBag.soLuongHoaDonKhongCoSanLuong;
@@ -45,7 +45,9 @@
                         <!--Chốt số liệu-->
                         <form action="/Solieutieuthu/chotSoLieu?tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
                             <button type="button" onclick="history.go(-1)" class="btn btn-success">Trở lại</button>
+                            @if(tuyenDuocChot==0){
                             <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
+                            }
                         </form>
 
                         <!-- Hướng dẫn tìm kiếm-->
@@ -53,11 +55,11 @@
                             <div class="pull-left">
                                 <p>Click vào tên khách hàng để tiến hành cập nhật thông tin nhanh, click vào mã khách hàng để xem chỉ số từng tháng</p>
                                 <p>Sau khi chỉnh sửa xong, ấn F5 để cập nhật lại</p>
-                            </div>                            
+                            </div>
                             <div class="clearfix"></div>
                         </div>
-                        
-                        <div>                            
+
+                        <div>
                             <div style="float:left;margin-left:12px">
                                 <div style="width:30px;height:30px;background-color:#29a286;float:left"></div><span>Tổng hợp</span>
                             </div>
@@ -68,7 +70,7 @@
                         </div>
                         <!--Tắt bật cột-->
                         <div class="form-actions">
-                           
+
                             <div class="pull-left">
                                 Tắt bật cột (Màu đỏ là cột được ẩn):
                                 <a class="toggle-vis" data-column="0">MãKH</a>
@@ -96,6 +98,7 @@
                                 <tr>
                                     <th style="width:70px;font-size:13px">Mã KH</th>
                                     <th style="width:240px;font-size:13px">Tên KH</th>
+                                    <th>TT Đọc</th>
                                     <th style="font-size:13px">Số hộ</th>
                                     <th style="font-size:13px">Số khẩu</th>
                                     <th style="font-size:13px">Loại giá</th>
@@ -112,8 +115,9 @@
                                     <th style="font-size:13px">SXXD</th>
                                     <th style="font-size:13px">KDDV</th>
                                 </tr>
+                                <!-- Dòng 2 fixed cột -->
                                 <tr>
-                                    <th colspan="17" style="font-size:15px">
+                                    <th colspan="18" style="font-size:15px">
                                         (@tuyenKH.Matuyen-@tuyen) - (@nV.MaNhanVien - @nV.Ten) - (@Request.QueryString["month"] / @Request.QueryString["year"])
                                     </th>
                                 </tr>
@@ -127,14 +131,14 @@
                                     int khachHangIDRow = item.KHID;
 
                                     sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
-                                    sumSH1 += item.SH1 == "" ? 0 : Convert.ToInt32(item.SH1); 
-                                    sumSH2 += item.SH2 == "" ? 0 : Convert.ToInt32(item.SH2); 
-                                    sumSH3 += item.SH3 == "" ? 0 : Convert.ToInt32(item.SH3);
-                                    sumSH4 += item.SH4 == "" ? 0 : Convert.ToInt32(item.SH4); 
-                                    sumHC += item.HC == "" ? 0 : Convert.ToInt32(item.HC); 
-                                    sumCC += item.CC == "" ? 0 : Convert.ToInt32(item.CC); 
-                                    sumSX += item.SXXD == "" ? 0 : Convert.ToInt32(item.SXXD); 
-                                    sumKD += item.KDDV == "" ? 0 : Convert.ToInt32(item.KDDV); 
+                                    sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
+                                    sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
+                                    sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
+                                    sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
+                                    sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
+                                    sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
+                                    sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
+                                    sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
                                     //kiểm tra áp giá đặc biệt
                                     bool isDacBiet = cS.isDacBiet(hoaDonID, Request.QueryString["month"], Request.QueryString["year"]);
 
@@ -149,6 +153,7 @@
 
                                         <td><a target="_blank" style="color:blue" href="@Url.Action("ViewDetail", "Khachhang", new { id = khachHangIDRow })">@item.MaKhachHang</a></td>
                                         <td><a target="_blank" style="color:blue" href="@Url.Action("Edit", "Khachhang", new { id = khachHangIDRow })">@item.TenKhachHang</a></td>
+                                        <td>@item.ThuTuDoc</td>
                                         <td>@item.SoHo</td>
                                         <td>@item.SoKhau</td>
                                         <td>@loaiGiaVietTat</td>
@@ -160,7 +165,7 @@
                                             <input class="sanLuong" data-khachhangid="@item.KHID"
                                                    style="color:red;width:80%;font-size:15px" value="@item.SanLuong"
                                                    data-month="@item.Thang"
-                                                   data-year="@item.Nam" />
+                                                   data-year="@item.Nam" readonly />
                                         </td>
                                         <td style="color:blue">@item.SH1</td>
                                         <td style="color:blue">@item.SH2</td>
@@ -176,7 +181,7 @@
                             </tbody>
                             <tfoot>
                                 <tr role="row">
-                                    <td colspan="8" class="cachTinhGia" style="font-size:15px"></td>
+                                    <td colspan="9" class="cachTinhGia" style="font-size:15px"></td>
                                     <td style="color:red;font-size:16px">@sumSanLuong</td>
                                     <td style="color:blue;font-size:16px">@sumSH1</td>
                                     <td style="color:blue;font-size:16px">@sumSH2</td>
@@ -244,23 +249,18 @@
             //xác nhận lần 2
             var secondConfirm = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");
             if (secondConfirm) {
-                //xác nhận lần 3
-                var thirdConfirm = confirm("Bạn chắc chứ!!");
-                if (thirdConfirm) {
-                    this.form.submit();
-                }
+                this.form.submit();
             }
-
             </text>
-            }
-        }); //chốt số liệu
+        }
+        });
 
         @{
             int tongHop = HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
         }
-        $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
-        $("tr.dacbiet").css({ "background-color": "#e47b0f", "color": "black" });
+    $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
+    $("tr.dacbiet").css({ "background-color": "#e47b0f", "color": "black" });
 
-    });//end jquery declaration
+    });
 
 </script>

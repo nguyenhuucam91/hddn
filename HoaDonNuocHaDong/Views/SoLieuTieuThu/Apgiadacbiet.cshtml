@@ -1,6 +1,5 @@
 ﻿@{
     ViewBag.Title = "Áp giá đặc biệt";
-
     var id = ViewBag.id;
     var maKH = ViewBag.maKH;
     var tenKH = ViewBag.tenKH;
@@ -14,6 +13,10 @@
     //helper class để xem ai áp giá đặc biệt
     var startDate = ViewBag.startDate;
     var endDate = ViewBag.endDate;
+    var to = Request.QueryString["to"];
+    var nhanVien = Request.QueryString["nhanvien"];
+    var tuyen = Request.QueryString["tuyen"];
+
 }
 
 <div class="main">
@@ -34,7 +37,7 @@
                         </div> <!-- /widget-header -->
 
                         <div class="widget-content">
-                            @using (Html.BeginForm("Nhapgiadacbiet", "Solieutieuthu", new { @id = id }, FormMethod.Post, new { id = "dacBietForm" }))
+                            @using (Html.BeginForm("Nhapgiadacbiet", "Solieutieuthu", new { @id = id, to = to, nhanvien = nhanVien, tuyen = tuyen, thang = month, nam = year }, FormMethod.Post, new { id = "dacBietForm" }))
                             {
                                 <div class="form-control ">
                                     <div class="pull-left">
@@ -113,18 +116,18 @@
 <script type="text/javascript">
     //giáng chỉ số còn lại sau khi trừ sản lượng vào dấu tích
     $("input[type='checkbox']").change(function () {
-        var SH1Val = parseInt($("#SH1").val()) || 0;
-        var SH2Val = parseInt($("#SH2").val()) || 0;
-        var SH3Val = parseInt($("#SH3").val()) || 0;
-        var SH4Val = parseInt($("#SH4").val()) || 0;
-        var CCVal = parseInt($("#CC").val()) || 0;
-        var HCVal = parseInt($("#HC").val()) || 0;
-        var SXVal = parseInt($("#SX").val()) || 0;
-        var KDVal = parseInt($("#KD").val()) || 0;
+        var SH1Val = parseFloat($("#SH1").val()) || 0;
+        var SH2Val = parseFloat($("#SH2").val()) || 0;
+        var SH3Val = parseFloat($("#SH3").val()) || 0;
+        var SH4Val = parseFloat($("#SH4").val()) || 0;
+        var CCVal = parseFloat($("#CC").val()) || 0;
+        var HCVal = parseFloat($("#HC").val()) || 0;
+        var SXVal = parseFloat($("#SX").val()) || 0;
+        var KDVal = parseFloat($("#KD").val()) || 0;
         var Sum = SH1Val + SH2Val + SH3Val + SH4Val + CCVal + HCVal + SXVal + KDVal;
         //nếu tick
         if ($(this).is(":checked")) {
-            var sanLuongAsInt = parseInt($("span.sanLuong").text());
+            var sanLuongAsInt = parseFloat($("span.sanLuong").text());
             var remainer = sanLuongAsInt - Sum;
             $(this).next("input").val(remainer);
         } else {

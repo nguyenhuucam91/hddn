@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Danh sách khách hàng có sản lượng không bình thường";
-    var kH = ViewBag.khachHang;
+    var kH = ViewBag.khachHang as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
     var tenTuyen = ViewBag.tenTuyen;
     int year = ViewBag.year;
     int month = ViewBag.month;
@@ -28,16 +28,10 @@
 <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
 
 <div class="main">
-
     <div class="main-inner">
-
         <div class="container-fluid">
-
             <div class="row">
-
-
                 <div class="widget ">
-
                     <div class="widget-header">
                         <i class="icon-user"></i>
                         <h3>Danh sách khách hàng có sản lượng không bình thường</h3>
@@ -45,8 +39,15 @@
 
                     <div class="widget-content">
                         <div class="form-actions">
-                            <button type="button" onclick="location.href='@Url.Action("ViewDetail", new { tuyenID = tuyenID,month = month,year = year, nvquanly = nVQuanLi })'" class="btn btn-success">Trở lại</button>
+                            <form action="/Solieutieuthu/chotSoLieu?tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
+                                <button type="button" onclick="location.href='@Url.Action("ViewDetail", new { tuyenID = tuyenID,month = month,year = year, nvquanly = nVQuanLi })'" class="btn btn-success">Trở lại</button>
+                                <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
+                            </form>
                         </div> <!-- /form-actions -->
+                        <!-- Hidden field value -->
+                        <input type="hidden" name="thang" value='@Request.QueryString["month"]' />
+                        <input type="hidden" name="nam" value='@Request.QueryString["year"]' />
+                        <!-- End hidden field -->
                         <div class="outerTable">
                             <table class="table table-bordered hoaDonNuoc">
                                 <thead>
@@ -72,45 +73,46 @@
                                     @{
                                         int i = 1;
                                     }
-                                    @foreach (var item in ViewBag.khachHang)
+                                    @foreach (var item in kH)
                                     {
                                         <tr>
-
-                                            <!-- Accessing property of anonymous type of object-->
-                                            <td>@i</td>
-                                            <td>@item.GetType().GetProperty("MaKhachHang").GetValue(item, null)</td>
-                                            <td>@item.GetType().GetProperty("TenKhachHang").GetValue(item, null)</td>
-                                            <td>@item.GetType().GetProperty("SoHo").GetValue(item, null)</td>
-                                            <td>@item.GetType().GetProperty("SoKhau").GetValue(item, null)</td>
-                                            <td><input type="text" readonly data-hoadonid="@item.GetType().GetProperty("ColID").GetValue(item, null)" name="thuTuDoc" style="width:70px" value="@item.GetType().GetProperty("ThuTuDoc").GetValue(item, null)" /></td>
-                                            <!-- Bắt đầu -->
                                             @{
                                         HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-                                        int hoaDonID = Convert.ToInt32(item.GetType().GetProperty("ColID").GetValue(item, null));
+                                        int hoaDonID = Convert.ToInt32(item.HoaDonNuocID);
                                         Lichsuhoadon ls = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == hoaDonID);
+                                        String[] soHoaDon = item.SoHoaDon.Split('-');
+                                        String soHoaDonTrimmed = soHoaDon[1].ToString().Trim();
                                             }
+                                            <!-- Accessing property of anonymous type of object-->
+                                            <td>@i</td>
+                                            <td>@item.MaKhachHang</td>
+                                            <td>@item.TenKhachHang</td>
+                                            <td>@item.SoHo</td>
+                                            <td>@item.SoKhau</td>
+                                            <td><input type="text" readonly data-hoadonid="@item.HoaDonNuocID" name="thuTuDoc" style="width:70px" value="@item.GetType().GetProperty("ThuTuDoc").GetValue(item, null)" /></td>
+                                            <!-- Bắt đầu -->
                                             @if (ls == null)
                                             {
-                                                <td class="startDate"><input type="text" style="width:80%" name="startDate" value="@currentDate" data-hoadonid="@item.GetType().GetProperty("ColID").GetValue(item, null)" /></td>
-                                                <td class="endDate"><input type="text" style="width:80%" name="endDate" value="@nextMonth" data-hoadonid="@item.GetType().GetProperty("ColID").GetValue(item, null)" /></td>
+                                                <td class="startDate"><input type="text" readonly style="width:80%" name="startDate" value="@currentDate" data-hoadonid="@item.HoaDonNuocID" /></td>
+                                                <td class="endDate"><input type="text" style="width:80%" name="endDate" value="@nextMonth" data-hoadonid="@item.HoaDonNuocID" /></td>
                                             }
                                             else
                                             {
-                                                <td class="startDate"><input type="text" style="width:80%" name="startDate" value="@ls.NgayBatDau" data-hoadonid="@item.GetType().GetProperty("ColID").GetValue(item, null)" /></td>
-                                                <td class="endDate"><input type="text" style="width:80%" name="endDate" value="@ls.NgayKetThuc" data-hoadonid="@item.GetType().GetProperty("ColID").GetValue(item, null)" /></td>
+                                                <td class="startDate"><input type="text" readonly style="width:80%" name="startDate" value="@ls.NgayBatDau" data-hoadonid="@item.HoaDonNuocID" /></td>
+                                                <td class="endDate"><input type="text" style="width:80%" name="endDate" value="@ls.NgayKetThuc" data-hoadonid="@item.HoaDonNuocID" /></td>
                                             }
                                             <!-- Kết thúc -->
-                                            <td><input type="text" style="width:60px" value="@item.GetType().GetProperty("ChiSoCu").GetValue(item, null)" readonly /></td>
-                                            <td><input type="number" class="negNumber" min="0" placeholder="@item.GetType().GetProperty("ChiSoCu").GetValue(item, null)" name="chiSoMoi" data-khid="@item.GetType().GetProperty("KhachHangID").GetValue(item, null)" id="@i.ToString()" data-hoadonid="@item.GetType().GetProperty("ColID").GetValue(item, null)" style="width:80px" placeholder="@item.GetType().GetProperty("ChiSoMoi").GetValue(item, null)"></td>
-                                            <td><input type="text" style="width:60px" name="sanLuong" readonly value="@item.GetType().GetProperty("SanLuong").GetValue(item, null)" /></td>
-                                            <td><input type="number" data-khid="@item.GetType().GetProperty("KhachHangID").GetValue(item, null)" data-hoadonid="@item.GetType().GetProperty("ColID").GetValue(item, null)" name="soKhoan" style="width:80px" placeholder="0" /></td>
+                                            <td><input type="text" style="width:60px" value="@item.ChiSoCu" readonly /></td>
+                                            <td><input type="number" class="negNumber" min="0" placeholder="@item.ChiSoMoi" name="chiSoMoi" data-sohoadon="@soHoaDonTrimmed" data-khid="@item.KhachHangID" id="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:80px"></td>
+                                            <td><input type="text" data-sohoadon="" style="width:60px" name="sanLuong" readonly value="@item.SanLuong" /></td>
+                                            <td><input type="number" data-khid="@item.KhachHangID" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:80px" placeholder="0" /></td>
                                             <td>
-                                                @if (HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(item.GetType().GetProperty("KhachHangID").GetValue(item, null), month, year))
+                                                @if (HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
                                                 {
-                                                    <input type="checkbox" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.GetType().GetProperty("KhachHangID").GetValue(item, null),month,year)"
-                                                           data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.GetType().GetProperty("KhachHangID").GetValue(item, null),month,year)" />
+                                                    <input type="checkbox" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
+                                                           data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
                                                     //thêm arrow nếu có kiểm định
-                                                    <button data-trid="details-@i" type="button" data-khid="@item.GetType().GetProperty("KhachHangID").GetValue(item, null)" data-month="@month" data-year="@year"
+                                                    <button data-trid="details-@i" type="button" data-khid="@item.KhachHangID" data-month="@month" data-year="@year"
                                                             title="Xem chi tiết kiểm định" class="btn btn-default dropdown-toggle xemChiTietKD">
                                                         <span class="caret"></span> <span class="sr-only"></span>
                                                     </button>
@@ -122,14 +124,14 @@
                                             </td>
                                             <td>
                                                 <!-- Áp giá đặc biệt -->
-                                                @if (helper.isApGiaDacBiet(item.GetType().GetProperty("ColID").GetValue(item, null)) > 0)
+                                                @if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
                                                 {
 
-                                                    <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.GetType().GetProperty("HoaDonNuocID").GetValue(item, null), @month = month, @year = year})" style="color:red">Áp giá đặc biệt</a>
+                                                    <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year})" style="color:red">Áp giá đặc biệt</a>
                                                 }
                                                 else
                                                 {
-                                                    <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.GetType().GetProperty("HoaDonNuocID").GetValue(item, null), @month = month, @year = year })">Áp giá đặc biệt</a>
+                                                    <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year })">Áp giá đặc biệt</a>
                                                 }
                                             </td>
                                         </tr>
@@ -146,10 +148,22 @@
                             </table>
                             <!--end table-->
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+    $(function () {
+        //chốt số liệu khi ấn vào nút chốt số liệu
+        $("#chotSoLieu").click(function () {
+            var secondConfirm = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");
+            if (secondConfirm) {
+                this.form.submit();
+            }
+        }); //chốt số liệu
+    });
+</script>
