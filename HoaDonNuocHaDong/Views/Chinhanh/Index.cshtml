@@ -1,0 +1,90 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.ToQuanHuyen>
+
+@{
+    ViewBag.Title = "Danh sách chi nhánh";
+
+    var quanHuyen = ViewBag.quanHuyen;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Quản lý chi nhánh</h3>
+                        </div>
+                        <div class="widget-content">
+                            <p>
+                                <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("Create","Chinhanh")'">Thêm mới chi nhánh</button>
+                            </p>
+
+                            <!-- Lọc phường xã theo quận huyện-->
+                            <div style="margin:2% 0 2% 0">
+                                @using (Html.BeginForm("Index", "Chinhanh", FormMethod.Post))
+                                {
+                                    <div class="form-group">
+
+                                        <!-- Nhân viên -->
+                                        <select class="dropdown form-control quan" style="width:220px;float:left;margin-right:3%" name="quanhuyen">
+                                            <option disabled="disabled" selected="selected">--Tìm theo quận huyện--</option>
+                                            <!-- Option mặc định -->
+                                            @foreach (var item in quanHuyen)
+                                            {
+                                                <option value="@item.QuanhuyenID">@item.Ten</option>
+                                            }
+                                        </select>
+
+                                        <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                                    </div>
+                                }
+                            </div>
+                            <!-- Bảng hiển thị dữ liệu -->
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>
+                                            Số chi nhánh
+                                        </th>
+                                        <th>
+                                            Tên
+                                        </th>
+                                                                               
+                                        <th>
+                                            Hành động
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SoCN)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ma)
+                                            </td>                                           
+                                        
+                                            <td>
+                                                @Html.ActionLink("Sửa", "Edit", new { id = item.ToQuanHuyenID }) |
+                                                @Html.ActionLink("Xóa", "Delete", new { id = item.ToQuanHuyenID }, new { @onclick = "return confirm('Bạn có muốn xóa tô này không')" })
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

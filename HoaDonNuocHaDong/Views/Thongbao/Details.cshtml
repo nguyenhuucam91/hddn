@@ -1,0 +1,67 @@
+﻿@model HoaDonNuocHaDong.Thongbao
+
+@{
+    ViewBag.Title = "Details";
+
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Thongbao</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Tieude)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tieude)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Noidung)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Noidung)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nguoitao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nguoitao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ngaytao)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ngaytao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nguoichinhsua)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nguoichinhsua)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ngaychinhsua)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ngaychinhsua)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

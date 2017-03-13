@@ -1,0 +1,104 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Cumdancu>
+
+@{
+    ViewBag.Title = "Danh sách cụm dân cư";
+
+    var quanHuyen = ViewBag.quanHuyen;
+    var phuongXa = ViewBag.phuongXa;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Quản lí cụm dân cư </h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="controls">
+                                <!-- Button to trigger modal -->
+                                <a href="@Url.Action("Create","Cumdancu")" role="button" class="btn btn-primary" data-toggle="modal">Thêm mới cụm dân cư
+                                </a>
+                            </div>
+                            <!-- Lọc cụm dân cư theo quận huyện-->
+                            <div style="margin:2% 0 2% 0">
+                                @using (Html.BeginForm("Index", "Cumdancu", FormMethod.Post))
+                                {
+                                    <div class="form-group">
+                                        Quận huyện: 
+                                        <!-- Nhân viên -->
+                                        <select class="dropdown form-control quanAllowClear" style="width:220px;float:left;margin-right:3%" name="quanhuyen">
+                                            <!-- Option mặc định -->
+                                            @foreach (var item in quanHuyen)
+                                            {
+                                                <option value="@item.QuanhuyenID">@item.Ten</option>
+                                            }
+                                        </select>
+
+                                        Phường xã: 
+                                        <!-- Nhân viên -->
+                                        <select class="dropdown form-control phuongAllowClear" style="width:220px;float:left;margin-right:3%" name="phuongxa">
+                                            <!-- Option mặc định -->
+                                            @foreach (var item in phuongXa)
+                                            {
+                                                <option value="@item.PhuongxaID">@item.Ten</option>
+                                            }
+                                        </select>
+
+                                        <button type="submit" class="btn btn-default">Lọc</button>
+                                    </div>
+                                }
+                            </div>
+                            <!-- Hướng dẫn -->
+                            <div class="huongDan">
+                                <p>Chọn quận huyện và phường xã để tiến hành lọc cụm dân cư, ấn dấu (x) ở quận để lấy tất cả danh sách cụm dân cư hiện có</p>
+                            </div>
+
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>
+                                            Tên cụm dân cư
+                                        </th>
+                                        <th>
+                                            Thuộc phường xã
+                                        </th>
+                                        <th>
+                                            Hoạt động
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ten)
+                                            </td>
+                                            <td>@item.Phuongxa.Ten</td>
+                                            <td>
+                                                @Html.ActionLink("Sửa", "Edit", new { id = item.CumdancuID }) |
+                                                @Html.ActionLink("Xóa", "Delete", new { id = item.CumdancuID }, new
+                                           {
+                                               @onclick = "return confirm('Bạn chắc chắn xóa cụm dân cư này chứ')"
+                                           })
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

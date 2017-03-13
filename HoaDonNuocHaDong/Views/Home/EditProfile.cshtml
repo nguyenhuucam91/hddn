@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Thông tin profile";
+
+    Nhanvien nhanVien = ViewData["nhanVien"] as Nhanvien;
+    Nguoidung nguoiDung = ViewData["nguoiDung"] as Nguoidung;
+    var identicalPassword = ViewBag.identicalPassword;
+
+    HoaDonNuocHaDong.Helper.NhanVienHelper helper = new HoaDonNuocHaDong.Helper.NhanVienHelper();
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="span4">
+
+                    <div class="widget">
+
+                        <div class="widget-content">
+
+                            <h1>Thông tin tài khoản</h1>
+                            <form action="/Home/EditProfile" method="post">
+                                <br />
+                                <div class="control-group">
+                                    <label class="control-label" for="firstname">Tên tài khoản</label>
+                                    <div class="controls">
+                                        <input type="text" class="span6" name="accName" value="@nguoiDung.Taikhoan" style="width:97%" />
+                                    </div> <!-- /controls -->
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="firstname">Mật khẩu</label>
+                                    <div class="controls">
+                                        <input type="password" class="span6" name="password" value="" style="width:97%" />
+                                        <span style="color:red">Nếu không nhập gì thì mật khẩu sẽ không thay đổi</span>
+                                    </div> <!-- /controls -->
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label" for="firstname">Nhập lại mật khẩu</label>
+                                    <div class="controls">
+                                        <input type="password" class="span6" name="reenterPassword" value="" style="width:97%" />
+                                        @if (!identicalPassword)
+                                        {
+                                            <span style="color:red">Mật khẩu và mật khẩu nhập lại phải trùng nhau</span><br />
+                                        }
+
+
+                                    </div> <!-- /controls -->
+                                </div>
+
+                                <div class="control-group">
+                                    <button type="submit" class="btn btn-info">Cập nhật</button>
+                                </div>
+                            </form>
+                        </div> <!-- /widget-content -->
+
+                    </div> <!-- /widget -->
+
+                </div>
+
+                <div class="span6">
+
+                    <div class="widget">
+
+                        <div class="widget-content">
+
+                            <h1>Thông tin nhân viên</h1>
+
+                            <br />
+                            <div class="control-group">
+                                <label class="control-label" for="firstname">Tên nhân viên</label>
+                                <div class="controls">
+                                    <input type="text" class="span6" value="@nhanVien.Ten" style="width:97%" />
+                                </div> <!-- /controls -->
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="firstname">Mã nhân viên</label>
+                                <div class="controls">
+                                    <input type="text" class="span6" value="@nhanVien.MaNhanVien" style="width:97%" />
+                                </div> <!-- /controls -->
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="firstname">Số điện thoại</label>
+                                <div class="controls">
+                                    <input type="text" class="span6" value="@nhanVien.SDT" style="width:97%" />
+                                </div> <!-- /controls -->
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="firstname">Quận huyện trực thuộc</label>
+                                <div class="controls">
+                                    <input type="text" class="span6" value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getQuanHuyen(nhanVien.NhanvienID)" style="width:97%" />
+                                </div> <!-- /controls -->
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="firstname">Tổ trực thuộc</label>
+                                <div class="controls">
+                                    <input type="text" class="span6" value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getToQuanHuyen(nhanVien.NhanvienID)" style="width:97%" />
+                                </div> <!-- /controls -->
+                            </div>
+
+
+                            <div class="control-group">
+                                <label class="control-label" for="firstname">Phòng ban</label>
+                                <div class="controls">
+                                    @{
+                                        String tenPhongBan = helper.getPhongBan(nhanVien.NhanvienID);
+                                    }
+                                    <input type="text" class="span6" value="@tenPhongBan" style="width:97%" />
+                                </div> <!-- /controls -->
+                            </div>
+
+
+                            <div class="control-group">
+                                <label class="control-label" for="firstname">Chức vụ</label>
+                                <div class="controls">
+                                    <input type="text" class="span6" value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getChucVu(nhanVien.NhanvienID)" style="width:97%" />
+                                </div> <!-- /controls -->
+                            </div>
+
+
+
+                        </div> <!-- /widget-content -->
+
+                    </div> <!-- /widget -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

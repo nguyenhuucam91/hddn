@@ -1,0 +1,78 @@
+﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+
+@{
+    ViewBag.Title = "DanhSachKhachHangTheoDinhMuc";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    int d1 = ViewBag.dt1;
+    int d2 = ViewBag.dt2;
+    DateTime d3 = ViewBag.dt3;
+}
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 25px;
+        font-weight: bold;
+        margin-left:18%;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 1% 0 4% 38%;
+    }
+
+    .tong {
+        font-size: 15px;
+        margin: 0 0 0 60%;
+    }
+    .wtable{width:100%}
+</style>
+<div class="ten">Danh sách Khách hàng sử dụng định mức <br /><br />
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; từ @d1 đến @d2 định mức</div>
+<div class="loc">Tháng @d3.Month năm @d3.Year</div>
+@{
+    List<DanhSachKhachHangTheoDinhMuc> lst = (List<DanhSachKhachHangTheoDinhMuc>)ViewData["lst"];
+
+}
+<table class="table table-bordered wtable">
+    <thead>
+        <tr>
+            <th>TT</th>
+            <th>Tuyến</th>
+            <th>TT đọc</th>
+            <th>Mã KH</th>
+            <th>Họ và Tên</th>
+            <th>Địa Chỉ</th>
+            <th>Số định mức</th>
+            <th>Ngày bắt đầu áp dụng</th>
+            <th>Ngày kết thúc</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+        @foreach(DanhSachKhachHangTheoDinhMuc obj in lst)
+        {
+        <tr>
+            <td>@i</td>
+            <td>@obj.Tuyen</td>
+            <td>@obj.ThuTuDoc</td>
+            <td>@obj.MaKhachHang</td>
+            <td>@obj.Ten</td>
+            <td>@obj.Diachi</td>
+            <td>@obj.SoDinhMuc</td>
+            <td>@String.Format("{0:dd/MM/yyyy}",obj.NgayBatDau)</td>
+            <td>@String.Format("{0:dd/MM/yyyy}",obj.NgayKetThuc)</td>
+            <td>@obj.GhiChu</td>
+        </tr>
+            i++;
+        }
+    </tbody>
+</table>
+<div class="tong"><b>Tổng cộng: @lst.Count khách hàng</b></div>

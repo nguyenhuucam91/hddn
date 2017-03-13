@@ -1,0 +1,74 @@
+﻿@model HoaDonNuocHaDong.Cumdancu
+
+@{
+    ViewBag.Title = "Cập nhật cụm dân cư";
+
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget widget-table action-table">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Cập nhật thông tin cụm dân cư</h3>
+                        </div>
+                        @using (Html.BeginForm("Edit", "Cumdancu"))
+                        {
+                            @Html.HiddenFor(Model => Model.CumdancuID)
+                            @Html.AntiForgeryToken()
+                        <!-- /widget-header -->
+                            <div class="widget-content">
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Tên cụm dân cư (bắt buộc): </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(p => p.Ten, new { @class = "form-control width", @required = "required" })
+                                        <br />
+                                        @Html.ValidationMessageFor(p => p.Ten)
+                                        <span class="hide required red">Không được để trống</span>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Thuộc quận huyện : </label>
+                                    <div class="col-sm-10">
+                                        @Html.DropDownList("QuanHuyenID", (SelectList)ViewBag._QuanhuyenID, new { @class = "dropdown quan" })
+                                        <br />
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Thuộc phường xã : </label>
+                                    <div class="col-sm-10">
+                                        @Html.DropDownListFor(p => p.PhuongxaID, (SelectList)ViewBag._PhuongxaID, new { @class = "dropdown phuong" })
+                                        <br />
+                                        @Html.ValidationMessageFor(p => p.PhuongxaID)
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-left:2%">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary createNew">Cập nhật</button>
+                                        <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index","Cumdancu")'">Quay lại</button>
+                                    </div>
+                                </div>
+                                <br/>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Style type -->
+<style type="text/css">
+    .field-validation-error {
+        margin-left: 0%;
+    }
+</style>

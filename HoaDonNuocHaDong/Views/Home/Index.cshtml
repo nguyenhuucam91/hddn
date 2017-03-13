@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-danger" style="width: 380px;margin: 60px auto -39px auto;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Thất bại!</strong> @TempData["message"]
+    </div>
+}
+<div class="account-container">
+
+    <div class="content clearfix">
+
+        <form action="/home/index" method="post">
+
+            <h1>Đăng nhập hệ thống</h1>
+
+            <div class="login-fields">
+
+
+                <div class="field">
+                    <label for="username">Tên đăng nhập</label>
+                    <input type="text" id="username" name="username" value="" placeholder="Username" class="login username-field" />
+                </div> <!-- /field -->
+
+                <div class="field">
+                    <label for="password">Mật khẩu:</label>
+                    <input type="password" id="password" name="password" value="" placeholder="Password" class="login password-field" />
+                </div> <!-- /password -->
+
+            </div> <!-- /login-fields -->
+
+            <div class="login-actions">
+
+                
+                <button class="button btn btn-success btn-large">Đăng nhập</button>
+
+            </div> <!-- .actions -->
+
+
+
+        </form>
+
+    </div> <!-- /content -->
+
+</div> <!-- /account-container -->

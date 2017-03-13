@@ -1,0 +1,156 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Nhanvien>
+
+@{
+
+    ViewBag.Title = "Danh sách nhân viên";
+    var phongBan = ViewBag.phongBan;
+    var chiNhanh = ViewBag.chiNhanh;
+    var chucVu = ViewBag.chucVu;
+    List<Tuyenkhachhang> tuyenKH = ViewData["Tuyen"] as List<Tuyenkhachhang>;
+    HoaDonNuocHaDong.Helper.NhanVienHelper helper = new HoaDonNuocHaDong.Helper.NhanVienHelper();
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Quản lý nhân viên</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="form-group">
+                                        <a class="btn btn-primary" href="@Url.Action("Create", "Nhanvien")" role="button">Thêm mới nhân viên</a>
+                                        <!--Gán tuyến cho nhân viên-->
+                                        <button type="button" class="btn btn-info btn-lg assignEmployee" data-toggle="modal" data-target="#myModal">Gán tuyến cho nhân viên</button>
+                                        <!-- Modal box để gán nhân viên cho tuyến được chọn-->
+                                        <div id="myModal" class="modal fade" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">Chọn tuyến gán cho nhân viên</h4>
+                                                    </div>
+                                                    @using (Html.BeginForm("AssignTuyen", "Nhanvien"))
+                                                    {
+                                                        <input type="hidden" name="selectedTuyen" class="selectedTuyen" />
+                                                        <div class="modal-body">
+                                                            <p>Chọn tuyến</p>
+                                                            <!-- Nhân viên -->
+                                                            <select class="dropdown form-control nhanvien" style="width:80%;float:left;margin-right:3%" name="nhanvien">
+                                                                <option disabled="disabled" selected="selected">--Tìm tuyến theo nhân viên--</option>
+                                                                <!-- Option mặc định -->
+                                                                @foreach (var item in tuyenKH)
+                                                                {
+                                                                    <option value="@item.TuyenKHID">@item.Matuyen - @item.Ten</option>
+                                                                }
+                                                            </select>
+                                                            <!-- -->
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-default">Lưu</button>
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br />
+
+                                    @using (Html.BeginForm("filterNhanVien", "Nhanvien", FormMethod.Post))
+                                    {
+                                        <div class="form-group">
+                                            <!-- Bộ lọc -->
+                                            <select class="dropdown form-control quan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
+                                                <!-- Option mặc định -->
+                                                <option selected disabled></option>
+                                                @foreach (var item in chiNhanh)
+                                                {
+                                                    <option value="@item.QuanhuyenID">@item.Ten</option>
+                                                }
+                                            </select>
+
+                                            <!-- Phòng ban -->
+                                            <select class="dropdown form-control to" style="width: 20%; float: left; margin-right: 3%" name="to">
+                                                <option selected disabled></option>
+                                                @foreach (var item in phongBan)
+                                                {
+                                                    <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                                }
+                                            </select>
+                                            <!-- Chức vụ-->                                           
+
+                                            <button class="btn btn-default">Tìm kiếm</button>
+
+                                        </div>
+                                    }
+                                    <!--Danh sách nhân viên dạng bảng-->
+                                    <table class="example table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>STT</th>
+                                                <th>Mã nhân viên</th>
+                                                <th>Tên nhân viên</th>
+                                                <th>Phòng ban</th>
+                                                <th>Tổ</th>
+                                                <th>Chức vụ</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{int i = 1;}
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td><input type="checkbox" name="check" value="@item.NhanvienID" /></td>
+                                                    <td>@i</td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.MaNhanVien)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Ten)
+                                                    </td>
+
+                                                    <td>
+                                                        @{int nhanVienID = item.NhanvienID;}
+                                                        @{
+                                                            String tenPhongBan = helper.getPhongBan(nhanVienID);
+                                                        }
+                                                        @tenPhongBan
+                                                    </td>
+                                                    <td>
+
+                                                        @HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(HoaDonNuocHaDong.Helper.UserInfo.getTenTo(item.ToQuanHuyenID.Value))
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Chucvu.Ten)
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Sửa", "Edit", new { id = item.NhanvienID }) |
+                                                        @Html.ActionLink("Xóa", "Delete", new { id = item.NhanvienID }, new { onclick = "return confirm('Bạn có muốn xóa nhân viên này không')" })
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

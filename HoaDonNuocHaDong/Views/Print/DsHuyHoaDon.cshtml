@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Danh sách khách hàng hủy hóa đơn";
+
+    List<HoaDonNuocHaDong.Models.Hoadonnuocbihuy.Hoadonnuocbihuy> huyHoaDon = ViewData["huyHoaDon"] as List<HoaDonNuocHaDong.Models.Hoadonnuocbihuy.Hoadonnuocbihuy>;   
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Danh sách khách hàng hủy hóa đơn</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="form-group">
+                                <a class="btn btn-primary" href="@Url.Action("HuyHoaDon", "Print")" role="button">Thêm mới hóa đơn hủy</a>
+                            </div>
+                            <!-- Phần lọc để lấy ra danh sách hóa đơn bị hủy trong tháng và năm nhất định -->
+                            <!-- Table lọc ra danh sách hủy hóa đơn-->
+                            <table class="example table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Số hóa đơn</th>
+                                        <th>Mã khách hàng</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>Mã tuyến</th>
+                                        <th>Số tiền hủy</th>
+                                        <th>Ngày hủy hóa đơn</th>
+                                        <th>Người yêu cầu hủy</th>
+                                        <th>Người thực hiện hủy</th>                                                                               
+                                        <th>Lí do hủy</th>                                        
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in huyHoaDon)
+                                    {
+                                        <tr>
+                                            <td>@item.SoHoaDon</td>
+                                            <td>@item.maKH</td>
+                                            <td>@item.tenKH</td>                                           
+                                            <td>@item.Tuyen</td>
+                                            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTien.Value)</td>
+                                            <td>@String.Format("{0:dd/MM/yyyy}",item.ngayHuy)</td>                                            
+                                            <td>@item.NguoiYeuCauHuy</td>
+                                            <td>@HoaDonNuocHaDong.Helper.NguoidungHelper.getTenNhanVien(item.nguoiHuy)</td>
+                                            <td>@item.lidohuy</td>                                            
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

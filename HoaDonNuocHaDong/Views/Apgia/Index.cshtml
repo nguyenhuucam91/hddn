@@ -1,0 +1,76 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Apgia>
+
+@{
+    ViewBag.Title = "Áp giá";
+
+}
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Quản lý áp giá</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="form-group">
+                                        <p>
+                                            <a class="btn btn-primary" href="@Url.Action("Create", "Apgia")" role="button">Thêm mới áp giá</a>
+                                        </p>
+                                    </div>
+                                    <table class="example table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Tên áp giá</th>
+                                                <th>Tên loại áp giá</th>
+                                                <th>Đến mức</th>
+                                                <th>Giá</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                int i = 1;
+                                            }
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @i
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Ten)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Loaiapgia.Ten)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Denmuc)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Gia)
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Sửa", "Edit", new { id = item.ApgiaID }) |
+                                                        @Html.ActionLink("Xóa", "Delete", new { id = item.ApgiaID }, new { @onclick="return confirm('Bạn có muốn xóa áp giá này không')"})
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

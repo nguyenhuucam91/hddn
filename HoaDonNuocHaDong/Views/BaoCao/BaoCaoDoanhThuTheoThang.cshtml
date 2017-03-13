@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "BaoCaoDoanhThuTheoThang";
+}
+
+<div style="margin:5% 15% 0 5%">
+    <div>
+        <div style="float:left;width:45%; font-size:16px">
+            <div style="margin-left:15%">CTY TNHH MTV NƯỚC SẠCH HÀ ĐÔNG</div>
+            <div style="margin-left:21%"><b>CHI NHÁNH - XN THU NGÂN @ViewBag.file</b></div>
+            <hr style="margin:0 42% 0 23%" />
+        </div>
+        <div>
+            <div style="margin-left: 55%; font-size: 16px"><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b></div>
+            <div style="margin-left: 59%; font-size: 16px"><b>Độc lập - Tự do - Hạnh phúc</b></div>
+            <hr style="margin:0 25% 0 59%" /><br />
+            <div style="margin-left: 59%;"><i>Hà Đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</i></div>
+        </div>
+    </div>
+    <div style="font-size:20px;font-weight:bold; margin:3% 25%">BÁO CÁO DOANH THU THÁNG @ViewBag.doanhthu[6] NĂM @ViewBag.doanhthu[7]</div>
+   
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th>Dư nợ đầu kỳ</th>
+                <th>Dư có đầu kỳ</th>
+                <th>HĐ in trong tháng</th>
+                <th>Doanh thu phải thu trong tháng</th>
+                <th>Doanh thu đã thu trong tháng</th>
+                <th>Dư nợ cuối kỳ</th>
+                <th>Dư có cuối kỳ</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                 <td>@{if(ViewBag.doanhthu[0]==null) {@Html.Raw("0")} else {@ViewBag.doanhthu[0]}}</td>
+                 <td>@{if (ViewBag.doanhthu[1] == null)
+                        {@Html.Raw("0")}
+                        else
+                        {@ViewBag.doanhthu[1]}}</td>
+                 <td>@ViewBag.doanhthu[8] </td>
+                 <td>@{if (ViewBag.doanhthu[2] == null)
+                        {@Html.Raw("0")}
+                        else
+                        {@ViewBag.doanhthu[2]}}</td>
+                 <td>@{if (ViewBag.doanhthu[3] == null)
+                            {@Html.Raw("0")}
+                            else
+                            {@ViewBag.doanhthu[3]}}</td>
+                 <td>@{if (ViewBag.doanhthu[4] == null)
+                            {@Html.Raw("0")}
+                            else
+                            {@ViewBag.doanhthu[4]}}</td>
+                 <td>@{if (ViewBag.doanhthu[5] == null)
+                        {@Html.Raw("0")}
+                        else
+                        {@ViewBag.doanhthu[5]}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="font-size:18px;font-weight:bold;float:right;margin:1% 10% 0 0">XÍ NGHIỆP THU NGÂN</div>
+</div>

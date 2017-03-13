@@ -1,0 +1,217 @@
+﻿@model List<HoaDonNuocHaDong.Chitiethoadonnuoc>
+@{
+    ViewBag.Title = "LichSuDungNuocCuaKhachHang";
+}
+<style type="text/css" media="print">
+    .dontprint {
+        display: none;
+    }
+</style>
+
+<div style="margin:5%">
+    <div>
+        <div style="float:left;width:45%; font-size:16px">
+            <div style="margin-left:15%">CTY TNHH MTV NƯỚC SẠCH HÀ ĐÔNG</div>
+            <div style="margin-left:21%"><b>CHI NHÁNH - XN THU NGÂN</b></div>
+            <hr style="margin:0 42% 0 23%" />
+        </div>
+        <div>
+            <div style="margin-left: 55%; font-size: 16px"><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b></div>
+            <div style="margin-left: 59%; font-size: 16px"><b>Độc lập - Tự do - Hạnh phúc</b></div>
+            <hr style="margin:0 25% 0 59%" /><br />
+            <div style="margin-left: 59%;"><i>Hà Đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</i></div>
+        </div>
+    </div>
+    @{var nam = DateTime.Now.Year.ToString();}
+    @if (Request.QueryString["year"] != null && Request.QueryString["year"].ToString().Length > 0)
+    {
+
+        nam = Request.QueryString["year"];
+
+    }
+    <div style="font-size:20px;font-weight:bold; margin:3% 25%">LỊCH SỬ DÙNG NƯỚC CỦA KHÁCH HÀNG NĂM <span id="nam">@nam</span></div>
+    <div style="margin-left:3%">
+        <p style="float:left;width:30%">Mã khách hàng: @ViewBag.mkh</p>
+        <p style="float:left;width:30%">Tuyến: @ViewBag.tuyen.Ten</p>
+        <p></p>
+        <p>Tên khách hàng:@ViewBag.ten</p>
+        <p>Địa chỉ: @ViewBag.diachi</p>
+
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Tháng</th>
+                <th>Ngày chốt</th>
+                <th>CS cũ</th>
+                <th>CS mới</th>
+                <th>SH1</th>
+                <th>SH2</th>
+                <th>SH3</th>
+                <th>SH4</th>
+                <th>HCCC</th>
+                <th>SXVC</th>
+                <th>KD</th>
+                <th>Tổng SL</th>
+                <th>Thành tiền</th>
+                <th>Đã thu</th>
+                <th>Ngày thu</th>
+                <th>Dư nợ</th>
+                <th>Dư có</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var duno = 0;
+                var duco = 0;
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr>
+                        <td>@{if (Model[i].Hoadonnuoc.ThangHoaDon != 1)
+                        {@(Model[i].Hoadonnuoc.ThangHoaDon - 1)}
+                        else
+                        {@Model[i].Hoadonnuoc.ThangHoaDon}} / @Model[i].Hoadonnuoc.NamHoaDon</td>
+                        <td></td>
+                        <td>
+                            @if (Model[i].Chisocu.Equals(null))
+                            {@Html.Raw(0)}
+                            else
+                            {@Model[i].Chisocu}
+                        </td>
+                        <td>
+                            @if (Model[i].Chisomoi.Equals(null))
+                            {@Html.Raw(0)}
+                            else
+                            {@Model[i].Chisomoi}
+                        </td>
+                        <td>
+                            @if (Model[i].SH1.Equals(null))
+                            { @Html.Raw("0")}
+                            else
+                            {@Model[i].SH1  }
+                        </td>
+                        <td>
+                            @if (Model[i].SH2.Equals(null))
+                            { @Html.Raw("0")}
+                            else
+                            { @Model[i].SH2}
+                        </td>
+                        <td>
+                            @if (Model[i].SH3.Equals(null))
+                            {@Html.Raw("0")}
+                            else
+                            { @Model[i].SH3 }
+                        </td>
+                        <td>
+                        @if (Model[i].SH4.Equals(null))
+                        { @Html.Raw("0")}
+                        else
+                        {@Model[i].SH4}
+                        </td>
+                        <td>
+                            @if (Model[i].HC.Equals(null))
+                            { @Html.Raw("0")}
+                            else
+                            {@Model[i].HC}
+                        </td>
+                        <td>
+                            @if (Model[i].SXXD.Equals(null))
+                            { @Html.Raw("0")}
+                            else
+                            {@Model[i].SXXD}
+                        </td>
+                        <td>
+                            @if (Model[i].KDDV.Equals(null))
+                            { @Html.Raw("0")}
+                            else
+                            {@Model[i].KDDV}
+                        </td>
+                        <td>
+                            @if (Model[i].Chisocu.Equals(null) || Model[i].Chisomoi.Equals(null))
+                            { @Html.Raw("0")}
+                            else
+                            {@(Model[i].Chisomoi.Value - Model[i].Chisocu.Value)}
+                        </td>
+                        <td width="6%">
+                            @if (Model[i].Hoadonnuoc.SoTienNopTheoThang == null)
+                            { @Html.Raw("0")}
+                            else
+                            { @Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienPhaiNop }
+                        </td>
+                        <td width=10%>
+                            @if (Model[i].Hoadonnuoc.SoTienNopTheoThang != null && Model[i].Hoadonnuoc.Trangthaithu == true)
+                            {
+                                <input type="text" name="tien" value="@Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienDaThu" size=8 class="span2" id="@Model[i].Hoadonnuoc.SoTienNopTheoThangID" data-hoadon="@Model[i].HoadonnuocID" />
+                                <input type="checkbox" class="@Model[i].HoadonnuocID" checked value="1" name="TrangThaiThu" />
+                            }
+                            else
+                            {  <input type="text" name="tien" class="span2" id="@Model[i].Hoadonnuoc.SoTienNopTheoThangID" data-hoadon="@Model[i].HoadonnuocID" />
+                                <input type="checkbox" value="0" class="@Model[i].HoadonnuocID" name="TrangThaiThu" />
+                            }
+                        </td>
+                        <td width=15%>
+                            @if (Model[i].Hoadonnuoc.NgayNopTien.Equals(null))
+                            {
+                                <input type="date" name="ngaynop" id="@Model[i].HoadonnuocID" />
+                            }
+                            else
+                            {
+                                <input type="date" name="ngaynop" value="@Model[i].Hoadonnuoc.NgayNopTien.Value.ToString("yyyy-MM-dd")" size="10" id="@Model[i].HoadonnuocID" />
+                            }
+                        </td>
+                        <td>
+                            @if (Model[i].Hoadonnuoc.SoTienNopTheoThang != null && Model[i].Hoadonnuoc.Trangthaithu == false)
+                            {
+                                if (Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienDaThu != null)
+                                {
+                                    @(Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienPhaiNop - Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienDaThu)
+                                    duno = duno + (int)Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienPhaiNop - (int)Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienDaThu;
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienDaThu - Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienPhaiNop > 0)
+                            {
+                                @(Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienDaThu - Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienPhaiNop)
+                                 duco = duco + (int)Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienDaThu - (int)Model[i].Hoadonnuoc.SoTienNopTheoThang.SoTienPhaiNop;
+                            }
+                        </td>
+                        </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <table style="float:right" class="table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Dư nợ
+                        </th>
+                        <th>
+                            Dư có
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@duno</td>
+                        <td>@duco</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            <div style="clear:both"></div>
+                <div class="dontprint">
+                    <button id="excel" data-khid="@ViewBag.khID" data-name="lichsu">Xuất ra file Excel</button>
+                    <div style="float:right">
+                        @using (Html.BeginForm("LichSuDungNuocCuaKhachHang", "BaoCao", FormMethod.Get))
+                        {
+                            @Html.Raw("Xem năm khác") <input type="text" name="year" placeholder="chọn năm" value="" class="span2" />
+                            <input type="hidden" name="id" value="@Request.QueryString["id"]" />
+                            <input type="submit" value="Xem báo cáo" />
+                        }
+                    </div>
+                </div>
+            </div>
+@Scripts.Render("~/Assets/components/jquery/dist/jquery.js")
+
+@Scripts.Render("~/Assets/js/BaoCao.js")

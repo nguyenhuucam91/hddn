@@ -1,0 +1,72 @@
+﻿@model HoaDonNuocHaDong.To
+
+@{
+    ViewBag.Title = "Create";
+
+}
+@using (Html.BeginForm("Create", "Khuvuc"))
+{
+    @Html.AntiForgeryToken()
+    <div class="main form-horizontal">
+        <div class="main-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <div class="widget ">
+                            <div class="widget-header">
+                                <i class="icon-user"></i>
+                                <h3>Thêm khu vực mới</h3>
+                            </div> <!-- /widget-header -->
+                            <div class="widget-content">
+                                <form id="edit-profile" class="form-horizontal">
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-8 pull-left">
+                                            <label for="" class="col-sm-2 control-label">Tên khu vực:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Ten)
+                                            @Html.ValidationMessageFor(model => model.Ten)
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-8 pull-left">
+                                            <label for="" class="control-label">Địa chỉ:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Diachi)
+                                            @Html.ValidationMessageFor(model => model.Diachi)
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-4 pull-left">
+                                            <label for="" class="control-label">Chi nhánh:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Chinhanh.Ten)
+                                            @Html.ValidationMessageFor(model => model.Chinhanh.Ten)
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-4 pull-left">
+                                            <label for="" class="control-label">Phường xã:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Phuongxa.Ten)
+                                            @Html.ValidationMessageFor(model => model.Phuongxa.Ten)
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-info">Thêm mới</button>
+                                        <button class="btn btn-default">@Html.ActionLink("Quay lại", "Index")</button>
+                                    </div> <!-- /form-actions -->
+                                </form>
+                            </div>
+                            <!-- /widget-content -->
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span6 -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main-inner -->
+    </div>
+  <!-- /main -->
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

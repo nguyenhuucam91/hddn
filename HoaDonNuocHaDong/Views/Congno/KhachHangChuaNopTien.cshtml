@@ -1,0 +1,277 @@
+﻿@model List<HoaDonNuocHaDong.Hoadonnuoc>
+
+
+@{
+    ViewBag.Title = "Quản lí công nợ";
+
+    var selectedChiNhanh = ViewBag.selectedChiNhanh;
+    var selectedPhongBan = ViewBag.selectedPhongBan;
+    var selectedTenChiNhanh = ViewBag.selectedTenChiNhanh;
+    var selectedTenPhongBan = ViewBag.selectedTenPhongBan;
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Danh sách khách hàng chưa đóng tiền tháng hiện tại</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="tabable">
+                                @{
+                                    String loaiKh = Request.QueryString["loaiKH"];
+                                    String action1 = "Index";
+                                    String actionNo = "KhachHangGiaDinhNo";
+                                    if (loaiKh == "2")
+                                    {
+                                        action1 = "congNoDoanhNghiep";
+                                        actionNo = "KhachHangDoanhNghiepNo";
+                                    }
+                                }
+                                <ul class="nav nav-tabs">
+                                    <li ><a href="@Url.Action(action1, "Congno")" >Danh sách công nợ tháng hiện tại </a></li>
+                                    <li class="active"><a href="@Url.Action("KhachHangChuaNopTien", "Congno")?loaiKH=1">Danh sách khách hàng chưa nộp tiền trong tháng</a></li>
+                                    <li><a href="@Url.Action(actionNo, "Congno")">Danh sách nợ đã hết hạn</a></li>
+                                </ul>
+                                <div class="tab-content">
+
+                                    <div class="row"
+                                         style=" border-bottom: 2px solid #F5F5F5; padding: 1%; margin-bottom: 12px"
+                                         id="showSearch">
+
+                                        <!-- Form group -->
+                                        <form class="form-horizontal" method="post" style="text-align:center">
+
+                                            <div class="form-group">
+                                                @Html.Partial("_FilterThuNgan")
+                                            </div>
+                                            <!-- submit-->
+                                            <br />
+                                            <div class="center form-group">
+
+
+                                                Hoặc tìm kiếm theo: <input type="text" name="Makh" class="detail" placeholder="TÌm theo mã khách hàng" />
+
+
+                                                <input type="text" name="name" class="detail" placeholder="TÌm theo tên khách hàng" />
+
+
+                                                <input type="text" name="diachi" class="detail" placeholder="TÌm theo địa chỉ khách hàng" />
+
+                                                <div style="clear:both"></div>
+                                                <br/>
+                                                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+
+                                            </div>
+                                        </form>
+
+
+                                    </div>
+
+                                    <div class="tab-pane active" id="tab-khuvuc" style="width:95%; margin: auto">
+
+                                        <div class="col-md-12">
+                                            @using (Html.BeginForm("Index", "Congno", FormMethod.Post))
+                                            {
+                                                <table id="example" class="table table-striped table-bordered hoaDonNuoc">
+
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th>TT</th>
+                                                            <th>
+                                                                Mã khách hàng
+                                                            </th>
+                                                            <th>
+                                                                Tên khách hàng
+                                                            </th>
+                                                            <th>
+                                                                Địa chỉ
+                                                            </th>
+                                                            <th>
+                                                                Tháng
+                                                            </th>
+                                                            <th>
+                                                                Số tiền
+                                                            </th>
+                                                            <th>
+                                                                Trạng thái thu <input id="checkAll" type="checkbox" />
+                                                            </th>
+                                                            <th style="width:8%">Ngày thu</th>
+                                                            <th>Số tiền đã nộp</th>
+                                                            @*<th width="10%">Ngày nộp</th>*@
+                                                            @*<th></th>*@
+                                                        </tr>
+                                                    </thead>
+                                                    @{double tong = 0;
+                                                    int j = 1;}
+                                                    @for (int i = 0; i < Model.Count(); i++)
+                                                    {
+
+                                                        var now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                                                        var tim = ViewBag.tim;
+
+                                                        if (Model[i].ThangHoaDon == now.Month && Model[i].NamHoaDon == now.Year || ViewBag.tim == true)
+                                                        {
+                                                            if (Model[i].SoTienNopTheoThang != null)
+                                                            {
+                                                                tong = tong + Model[i].SoTienNopTheoThang.SoTienPhaiNop.Value;
+                                                            }
+                                                            <tr>
+                                                                <td>@j @{j = j + 1;}</td>
+                                                                <td>
+
+                                                                    @Html.HiddenFor(x => Model[i].KhachhangID)
+                                                                    @Html.DisplayFor(x => Model[i].Khachhang.MaKhachHang)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.HiddenFor(x => Model[i].HoadonnuocID)
+                                                                    <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
+                                                                       data-khachhang="@Model[i].KhachhangID" data-loaikhachhang="@Model[i].Khachhang.LoaiKHID"
+                                                                       data-thanhtoan="@Model[i].Khachhang.HinhthucttID" data-hd="@Model[i].Sohoadon">
+                                                                        @Model[i].Khachhang.Ten
+                                                                    </a>
+                                                                </td>
+                                                                <td>
+                                                                    @Model[i].Khachhang.Diachi
+                                                                    @Html.HiddenFor(x => Model[i].Kyhieu)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(x => Model[i].ThangHoaDon)/@Html.DisplayFor(x => Model[i].NamHoaDon)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.HiddenFor(x => Model[i].Tongsotieuthu)
+                                                                    @{if (Model[i].SoTienNopTheoThang != null)
+                                                                    {
+                                                                        @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(Model[i].SoTienNopTheoThang.SoTienPhaiNop.Value)
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.Raw("0")
+                                                                    }
+                                                                    }
+
+                                                                </td>
+                                                                <td>
+                                                                    @if (Model[i].Trangthaithu == true)
+                                                                    {
+                                                                        <input type="checkbox" class="@Model[i].HoadonnuocID" checked value="1" name="TrangThaiThu" />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="checkbox" value="0" class="@Model[i].HoadonnuocID" name="TrangThaiThu" />
+                                                                    }
+                                                                </td>
+                                                                <td width=10%>
+                                                                    @if (Model[i].NgayNopTien.Equals(null) || Model[i].Trangthaithu == false || Model[i].Trangthaithu == null)
+                                                                    {
+                                                                        <input type="date" name="ngaynop" value="" style="width:70px" id="@Model[i].HoadonnuocID" class="ngaynoptien" />
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <input type="date" name="ngaynop" value="@Model[i].NgayNopTien.Value.ToString("dd/MM/yyyy")" style="width:70px" id="@Model[i].HoadonnuocID" class="ngaynoptien" />
+                                                                    }
+
+                                                                </td>
+                                                                <td>
+                                                                    <div style="color:red">
+                                                                        <span class="@Model[i].HoadonnuocID">
+                                                                            @if (Model[i].SoTienNopTheoThang != null && Model[i].SoTienNopTheoThang.SoTienDaThu != null)
+                                                                            {
+                                                                                @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(Model[i].SoTienNopTheoThang.SoTienDaThu.Value)
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                @Html.Raw("0")
+                                                                            }
+                                                                        </span>
+                                                                        <a class="passGiaoDich" href="#" style="color:black;" data-toggle="modal" data-target="#ThemTien"
+                                                                           data-khachhang="@Model[i].KhachhangID" data-tiennoptheothang="@Model[i].SoTienNopTheoThangID" data-hdid="@Model[i].HoadonnuocID">
+
+                                                                            <button style="margin-bottom:8px">+</button>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="5">Tổng tiền trong hóa đơn</td>
+                                                            <td class="tong"> @Html.Raw(HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tong)) </td>
+                                                            <td colspan="2"></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- Danh sachs bao gồm khách hàng không thanh toán công nợ từ tháng trước -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal box cho chọn tên -->
+<div id="myModal" class="modal fade" role="dialog" style="top:50%;display:none">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Chi tiết</h3>
+            </div>
+            <div class="modal-body">
+                <h5><a href="">Xem chi tiết thông tin cá nhân</a></h5>
+
+                <div id="thongtin"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="ThemTien" class="modal fade" role="dialog" style="top:50%;display:none">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Khách hàng đóng thêm tiền vào dư có</h3>
+            </div>
+            <div class="modal-body">
+                <form action="/Congno/addGiaoDich" method="post">
+                    <div class="span3">Số tiền khách hàng đóng thêm</div> <input class="form-control" type="text" name="sotien" required /> <br />
+                    <div class="span3">Ngày nộp</div> <input type="date" name="ngaynop" id="ngaynop" />
+                    <input id="tiennoptheothangID" type="hidden" name="tiennoptheothangID">
+                    <button type="submit" class="bnt btn-success" style="margin-bottom:10px">Nộp tiền</button>
+                </form>
+            </div>
+            <div class="modal-body">
+                <h3>Lịch sử giao dịch của khách hàng</h3>
+                <br />
+                <div id="ls" style="display:inline !important">
+                    @*<div class="span3">Ngày 5/9/2016</div> <div>500000 </div><br />*@
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end modal -->

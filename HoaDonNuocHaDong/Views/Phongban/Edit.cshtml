@@ -1,0 +1,64 @@
+﻿@model HoaDonNuocHaDong.Phongban
+
+@{
+    ViewBag.Title = "Cập nhật phòng ban";
+
+}
+
+
+<div class="main form-horizontal">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="span12">
+                    <div class="widget ">
+                        <div class="widget-header">
+                            <i class="icon-user"></i>
+                            <h3>Cập nhật thông tin phòng ban</h3>
+                        </div> <!-- /widget-header -->
+                        <div class="widget-content">
+                            <form id="edit-profile" class="form-horizontal" method="post">
+                                @Html.HiddenFor(p=>p.PhongbanID)
+                                @Html.AntiForgeryToken()
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-8 pull-left">
+                                        <label for="" class="col-sm-2 control-label">Tên phòng ban:</label>&nbsp;&nbsp;
+                                        @Html.EditorFor(model => model.Ten)
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.Ten)
+                                    </div>
+
+                                </div>
+
+                                @*<div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-8 pull-left">
+                                        <label for="" class="col-sm-2 control-label">Thuộc chi nhánh:</label>&nbsp;&nbsp;
+                                        @Html.DropDownListFor(p => p.ChinhanhID, (SelectList)ViewBag._ChinhanhID, new { @class = "dropdown chinhanh" })
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.ChinhanhID)
+                                    </div>
+                                </div>*@
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-info">Cập nhật</button>
+                                    <button class="btn btn-default" type="button">@Html.ActionLink("Quay lại", "Index")</button>
+                                </div> <!-- /form-actions -->
+                            </form>
+                        </div>
+                        <!-- /widget-content -->
+                    </div>
+                    <!-- /widget -->
+                </div>
+                <!-- /span6 -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /main-inner -->
+</div>
+<!-- /main -->
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

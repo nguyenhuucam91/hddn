@@ -1,0 +1,80 @@
+﻿@using HoaDonNuocHaDong.Models;
+@{
+    ViewBag.Title = "NhapChiSoCap";
+
+}
+<link href="~/Content/Style.css" rel="stylesheet" />
+<style>
+    .hide {
+        visibility: hidden;
+        display: none;
+    }
+</style>
+<div class="row" style="margin-left:4%">
+    <!-- /span6 -->
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <i class="icon-bookmark"></i>
+                <h3>Nhập sản lượng cấp của tuyến ống tháng @ViewBag.thang năm @ViewBag.nam</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                <h4 style="margin-left:10%">Chi nhánh: @ViewBag.chinhanh</h4>
+                @using (Html.BeginForm("NhapChiSoCapThanhCong", "NhapChiSoCap"))
+                {
+                    List<MTuyenong> lst = (List<MTuyenong>)ViewData["lst"];
+                    <p>
+                         <a href="Index" class="btn btn-info" role="button" style="margin:5% 2% 0 82%;float:left ">Quay lại</a>
+                        <input type="submit" class="btn btn-success" value="Nhập chỉ số" style="margin-top:5%">
+                     </p>
+                   <table class="example table  table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã tuyến ống</th>
+                                                <th>Tên tuyến ống</th>
+                                                <th>Cấp tuyến ống</th>
+                                                <th>Tháng</th>
+                                                <th>Năm</th>
+                                                <th>Nhập giá trị</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for(int i=0;i<lst.Count;i++)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <input class="hide" type="text" name=@("TuyenongID" + i) value="@lst[i].TOID" />
+                                                        @lst[i].TOID
+                                                    </td>
+                                                    <td>
+                                                        @lst[i].Ten
+                                                    </td>
+                                                    <td>
+                                                        <input class="hide" type="text" name=@("Captuyen" + i) value="@lst[i].Captuyen" />
+                                                        @lst[i].Captuyen
+                                                    </td>
+                                                    <td>
+                                                        <input class="hide" type="text" name=@("Thang" + i) value="@ViewBag.thang" />
+                                                       @ViewBag.thang
+                                                    </td>
+                                                    <td>
+                                                        <input class="hide" type="text" name=@("Nam" + i) value="@ViewBag.nam" />
+                                                        @ViewBag.nam
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control " name="@i" required>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                     <p>
+                         <a href="Index" class="btn btn-info" role="button" style="margin:5% 2% 0 82%;float:left ">Quay lại</a>
+                        <input type="submit" class="btn btn-success" value="Nhập chỉ số" style="margin-top:5%">
+                     </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

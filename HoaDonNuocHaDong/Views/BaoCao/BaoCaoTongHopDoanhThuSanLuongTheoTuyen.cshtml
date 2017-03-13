@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "BaoCaoTongHopDoanhThuSanLuongTheoTuyen";
+    var bcth = ViewBag.bcth;
+    var tong = ViewBag.tong;
+}
+<div style="margin:5%">
+    <h1 style="margin-left:7%">BÁO CÁO TỔNG HỢP DOANH THU SẢN LƯỢNG THEO TUYẾN</h1>
+    <p style="margin-left:50%">Từ tháng 6 đến tháng 6 năm 2016</p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mã tuyến</th>
+                <th>Tên tuyến</th>
+                <th>Số lượng hóa đơn</th>
+                <th>Tổng sản lượng</th>
+                <th>SH1</th>
+                <th>SH2</th>
+                <th>SH3</th>
+                <th>SH4</th>
+                <th>SX</th>
+                <th>CC</th>
+                <th>HCSN</th>
+                <th>KDDV</th>
+                <th>DTTT</th>
+                <th>VAT</th>
+                <th>Phí nước thải</th>
+                <th>Tổng cộng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in bcth)
+            {
+                <tr>
+                <td>@item.Ma</td>
+                <td>@item.Ten</td>
+                <td>@item.SoLuongHoaDon</td>
+                <td>@item.TongSanLuong</td>
+                <td>@item.SH1</td>
+                <td>@item.SH2</td>
+                <td>@item.SH3</td>
+                <td>@item.SH4</td>
+                <td>@item.SX</td>
+                <td>@item.CC</td>
+                <td>@item.HCSN</td>
+                <td>@item.KDDV</td>
+                <td>@item.DTTT</td>
+                <td>@item.VAT</td>
+                <td>@item.PhiNuocThai</td>
+                <td>@item.TongCong</td>
+            </tr>
+            }
+            
+        </tbody>
+        <tr style="font-weight:bold;font-size:17px">
+            <td>Tổng</td>
+            <td></td>
+            <td>@tong.SoLuongHoaDon</td>
+            <td>@tong.TongSanLuong</td>
+            <td>@tong.SH1</td>
+            <td>@tong.SH2</td>
+            <td>@tong.SH3</td>
+            <td>@tong.SH4</td>
+            <td>@tong.SX</td>
+            <td>@tong.CC</td>
+            <td>@tong.HCSN</td>
+            <td>@tong.KDDV</td>
+            <td>@tong.DTTT</td>
+            <td>@tong.VAT</td>
+            <td>@tong.PhiNuocThai</td>
+            <td>@tong.TongCong</td>
+        </tr>
+    </table>
+
+</div>

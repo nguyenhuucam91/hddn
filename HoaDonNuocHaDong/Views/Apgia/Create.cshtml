@@ -1,0 +1,74 @@
+﻿@model HoaDonNuocHaDong.Apgia
+
+@{
+    ViewBag.Title = "Thêm mới áp giá";
+
+    var loaiApGia = ViewBag.LoaiapgiaID;
+}
+@using (Html.BeginForm("Create", "Apgia"))
+{
+    @Html.AntiForgeryToken()
+    <div class="main form-horizontal">
+        <div class="main-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <div class="widget ">
+                            <div class="widget-header">
+                                <i class="icon-user"></i>
+                                <h3>Thêm mức giá mới</h3>
+                            </div> <!-- /widget-header -->
+                            <div class="widget-content">
+                                <form id="edit-profile" class="form-horizontal">
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-8 pull-left">
+                                            <label for="" class="col-sm-2 control-label">Tên mức giá:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Ten)
+                                            @Html.ValidationMessageFor(model => model.Ten)
+                                            <span class="hide red">Tên không để trống</span>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-8 pull-left">
+                                            <label for="" class="control-label">Tên loại áp giá:</label>&nbsp;&nbsp;
+                                            @Html.DropDownList("LoaiapgiaID", (SelectList)ViewBag.LoaiapgiaID)
+                                            @Html.ValidationMessageFor(model => model.Loaiapgia.Ten)
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-4 pull-left">
+                                            <label for="" class="control-label">Đến mức:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Denmuc)
+                                            @Html.ValidationMessageFor(model => model.Denmuc)
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-4 pull-left">
+                                            <label for="" class="control-label">Giá:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Gia, new { @type="number"})
+                                            @Html.ValidationMessageFor(model => model.Gia)
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-info createNew">Thêm mới</button>
+                                        <button class="btn btn-default">@Html.ActionLink("Quay lại", "Index")</button>
+                                    </div> <!-- /form-actions -->
+                                </form>
+                            </div>
+                            <!-- /widget-content -->
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span6 -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main-inner -->
+    </div>
+  <!-- /main -->
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

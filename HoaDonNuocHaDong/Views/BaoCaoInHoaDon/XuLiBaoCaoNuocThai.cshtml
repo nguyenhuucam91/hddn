@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "XuLiBaoCaoNuocThai";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    List<HoaDonNuocHaDong.Models.BaoCaoInHoaDon.BaoCaoPhiNuocThai> ls = ViewData["bc"] as List<HoaDonNuocHaDong.Models.BaoCaoInHoaDon.BaoCaoPhiNuocThai>;
+}
+
+
+
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 29px;
+        font-weight: bold;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+    }
+</style>
+<div class="ten center" style="font-size:12px">
+    DANH SÁCH CÁC CƠ SỞ THUỘC ĐỐI TƯỢNG NỘP PHÍ BVMT ĐỐI VỚI NƯỚC THẢI CÔNG NGHIỆP <br />
+    CÔNG TY NƯỚC SẠCH HÀ ĐÔNG KHÔNG THU PHÍ BVMT ĐỐI VỚI NƯỚC THẢI SINH HOẠT (ÁP DỤNG TỪ 1/12/2014)
+</div>
+<br />
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th style="text-align:center">STT</th>
+            <th style="text-align:center">TÊN CƠ SỞ</th>
+            <th style="text-align:center">ĐỊA CHỈ (CƠ SỞ SẢN XUẤT)</th>
+            <th style="text-align:center">TUYẾN</th>
+            <th style="text-align:center">MÃ KH</th>
+            <th style="text-align:center">Trước thuế</th>
+            <th style="text-align:center">Thuế</th>
+            <th style="text-align:center">Tổng</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        @foreach (var item in ls)
+        {
+            <tr>
+                <td>@item.SoTT</td>
+                <td>@item.tenKhachHang</td>
+                <td>@item.diaChi</td>
+                <td>@item.Tuyen</td>
+                <td>@item.MaKH</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.TruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.Thue)</td>
+                <td style="font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.Tong)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p style="float:right">Hà đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</p>
+<div class="clearfix"></div>
+<div class="span6 center">
+    Phòng tài vụ - Kế toán
+</div>
+
+<div class="span4 center">
+    Xí nghiệp kinh doanh lãnh đạo công ty
+</div>

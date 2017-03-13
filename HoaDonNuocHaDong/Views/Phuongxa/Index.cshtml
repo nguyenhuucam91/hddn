@@ -1,0 +1,94 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Phuongxa>
+
+@{
+    ViewBag.Title = "Danh sách phường xã";
+
+    var quanHuyen = ViewBag.quanHuyen;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Quản lí phường xã </h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="controls">
+                                <!-- Button to trigger modal -->
+                                <a href="@Url.Action("Create","Phuongxa")" role="button" class="btn btn-primary" data-toggle="modal">Thêm mới phường xã
+                                </a>
+                            </div>
+                            <!-- Lọc phường xã theo quận huyện-->
+                            <div style="margin:2% 0 2% 0">
+                                @using (Html.BeginForm("Index", "Phuongxa", FormMethod.Post))
+                                {
+                                    <div class="form-group">
+                                        Quận huyện: 
+                                        <!-- Nhân viên -->
+                                        <select class="dropdown form-control quanAllowClear" style="width:220px;float:left;margin-right:3%" name="quanhuyen">
+                                            <!-- Option mặc định -->
+                                            @foreach (var item in quanHuyen)
+                                            {
+                                                <option value="@item.QuanhuyenID">@item.Ten</option>
+                                            }
+                                        </select>
+
+                                        <button type="submit" class="btn btn-default">Lọc</button>
+                                    </div>
+                                }
+                            </div>
+                            <!-- Hướng dẫn tìm kiếm -->
+                            <div class="huongDan">
+                                <span>Lọc danh sách phường xã theo quận huyện bằng cách chọn/nhập quận huyện từ danh sách, ấn vào dấu (x) để lọc tất cả danh sách </span>
+                            </div>
+
+                            <!-- -->
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>
+                                            Tên phường xã
+                                        </th>
+                                        <th>
+                                            Thuộc quận huyện
+                                        </th>
+                                        <th>
+                                            Hoạt động
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ten)
+                                            </td>
+                                            <td>@Html.DisplayFor(modelItem => item.Quanhuyen.Ten)</td>
+                                            <td>
+                                                @Html.ActionLink("Sửa", "Edit", new { id = item.PhuongxaID }) |
+                                                @Html.ActionLink("Xóa", "Delete", new { id = item.PhuongxaID }, new
+                                           {
+                                               @onclick = "return confirm('Bạn chắc chắn xóa phường xã này chứ')"
+                                           })
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

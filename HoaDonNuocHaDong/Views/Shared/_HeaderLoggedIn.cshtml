@@ -1,0 +1,204 @@
+﻿@{
+    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+
+}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </a><a class="brand" href="#">Công ty TNHH Một thành viên nước sạch Hà Đông</a>
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            @if (Session["tenDangNhap"] != null)
+                            {
+                                <i class="icon-user"></i> @Session["tenDangNhap"]; <b class="caret"></b>
+                            }
+                            else
+                            {
+                                <i class="icon-user"></i> <b class="caret"></b>
+                            }
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("EditProfile","Home")">Hồ sơ cá nhân</a></li>
+                            <li><a href="@Url.Action("Logout", "Secure", new { area = "" })">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-search pull-right">
+                    <input type="text" class="search-query" placeholder="Tìm kiếm">
+                </form>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /navbar-inner -->
+</div>
+<!-- /navbar -->
+<div class="subnavbar">
+    <div class="subnavbar-inner">
+        <div class="container">
+            <!-- Nếu có session phòng ban -->
+            <!-- Nếu là admin-->
+            @if (HoaDonNuocHaDong.Helper.UserInfo.checkAdmin(Convert.ToInt32(Session["nguoiDungID"])) == true)
+            {
+                <ul class="mainnav">                   
+                    <!-- Khu vực-->
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-gears"></i>
+                            <span>Quản lí khu vực</span>
+                            <b class="caret"></b>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Index","Quanhuyen")">Quận huyện</a></li>
+                            <li><a href="@Url.Action("Index","Phuongxa")">Phường xã</a></li>
+                            <li><a href="@Url.Action("Index","Cumdancu")">Cụm dân cư</a></li>
+                            <li><a href="@Url.Action("Index","ToQuanHuyen")">Tổ</a></li>
+                            <li><a href="@Url.Action("Index","Tuyen")">Tuyến khách hàng</a></li>
+                            <li><a href="@Url.Action("Index","Tuyenong")">Tuyến ống</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i>
+                            <span>Người dùng & nhân viên</span>
+                            <b class="caret"></b>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Index","Nguoidung")">Người dùng</a></li>
+                            <li><a href="@Url.Action("Index","Nhanvien")">Nhân viên</a></li>
+                            @*<li><a href="@Url.Action("Index","Phongban")">Phòng ban</a></li>*@
+                            @*<li><a href="@Url.Action("Index","Chucvu")">Chức vụ</a></li>*@
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-money"></i><span>Quản lý áp giá</span> </a><b class="caret"></b>
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Index","Apgia")">Áp giá</a></li>
+                            <li><a href="@Url.Action("Index","LoaiApgia")">Loại áp giá</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li><a href="@Url.Action("Index","Thongbao")"><i class="icon-globe"></i><span>Quản lý thông báo</span> </a></li>
+
+
+                    <li class="dropdown">
+                        <a href="@Url.Action("Index","Log")"><i class="icon-th-list"></i><span>Xem lịch sử hệ thống</span></a>
+                        @*<ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Listmodule","Log")">Nhóm chức năng</a></li>
+                            <li><a href="@Url.Action("ListFunctionModule")">Chức năng chương trình</a></li>*@
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-user"></i>
+                            <span>Sao lưu và khôi phục</span>
+                            <b class="caret"></b>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="@Url.Action("Backup","Settings")"><span>Sao lưu cơ sở dữ liệu</span> </a></li>
+                            <li style="display:none"><a href="@Url.Action("Restore","Settings")"><span>Khôi phục cơ sở dữ liệu</span></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            }
+            //nếu không phải là admin
+            else
+            {
+                List<int> kinhDoanhList = db.Phongbans.Where(p => p.Ten.Contains("kinh")).Select(p => p.PhongbanID).ToList();
+                List<int> thuNganList = db.Phongbans.Where(p => p.Ten.Contains("thu")).Select(p => p.PhongbanID).ToList();
+                List<int> inHoaDonList = db.Phongbans.Where(p => p.Ten.Contains("in")).Select(p => p.PhongbanID).ToList();
+
+                if (Session["phongBan"] != null)
+                {
+                    //nếu là phòng ban kinh doanh
+                    if (kinhDoanhList.Contains(Convert.ToInt32(Session["phongBan"])))
+                    {
+                        <!-- Drop down menu: Chứa chức năng quản lí nhân viên và tuyến khách hàng-->
+                        <ul class="mainnav">
+                            <li class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-user"></i>
+                                    <span>Tuyến và nhân viên</span>
+                                    <b class="caret"></b>
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("Index","Nhanvien")"><span>Nhân viên</span></a></li>
+                                    <li><a href="@Url.Action("Index","Tuyen")"><span>Tuyến khách hàng</span> </a></li>                                    
+                                </ul>
+                            </li>
+                            <!-- -->
+                            <li><a href="@Url.Action("Index","KhachHang")"><i class="icon-user"></i><span>QL Khách hàng</span> </a></li>
+                            <li class="dropdown">
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-list-ul"></i><span>QL tuyến ống</span> </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("Index","Tuyenong")">Quản lý tuyến ống</a></li>
+                                    <li><a href="@Url.Action("NhapChiSo", "Tuyenong")">Nhập chỉ số tuyến ống</a></li>                                   
+                                </ul>
+                            </li>
+
+                            <li><a href="@Url.Action("Index","Solieutieuthu")"><i class="icon-list-alt"></i><span>Nhập số liệu</span> </a> </li>
+                            <li><a href="@Url.Action("Index","Kiemdinh")"><i class="icon-wrench"></i><span>Kiểm định</span> </a> </li>
+                            <li><a href="@Url.Action("Baocaokinhdoanh", "Baocaokinhdoanh")"><i class="icon-paper-clip"></i><span>Báo cáo</span> </a> </li>
+                        </ul>
+
+                    }
+                    //nếu là phòng ban thu ngân
+                    else if (thuNganList.Contains(Convert.ToInt32(Session["phongBan"])))
+                    {
+                        <ul class="mainnav">
+                            <li class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-user"></i>
+                                    <span>Người dùng & nhân viên</span>
+                                    <b class="caret"></b>
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("Index","Nguoidung")">Người dùng</a></li>
+                                    <li><a href="@Url.Action("Index","Nhanvien")">Nhân viên</a></li>
+                                    @*<li><a href="@Url.Action("Index","Phongban")">Phòng ban</a></li>*@
+                                    @*<li><a href="@Url.Action("Index","Chucvu")">Chức vụ</a></li>*@
+                                </ul>
+                            </li>
+
+                            <li><a href="@Url.Action("Index","Congno")"><i class="icon-group"></i><span>Công nợ hộ gia đình</span> </a></li>
+                            <li><a href="@Url.Action("congNoDoanhNghiep", "Congno")"><i class="icon-list-alt"></i><span>Công nợ cơ quan, tổ chức</span> </a></li>
+                            <li><a href="@Url.Action("congNoChuyenKhoan","Congno")"><i class="icon-user"></i><span>KH chuyển khoản</span></a></li>
+                            <li><a href="@Url.Action("ReportList", "Congno")"><i class="icon-list-alt"></i><span>Báo cáo thu ngân </span> </a></li>
+                            <li style="display:none"><a href="@Url.Action("QuanLyDuCo","Congno")"><i class="icon-user"></i><span>Quản lý dư có</span></a></li>
+                            <li><a href="@Url.Action("DanhDauTatCa", "Congno")"><i class="icon-list-alt"></i><span>Đánh dấu tất cả </span> </a></li>
+                            <li style="display:none"><a href="@Url.Action("DanhSachKhachHangInHoaDon", "Congno")"><i class="icon-list-alt"></i><span>Danh sách khách hàng in hóa đơn </span> </a></li>
+                            <li><a href="@Url.Action("DanhSachTuyenHoaDonDaIn", "Congno")"><i class="icon-list-alt"></i><span>Danh sách hóa đơn đã in</span> </a></li>
+                        </ul>
+                    }
+                    //nếu là phòng in hóa đơn
+                    else
+                    {
+                        <ul class="mainnav">
+                            <li><a href="@Url.Action("ChiSoTuyen","Print")"><i class="icon-book"></i><span>Danh sách hóa đơn</span> </a></li>
+                            <li><a href="@Url.Action("dshuyhoadon","Print")"><i class="icon-adjust"></i><span>Danh sách hủy hóa đơn</span></a></li>
+                            <li><a href="@Url.Action("Index","BaoCaoInHoaDon")"><i class="icon-book"></i><span>Báo cáo</span> </a></li>
+                        </ul>
+                    }
+                }
+            }
+
+
+        </div>
+    </div>
+    <!-- /container -->
+</div>

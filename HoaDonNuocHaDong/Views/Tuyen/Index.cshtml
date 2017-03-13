@@ -1,0 +1,136 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Tuyenkhachhang>
+
+@{
+    ViewBag.Title = "Danh sách tuyến khách hàng";
+
+    var nhanVien = ViewBag._nhanVien;
+    HoaDonNuocHaDong.Helper.Tuyen tuyenHelper = new HoaDonNuocHaDong.Helper.Tuyen();
+}
+
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Quản lý tuyến khách hàng</h3>
+                        </div>
+                        <div class="widget-content">
+                            <!-- Thêm mới tuyến sử dụng modal box-->
+                            <div class="controls">
+                                <!-- Button to trigger modal -->
+                                <a href="@Url.Action("Create","Tuyen")" role="button" class="btn btn-primary" data-toggle="modal">Thêm mới tuyến</a>
+                                <!--Gán tuyến cho nhân viên-->
+                                <button type="button" class="btn btn-info btn-lg assignEmployee" data-toggle="modal" data-target="#myModal">Gán nhân viên cho tuyến</button>
+                                <!-- Modal box để gán nhân viên cho tuyến được chọn-->
+                                <div id="myModal" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Gán nhân viên cho tuyến được chọn</h4>
+                                            </div>
+                                            @using (Html.BeginForm("AssignEmployee", "Tuyen"))
+                                            {
+                                                <input type="hidden" name="selectedTuyen" class="selectedTuyen" />
+                                                <div class="modal-body">
+                                                    <p>Chọn nhân viên</p>
+                                                    <!-- Nhân viên -->
+                                                    <select class="dropdown form-control nhanvien" style="width:80%;float:left;margin-right:3%" name="nhanvien">
+                                                        <option></option>
+                                                        <!-- Option mặc định -->
+                                                        @foreach (var item in nhanVien)
+                                                        {
+                                                            <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+                                                        }
+                                                    </select>
+                                                    <!-- -->
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-default">Lưu</button>
+                                                </div>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bộ lọc để lọc dữ liệu -->
+                            <div style="margin:2% 0 2% 0">
+                                @using (Html.BeginForm("Index", "Tuyen", FormMethod.Post))
+                                {
+                                    <div class="form-group">
+                                        <!-- Nhân viên -->
+                                        <select class="dropdown form-control nhanvien" style="width:30%;float:left;margin-right:3%" name="nhanvien">
+                                            <option></option>
+                                            <!-- Option mặc định -->
+                                            @foreach (var item in nhanVien)
+                                            {
+                                                <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+                                            }
+                                        </select>
+                                      
+                                        <button type="submit" class="btn btn-default">Lọc</button>
+                                        <!-- Hướng dẫn tìm kiếm -->
+                                        <div class="huongDan">
+                                            <span>Nếu nhân viên để trống thì lọc danh sách tuyến khách hàng theo toàn bộ nhân viên</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <!-- Bảng tuyến -->
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>STT</th>
+                                        <th>Mã tuyến</th>
+                                        <th>
+                                            Tên tuyến
+                                        </th>
+                                        
+                                        <th>
+                                            Hành động
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" name="check" data-page="1" value="@item.TuyenKHID" /></td>
+                                            <td>@i</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Matuyen)</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ten)
+                                            </td>
+                                           
+                                            <td>
+                                                @Html.ActionLink("Xem", "Details", new { id = item.TuyenKHID }) |
+                                                @Html.ActionLink("Sửa", "Edit", new { id = item.TuyenKHID }) |
+                                                @Html.ActionLink("Xóa", "Delete", new { id = item.TuyenKHID}, new
+                                           {
+                                               @onclick = "return confirm('Bạn có muốn xóa tuyến này không.')"
+                                           })
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

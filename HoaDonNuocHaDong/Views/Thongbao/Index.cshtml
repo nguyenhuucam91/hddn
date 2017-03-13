@@ -1,0 +1,96 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Thongbao>
+
+@{
+    ViewBag.Title = "Danh sách thông báo";
+
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Quản lý thông báo</h3>
+                        </div>
+                        <div class="widget-content">
+                            <!-- Thêm mới thông báo sử dụng modal box-->
+                            <div class="controls">
+                                <!-- Button to trigger modal -->
+                                <a href="@Url.Action("Create","Thongbao")" role="button" class="btn btn-primary" data-toggle="modal">Thêm mới thông báo</a>
+                            </div>
+                            <br />
+                            <!-- Lọc danh sách thông báo theo tháng và năm-->
+                            @using (Html.BeginForm("FilterThongbao", "Thongbao"))
+                            {
+                                <div class="form-group">
+                                    @Html.Raw("Tháng: ")
+                                    @Html.TextBox("month", "", new { @type = "number", @min = 1, @max = 12, @style = "width:10%",@placeholder="1"})
+                                    @Html.Raw("Năm: ")
+                                    @Html.TextBox("year", "", new { @type = "number", @style = "width:10%",@min=2000,@placeholder=DateTime.Now.Year})
+                                    <button type="submit" name="submit" style="margin-top:-12px">Tìm kiếm</button>
+                                </div>
+                            }
+                            <!-- Bảng thông báo -->
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>
+                                            Tiêu đề
+                                        </th>
+                                        <th>
+                                            Người đăng
+                                        </th>
+                                        <th>
+                                            Ngày đăng
+                                        </th>
+                                        <th>
+                                            Hành động
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Tieude)
+                                            </td>
+                                            @if (item.Nguoichinhsua == null)
+                                            {
+                                                <td></td>
+                                            }
+                                            else
+                                            {
+                                                <td>@HoaDonNuocHaDong.Helper.NguoidungHelper.getTenDangNhap(item.Nguoichinhsua.Value)</td>
+                                            }
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ngaychinhsua)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Sửa", "Edit", new { id = item.Id }) |
+                                                @Html.ActionLink("Xóa", "Delete", new { id = item.Id }, new
+                                           {
+                                               @onclick = "return confirm('Bạn có muốn xóa thông báo này không.')"
+                                           })
+                                            </td>
+                                        </tr>
+                                            i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

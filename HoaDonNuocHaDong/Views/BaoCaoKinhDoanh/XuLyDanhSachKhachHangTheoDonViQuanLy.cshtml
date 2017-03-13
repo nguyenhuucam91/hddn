@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "XuLyDanhSachKhachHangTheoDonViQuanLy";
+
+}
+<link href="~/Content/Style.css" rel="stylesheet" />
+<div class="row" style="margin-left:4%">
+    <!-- /span6 -->
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <i class="icon-bookmark"></i>
+                <h3>Tùy chọn báo cáo danh sách khách hàng theo đơn vị quản lý</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                @using (Html.BeginForm("DanhSachKhachHangTheoToQuanLy", "BaoCaoKinhDoanh"))
+                {
+                    <div class="xulybc">
+                        <p><div>Đơn vị quản lý:</div><input type="text" class="form-control margin" name="d1" id="donvi" required></p>
+                        <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

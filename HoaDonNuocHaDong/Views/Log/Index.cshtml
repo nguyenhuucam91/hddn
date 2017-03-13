@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "Xem lịch sử hệ thống";
+
+    var ls = ViewBag.lichSu;
+    var nhomChucNang = ViewBag.nhomChucNang;
+
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem lịch sử hệ thống</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <!-- Lọc lịch sử dùng theo thời gian -->
+                            <div class="form-control">
+                                @using (Html.BeginForm("FilterLog", "Log"))
+                                {
+                                    <div class="dateRange">
+                                        <label style="display:inline" class="form-horizontal">Từ ngày: </label>
+                                        <input type="text" class="datepicker" placeholder="d/m/YYYY" name="startTime" style="width:10%" value="@ViewBag.startTime"/>
+                                        <label style="display:inline"> đến ngày: </label>
+                                        <input type="text" class="datepicker" placeholder="d/m/YYYY" name="endTime" style="width:10%" value="@ViewBag.endTime" />
+                                    </div>
+
+                                    <div class="user col-md-4" style="float:left">
+                                        <label style="display:inline">Lọc theo người dùng:</label>
+                                        <input type="text" name="username" placeholder="Tên người dùng" style="width:50%" value="@ViewBag.ngDung" />
+                                    </div>
+
+                                    <div class="logName  col-md-4" style="float:left;margin-left:3px">
+                                        <label style="display:inline"> Lọc theo từ khóa:</label>
+                                        <input type="text" name="keyword" placeholder="Từ khóa" style="width:50%" value="@ViewBag.tuKhoa" />
+                                    </div>
+
+                                    <div class="category  col-md-4" style="margin-left:3px">
+                                        <label style="display:inline"> Lọc theo module:</label>
+                                        <select name="category" class="dropdown category">
+                                            <option value="0" selected>--Tất cả--</option>
+                                            @foreach (var item in nhomChucNang)
+                                            {
+                                                <option value="@item.NhomchucnangID">@item.Ten</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <br/>
+                                    <div class="submitBtn" style="text-align:center">
+                                        <button type="submit" name="submit" class="btn btn-default">
+                                            Lọc lịch sử
+                                        </button>
+                                        <button type="button" name="clearAllLog" class="btn btn-danger clearAllLog">
+                                            Xóa lịch sử hệ thống
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>
+                                            Tên hành động
+                                        </th>
+                                        <th>
+                                            Người dùng
+                                        </th>
+                                        <th>
+                                            Thời gian
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                    }
+
+                                    @foreach (var item in ls)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@HoaDonNuocHaDong.Helper.Log.getActionFriendlyName(item.ChucnangID)</td>
+                                            <td>@HoaDonNuocHaDong.Helper.NguoidungHelper.getTenDangNhap(item.NguoidungID)</td>
+                                            <td>@item.Thoigian</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $(".clearAllLog").on('click',function () {
+            var confirmation = confirm("Bạn CHẮC CHẮN muốn xóa hết toàn bộ lịch sử sử dụng hệ thống chứ");
+            if (confirmation) {
+                window.location.href = '@Url.Action("clearAllLog","Log")';
+            }
+        });
+    });
+
+</script>

@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "DanhSachKhachHangDaInXongHoaDon";
+    Layout = "~/Views/Shared/_LoggedIn.cshtml";
+    var hoadon = ViewBag.hoadon;
+    var tuyen = ViewBag.tuyen;
+}
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Danh sách khách hàng đã in xong hóa đơn</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div style="margin:2%">
+                                <!-- Tuyến -->
+                                <select class=" dropdown form-control tuyen" style="width: 220px; float: left; margin-right: 3%" onchange="location= this.value;" name="tuyen">
+                                    <option selected disabled></option>
+                                    @foreach (var item in tuyen)
+                                    {
+                                        <option value="@Url.Action("DanhSachKhachHangDaInXongHoaDon", "ThuNgan", new { id = item.TuyenKHID })">@item.Ten</option>
+                                    }
+                                </select>
+                            </div>
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Mã khách hàng</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Loại khách hàng</th>
+                                        <th>Loại áp giá</th>
+                                        <th>Tổng sản lượng</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in hoadon)
+                                    {
+                                        <tr>
+                                            <td>@item.Khachhang.MaKhachHang</td>
+                                            <td>@item.Khachhang.Ten</td>
+                                            <td>@item.Khachhang.Diachi</td>
+                                            <td>@item.Khachhang.Dienthoai</td>
+                                            <td>@item.Khachhang.LoaiKH.Ten</td>
+                                            <td>@item.Khachhang.Loaiapgia.Ten</td>
+                                            <td>@item.Tongsotieuthu</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

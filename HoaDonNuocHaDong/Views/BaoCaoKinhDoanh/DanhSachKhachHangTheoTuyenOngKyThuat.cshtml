@@ -1,0 +1,65 @@
+﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+@{
+    ViewBag.Title = "DanhSachKhachHangTheoTuyenOngKyThuat";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    string d1 = ViewBag.dt1;
+}
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 25px;
+        font-weight: bold;
+        margin-left: 11%;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 1% 0 4% 34%;
+    }
+
+    .tong {
+        margin: 1% 0 0 60%;
+    }
+</style>
+<div class="ten">Danh sách Khách hàng theo tuyến ống kỹ thuật</div>
+<div class="loc">Tuyến ống: @d1</div>
+@{
+    List<DanhSachKhachHangTheoTuyenOngKyThuat> lst = (List<DanhSachKhachHangTheoTuyenOngKyThuat>)ViewData["lst"];
+
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>TT</th>
+            <th>Mã tuyến KH</th>
+            <th>TT đọc/tuyến</th>
+            <th>Mã KH</th>
+            <th>Họ và Tên</th>
+            <th>Địa Chỉ</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+        @foreach (DanhSachKhachHangTheoTuyenOngKyThuat obj in lst) {
+        <tr>
+            <td>@i</td>
+            <td>@obj.TenTuyen</td>
+            <td>@obj.ThuTuDocVaTuyen</td>
+            <td>@obj.MaKhachHang</td>
+            <td>@obj.Ten</td>
+            <td>@obj.Diachi</td>
+            <td>@obj.Ghichu</td>
+        </tr> 
+            i++;
+        }
+    </tbody>
+</table>
+<div class="tong"><b>Tổng cộng: @lst.Count khách hàng</b></div>

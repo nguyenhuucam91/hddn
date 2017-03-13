@@ -1,0 +1,83 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>Login</title>
+    <!-- Styles CSS -->
+    @Styles.Render("~/Css/bootstrap.css")
+    @Styles.Render("~/Css/bootstrap.min.css")
+    @Styles.Render("~/Assets/components/font-awesome/css/font-awesome.min.css")
+    @Styles.Render("~/Css/style.css")
+    @Styles.Render("~/Css/pages/signin.css")
+    @Styles.Render("http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600")
+    @Styles.Render("~/Content/Style.css")
+    @Styles.Render("/Assets/css/buttons.dataTables.min.css")
+    <style>
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="margin:5% auto">
+            <div>
+                <div style="float:left;width:45%; font-size:16px">
+                    <div style="margin-left:25%">Công ty nước sạch Hà Đông</div>
+                    <div style="margin-left:25%"><b>Xí nghiệp kinh doanh số 1</b></div>
+                    <hr style="margin:0 40% 0 27%" />
+                </div>
+                <div>
+                    <div style="margin-left: 50%; font-size: 16px"><b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b></div>
+                    <div style="margin-left: 54%; font-size: 16px"><b>Độc lập - Tự do - Hạnh phúc</b></div>
+                    <hr style="margin:0 30% 0 56%" /><br />
+                </div>
+            </div>
+
+            <!-- Header (navigation) -->
+            <div style="margin:0 6% 0 8%">@RenderBody()</div>
+
+            <!-- /main -->
+        </div>
+    </div>
+    <!-- Javascript file-->
+    @Scripts.Render("~/js/jquery-1.7.2.min.js")
+    @Scripts.Render("~/js/signin.js")
+    @Scripts.Render("~/js/bootstrap.js")
+    @Scripts.Render("~/Assets/components/datatables/media/js/jquery.dataTables.min.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/dataTables.buttons.min.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/buttons.html5.min.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/jszip.min.js");
+
+    @RenderSection("scripts", required: false)
+    <script>
+        /*-------căn ra giữa bảng--------------*/
+        $("table tr th").css({ "text-align": "center", "vertical-align": "middle" });
+    </script>
+    <script>
+        /*Export to Excel plugins*/
+        $(document).ready(function () {
+            $('.table').DataTable({
+                dom: 'Bfrtip',
+                "bFilter": false,
+                "bPaginate": false,
+                "bSort":false,
+                "language": {
+                    "emptyTable": "Không có dữ liệu"
+                },
+                buttons: [
+                    'excelHtml5',
+                ],
+            });
+
+            //Đổi chữ trong tất cả các báo cáo từ Excel => xuất Excel
+            $(".buttons-excel").text("Xuất Excel");
+        });
+    </script>
+</body>
+</html>

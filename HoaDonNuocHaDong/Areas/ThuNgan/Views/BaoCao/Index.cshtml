@@ -1,0 +1,61 @@
+﻿<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Các báo cáo thu ngân</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="tabable">
+                                <div class="tab-content">
+                                    <div class="form-group">
+                                        <form>
+                                           
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane active" id="tab-khuvuc" style="width:95%; margin: auto">
+                                        <div class="row">
+                                            @using (Html.BeginForm("baoCaoDuNo", "Congno", FormMethod.Get))
+                                            {
+                                                <div class="span3">Báo cáo dư có tháng</div>
+                                                <input type="hidden" name="nhanvienid" />
+                                                <input type="submit" value="Xem báo cáo" />
+                                            }
+                                            @using (Html.BeginForm("baoCaoCongNo", "Congno", FormMethod.Get))
+                                            {
+                                                <div class="span3">Báo cáo dư nợ tháng</div> <input type="text" name="month" />
+                                                @Html.Raw("năm ") <input type="text" name="year" />
+                                                <input type="hidden" name="nhanvienid" />
+                                                <input type="submit" value="Xem báo cáo" />
+                                            }
+                                            @using (Html.BeginForm("BaoCaoDoanhThuTheoThang", "BaoCao", FormMethod.Get))
+                                            {
+                                                <div class="span3">@Html.Raw("Báo cáo doanh thu theo tháng ")</div> <input type="text" name="month" />
+                                                @Html.Raw("năm ") <input type="text" name="year" />
+                                                <input type="hidden" name="nhanvienid" />
+                                                <input type="submit" value="Xem báo cáo" />
+                                            }
+                                            @using (Html.BeginForm("DanhSachKhachHangInHoaDon", "Congno", FormMethod.Get))
+                                            {
+                                                <div class="span3">@Html.Raw("Danh sách hóa đơn khách hàng tổ chức, tập thể")</div> <input type="text" name="month" />
+                                                @Html.Raw("năm ") <input type="text" name="year" />
+                                                <input type="hidden" name="nhanvienid" />
+                                                <input type="submit" value="Xem báo cáo" />
+                                            }
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

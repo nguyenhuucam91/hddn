@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "Danh sách in hóa đơn";
+
+    HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
+
+    double SH1Price = cS.getSoTienTheoApGia("SH1").Value;
+    double SH2Price = cS.getSoTienTheoApGia("SH2").Value;
+    double SH3Price = cS.getSoTienTheoApGia("SH3").Value;
+    double SH4Price = cS.getSoTienTheoApGia("SH4").Value;
+    double HCPrice = cS.getSoTienTheoApGia("HC").Value;
+    double CCPrice = cS.getSoTienTheoApGia("CC").Value;
+    double SXPrice = cS.getSoTienTheoApGia("SX-XD").Value;
+    double KDPrice = cS.getSoTienTheoApGia("KDDV").Value;
+    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+    var selectedMonth = Request.QueryString["month"];
+    var selectedYear = Request.QueryString["year"];
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem danh sách hóa đơn</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            
+
+                            <!-- Hướng dẫn -->
+                            <div class="huongDan">
+                                <span>Những khách hàng nào đã in chỉ số thì tên khách hàng được hiện màu đỏ</span>
+                            </div>
+                            <!-- Bảng xem chỉ số -->
+                            <table class="unlimited table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                       
+                                        <th>#</th>
+                                        <th>Mã khách hàng</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Thứ tự đọc</th>
+                                        <th>Sản lượng</th>
+                                        <th>VAT</th>
+                                        <th>MT</th>
+                                        <th>Tổng cộng</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                        var dsKH = ViewBag.dsachKH;
+                                    }
+                                    @foreach (var item in dsKH)
+                                    {
+                                        int hoaDonNuocID = item.GetType().GetProperty("HoaDonNuoc").GetValue(item, null);
+                                        Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);
+                                        <tr>
+                                            
+                                            <td>@i</td>
+                                            <td>@item.GetType().GetProperty("MaKH").GetValue(item, null)</td>
+                                            <!-- Những khách hàng nào đã in chỉ số thì hiện màu đỏ -->
+                                            @if (hoaDonObj.Trangthaiin == true)
+                                            {
+                                                <td style="color:red">@item.GetType().GetProperty("TenKH").GetValue(item, null)</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.GetType().GetProperty("TenKH").GetValue(item, null)</td>
+                                            }
+                                            <td>@item.GetType().GetProperty("DiaChi").GetValue(item, null)</td>
+                                            <td>@item.GetType().GetProperty("TTDoc").GetValue(item, null)</td>
+                                            <td>@item.GetType().GetProperty("SanLuong").GetValue(item, null)</td>
+                                            <td>@String.Format("{0:n0}", item.GetType().GetProperty("PhiVAT").GetValue(item, null))</td>
+                                            <td>@String.Format("{0:n0}", item.GetType().GetProperty("PhiBVMT").GetValue(item, null))</td>
+                                            <td style="color:blue">@String.Format("{0:n0}", String.Format("{0:n0}", item.GetType().GetProperty("TongCong").GetValue(item, null)))</td>
+                                        </tr>
+                                            i++;
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

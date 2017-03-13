@@ -1,0 +1,163 @@
+﻿@model HoaDonNuocHaDong.Nhanvien
+
+@{
+    ViewBag.Title = "Cập nhật thông tin nhân viên";
+
+    var tuyenKHID = ViewBag._TuyenKHID;
+    String selectedTuyenKHID = (String)ViewBag.selectedTuyenKHID;
+    String[] output = selectedTuyenKHID.Split(',');
+    var to = ViewBag._To;
+    var selectedTo = ViewBag.selectedTo;
+    var phongBan = ViewBag._PhongbanID;
+}
+
+@using (Html.BeginForm("Edit", "Nhanvien"))
+{
+    @Html.HiddenFor(model => model.NhanvienID)
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="IsDelete" value="false"/>
+    <div class="main form-horizontal">
+        <div class="main-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <div class="widget ">
+                            <div class="widget-header">
+                                <i class="icon-user"></i>
+                                <h3>Chỉnh sửa thông tin nhân viên</h3>
+                            </div> <!-- /widget-header -->
+                            <div class="widget-content">
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-8 pull-left">
+                                        <label for="" class="col-sm-2 control-label">Tên nhân viên:</label>&nbsp;&nbsp;
+                                        @Html.EditorFor(model => model.Ten)
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.Ten)
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-8 pull-left">
+                                        <label for="" class="col-sm-2 control-label">Mã nhân viên:</label>&nbsp;&nbsp;
+                                        @Html.EditorFor(model => model.MaNhanVien)
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.MaNhanVien)
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-12">
+                                        <label for="" class="control-label">Địa chỉ:</label>&nbsp;&nbsp;
+                                        @Html.TextBoxFor(model => model.Diachi, new { @style = "width:80%" })
+                                        @Html.ValidationMessageFor(model => model.Diachi)
+                                    </div>
+                                </div>
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4 pull-left">
+                                        <label for="" class="control-label">Số điện thoại:</label>&nbsp;&nbsp;
+                                        @Html.EditorFor(model => model.SDT)
+                                        @Html.ValidationMessageFor(model => model.SDT)
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Quận huyện:</label>&nbsp;&nbsp;
+                                        @Html.DropDownList("Chinhanh", (SelectList)ViewBag.ChinhanhID, "--Chọn một--", new { @class = "dropdown quan",@required=true })
+                                        @Html.ActionLink("Thêm mới", "Create", "Quanhuyen")
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Tổ:</label>&nbsp;&nbsp;
+                                        <select name="ToQuanHuyenID" class="dropdown toes">
+                                            @foreach (var item in to)
+                                            {
+                                                if (item.ToQuanHuyenID == selectedTo)
+                                                {
+                                                    <option value="@item.ToQuanHuyenID" selected>@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+
+                                                }
+                                            }
+                                        </select>
+
+                                        @Html.ActionLink("Thêm mới", "Create", "ToQuanHuyen")
+                                        @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4 pull-left">
+                                        <label for="" class="control-label">Chức vụ:</label>&nbsp;&nbsp;
+                                        @Html.DropDownListFor(model => model.ChucvuID, (SelectList)ViewBag._ChucvuID)
+                                        @Html.ActionLink("Thêm mới", "Create", "Chucvu")
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.ChucvuID)
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
+                                        @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown phongban" })
+                                        @Html.ActionLink("Thêm mới", "Create", "Phongban")
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
+                                    </div>
+                                </div>
+                                <!-- Tuyến khách hàng-->
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Tuyến khách hàng:</label>&nbsp;&nbsp;
+                                        <select class="dropdown tuyen" name="TuyenID" multiple="multiple" style="width:80%">
+                                            <!-- Nếu không có nhóm nào được chọn-->
+                                            @foreach (var item in tuyenKHID)
+                                            {
+                                                <option value="@item.TuyenKHID">@item.Matuyen - @item.Ten</option>
+                                            }
+
+
+                                        </select>
+                                        @Html.ActionLink("Thêm mới", "Create", "Tuyen")
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.NhanvienID, null, new { @style = "margin-left:17%" })
+
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-info">Cập nhật</button>
+                                    <button class="btn btn-default" type="button" onclick="history.go(-1)">Quay lại</button>
+                                </div> <!-- /form-actions -->
+
+                            </div>
+                            <!-- /widget-content -->
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span6 -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main-inner -->
+    </div>
+  <!-- /main -->
+}
+
+<script type="text/javascript">
+    $(function () {
+        @foreach (var item in output)
+            {
+                <text>
+        $('.tuyen option[value="@item"]').prop('selected', true).trigger('change');
+        </text>
+            }
+    });
+</script>

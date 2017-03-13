@@ -1,0 +1,103 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.ToQuanHuyen>
+
+@{
+    ViewBag.Title = "Danh sách tổ";
+
+    var quanHuyen = ViewBag.quanHuyen;
+    HoaDonNuocHaDong.Helper.PhongbanHelper phongBan = new HoaDonNuocHaDong.Helper.PhongbanHelper();
+    List<Phongban> phongBans = ViewData["phongBan"] as List<Phongban>;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Quản lý tổ</h3>
+                        </div>
+                        <div class="widget-content">
+                            <p>
+                                <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("Create","ToQuanHuyen")'">Thêm mới tổ</button>
+                            </p>
+
+                            <!-- Lọc phường xã theo quận huyện-->
+                            <div style="margin:2% 0 2% 0">
+                                @using (Html.BeginForm("Index", "ToQuanHuyen", FormMethod.Post))
+                                {
+                                    <div class="form-group">
+
+                                        <!-- Quận huyện -->
+                                        <select class="dropdown form-control quan" style="width:220px;float:left;margin-right:3%" name="quanhuyen">
+                                            <option></option>
+                                            <!-- Option mặc định -->
+                                            @foreach (var item in quanHuyen)
+                                            {
+                                                <option value="@item.QuanhuyenID">@item.Ten</option>
+                                            }
+                                        </select>
+                                        <!-- Phòng ban -->
+                                        <select name="phongBan" class="dropdown phongBan allowClear">
+                                            
+                                            @foreach (var item in phongBans) { 
+                                            <option value="@item.PhongbanID">@item.Ten</option>
+                                            }
+                                        </select>
+                                        <button type="submit" class="btn btn-default">Lọc</button>
+
+                                        <!-- Hướng dẫn tìm kiếm -->
+                                        <div class="huongDan">
+                                            <span>Nếu quận huyện để trống sẽ lọc danh sách tổ theo TẤT CẢ quận huyện, nếu phòng ban để trống (bằng cách ấn dấu x) 
+                                            sẽ lọc danh sách tổ theo TẤT CẢ phòng ban</span>
+                                        </div>
+                                       
+                                    </div>
+                                }
+                            </div>
+                            <!-- Bảng hiển thị dữ liệu -->
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                     
+                                        <th>
+                                            Mã tổ
+                                        </th>
+                                        <th>
+                                            Phòng ban
+                                        </th>
+                                        <th>
+                                            Hành động
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                           
+                                            <td>
+                                                @item.Ma
+                                            </td>
+                                            <td>@phongBan.getTenPhongBan(item.PhongbanID)</td>
+                                            <td>
+                                                @Html.ActionLink("Sửa", "Edit", new { id = item.ToQuanHuyenID }) |
+                                                @Html.ActionLink("Xóa", "Delete", new { id = item.ToQuanHuyenID }, new { @onclick = "return confirm('Bạn có muốn xóa tổ này không')" })
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

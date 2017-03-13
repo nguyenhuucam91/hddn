@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "Danh sách in hóa đơn";
+
+    var beforeFiltered = ViewBag.beforeFilter;
+    var selectedMonth = ViewBag.selectedMonth;
+    var selectedYear = ViewBag.selectedYear;
+    HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
+    //Áp giá mặc định
+    double SH1Price = cS.getSoTienTheoApGia("SH1").Value;
+    double SH2Price = cS.getSoTienTheoApGia("SH2").Value;
+    double SH3Price = cS.getSoTienTheoApGia("SH3").Value;
+    double SH4Price = cS.getSoTienTheoApGia("SH4").Value;
+    double HCPrice = cS.getSoTienTheoApGia("HC").Value;
+    double CCPrice = cS.getSoTienTheoApGia("CC").Value;
+    double SXPrice = cS.getSoTienTheoApGia("SX-XD").Value;
+    double KDPrice = cS.getSoTienTheoApGia("KDDV").Value;
+    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem danh sách hóa đơn</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <form action="/Print" method="post">
+                                @Html.Partial("_InhoadonMenuPartial")
+                                <br />
+                                <div class="form-group">
+                                    <label for="" class="" style="float:left;margin: .5% 1% 0 0%"><strong>Tháng:</strong></label>
+                                    <input name="thang" type="number" min="1" max="12" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Month" />
+
+                                    <label for="" class="" style="float:left;margin: .5% 1% 0 3%"><strong>Năm:</strong></label>
+                                    <input name="nam" type="number" min="0" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Year" />
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <!-- Đã có thành tiền hay chưa-->
+                                <div class="clearfix"></div>
+
+                                <div class="form-control" style="text-align:center">
+                                    <button type="submit" class="btn btn-default" style="text-align:center">Tìm kiếm</button>
+                                    @if (!beforeFiltered)
+                                    {
+                                        <button type="button" class="btn btn-default" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear})')">In</button>
+                                    }
+                                </div>
+                            </form>
+
+                            <!--Form in danh sách khách hàng được chọn-->
+                            <form action="/PrintSelected" method="post">
+                                <input type="hidden" class="printSelectedHidden" />
+                                <button type="submit" class="btn btn-default printSelected" onclick="window.open('@Url.Action("PrintSelected", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear })')">In hóa đơn được chọn</button>
+                            </form>
+                            <!-- Bảng xem chỉ số -->
+                            @if (!beforeFiltered)
+                            {
+                                <table class="example table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>#</th>
+                                            <th>Mã khách hàng</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Thứ tự đọc</th>
+                                            <th>Sản lượng</th>
+                                            <th>VAT</th>
+                                            <th>MT</th>
+                                            <th>Tổng cộng</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @{
+                                int i = 1;
+                                var dsKH = ViewBag.dsachKH;
+                                        }
+                                        @foreach (var item in dsKH)
+                                        {
+                                            int hoaDonNuocID = item.GetType().GetProperty("HoaDonNuoc").GetValue(item, null);
+                                            double SH1 = item.GetType().GetProperty("SH1").GetValue(item, null);
+                                            double SH2 = item.GetType().GetProperty("SH2").GetValue(item, null);
+                                            double SH3 = item.GetType().GetProperty("SH3").GetValue(item, null);
+                                            double SH4 = item.GetType().GetProperty("SH4").GetValue(item, null);
+                                            double HC = item.GetType().GetProperty("HC").GetValue(item, null);
+                                            double CC = item.GetType().GetProperty("CC").GetValue(item, null);
+                                            double KD = item.GetType().GetProperty("KD").GetValue(item, null);
+                                            double SX = item.GetType().GetProperty("SX").GetValue(item, null);
+                                            double PhiMT = item.GetType().GetProperty("TilePhiMT").GetValue(item, null);
+
+
+                                            double SH1Total = 0;
+                                            double SH2Total = 0;
+                                            double SH3Total = 0;
+                                            double SH4Total = 0;
+                                            double HCTotal = 0;
+                                            double CCTotal = 0;
+                                            double KDTotal = 0;
+                                            double SXTotal = 0;
+                                            double Sum = 0;
+                                            //tìm kiếm trong áp giá đặc biệt, nếu có sẽ tính theo giá đặc biệt
+
+                                            SH1Total = SH1 * SH1Price;
+                                            SH2Total = SH2 * SH2Price;
+                                            SH3Total = SH3 * SH3Price;
+                                            SH4Total = SH4 * SH4Price;
+                                            HCTotal = HC * HCPrice;
+                                            CCTotal = CC * CCPrice;
+                                            KDTotal = KD * KDPrice;
+                                            SXTotal = SX * SXPrice;
+
+
+
+                                            Sum = SH1Total + SH2Total + SH3Total + SH4Total + HCTotal + CCTotal + KDTotal + SXTotal;
+                                            double PhiVAT = Sum * 0.05;
+                                            double PhiBVMT = Sum * (PhiMT / 100);
+
+                                            double TongGiaTien = Sum + PhiVAT + PhiBVMT;
+                                            <tr>
+                                                <td><input type="checkbox" name="check" value="@item.GetType().GetProperty("HoaDonNuoc").GetValue(item, null)" /></td>
+                                                <td>@i</td>
+                                                <td>@item.GetType().GetProperty("MaKH").GetValue(item, null)</td>
+                                                <td>@item.GetType().GetProperty("TenKH").GetValue(item, null)</td>
+                                                <td>@item.GetType().GetProperty("DiaChi").GetValue(item, null)</td>
+                                                <td>@item.GetType().GetProperty("TTDoc").GetValue(item, null)</td>
+                                                <td>@item.GetType().GetProperty("SanLuong").GetValue(item, null)</td>
+                                                <td>@String.Format("{0:n0}", PhiVAT)</td>
+                                                <td>@String.Format("{0:n0}", PhiBVMT)</td>
+                                                <td style="color:blue">@String.Format("{0:n0}", TongGiaTien)</td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

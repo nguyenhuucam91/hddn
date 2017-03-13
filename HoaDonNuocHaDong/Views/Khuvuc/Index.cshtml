@@ -1,0 +1,72 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.To>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Quản lý Khu vực</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="form-group">
+                                        <p>
+                                            <a class="btn btn-primary" href="@Url.Action("Create", "Khuvuc")" role="button">Thêm mới khu vực</a>
+                                        </p>
+                                    </div>
+                                    <table class="example table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Tên khu vực</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Chi nhánh</th>
+                                                <th>Phường/Xã</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.ToID)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Ten)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Diachi)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Chinhanh.Ten)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Phuongxa.Ten)
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Sửa", "Edit", new { id = item.ToID}) |
+                                                        @Html.ActionLink("Xóa", "Delete", new { id = item.ToID}) 
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

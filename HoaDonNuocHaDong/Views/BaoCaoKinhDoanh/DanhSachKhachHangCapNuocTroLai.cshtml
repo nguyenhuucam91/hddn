@@ -1,0 +1,66 @@
+﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+@{
+    ViewBag.Title = "DanhSachKhachHangCapNuocTroLai";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    DateTime d1 = ViewBag.dt1;
+    DateTime d2 = ViewBag.dt2;
+}
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 29px;
+        font-weight: bold;
+        margin-left: 14%;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 1% 0 4% 34%;
+    }
+
+    .tong {
+        margin: 1% 0 0 60%;
+    }
+</style>
+<div class="ten">Danh sách Khách hàng cấp nước trở lại</div>
+<div class="loc">Từ ngày: @d1.Day - @d1.Month - @d1.Year đến ngày: @d2.Day - @d2.Month - @d2.Year</div>
+@{
+    List<DanhSachKhachHangCapNuocTroLai> lst = (List<DanhSachKhachHangCapNuocTroLai>)ViewData["lst"];
+
+}
+
+<table class="table table-bordered" >
+    <thead>
+        <tr>
+            <th>TT</th>
+            <th>Mã tuyến KH</th>
+            <th>Mã KH</th>
+            <th>Họ và Tên</th>
+            <th>Địa Chỉ</th>
+            <th>Lý do cấp nước trở lại</th>
+            <th>Ngày cấp lại</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DanhSachKhachHangCapNuocTroLai obj in lst)
+        {
+        <tr>
+            <td>@obj.TT</td>
+            <td>@obj.Matuyen</td>
+            <td>@obj.MaKhachHang</td>
+            <td>@obj.Ten</td>
+            <td>@obj.Diachi</td>
+            <td>@obj.Lydocapnuoctrolai</td>
+            <td>@String.Format("{0:dd/MM/yyyy}",obj.Ngaycaplai)</td>
+            <td>@obj.Ghichu</td>
+        </tr>
+        }
+    </tbody>
+</table>
+<div class="tong"><b>Tổng cộng: @lst.Count khách hàng</b></div>

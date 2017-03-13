@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "XuLyDanhSachKhachHangTheoToQuanLy";
+
+    List<ToQuanHuyen> to = ViewData["to"] as List<ToQuanHuyen>;
+}
+<link href="~/Content/Style.css" rel="stylesheet" />
+<div class="row" style="margin-left:4%">
+    <!-- /span6 -->
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <i class="icon-bookmark"></i>
+                <h3>Tùy chọn báo cáo danh sách khách hàng theo tổ quản lý</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                @using (Html.BeginForm("DanhSachKhachHangTheoToQuanLy", "BaoCaoKinhDoanh"))
+                {
+                    <div class="xulybc">
+                        <p><div>Tổ quản lý:</div>
+                        <select name="d1" class="dropdown to">
+                            @foreach (var item in to)
+                            {
+                                <option value="@item.ToQuanHuyenID">@item.SoCN - @HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                            }
+                        </select>
+                        </p>
+                        <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

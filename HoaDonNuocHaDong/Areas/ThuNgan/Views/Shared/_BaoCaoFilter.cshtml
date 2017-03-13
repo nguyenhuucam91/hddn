@@ -1,0 +1,38 @@
+﻿<style>
+    .filter {
+        border-bottom: 2px solid #F5F5F5;
+        padding: 1%;
+        margin-bottom: 12px;
+    }
+
+    .hoa-don-filter select {
+        width: 20%;
+        float: left;
+        margin-right: 3%;
+    }
+</style>
+<div class="row filter hoa-don-filter">
+    <form class="form-horizontal" method="get">
+        <center>
+            <div class="form-group">
+                Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Filter.Year" />
+                Tháng: <input type="number" name="Month" placeholder="Tháng" @ViewBag.Filter.Month />
+            </div>
+            <br />
+            <div class="form-group">
+                <!-- Chi nhánh -->
+                <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
+                <!-- Tổ -->
+                <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
+                <!-- Nhân viên -->
+                <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
+            </div>
+            <br />
+            <div class="center form-group">
+                <input type="hidden" name="Mode" value="search" />
+                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            </div>
+        </center>
+    </form>
+</div>
+

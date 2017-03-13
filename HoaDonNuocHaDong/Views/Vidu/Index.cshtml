@@ -1,0 +1,9 @@
+﻿@using HoaDonNuocHaDong.ModelReport;
+@{
+    List<HoaDonNuocHaDong.ModelReport.Apgia> lst = (List<HoaDonNuocHaDong.ModelReport.Apgia>)ViewData["lst"];
+    foreach(HoaDonNuocHaDong.ModelReport.Apgia ag in lst)
+    {
+        <p>@ag.ApgiaID</p>
+        <p>@ag.LoaiapgiaID</p>
+    }
+}

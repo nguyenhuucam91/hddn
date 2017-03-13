@@ -1,0 +1,144 @@
+﻿@model HoaDonNuocHaDong.Tuyenong
+
+@{
+    ViewBag.Title = "Cập nhật tuyến ống";
+
+   
+    var quanHuyen = ViewBag._QuanHuyen;
+    var selectedQuanHuyen = ViewBag._selectedQuanHuyen;
+    var phuongXa = ViewBag._Phuongxa;
+    var selectedPhuongXa = ViewBag._selectedPhuongXa;
+    var parentID = ViewBag._parentID;
+    var selectedPID = ViewBag.selectedPID;        
+    var capTuyenID = ViewBag._CaptuyenID;
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget widget-table action-table">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Cập nhật thông tin tuyến ống</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            @using (Html.BeginForm("Edit", "Tuyenong"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                @Html.HiddenFor(p => p.TuyenongID)
+                                <input type="hidden" name="IsDelete" value="false" />
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Mã tuyến ống : </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(p => p.Matuyen, new { @class = "form-control width" })
+                                        <br />
+                                        @Html.ValidationMessageFor(p => p.Matuyen)
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Tên tuyến ống:  </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(p => p.Tentuyen, new { @class = "form-control width", @style = "width:50%" })
+                                        <br />
+                                        @Html.ValidationMessageFor(p => p.Tentuyen)
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Quận huyện:  </label>
+                                    <select name="QuanHuyenID" class="dropdown quan">
+                                        <option selected></option>
+                                        @foreach (var item in quanHuyen)
+                                        {
+                                            if (item.QuanhuyenID == selectedQuanHuyen)
+                                            {
+                                                <option value="@item.QuanhuyenID" selected>@item.Ten</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.QuanhuyenID">@item.Ten</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Phường xã:  </label>
+                                    <select name="PhuongxaID" class="dropdown phuong">
+                                        <option selected></option>
+                                        @foreach (var item in phuongXa)
+                                        {
+                                            if (item.PhuongxaID == selectedPhuongXa)
+                                            {
+                                                <option value="@item.PhuongxaID" selected>@item.Ten</option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.PhuongxaID">@item.Ten</option>                                                
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Tuyến ống cha: </label>
+
+                                    <div class="col-md-10">
+                                        <select name="TuyenongPID" class="dropdown tuyenong" style="width: 50%">
+                                            <option selected></option>
+                                            @foreach (var item in parentID)
+                                            {
+                                                if (item.TuyenongID == selectedPID)
+                                                {
+                                                    <option value="@item.TuyenongID" selected>@item.Matuyen - @item.Tentuyen</option>
+
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.TuyenongID">@item.Matuyen - @item.Tentuyen</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Cấp tuyến ống:  </label>
+                                    @Html.DropDownListFor(p => p.CaptuyenID, (SelectList)ViewBag.CaptuyenID)
+                                </div>
+
+
+                                <div class="form-group" style="margin-left:2%">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                        <button type="button" class="btn btn-danger" onclick="history.go(-1);">Quay lại</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- /widget-content -->
+                    </div>
+                    <!-- /widget -->
+                </div>
+                <!-- /span6 -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /main-inner -->
+</div>
+
+<style>
+    .field-validation-error {
+        margin-left: 0;
+    }
+</style>

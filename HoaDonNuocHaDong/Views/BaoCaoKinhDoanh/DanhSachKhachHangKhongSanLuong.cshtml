@@ -1,0 +1,73 @@
+﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+@{
+    ViewBag.Title = "DanhSachKhachHangKhongSanLuong";
+Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+DateTime d1 = ViewBag.dt1;
+DateTime d2 = ViewBag.dt2;
+}
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 25px;
+        font-weight: bold;
+        margin-left: 18%;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 1% 0 4% 32%;
+    }
+
+    .tong {
+        margin: 1% 0 0 60%;
+    }
+</style>
+<div class="ten">Danh sách Khách hàng không sản lượng</div>
+<div class="loc">Từ tháng @d1.Month năm @d1.Year đến tháng @d2.Month năm @d2.Year</div>
+@{
+    List<DanhSachKhachHangKhongSanLuong> lst = (List<DanhSachKhachHangKhongSanLuong>)ViewData["lst"];
+
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th rowspan="2">TT</th>
+            <th rowspan="2">Tuyến</th>
+            <th rowspan="2">TT đọc</th>
+            <th rowspan="2">Mã KH</th>
+            <th rowspan="2">Họ và Tên</th>
+            <th rowspan="2">Địa Chỉ</th>
+            <th rowspan="2">Loại giá</th>
+            <th colspan="2"><div class="center">Sản lượng tháng</div></th>           
+            <th rowspan="2">Ghi chú</th>
+        </tr>
+        <tr>
+            <th>Ngày</th>
+            <th>Chỉ số</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DanhSachKhachHangKhongSanLuong obj in lst)
+        {
+         <tr>
+            <td>@obj.TT</td>
+            <td>@obj.Tuyen</td>
+            <td>@obj.ThuTuDoc</td>
+            <td>@obj.MaKhachHang</td>
+            <td>@obj.Ten</td>
+            <td>@obj.Diachi</td>
+            <td>@obj.LoaiGia</td>
+            <td>@obj.Ngay.Month / @obj.Ngay.Year</td>
+            <td>@obj.ChiSo</td>
+            <td>@obj.GhiChu</td>
+        </tr> 
+        }
+        
+    </tbody>
+</table>
+<div class="tong"><b>Tổng cộng: @lst.Count khách hàng</b></div>

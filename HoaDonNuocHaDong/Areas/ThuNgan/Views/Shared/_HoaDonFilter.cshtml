@@ -1,0 +1,51 @@
+﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel
+<style>
+    .filter {
+        border-bottom: 2px solid #F5F5F5;
+        padding: 1%;
+        margin-bottom: 12px;
+    }
+
+    .hoa-don-filter select {
+        width: 20%;
+        float: left;
+        margin-right: 3%;
+    }
+</style>
+<div class="row filter hoa-don-filter">
+    <form class="form-horizontal" method="get">
+        <center>
+            <input type="hidden" name="From" value="@(Model.From != null ? Model.From.Value.ToString("MM-yyyy") : "")" />
+            <input type="hidden" name="To" value="@(Model.To != null ? Model.To.Value.ToString("MM-yyyy") : "")" />
+            <input type="hidden" name="LoaiKhachHang" value="@Model.LoaiKhachHang" />
+            <input type="hidden" name="HinhThucThanhToan" value="@Model.HinhThucThanhToan" />
+            <input type="hidden" name="TrangThaiThu" value="@Model.TrangThaiThu" />
+
+            <div class="form-group">
+                <!-- Chi nhánh -->
+                <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
+
+                <!-- Tổ -->
+                <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
+                <!-- Nhân viên -->
+                <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
+
+                <!-- Tuyến -->
+                <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
+            </div>
+            <br />
+            <div class="center form-group">
+                Hoặc tìm kiếm theo:
+                <input type="text" name="MaKH" class="detail" placeholder="Tìm theo mã khách hàng" value="@Model.MaKH" />
+                <input type="text" name="TenKH" class="detail" placeholder="Tìm theo tên khách hàng" value="@Model.TenKH" />
+                <input type="text" name="DiaChiKH" class="detail" placeholder="Tìm theo địa chỉ khách hàng" value="@Model.DiaChiKH" />
+            </div>
+            <br />
+            <div class="center form-group">
+                <input type="hidden" name="Mode" value="search" />
+                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+            </div>
+        </center>
+    </form>
+</div>
+

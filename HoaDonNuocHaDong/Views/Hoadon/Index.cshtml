@@ -1,0 +1,115 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Hoadonnuoc>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Danh sách hóa đơn</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="tabable">
+                                @*<p>
+                                    @Html.ActionLink("Create New", "Create")
+                                </p>*@
+                                <table id="example" class="example table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Tên khách hàng
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Sohoadon)
+                                            </th>
+                                            @*<th>
+                                                @Html.DisplayNameFor(model => model.Kyhieu)
+                                            </th>*@
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Tongsotieuthu)
+                                            </th>
+                                            <th>
+                                                Tháng
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Trangthaithu)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Trangthaiin)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Khachhang.Sotaikhoan)
+                                            </th>
+                                            <th>
+                                                Bàn giao thu ngân
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Khachhang.Phuongxa)
+                                            </th>
+                                            <th>
+                                               
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Khachhang.Ten)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sohoadon)
+                                            </td>
+                                            @*<td>
+                                                @Html.DisplayFor(modelItem => item.Kyhieu)
+                                            </td>*@
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Tongsotieuthu)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ngayhoadon.Value.Month)/@Html.DisplayFor(modelItem => item.Ngayhoadon.Value.Year)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Trangthaithu)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Trangthaiin)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Khachhang.Sotaikhoan)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Trangthaibangiao)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Khachhang.Phuongxa.Ten)
+                                            </td>
+                                            <td>
+                                                <button>Sửa</button>
+                                            </td>
+                                            @*<td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.HoadonnuocID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.HoadonnuocID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.HoadonnuocID })
+                    </td>*@
+                                        </tr>
+                                    }
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

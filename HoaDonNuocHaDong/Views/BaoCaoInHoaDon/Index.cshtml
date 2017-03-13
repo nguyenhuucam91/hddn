@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Index";
+
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row" style="margin-left:4%">
+                <!-- /span6 -->
+                <div class="span12">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-bookmark"></i>
+                            <h3>Các báo cáo in hóa đơn</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="shortcuts">
+                                <a href="@Url.Action("BaoCaoSanLuongDoanhThu","BaoCaoInHoaDon")" class="shortcut">
+                                    <span class="shortcut-label">Báo cáo sản lượng doanh thu</span>
+                                </a>
+                                <a href="@Url.Action("BaoCaoNuocThai","BaoCaoInHoaDon")" class="shortcut">
+                                    <span class="shortcut-label">Báo cáo theo phí nước thải</span>
+                                </a>
+                                <a href="@Url.Action("BaoCaoHoaDonNhan","BaoCaoInHoaDon")" class="shortcut">
+                                    <span class="shortcut-label">Báo cáo hóa đơn nhận</span>
+                                </a>
+                                <a href="@Url.Action("Baocaocongno","Congno")" class=" shortcut">
+                                    <span class="shortcut-label">Báo cáo dư nợ</span>
+                                </a>
+                                <a href="@Url.Action("Baocaoduno","Congno") " class=" shortcut">
+                                    <span class="shortcut-label">Báo cáo dư có</span>
+                                </a>
+                                
+                            </div>
+                            <!-- /shortcuts -->
+                        </div>
+                        <!-- /widget-content -->
+                    </div>
+                </div>
+                <!-- /span6 -->
+            </div>
+        </div>
+    </div>
+</div>
+

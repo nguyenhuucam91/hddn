@@ -1,0 +1,65 @@
+﻿@model HoaDonNuocHaDong.Phuongxa
+
+@{
+    ViewBag.Title = "Thêm mới phường xã";
+
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget widget-table action-table">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Cập nhật thông tin phường xã</h3>
+                        </div>
+                        @using (Html.BeginForm("Edit", "Phuongxa"))
+                        {
+                            @Html.HiddenFor(p=>p.PhuongxaID)
+                            @Html.AntiForgeryToken()
+                        <!-- /widget-header -->
+                            <div class="widget-content">
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Tên phường xã : </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(p => p.Ten, new { @class = "form-control width" })
+                                        <br />
+                                        @Html.ValidationMessageFor(p => p.Ten)
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Thuộc quận huyện : </label>
+                                    <div class="col-sm-10">
+                                        @Html.DropDownList("QuanhuyenID", (SelectList)ViewBag._QuanhuyenID,new{@class="dropdown quan"})
+                                        <br />
+                                        @Html.ValidationMessageFor(p => p.QuanhuyenID)
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-left:2%">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                        <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index","Phuongxa")'">Quay lại</button>
+                                    </div>
+                                </div>
+                                <br />
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Style type -->
+<style type="text/css">
+    .field-validation-error {
+        margin-left: 0%;
+    }
+</style>

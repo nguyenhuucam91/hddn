@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "XuliBaoCaoHoaDonNhan";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+
+    var ls = ViewData["hoadon"] as List<HoaDonNuocHaDong.Models.BaoCaoInHoaDon.BaoCaoHoaDonNhan>;
+    var tenTuyen = ViewBag.tenTuyen;
+    HoaDonNuocHaDong.Helper.KhachHang kH = new HoaDonNuocHaDong.Helper.KhachHang();
+    var monthStart = ViewBag.monthStart;
+    var monthEnd = ViewBag.monthEnd;
+    var yearStart = ViewBag.yearStart;
+    var yearEnd = ViewBag.yearEnd;
+}
+
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 29px;
+        font-weight: bold;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+    }
+</style>
+<div class="ten center" style="font-size:17px">
+    BẢNG KÊ CHI TIẾT HÓA ĐƠN TIỀN NƯỚC
+    <p>Từ tháng: @String.Concat(monthStart, "/", yearStart) - @String.Concat(monthEnd, '/', yearEnd)</p>
+    <p>Tuyến khách hàng: @tenTuyen</p>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th style="text-align:center" rowspan="2">STT</th>
+            <th style="text-align:center" rowspan="2">ID</th>
+            <th style="text-align:center" rowspan="2">Mã KH</th>
+            <th style="text-align:center" rowspan="2">Tên khách hàng</th>
+            <th style="text-align:center" colspan="2">Hóa đơn</th>
+            <th style="text-align:center" rowspan="2">Thành tiền</th>
+        </tr>
+        <tr>
+
+            <th>Tháng</th>
+            <th>Năm</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @{int i = 1;}
+        @foreach (var item in ls)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@item.ID</td>
+                <td>@item.MaKH</td>
+                <td>@item.TenKH</td>
+                <td>
+                    @item.NgayHoaDon.Value.Month
+                </td>
+                <td>
+                    @item.NgayHoaDon.Value.Year
+                </td>
+                <td style="font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.TongTien)</td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+
+
+
+<p style="float:right">Hà đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</p>
+<div class="clearfix"></div>
+<div class="span6 center">
+    Xí nghiệp kinh doanh nước sạch
+</div>
+
+<div class="span4 center">
+    Người lập
+</div>

@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "BaoCaoHoaDonNhan";
+
+    List<Tuyenkhachhang> ls = ViewData["tuyen"] as List<Tuyenkhachhang>;
+    List<LoaiKH> loaiKH = ViewData["loaiKH"] as List<LoaiKH>;
+}
+
+<link href="~/Content/Style.css" rel="stylesheet" />
+<div class="row" style="margin-left:4%">
+    <!-- /span6 -->
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <i class="icon-bookmark"></i>
+                <h3>Tùy chọn hóa đơn nhận</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                @using (Html.BeginForm("XuliBaoCaoHoaDonNhan", "BaocaoInHoaDon"))
+                {
+                    <div class="xulybc">
+                        <p>Tuyến:
+                            <select name="tuyen" class="dropdown tuyen" style="width:80%">
+                                @foreach (var item in ls)
+                                {
+                                    <option value="@item.TuyenKHID">@item.Ten</option>
+                                }
+                            </select>                        
+                        </p>
+                        <p>
+                            Loại khách hàng:
+                            <select name="customerType">
+                                <option value="0"> Tất cả </option>
+                                @foreach (var item in loaiKH)
+                                {
+                                    <option value="@item.LoaiKHID">@item.Ten</option>
+                                }
+                            </select>
+                        </p>
+                        <p>Từ ngày: <input type="number" name="fromDay" placeholder="@DateTime.Now.Day"/> tháng: <input type="number" name="fromMonth" placeholder="@DateTime.Now.Month" class="negNumber"/> năm <input type="number" name="fromYear" placeholder="@DateTime.Now.Year" class="negNumber" /><br/>
+                        đến ngày: <input type="number" name="toDay" placeholder="@DateTime.Now.Day"/> tháng: <input type="number" name="toMonth" placeholder="@DateTime.Now.Month" class="negNumber" /> năm <input type="number" name="toYear" placeholder="@DateTime.Now.Year" class="negNumber" /></p>
+                        <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

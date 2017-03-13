@@ -1,0 +1,33 @@
+﻿@{
+    var chiNhanh = ViewBag.chiNhanh;
+    var to = ViewBag.to;
+    var nhanVien = ViewBag.nhanVien;
+    var tuyen = ViewBag.tuyen;
+
+    var chiNhanhID = ViewBag.selectedChinhanhID;
+    var tuyenID = ViewBag.selectedTuyen;
+    var nhanVienID = ViewBag.selectedNhanVien;
+    var toID = ViewBag.selectedTo;
+}
+
+
+<div class="form-group">
+    <!-- Chi nhánh -->
+    <select class="dropdown form-control quanTuyen" style="width:20%;float:left;margin-right:3%" name="chinhanh">
+        <!-- Option mặc định -->
+        <option selected disabled></option>
+        @foreach (var item in chiNhanh)
+        {
+           <option value="@item.QuanhuyenID">@item.Ten</option>
+        }
+    </select>  
+
+    <!-- Tuyến -->
+    <select class=" dropdown form-control tuyenQuan" style="width: 20%; float: left; margin-right: 3%" name="tuyen">
+        <option selected disabled></option>
+        @foreach (var item in tuyen)
+        {
+            <option value="@item.TuyenKHID">@item.Ten</option>
+        }
+    </select>
+</div>

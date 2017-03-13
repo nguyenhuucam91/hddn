@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "XuLyDanhSachKhachHangTheoNhanVien";
+
+    List<Nhanvien> ls= ViewData["nhanvien"] as List<Nhanvien>;
+}
+<link href="~/Content/Style.css" rel="stylesheet" />
+<div class="row" style="margin-left:4%">
+    <!-- /span6 -->
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <i class="icon-bookmark"></i>
+                <h3>Tùy chọn báo cáo danh sách khách hàng theo nhân viên</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                @using (Html.BeginForm("DanhSachKhachHangTheoNhanVien", "BaoCaoKinhDoanh"))
+                {
+                    <div class="xulybc">
+                        <p><div>Nhân viên:</div>
+                        <select name="d1" class="dropdown nhanvien" style="width:80%">
+                            @foreach (var item in ls)
+                            {
+                                <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>   
+                            }
+                        </select>
+                        </p>
+                        <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

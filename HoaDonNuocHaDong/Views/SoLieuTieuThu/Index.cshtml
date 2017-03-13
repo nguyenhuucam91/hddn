@@ -1,0 +1,260 @@
+﻿@{
+    ViewBag.Title = "Nhập số liệu tiêu thụ";
+    var kH = ViewBag.khachHang as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
+    int year = ViewBag.year;
+    int month = ViewBag.month;
+    //show hóa đơn hay không
+    var receiptIsShown = ViewBag.showHoaDon;
+    //tuyến đc chọn
+    var selectedTuyen = ViewBag.selectedTuyen;
+    //áp giá đặc biệt class
+    HoaDonNuocHaDong.Helper.ApGiaHelper helper = new HoaDonNuocHaDong.Helper.ApGiaHelper();
+    var currentDate = ViewBag.currentDate;
+    var nextMonth = ViewBag.nextMonth;
+    var selectedNhanvien = ViewBag.selectedNhanvien;
+    Nhanvien nhanVienObj = ViewData["nhanVienObj"] as Nhanvien;
+    Tuyenkhachhang tuyenObj = ViewData["tuyenObj"] as Tuyenkhachhang;
+    //được chốt
+    var isChot = ViewBag.isChot;
+    //Tạo 1 instance của class Chỉ số để kiểm tra chốt
+    HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
+}
+<script src="~/Assets/js/jquery.dataTables.min.js"></script>
+<script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
+<link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
+<!-- Khu vực toggle cột tắt bật -->
+<style>
+    .clicked {
+        color: red;
+    }
+
+    tbody, tbody input {
+        font-size: 15px;
+    }
+</style>
+<div class="main">
+
+    <div class="main-inner">
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="widget ">
+                    <div class="widget-header">
+                        <i class="icon-user"></i>
+                        <h3>Nhập số liệu tiêu thụ cho tuyến</h3>
+                    </div> <!-- /widget-header -->
+
+                    <div class="widget-content">
+                        <h4>Bạn đang nhập số liệu cho:</h4>
+                        <div style="margin:25px; margin-left:10px">
+                            <form action="@Url.Action("index","solieutieuthu")" method="post">
+
+                                <div class="form-group">
+                                    <label for="" class="" style="float:left;margin: .5% 1% 0 0%"><strong>Tháng:</strong></label>
+                                    <input name="thang" type="number" min="1" max="12" class="form-control" style="width:100px;float:left" value="@ViewBag.month" />
+
+                                    <label for="" class="" style="float:left;margin: .5% 1% 0 3%"><strong>Năm:</strong></label>
+                                    <input name="nam" type="number" min="0" class="form-control" style="width:100px;float:left" value="@ViewBag.year" />
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <!-- Ngày bắt đâu và ngày kết thúc để chuyển xuống in hóa đơn -->
+                                <!-- Tuyến -->
+                                <div class="form-group">
+                                    @Html.Partial("_FilterKhachHang")
+                                </div>
+                                <!-- Hướng dẫn tìm kiếm-->
+                                <div class="huongDan">
+                                    <p>Chọn tổ, nhân viên, tuyến để tiến hành lọc ds khách hàng, nhập ngày kết thúc để thiết lập ngày kết thúc cho hóa đơn.</p>
+                                    <p>Click vào tên khách hàng để tiến hành cập nhật thông tin nhanh, click vào mã khách hàng để xem chỉ số từng tháng</p>
+                                    <p>Sau khi chỉnh sửa xong, ấn F5 để cập nhật lại</p>
+                                </div>
+                                <br />
+                                <!-- Submit btn -->
+                                <div class="form-group" style="clear:both;text-align:center">
+                                    <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Tắt bật cột -->
+                        <!--Tắt bật cột-->
+                        <div class="form-actions">
+                            Tắt bật cột (Màu đỏ là cột được ẩn):
+
+                            <a class="toggle-vis" data-column="0">MãKH</a>
+                            - <a class="toggle-vis" data-column="1">TênKH</a>
+                            - <a class="toggle-vis" data-column="2">Số hộ</a>
+                            - <a class="toggle-vis" data-column="3">Số khẩu</a>
+                            - <a class="toggle-vis" data-column="4">TTDoc</a>
+                            - <a class="toggle-vis" data-column="5">Bắt đầu</a>
+                            - <a class="toggle-vis" data-column="6">Kết thúc</a>
+
+                        </div>
+                        <!-- Operation in ấn và xuất hóa đơn -->
+                        @if ((bool)receiptIsShown)
+                        {
+                            <div class="outerTable">
+                                <table class="table table-bordered hoaDonNuoc">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã khách hàng</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Số hộ</th>
+                                            <th>Số khẩu</th>
+                                            <th>TT đọc</th>
+                                            <th>Ngày bắt đầu</th>
+                                            <th>Ngày kết thúc</th>
+                                            <th>Chỉ số cũ</th>
+                                            <th>Chỉ số mới</th>
+                                            <th>Sản lượng</th>
+                                            <th>Số khoán</th>
+                                            <th>Kiểm định</th>
+                                            <th data-toggle="tooltip" data-placement="top" title="Màu đỏ là danh sách những khách hàng có áp giá đặc biệt trong tháng này">Áp đặc biệt</th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="7"><b>(@tuyenObj.Matuyen - @tuyenObj.Ten) - (@nhanVienObj.MaNhanVien - @nhanVienObj.Ten) - (@month / @year)</b></td>
+                                            <td colspan="3">Ngày bắt đầu: <input type="text" id="startDateFixedTop"></td>
+                                            <td colspan="3">Ngày kết thúc: <input type="text" id="endDateFixedTop"></td>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @{
+                            int i = 1;
+                            int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
+                            int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
+                                        }
+                                        @foreach (var item in kH)
+                                        {
+                                            int hoaDonID = item.HoaDonNuocID;
+                                            int khachHangIDRow = item.KhachHangID;
+
+                                            <tr>
+                                                <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
+                                                <td><a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow})">@item.TenKhachHang</a></td>
+                                                <td style="width:5px">@item.SoHo</td>
+                                                <td>@item.SoKhau</td>
+                                                <td>@item.ThuTuDoc</td>
+                                                <!-- Bắt đầu -->
+                                                @{
+                                            HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+                                            Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
+                                            Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == nextMonthReceiptNumber && p.NamHoaDon == nextYearReceiptNumber);
+                                                }
+
+                                                <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
+                                                @if (thisMonthReceipt.Ngaybatdausudung != null)
+                                                {
+                                                    <td class="startDate">
+                                                        <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
+                                                        <input type="text" style="width:90%" name="startDate" value="@String.Format("{0:dd/MM/yyyy}",thisMonthReceipt.Ngaybatdausudung)" data-hoadonid="@item.HoaDonNuocID" />
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="startDate">
+                                                        <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="0" />
+                                                        <input type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" />
+                                                    </td>
+                                                }
+                                                @if (nextMonthReceipt != null)
+                                                {
+                                                    <td class="endDate"><input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID" value="@String.Format("{0:dd/MM/yyyy}", nextMonthReceipt.Ngaybatdausudung)" data-hoadonid="@item.HoaDonNuocID" /></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="endDate"><input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID" data-hoadonid="@item.HoaDonNuocID" /></td>
+                                                }
+
+                                                <!-- Chỉ số cũ -->
+                                                <td><input type="text" style="width:55px" value="@item.ChiSoCu" /></td>
+                                                <!-- Chỉ số mới: nếu là nhân viên, nếu đã chốt thì disabled đối với nhân viên(enable với trưởng phòng), nếu chưa chốt thì mở ô ra cho nhập -->
+                                                @if (isChot == null || isChot == false)
+                                                {
+                                                    <td><input type="number" class="negNumber" min="0" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi"></td>
+                                                }
+                                                //nếu đã chốt hóa đơn (chốt = true) mà phòng in hóa đơn tiến hành hủy hóa đơn thì vấn edit lại được
+                                                else
+                                                {
+                                                    if (cS.isChotHoaDon(hoaDonID))
+                                                    {
+                                                        <td><input type="number" class="negNumber" min="0" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" disabled="disabled"></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td><input type="number" class="negNumber" min="0" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi"></td>
+                                                    }
+                                                }
+                                                <!-- Sản lượng -->
+                                                <td><input type="text" style="width:55px" name="sanLuong" readonly value="@item.SanLuong" /></td>
+                                                <!-- Số khoán -->
+                                                <td><input type="number" data-khid="@item.KhachHangID" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="0" /></td>
+                                                <td>
+                                                    @if (HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
+                                                    {
+                                                        <input type="checkbox" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
+                                                               data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
+                                                        //thêm arrow nếu có kiểm định
+                                                        <button data-trid="details-@i" type="button" data-khid="@item.KhachHangID" data-month="@month" data-year="@year"
+                                                                title="Xem chi tiết kiểm định" class="btn btn-default dropdown-toggle xemChiTietKD">
+                                                            <span class="caret"></span> <span class="sr-only"></span>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" class="toggle" disabled />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <!-- Áp giá đặc biệt -->
+                                                    @if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
+                                                    {
+
+                                                        <a target="_blank" href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year})" style="color:red">Áp</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a target="_blank" href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year })">Áp</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <!-- Phần phụ để hiển thị thông tin kiểm định, không phải lúc nào cũng hiện ra, sử dụng ajax để load -->
+                                                    i++;
+                                        }
+                                    </tbody>
+
+
+                                </table>
+                                <!--end table-->
+                            </div>
+                        }
+                        <!-- Operation -->
+                        <div class="form-actions">
+                            <button type="button" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new { tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' class="btn btn-default" style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
+                        </div> <!-- /form-actions -->
+
+                    </div> <!-- /widget-content -->
+
+                </div> <!-- /widget -->
+
+
+            </div> <!-- /row -->
+
+        </div> <!-- /container -->
+
+    </div> <!-- /main-inner -->
+
+</div> <!-- /main -->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Xem chi tiết chỉ số
+        $(document).keyup(function (event) {
+            if (event.ctrlKey && (event.which === 88)) {
+                //xem chỉ số chi tiết
+                window.location.href = "/Solieutieuthu/ViewDetail?tuyenID=@selectedTuyen&month=@month&year=@year&nvquanly=@selectedNhanvien";
+            }
+        });
+    });
+</script>

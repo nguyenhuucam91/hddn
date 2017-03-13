@@ -1,0 +1,194 @@
+﻿using HoaDonHaDong.Helper;
+using HoaDonNuocHaDong.Base;
+using HoaDonNuocHaDong.Helper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace HoaDonNuocHaDong.Controllers
+{
+    public class KiemdinhController : BaseController
+    {
+        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        KiemDinh kiemDinhHelper = new KiemDinh();
+        NguoidungHelper ngHelper = new NguoidungHelper();
+        // GET: /Kiemdinh/
+        public ActionResult Create()
+        {
+            ViewBag.result = false;
+            return View();
+        }
+
+        /// <summary>
+        /// Tìm kiếm khách hàng có mã khách hàng nhập từ form cho sẵn
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Create(FormCollection form)
+        {
+            int quanHuyenID = Convert.ToInt32(form["quan"]);
+            Kiemdinh kD = new Kiemdinh();
+            List<Khachhang> kH = new List<Khachhang>();
+            String maKhachHang = "";
+            String IDKH = String.IsNullOrEmpty(form["maKhachHang"]) ? "0" : form["maKhachHang"];
+            var khachHang = db.Khachhangs.FirstOrDefault(p => p.MaKhachHang == IDKH);
+            if (khachHang != null)
+            {
+                maKhachHang = khachHang.MaKhachHang;
+            }
+            //nếu tìm thấy mã khách hàng trong hệ thống
+            if (khachHang != null)
+            {
+                ViewBag.message = null;
+                ViewBag.khachHang = khachHang;
+                ViewBag.maKH = maKhachHang;
+                ViewBag.khachHangID = khachHang.KhachhangID;
+                ViewBag.chiSoThangTruoc = ChiSo.getChiSoMoiThangTruoc(khachHang.KhachhangID);
+                //set status trả về
+                ViewBag.result = true;
+                ViewBag.dsKhachHang = kH;
+                return View(kD);
+            }
+            else
+            {
+                ViewBag.message = "Không tìm thấy khách hàng trong hệ thống";
+                ViewBag.result = false;
+                ViewBag.maKH = maKhachHang;
+            }
+
+            return View();
+        }
+
+        /// <summary>
+        /// Xem danh sách kiểm định trong tháng
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
+        {
+            ViewBag.kiemDinh = new List<Kiemdinh>();
+            return View();
+        }
+
+        /// <summary>
+        /// Lấy danh sách kiểm định của tháng nhất định
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Index(FormCollection form)
+        {
+            int month = String.IsNullOrEmpty(form["month"].ToString()) ? DateTime.Now.Month : Convert.ToInt32(form["month"]);
+            int year = String.IsNullOrEmpty(form["year"].ToString()) ? DateTime.Now.Year : Convert.ToInt32(form["year"]);
+            int tuyen = String.IsNullOrEmpty(form["tuyen"]) ? 0 : Convert.ToInt32(form["tuyen"]);
+            IEnumerable<object> kiemDinh = kiemDinhHelper.getDanhSachKiemDinh(month, year, tuyen);
+            ViewBag.kiemDinh = kiemDinh;
+            return View();
+        }
+
+        /// <summary>
+        /// Cập nhật kiểm định
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Edit(int? id)
+        {
+            Kiemdinh kiemDinh = db.Kiemdinhs.FirstOrDefault(p => p.KiemdinhID == id);
+            int kiemDinhKHID = kiemDinh.KhachhangID.Value;
+            int chiSoThangTruoc = ChiSo.getChiSoMoiThangTruoc(kiemDinhKHID);
+
+            ViewData["kiemDinh"] = kiemDinh;
+            ViewData["khachHang"] = db.Khachhangs.Find(kiemDinh.KhachhangID);
+            ViewBag.chiSoThangTruoc = chiSoThangTruoc;
+            ViewBag.id = id;
+            return View(kiemDinh);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int? id, FormCollection form)
+        {
+            Kiemdinh kD = db.Kiemdinhs.Find(id);
+            DateTime ngayKiemDinh = Convert.ToDateTime(form["ngayKiemDinh"]);
+            if (ngayKiemDinh != null)
+            {
+                //lấy danh sách attributes của khách hàng
+                int khachHangID = int.Parse(form["khachHangID"].ToString());
+                String ghiChu = form["ghiChu"];
+                int chiSoLucKiemDinh = Convert.ToInt32(form["chiSoTruocKiemDinh"]);
+                int chiSoSauKhiKiemDinh = Convert.ToInt32(form["chiSoSauKhiKiemDinh"]);
+                //thêm object kiểm định mới
+
+                kD.KhachhangID = khachHangID;
+                kD.Ngaykiemdinh = ngayKiemDinh;
+                kD.Ghichu = ghiChu;
+                kD.Chisoluckiemdinh = chiSoLucKiemDinh;
+                kD.Chisosaukiemdinh = chiSoSauKhiKiemDinh;
+                db.Entry(kD).State = System.Data.Entity.EntityState.Modified;
+                //lưu vào db
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View("Edit", kD);
+            }
+        }
+
+        [HttpPost]
+        /// <summary>
+        /// Thêm mới kiểm định cho khách hàng nào đó.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public ActionResult AddKiemDinh([Bind()] Kiemdinh kD, FormCollection form)
+        {
+            DateTime ngayKiemDinh = Convert.ToDateTime(form["ngayKiemDinh"]);
+            if (ngayKiemDinh != null)
+            {
+                //lấy danh sách attributes của khách hàng
+                int khachHangID = int.Parse(form["khachHangID"].ToString());
+
+                String ghiChu = form["ghiChu"];
+                int chiSoLucKiemDinh = Convert.ToInt32(form["chiSoTruocKiemDinh"]);
+                int chiSoSauKhiKiemDinh = Convert.ToInt32(form["chiSoSauKhiKiemDinh"]);
+                //thêm object kiểm định mới
+                kD = new Kiemdinh();
+                kD.KhachhangID = khachHangID;
+                kD.Ngaykiemdinh = ngayKiemDinh;
+                kD.Ghichu = ghiChu;
+                kD.Chisoluckiemdinh = chiSoLucKiemDinh;
+                kD.Chisosaukiemdinh = chiSoSauKhiKiemDinh;
+                db.Kiemdinhs.Add(kD);
+                //lưu vào db
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View("Create", kD);
+            }
+
+        }
+
+        /// <summary>
+        /// Xóa kiểm định ra khỏi hệ thống
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult Delete(int id)
+        {
+            var kiemDinh = db.Kiemdinhs.FirstOrDefault(p => p.KiemdinhID == id);
+            if (kiemDinh != null)
+            {
+                db.Kiemdinhs.Remove(kiemDinh);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+
+    }
+}

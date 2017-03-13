@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Danh sách controller";
+
+    var actionList = ViewBag.actionList;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Chức năng hệ thống</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <button class="btn btn-danger" onclick="history.go(-1)">Quay lại</button>
+
+                           <table class="example table-bordered table-striped">
+                               <thead>
+                                   <tr>
+                                       <th>
+                                           Stt
+                                       </th>
+                                       <th>
+                                           Tên module
+                                       </th>
+                                       <th style="width:20%">
+                                           Tên action
+                                       </th>
+                                       <th>
+                                           Tên
+                                       </th>
+                                   </tr>
+                               </thead>
+
+                               <tbody>
+                                   @{int i = 1;}
+                                   @foreach (var item in actionList)
+                                   {
+                                       <tr>
+                                           <td>
+                                                @i
+                                           </td>
+                                           <td>
+                                               @HoaDonNuocHaDong.Helper.Log.getName(item.NhomchucnangID)
+                                           </td>
+                                           <td>
+                                               @item.TenAction
+                                           </td>
+                                           <td>
+                                               <input type="text" name="action" data-rowID ="@item.ChucnangID" class="actionFriendlyName" value="@item.Ten" style="width:95%"/>
+                                           </td>
+                                       </tr>
+                                       i++;
+                                   }
+                               </tbody>                               
+                           </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

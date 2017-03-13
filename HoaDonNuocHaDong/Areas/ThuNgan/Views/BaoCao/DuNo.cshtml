@@ -1,0 +1,104 @@
+﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.DuNoModel>
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Báo cáo dư nợ</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="tabable">
+                                <ul class="nav nav-tabs">
+                                    @*<li class="active"><a href="#tab-khuvuc" data-toggle="tab">Danh sách thu</a></li>*@
+                                    <li><a href="#tab-nhanvien" data-toggle="tab">Danh sách khách hàng chưa thanh toán</a></li>
+                                    <li><a href="@Url.Action("BaoCaoDuNo","Congno")">Báo cáo dư có</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <!-- Danh sachs bao gồm khách hàng không thanh toán công nợ từ tháng trước -->
+                                    <div class="tab-pane active" id="tab-nhanvien" style="width:95%; margin: auto">
+                                        <div>
+                                            <span style="color:red; font-size:11px;">Danh sách khách hàng chưa thanh toán</span>
+                                            <table id="example2" class="unlimited table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Mã khách hàng</th>
+                                                        <th>Tên khách hàng</th>
+                                                        <th>Địa chỉ</th>
+                                                        <th>Tuyến</th>
+                                                        <th>Tháng</th>
+                                                        <th>Số tiền</th>
+                                                        <th>Nhân viên</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{ double tong = 0; }
+                                                    @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuNoModel item in Model)
+                                                    {
+                                                        if (item.HoaDon.SoTienNopTheoThang != null) {
+                                                            tong = item.HoaDon.SoTienNopTheoThang.SoTienPhaiNop ?? 0;
+                                                        }
+                                                        <tr>
+                                                            <td>@item.KhachHang.MaKhachHang</td>
+                                                            <td>
+                                                                <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
+                                                                   data-khachhang="@item.KhachHang.KhachhangID" data-loaikhachhang="@item.KhachHang.LoaiKHID"
+                                                                   data-thanhtoan="@item.KhachHang.HinhthucttID" data-hd="@item.HoaDon.Sohoadon">
+                                                                    @item.KhachHang.Ten
+                                                                </a>
+                                                            </td>
+                                                            <td>@item.KhachHang.Diachi</td>
+                                                            <td>@item.TuyenKhachHang.Ten</td>
+                                                            <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+                                                            <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop)</td>
+                                                            <td>@item.NhanVien.Ten</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr role="row">
+                                                        <td>Tổng</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>@tong</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal box cho chọn tên -->
+<div id="myModal" class="modal fade" role="dialog" style="top:50%">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Chi tiết</h3>
+            </div>
+            <div class="modal-body">
+                <h5><a href="profile.html">Xem chi tiết thông tin cá nhân</a></h5>
+
+                <div id="thongtin"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- end modal -->

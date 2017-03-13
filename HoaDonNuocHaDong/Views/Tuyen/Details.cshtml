@@ -1,0 +1,71 @@
+﻿@model HoaDonNuocHaDong.Tuyenkhachhang
+
+@{
+    ViewBag.Title = "Xem chi tiết";
+
+    var nhanVien = (List<Nhanvien>)ViewBag._nhanVien;
+    var selectedNhanVien = ViewBag.selectedNhanVien;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget widget-table action-table">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem thông tin tuyến khách hàng</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="form-group" style="margin:2%">
+                                <label for="" class="col-sm-2 control-label" style="margin-right:3%">Mã tuyến : </label>
+                                <div class="col-sm-10">
+                                    @Html.TextBoxFor(p => p.Matuyen, new { @class = "form-control width" })
+                                    <br />
+                                    @Html.ValidationMessageFor(p => p.Matuyen)
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin:2%">
+                                <label for="" class="col-sm-2 control-label" style="margin-right:3%">Tên tuyến : </label>
+                                <div class="col-sm-10">
+                                    @Html.TextBoxFor(p => p.Ten, new { @class = "form-control width", @style = ";width:50%" })
+                                    <br />
+                                    @Html.ValidationMessageFor(p => p.Ten)
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin:2%">
+                                <label for="" class="col-sm-2 control-label" style="margin-right:3%">Nhân viên quản lí : </label>
+
+                                <div class="col-md-10">
+                                    <select name="nV" class="dropdown nhanvien" style="width:40%">
+                                        @foreach (var item in nhanVien)
+                                        {
+                                            if (item.NhanvienID == selectedNhanVien)
+                                            {
+                                                <option value="@item.NhanvienID" selected>@item.MaNhanVien - @item.Ten</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10" style="margin:2%">
+                                    @Html.ActionLink("Tới trang cập nhật", "Edit", new { id = Model.TuyenKHID }, new { @class = "btn btn-primary" })
+                                    @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-danger" })
+                                    <br /><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,137 @@
+﻿@model IList<HoaDonNuocHaDong.Hoadonnuoc>
+
+@{
+    ViewBag.Title = "duno";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    String month = Request.QueryString["month"];
+    String year = Request.QueryString["year"];
+}
+
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 29px;
+        font-weight: bold;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+    }
+</style>
+<div class="ten center" style="font-size:24px">
+    Báo cáo dư nợ
+</div>
+<div class="loc center">Tháng @month năm @year</div>
+<br />
+
+<table id="example2" class="unlimited table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Mã khách hàng
+            </th>
+            <th>
+                Tên khách hàng
+                @*@Html.DisplayNameFor(model => model.Khachhang.Ten)*@
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+
+            @*<th>
+                    Số hóa đơn
+                </th>*@
+            <th>
+                Tuyến
+                @*@Html.DisplayNameFor(model => model.Khachhang.TuyenKHID)*@
+            </th>
+            <th>
+                Tháng
+                @*@Html.DisplayNameFor(model => model.Ngayhoadon)*@
+            </th>
+            <th>
+                Số tiền
+                @*@Html.DisplayNameFor(model => model.Tongsotieuthu)*@
+            </th>
+            @*<th>
+                    Trạng thái in
+                    @Html.DisplayNameFor(model => model.Trangthaiin)
+                </th>*@
+
+            <th>
+                Nhân viên
+                @*@Html.DisplayNameFor(model => model.Nhanvien.Ten)*@
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{double no = 0;}
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            var dayNow = new DateTime(Model[i].NamHoaDon.Value, Model[i].ThangHoaDon.Value, 1);
+
+            var day = DateTime.Now.Date - dayNow;
+            //var day = DateTime.Now - Model[i].Ngayhoadon;
+            if (Model[i].Trangthaithu == false || Model[i].Trangthaithu == null)
+            {
+                Boolean t = Model[i].SoTienNopTheoThang != null;
+                if (t)
+                {
+                    no = (double)no + Model[i].SoTienNopTheoThang.SoTienPhaiNop.Value;
+                }
+                <tr>
+                    <td>
+
+                        @Html.HiddenFor(x => Model[i].KhachhangID)
+                        @Model[i].Khachhang.MaKhachHang
+                    </td>
+                    <td>
+                        <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
+                           data-khachhang="@Model[i].KhachhangID" data-loaikhachhang="@Model[i].Khachhang.LoaiKHID"
+                           data-thanhtoan="@HoaDonNuocHaDong.Helper.KhachHang.getHTTTID(Model[i].KhachhangID.Value)" data-hd="@Model[i].Sohoadon">
+                            @Html.HiddenFor(x => Model[i].HoadonnuocID)
+                            @Model[i].Khachhang.Ten
+                        </a>
+                    </td>
+                    <td>
+                        @Model[i].Khachhang.Diachi
+                    </td>
+
+                    @*<td>
+                            @Html.HiddenFor(x => Model[i].Sohoadon)
+                            @Html.DisplayFor(x => Model[i].Sohoadon)
+                        </td>*@
+                    <td>
+
+                        @Model[i].Khachhang.Tuyenkhachhang.Ten
+                    </td>
+                    <td>
+                        @Html.HiddenFor(x => Model[i].Ngayhoadon)
+                        @Html.DisplayFor(x => Model[i].ThangHoaDon)/@Html.DisplayFor(x => Model[i].NamHoaDon)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(x => Model[i].SoTienNopTheoThang.SoTienPhaiNop)
+                        @Html.DisplayFor(x => Model[i].SoTienNopTheoThang.SoTienPhaiNop)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(x => Model[i].NhanvienID)
+                        @Html.DisplayFor(x => Model[i].Nhanvien.Ten)
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+    <thead>
+        <tr>
+            <td colspan="5">Tổng</td>
+            <td class="tong">@Html.Raw(no) </td>
+            <td></td>
+        </tr>
+    </thead>
+</table>

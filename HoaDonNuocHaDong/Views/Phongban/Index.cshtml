@@ -1,0 +1,113 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Phongban>
+
+@{
+    ViewBag.Title = "Danh sách phòng ban";
+
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Quản lý phòng ban</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <!-- Thêm mới -->
+                            @*<button class="btn btn-primary" onclick="window.location.href='@Url.Action("Create","Phongban")'">Thêm mới phòng ban</button>*@
+                            <br /><br />
+                            <!-- Danh sách phòng ban-->
+                            @{
+                                int i = 1;
+                            }
+                            @foreach (var item in Model)
+                            {
+
+                                List<Nhanvien> nV = HoaDonNuocHaDong.Helper.PhongbanHelper.getNhanVienInPhongBan(item.PhongbanID);
+                                <div class="col-sm-6 col-md-4 pull-left">
+                                    <div class="thumbnail">
+
+                                        <div class="caption">
+                                            <h3>@item.Ten</h3>
+                                            <br />                                            
+                                            @*<p><a href="#" data-toggle="modal" data-target="#@item.PhongbanID">Xem danh sách nhân viên</a></p>*@
+                                            <!--Modal box-->
+                                            <!-- Modal -->
+                                            @*<div class="modal fade" id="@item.PhongbanID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel">
+                                                               Tất cả (@HoaDonNuocHaDong.Helper.PhongbanHelper.countNhanVienInPhongban(item.PhongbanID))
+                                                            </h4>
+                                                        </div>
+
+                                                        <div class="clear" style="clear:both"></div>
+                                                        <div class="modal-body">
+                                                            <!-- Danh sách nhân viên -->
+                                                            <div class="row" style="margin-left:0">
+                                                                @foreach (var _item in nV)
+                                                                {
+                                                                    <div class="col-md-4 tenNV" style="float:left;font-size:13px">@_item.Ten</div>
+                                                                    <div class="col-md-8" style="float:right;font-size:13px">
+                                                                        <a href="@Url.Action("Edit", "Nhanvien", new { @id=_item.NhanvienID})" class="btn btn-primary">Sửa</a>
+                                                                        <a href="@Url.Action("Delete", "Nhanvien", new { @id=_item.NhanvienID})" class="btn btn-danger">Xóa</a>
+                                                                    </div>
+                                                                    <div style="clear:both"></div>
+                                                                    <hr style="margin:10px 0"/>
+                                                                }
+                                                            </div>                                                           
+                                                        </div>
+                                                        <!-- Đóng hộp thoại-->
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+
+                                            @*<p>
+                                                <a href="@Url.Action("Edit", new { @id=item.PhongbanID})" class="btn btn-primary" role="button">Sửa</a>
+                                                <a href="@Url.Action("Delete", new { @id = item.PhongbanID })" class="btn btn-default" role="button">Xóa</a>
+                                            </p>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- hết danh sách phòng ban-->
+                                                                i++;
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pull-left {
+        float: left;
+        width: 33%;
+        margin: 0 1px;
+    }
+
+    .modal {
+        display: block !important; /* I added this to see the modal, you don't need this */
+    }
+
+    /* Important part */
+    .modal-dialog {
+        overflow-y: initial !important;
+    }
+
+    .modal-body {
+        max-height: 250px;
+        overflow-y: auto;
+    }
+</style>

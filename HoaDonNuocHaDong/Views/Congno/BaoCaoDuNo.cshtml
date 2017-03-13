@@ -1,0 +1,179 @@
+﻿@model IList<HoaDonNuocHaDong.DuCo>
+
+
+@{
+    ViewBag.Title = "Báo cáo dư có";
+
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Báo cáo dư có</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="tabable">
+                                @*<ul class="nav nav-tabs">
+                                    
+                                    <li><a href="@Url.Action("baoCaoCongNo","Congno")#tab-nhanvien">Danh sách khách hàng nợ</a></li>
+                                    <li class="active"><a href="#tab-khuvuc" data-toggle="tab">Báo cáo dư có</a></li>
+                                </ul>*@
+                                <div class="tab-content">
+                                   
+
+                                        <!-- Form group -->
+                                      
+                                    </div>
+
+                                    <div class="tab-pane active" id="tab-khuvuc" style="width:95%; margin: auto">
+                                       
+                                        <div class="col-md-12">
+                                            @*<div id="thang">
+                                                Chọn tháng, năm hiển thị
+                                                @{
+                                                    var month = DateTime.Now.Month;
+                                                    var year = DateTime.Now.Year;
+                                                    if (Request.QueryString["month"] != null && Request.QueryString["month"].ToString() != "")
+                                                    {
+                                                        month = Convert.ToInt32(Request.QueryString["month"]);
+                                                    }
+                                                    if (Request.QueryString["year"] != null && Request.QueryString["year"].ToString() != "")
+                                                    {
+                                                        year = Convert.ToInt32(Request.QueryString["year"]);
+                                                    }
+                                                }
+                                               @using (Html.BeginForm("BaoCaoDuNo", "Congno", FormMethod.Get))
+                                                {
+                                                    @Html.Raw("Tháng") <input type="text" name="month" placeholder="chọn tháng" value="@month" class="span1" />
+                                                    @Html.Raw("Năm") <input type="text" name="year" placeholder="chọn năm" value="@year" class="span1" />
+                                                    <input type="submit" value="Xem báo cáo" />
+                                                }
+                                            </div>*@
+                                            <table id="example1" class="unlimited table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Mã khách hàng
+                                                        </th>
+                                                        <th>
+                                                            Tên khách hàng
+                                                            @*@Html.DisplayNameFor(model => model.Khachhang.Ten)*@
+                                                        </th>
+                                                        <th>
+                                                            Địa chỉ
+                                                        </th>
+                                                        @*<th>
+                                                                Số nhân khẩu
+                                                            </th>*@
+                                                        @*<th>
+                                                                Ký Hiệu
+                                                                @Html.DisplayNameFor(model => model.Kyhieu)
+                                                            </th>*@
+                                                        
+                                                        <th>
+                                                            Tuyến
+                                                            @*@Html.DisplayNameFor(model => model.Khachhang.TuyenKHID)*@
+                                                        </th>
+                                                        <th>
+                                                            Số tiền dư
+                                                            @*@Html.DisplayNameFor(model => model.Tongsotieuthu)*@
+                                                        </th>
+                                                        <th>
+                                                            Nhân viên
+
+                                                            @*@Html.DisplayNameFor(model => model.Nhanvien.Ten)*@
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                @{var tong = 0;}
+                                                @for (var i = 0; i < Model.Count; i++)
+                                                {
+                                                    tong = (int)tong + (int)Model[i].SoTienDu;
+
+                                                    if (true)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Html.HiddenFor(x => Model[i].KhachhangID)
+                                                                @Model[i].KhachhangID
+                                                            </td>
+                                                            <td>
+                                                                @*@Html.HiddenFor(x => Model[i].HoadonnuocID)*@
+                                                                <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
+                                                                   data-khachhang="@Model[i].KhachhangID" data-loaikhachhang="@Model[i].Khachhang.LoaiKHID"
+                                                                   data-thanhtoan="@HoaDonNuocHaDong.Helper.KhachHang.getHTTTID(Model[i].KhachhangID.Value)" data-hd="@Model[i].SoTienNopTheoThang.Hoadonnuoc.Sohoadon">
+                                                                    @Model[i].Khachhang.Ten
+                                                                </a>
+                                                            </td>
+                                                            <td>
+
+                                                                @Model[i].Khachhang.Diachi
+                                                            </td>
+                                                            <td>
+
+                                                                @Model[i].Khachhang.TuyenKHID
+                                                            </td>
+                                                           
+                                                            @*<td>
+                                                                @Html.HiddenFor(x => Model[i].SoTienNopTheoThang.Hoadonnuoc.Ngayhoadon)
+                                                                @Html.DisplayFor(x => Model[i].SoTienNopTheoThang.Hoadonnuoc.ThangHoaDon)/@Html.DisplayFor(x => Model[i].SoTienNopTheoThang.Hoadonnuoc.NamHoaDon)
+                                                            </td>*@
+                                                            <td>
+                                                                @Html.HiddenFor(x => Model[i].SoTienDu)
+                                                                @Html.DisplayFor(x => Model[i].SoTienDu)
+                                                            </td>
+                                                            <td>
+                                                                @Html.HiddenFor(x => Model[i].SoTienNopTheoThang.Hoadonnuoc.NhanvienID)
+                                                                @Html.DisplayFor(x => Model[i].SoTienNopTheoThang.Hoadonnuoc.Nhanvien.Ten)
+                                                            </td>
+                                                           
+                                                        </tr>
+                                                    }
+                                                }
+                                                <thead>
+                                                    <tr>
+                                                        <td colspan="5">Tổng</td>
+                                                        <td class="tong"> @Html.Raw(tong) </td>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal box cho chọn tên -->
+<div id="myModal" class="modal fade" role="dialog" style="top:50%">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Chi tiết</h3>
+            </div>
+            <div class="modal-body">
+                <h5><a href="profile.html">Xem chi tiết thông tin cá nhân</a></h5>
+
+                <div id="thongtin"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- end modal -->

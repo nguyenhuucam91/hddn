@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Lọc danh sách khách hàng";
+    List<Khachhang> khachhangAfterFiltered = ViewData["khachhangAfterFiltered"] as List<Khachhang>;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Quản lý khách hàng</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs">
+                                    <li class="index"><a href="@Url.Action("Index","Khachhang")">Danh sách khách hàng</a>
+                                    <li class="filter active"><a href="@Url.Action("FilterMaKH","Khachhang")">Lọc khách hàng</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Lọc khách hàng -->
+                            <!-- Tab lọc khách hàng -->
+                            <div id="tab-lockhachhang" class="tab-content tab-pane">                               
+                                <!-- Form Thứ 2: Lọc theo mã khách hàng -->
+                                <form action='@Url.Action("FilterMaKH","Khachhang")' method="post">
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Lọc theo mã khách hàng" name="maKH" class="form-control pull-left" />
+                                        <button type="submit" class="btn btn-default" style="text-align:center;margin-left:12px">Lọc</button>
+                                    </div>
+                                </form>
+
+                                <!-- Bảng lọc khách hàng -->
+                                <table class="example table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>STT</th>
+                                            <th>Mã khách hàng</th>
+                                            <th>Mã hợp đồng</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Thứ tự đọc</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Because model is in the type of LISt (storage - multiple records), so in order to get EACH RECORD, u need to iterate VIA LOOP -->
+                                        @{int j = 1;}
+                                        @foreach (var item in khachhangAfterFiltered)
+                                        {
+                                            <tr>
+                                                <td><input type="checkbox" name="check" value="@item.KhachhangID" /></td>
+                                                <td>@j</td>
+                                                <td>
+                                                    @item.MaKhachHang
+                                                </td>
+                                                <td>
+                                                    @item.Sohopdong
+                                                </td>
+                                                <td>
+                                                    <a href="@Url.Action("ViewDetail", "Khachhang", new { @id = item.KhachhangID})" target="_blank">@item.Ten</a>
+                                                </td>
+
+                                                <td>
+                                                    @item.Diachi
+                                                </td>
+                                                <td>
+                                                    @item.Dienthoai
+                                                </td>
+                                                <td>
+                                                    @item.TTDoc
+                                                </td>
+
+                                                <td>
+                                                    @Html.ActionLink("Sửa", "Edit", new { id = item.KhachhangID }) |
+                                                    @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"]}, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" }) |
+                                                    @if (item.Tinhtrang == 0 || item.Tinhtrang == null)
+                                                    {
+                                                        @Html.ActionLink("Thanh lý HD", "Inactive", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"]})
+                                                        @Html.Raw("|")
+                                                        if (String.IsNullOrEmpty(Request.QueryString["catnuoc"]) || Request.QueryString["catnuoc"] == "0")
+                                                        {
+                                                            @Html.ActionLink("Cắt nước", "Catnuoc", new { id = item.KhachhangID, TinhTrang = 0})
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.ActionLink("Cấp lại nước", "Caplainuoc", new { id = item.KhachhangID, TinhTrang = 0})
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@Url.Action("Inactive", new { @id = item.KhachhangID})" target="_blank">Xem thanh lý</a>
+                                                    }
+
+
+
+
+                                                </td>
+                                            </tr>
+                                                    j++;
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End main-->

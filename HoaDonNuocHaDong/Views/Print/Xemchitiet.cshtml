@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "Danh sách in hóa đơn";
+
+    HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
+    
+    double SH1Price = cS.getSoTienTheoApGia("SH1").Value;
+    double SH2Price = cS.getSoTienTheoApGia("SH2").Value;
+    double SH3Price = cS.getSoTienTheoApGia("SH3").Value;
+    double SH4Price = cS.getSoTienTheoApGia("SH4").Value;
+    double HCPrice = cS.getSoTienTheoApGia("HC").Value;
+    double CCPrice = cS.getSoTienTheoApGia("CC").Value;
+    double SXPrice = cS.getSoTienTheoApGia("SX-XD").Value;
+    double KDPrice = cS.getSoTienTheoApGia("KDDV").Value;
+    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+    var selectedMonth = Request.QueryString["month"];
+    var selectedYear = Request.QueryString["year"];
+    //danh sách khách hàng tính tiền
+    var dsKH = ViewBag.dsachKH as List<HoaDonNuocHaDong.Models.InHoaDon.TuyenTinhTien>;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem danh sách hóa đơn</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <button type="button" onclick="history.go(-1)" class="btn btn-default">Quay lại</button>
+                            <button type="button" class="btn btn-default" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear})')">In</button>
+                            <p></p>
+                            <!--Form in danh sách khách hàng được chọn-->
+                            <form action="/Print/PrintSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />
+                                <button type="submit" class="btn btn-default printSelected">In hóa đơn được chọn</button>
+                            </form>
+
+                            <form action="/Print/PrintFrom?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                <input type="number" placeholder="Từ số hóa đơn" name="from" class="negNumber"/>
+                                <input type="number" placeholder="đến số hóa đơn" name="to" class="negNumber"/>
+                                <input type="submit" value="In danh sách theo số hóa đơn" />
+                            </form>
+
+                            <!-- Hướng dẫn -->
+                            <div class="huongDan">
+                                <span>Những khách hàng nào đã in chỉ số thì tên khách hàng được hiện màu đỏ</span>
+                            </div>
+                            <!-- Bảng xem chỉ số -->
+                            <table class="unlimited table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>#</th>
+                                        <th>Mã khách hàng</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Ngày bắt đầu</th>
+                                        <th>Ngày kết thúc</th>
+                                        <th>Thứ tự đọc</th>
+                                        <th>Sản lượng</th>
+                                        <th>VAT</th>
+                                        <th>MT</th>
+                                        <th>Tổng cộng</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                      
+                                    }
+                                    @foreach (var item in dsKH)
+                                    {                   
+                                        int hoaDonNuocID = item.HoaDonNuoc;   
+                                        Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);                  
+                                        <tr>
+                                            <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
+                                            <td>@i</td>
+                                            <td>@item.MaKH</td>
+                                            <!-- Những khách hàng nào đã in chỉ số thì hiện màu đỏ -->
+                                            @if (hoaDonObj.Trangthaiin == true)
+                                            {
+                                                <td style="color:red">@item.TenKH</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.TenKH</td>
+                                            }
+                                            <td>@item.DiaChi</td>
+                                            <td>@item.NgayBatDau</td>
+                                            <td>@item.NgayKetThuc</td>
+                                            <td>@item.TTDoc</td>
+                                            <td>@item.SanLuong</td>
+                                            <td>@String.Format("{0:n0}", item.PhiVAT)</td>
+                                            <td>@String.Format("{0:n0}", item.PhiBVMT)</td>
+                                            <td style="color:blue">@String.Format("{0:n0}", String.Format("{0:n0}",item.TongCong ))</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

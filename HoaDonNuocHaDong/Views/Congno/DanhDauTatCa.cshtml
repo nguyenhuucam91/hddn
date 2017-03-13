@@ -1,0 +1,49 @@
+﻿
+
+
+@{
+    ViewBag.Title = "Quản lí công nợ";
+
+   
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Đánh dấu tất cả khách hàng trong tháng đã nộp tiền</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="tabable">
+
+                                <div class="tab-content">
+
+                                    <div class="row"
+                                         style=" border-bottom: 2px solid #F5F5F5; border-top: 2px solid #F5F5F5; padding: 1%; margin-bottom: 12px"
+                                         id="showSearch">
+
+                                        <!-- Form group -->
+                                        <h4>Đánh dấu tất cả  <span style="color:red">@ViewBag.dem</span> khách hàng trong quận đã nộp tiền tháng @DateTime.Now.Month/@DateTime.Now.Year</h4> 
+                                        <button id="chooseAll" data-status="@ViewBag.isChecked">Đánh dấu tất cả</button>
+                                    </div>
+
+                                    <div class="tab-pane active" id="tab-khuvuc" style="width:95%; margin: auto">
+
+                                   
+                                    </div>
+
+                                    <!-- Danh sachs bao gồm khách hàng không thanh toán công nợ từ tháng trước -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

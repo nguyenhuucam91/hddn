@@ -1,0 +1,79 @@
+﻿@{
+    var chiNhanh = ViewBag.chiNhanh;
+    var to = ViewBag.to;
+    var nhanVien = ViewBag.nhanVien;
+    var tuyen = ViewBag.tuyen as List<Tuyenkhachhang>;
+    var selectedChiNhanh = ViewBag.selectedChiNhanh;
+    var selectedPhongBan = ViewBag.selectedPhongBan;
+    var selectedTenChiNhanh = ViewBag.selectedTenChiNhanh;
+    var selectedTenPhongBan = ViewBag.selectedTenPhongBan;
+
+    var selectedNhanVien = Convert.ToInt32(ViewBag.selectedNhanVien);
+    var selectedTuyen = Convert.ToInt32(ViewBag.selectedTuyen);
+    var selectedTo = Convert.ToInt32(ViewBag.selectedTo);
+
+}
+
+
+<div class="form-group">
+    <!-- Chi nhánh -->
+    <select class="dropdown form-control quan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
+        <!-- Option mặc định -->
+        <option selected value="@selectedChiNhanh">@selectedTenChiNhanh</option>
+        @* @foreach (var item in chiNhanh)
+            {
+                <option value="@item.ChinhanhID">@item.ChinhanhID - @item.Ten</option>
+            }*@
+    </select>
+
+    <!-- Tổ -->
+    <select class="dropdown form-control to" style="width: 20%; float: left; margin-right: 3%" name="to">
+        <option></option>
+
+        @foreach (var item in to)
+        {
+            if (selectedTo == item.ToQuanHuyenID)
+            {
+                <option value="@item.ToQuanHuyenID" selected>@item.ToQuanHuyenID - @item.Ma</option>
+
+            }
+            else
+            {
+                <option value="@item.ToQuanHuyenID">@item.ToQuanHuyenID - @item.Ma</option>
+            }
+        }
+
+
+    </select>
+    <!-- Nhân viên -->
+    <select class=" dropdown form-control nhanvien" style="width: 20%; float: left; margin-right: 3%" name="nhanvien">
+        <option></option>
+        @foreach (var item in nhanVien)
+        {
+            if (selectedNhanVien == item.NhanvienID)
+            {
+                <option value="@item.NhanvienID" selected>@item.MaNhanVien - @item.Ten</option>
+            }
+            else
+            {
+                <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+            }
+        }
+    </select>
+
+    <!-- Tuyến -->
+    <select class=" dropdown form-control tuyen" style="width: 20%; float: left; margin-right: 3%" name="tuyen">
+        <option></option>
+        @foreach (var item in tuyen)
+        {
+            if (selectedTuyen == item.TuyenKHID)
+            {
+                <option value="@item.TuyenKHID" selected>@item.Ten</option>
+            }
+            else
+            {
+                <option value="@item.TuyenKHID">@item.Ten</option>
+            }
+        }
+    </select>
+</div>

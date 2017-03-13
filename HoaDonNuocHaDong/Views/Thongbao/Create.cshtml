@@ -1,0 +1,62 @@
+﻿@model HoaDonNuocHaDong.Thongbao
+
+@{
+    ViewBag.Title = "Thêm mới thông tin quận huyện";
+
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget widget-table action-table">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Thêm mới thông tin thông báo</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            @using (Html.BeginForm("Create", "Thongbao"))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                               
+                                <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Tiêu đề : </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextBoxFor(p => p.Tieude, new { @class = "form-control width" })
+                                        <span class="hide red">Tiêu đề không được để trống</span>
+                                    </div>
+                                </div>
+
+                                 <div class="form-group" style="margin:2%">
+                                    <label for="" class="col-sm-2 control-label" style="margin-right:3%">Nội dung : </label>
+                                    <div class="col-sm-10">
+                                        @Html.TextAreaFor(p => p.Noidung, new { @class = "form-control width" })
+                                        @Html.ValidationMessageFor(p=>p.Noidung)
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" style="margin-left:2%">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary createNew">Thêm mới</button>
+                                        <button type="button" class="btn btn-danger" onclick="history.go(-1);">Quay lại</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!-- /widget-content -->
+                    </div>
+                    <!-- /widget -->
+                </div>
+                <!-- /span6 -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /main-inner -->
+</div>
+<!-- /main -->

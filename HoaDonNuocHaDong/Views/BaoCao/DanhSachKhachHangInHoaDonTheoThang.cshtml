@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "DanhSachKhachHangInHoaDonTheoThang";
+}
+
+<div style="margin:5% 15% 0 5%">
+    <div style="font-size:20px;font-weight:bold; margin:3% 0 0 20%">DANH SÁCH KHÁCH HÀNG IN HÓA ĐƠN THÁNG ..... NĂM 20.....</div>
+    <div style="font-size:20px;font-weight:bold; margin:1% 0 3% 30%">TUYẾN:..............................</div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>TT</th>
+                <th>Mã KH</th>
+                <th>Tên khách hàng</th>
+                <th>Địa chỉ</th>
+                <th>Sản lượng</th>
+                <th>Số tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                for (int i = 1; i <= 4; i++)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

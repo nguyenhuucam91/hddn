@@ -1,0 +1,88 @@
+﻿@model HoaDonNuocHaDong.Hoadonnuoc
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Hoadonnuoc</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Ngayhoadown)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ngayhoadown)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sohoadon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sohoadon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Kyhieu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Kyhieu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tongsotieuthu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tongsotieuthu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Trangthaithu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Trangthaithu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Trangthaiin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Trangthaiin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Khachhang.Sotaikhoan)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Khachhang.Sotaikhoan)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nhanvien.Ten)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nhanvien.Ten)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

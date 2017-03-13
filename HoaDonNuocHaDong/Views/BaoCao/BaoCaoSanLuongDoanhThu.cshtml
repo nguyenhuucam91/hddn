@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "BaoCaoSanLuongDoanhThu";
+    var bcsl = ViewBag.bcsl;
+    var tong = ViewBag.tong;
+}
+
+<div style="margin:5% 10% 0 5%">
+    <h4>CÔNG TY TNHH MTV NƯỚC SẠCH HÀ ĐÔNG</h4>
+    <h1 style="margin-left:30%">BÁO CÁO SẢN LƯỢNG DOANH THU</h1>
+    <br />
+    <p style="margin-left:45%"><i>Tháng 7 năm 2016</i></p>
+    <br />
+    <p style="margin-right:5%; float:right"><i>Đơn vị tính: Đồng</i></p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Các mức</th>
+                <th>Số lượng</th>
+                <th>D.Thu trước thuế</th>
+                <th>VAT</th>
+                <th>Phí NT</th>
+                <th>Tổng cộng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in bcsl)
+            {
+                <tr>
+                <td>@item.STT</td>
+                <td>@item.CacMuc</td>
+                <td>@item.SanLuong</td>
+                <td>@item.DoanhThuTruocThue</td>
+                <td>@item.VAT</td>
+                <td>@item.PhiNuocThai</td>
+                <td>@item.TongCong</td>
+            </tr>
+            }
+            
+        </tbody>
+        <tr style="font-weight:bold;font-size:17px">
+            <td></td>
+            <td>Tổng</td>
+            <td>@tong.SanLuong</td>
+            <td>@tong.DoanhThuTruocThue</td>
+            <td>@tong.VAT</td>
+            <td>@tong.PhiNuocThai</td>
+            <td>@tong.TongCong</td>
+        </tr>
+    </table>
+    <br />
+    <p style="float:right"><i>Hà Đông, ngày 10 tháng 08 năm 2016</i></p><br />
+    <div style="font-size:14px; font-weight:bold;margin-left:20%;float:left">Người lập biểu</div>
+    <div style="font-size:14px; font-weight:bold;margin-left:20%;float:left">Kế toán trưởng</div>
+    <div style="font-size:14px; font-weight:bold;margin-left:20%;float:left">Tổng Giám đốc</div>
+</div>
+
+

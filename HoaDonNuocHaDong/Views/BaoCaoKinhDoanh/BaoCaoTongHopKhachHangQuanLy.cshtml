@@ -1,0 +1,97 @@
+﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+
+@{
+    ViewBag.Title = "BaoCaoTongHopKhachHangQuanLy";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    DateTime d1 = ViewBag.dt1;
+    DateTime d2 = ViewBag.dt2;
+}
+<style>
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 29px;
+        font-weight: bold;
+        margin-left: 35%;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 1% 0 4% 42%;
+    }
+</style>
+<div class="ten">Báo cáo tổng hợp Khách hàng quản lý</div>
+<div class="loc">Từ tháng: @d1.Month đến tháng: @d2.Month năm @d2.Year</div>
+@{
+    List<BaoCaoTongHopKhachHangQuanLy> lst = (List<BaoCaoTongHopKhachHangQuanLy>)ViewData["lst"];
+    int[] arrSum = (int[])ViewData["tong"];
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th rowspan="2">TT</th>
+            <th rowspan="2"></th>
+            <th colspan="3">Thống kê đầu kỳ</th>
+            <th colspan="3">Tăng trong kỳ</th>
+            <th colspan="3">Giảm trong kỳ</th>
+            <th colspan="3">Thống kê cuối kỳ</th>
+        </tr>
+        <tr>
+            <th>Đồng hồ</th>
+            <th>Khoán</th>
+            <th>Tổng</th>
+            <th>Đồng hồ</th>
+            <th>Khoán</th>
+            <th>Tổng</th>
+            <th>Đồng hồ</th>
+            <th>Khoán</th>
+            <th>Tổng</th>
+            <th>Đồng hồ</th>
+            <th>Khoán</th>
+            <th>Tổng</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (BaoCaoTongHopKhachHangQuanLy obj in lst)
+        {
+         <tr>
+            <td>@obj.TT</td>
+            <td></td>
+            <td>@obj.DongHoThongKeDauKy</td>
+            <td>@obj.KhoanThongKeDauKy</td>
+            <td>@obj.TongThongKeDauKy</td>
+            <td>@obj.DongHoTangTrongKy</td>
+            <td>@obj.KhoanTangTrongKy</td>
+            <td>@obj.TongTangTrongKy</td>
+            <td>@obj.DongHoGiamTrongKy</td>
+            <td>@obj.KhoanGiamTrongKy</td>
+            <td>@obj.TongGiamTrongKy</td>
+            <td>@obj.DongHoThongKeCuoiKy</td>
+            <td>@obj.KhoanThongKeCuoiKy</td>
+            <td>@obj.TongThongKeCuoiKy</td>
+        </tr>
+        }
+       
+        <tr>
+            <td></td>
+            <td>Tổng</td>
+            <td>@arrSum[0]</td>
+            <td>@arrSum[1]</td>
+            <td>@arrSum[2]</td>
+            <td>@arrSum[3]</td>
+            <td>@arrSum[4]</td>
+            <td>@arrSum[5]</td>
+            <td>@arrSum[6]</td>
+            <td>@arrSum[7]</td>
+            <td>@arrSum[8]</td>
+            <td>@arrSum[9]</td>
+            <td>@arrSum[10]</td>
+            <td>@arrSum[11]</td>
+        </tr>
+    </tbody>
+</table>

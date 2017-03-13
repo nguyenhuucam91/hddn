@@ -1,0 +1,483 @@
+﻿@model HoaDonNuocHaDong.Khachhang
+
+@{
+    ViewBag.Title = "Thêm mới khách hàng";
+
+    var maKH = ViewBag.MaKH;
+    var tuyenOngKTID = ViewBag.TuyenongkythuatID;
+    var selectedQuanHuyen = ViewBag.selectedQuanHuyen;
+    var selectedPhuongXa = ViewBag.selectedPhuongXa;
+    var selectedName = ViewBag.selectedQuanHuyenName;
+    var selectedCumDanCu = ViewBag.selectedCumDanCu;
+    var phuongXa = ViewBag.PhuongxaID as List<Phuongxa>;
+    var cumdanCu = ViewBag.CumdancuID as List<Cumdancu>;
+    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+    List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> tuyenLS = ViewBag.TuyenKHID as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
+    var isReentered = ViewBag.reEnterCustomer;
+    //để nhập khách hàng hàng loạt mà không bị mất giá trị
+    var selectedTuyenKHID = ViewBag.selectedTuyenKHID;
+    //thông báo thêm mới khách hàng thành công
+    var successfulMessage = ViewBag.successfulMessage;
+}
+@using (Html.BeginForm("Create", "Khachhang", FormMethod.Post, new { novalidate = false }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="main form-horizontal">
+        <div class="main-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <div class="widget ">
+                            <div class="widget-header">
+                                <i class="icon-user"></i>
+                                <h3>Thêm khách hàng mới</h3>
+                            </div> <!-- /widget-header -->
+
+                            <div class="widget-content">
+                                @if (ViewData.ModelState.Values.Where(v => v.Errors.Count != 0).Count() > 0)
+                                {
+                                    Html.ValidationSummary(false, "", new { @class = "alert alert-danger" });
+                                }
+                                <!-- Box hiển thị thêm mới khách hàng thành công-->
+                                @if(successfulMessage!=null){
+                                    <div class="alert alert-success" role="alert">
+                                        @successfulMessage
+                                    </div>
+
+                                 }   
+
+                                <form id="edit-profile" class="form-horizontal">
+                                    <input type="hidden" value="false" name="IsDelete" />
+                                    <!-- Tên khách hàng -->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-6 pull-left">
+                                            <label for="" class="control-label">Mã khách hàng:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.MaKhachHang, new { @Value = maKH, @readonly = "readonly" })
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.MaKhachHang)
+                                        </div>
+                                        <div class="col-md-6 pull-right" style="margin-right:20%">
+                                            <label for="" class="control-label">Tên khách hàng:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Ten, new { autofocus = true })
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Ten)
+                                        </div>
+                                    </div>
+
+                                    <!-- Tuyến khách hàng -->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-4 pull-left">
+                                            <label for="" class="control-label">Tuyến khách hàng:</label>&nbsp;&nbsp;
+                                            <select name="TuyenKHID" class="dropdown tuyen">
+                                                @foreach (var item in tuyenLS)
+                                                {
+                                                    int TuyenKH = item.TuyenCuaKH;
+                                                    String TenTuyenKH = item.TenTuyen;
+                                                    if (isReentered != null)
+                                                    {
+                                                        if (item.TuyenCuaKH == selectedTuyenKHID)
+                                                        {
+                                                            <option value="@TuyenKH" selected>@TenTuyenKH</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@TuyenKH">@TenTuyenKH</option>
+                                                        }
+                                                    }
+                                                    <option value="@TuyenKH">@TenTuyenKH</option>
+                                                }
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.TuyenKHID)
+                                        </div>
+                                        <div class="col-md-3 pull-right" style="margin-right:20%">
+                                            <label for="" class="control-label">Số hợp đồng:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Sohopdong)
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Sohopdong)
+                                        </div>
+                                    </div>
+
+                                    <!-- Số điện thoại-->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-3 pull-left" style="margin-right:20%">
+                                            <label for="" class="control-label">Số điện thoại:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Dienthoai)
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Dienthoai)
+                                        </div>
+
+                                        <div class="col-md-6 pull-right" style="margin-right:10%">
+                                            <label for="" class="control-label">Khu vực:</label>&nbsp;&nbsp;
+                                            <select class="form-control" name="Sokhuvuc">
+                                                <option value="1" selected>1</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-3 pull-left" style="float:left">
+                                            <label for="" class="control-label">Quận:</label>&nbsp;&nbsp;
+                                            <select name="QuanhuyenID">
+                                                <option value="@selectedQuanHuyen" selected>@selectedName</option>
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.QuanhuyenID)
+                                        </div>
+                                        <div class="col-md-3 " style="float:left">
+                                            <label for="" class="control-label">Phường:</label>&nbsp;&nbsp;
+                                            <select name="PhuongxaID" class="dropdown phuong">
+                                                @foreach (var item in phuongXa)
+                                                {
+                                                    if (item.PhuongxaID == selectedPhuongXa)
+                                                    {
+                                                        <option value="@item.PhuongxaID" selected>@item.PhuongxaID - @item.Ten</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.PhuongxaID">@item.PhuongxaID - @item.Ten</option>
+                                                    }
+                                                }
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.PhuongxaID)
+                                        </div>
+                                        <div class="col-md-3 " style="float:left">
+                                            <label for="" class="control-label">Cụm dân cư:</label>&nbsp;&nbsp;
+                                            <select name="CumdancuID" class="dropdown cumdancu">
+                                                @foreach (var item in cumdanCu)
+                                                {
+                                                    if (item.CumdancuID == selectedCumDanCu)
+                                                    {
+                                                        <option value="@item.CumdancuID" selected>@item.CumdancuID - @item.Ten</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.CumdancuID">@item.CumdancuID - @item.Ten</option>
+                                                    }
+                                                }
+                                            </select>
+
+                                            @Html.ValidationMessageFor(model => model.CumdancuID)
+                                        </div>
+                                    </div>
+                                    <!-- Địa chỉ -->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-12">
+                                            <label for="" class="control-label">Địa chỉ đọc đồng hồ:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Diachi, new { style = "width:78.5%" })
+                                            <br />
+
+                                            @Html.ValidationMessageFor(model => model.Diachi)
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-12">
+                                            <label for="" class="control-label">Địa chỉ thu tiền:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Diachithutien, new { style = "width:78.5%" })
+                                            <br />
+
+                                            @Html.ValidationMessageFor(model => model.Diachithutien)
+                                        </div>
+
+                                    </div>
+                                    <!-- Khu vực -->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-6 pull-left">
+                                            <label for="" class="control-label">Số tài khoản:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Sotaikhoan)
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Sotaikhoan)
+                                        </div>
+
+
+                                        <div class="col-md-6 pull-right" style="margin-right:20%">
+                                            <label for="" class="control-label">Mã số thuế:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Masothue)
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Masothue)
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Ngày kí hợp đồng -->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-3 pull-left">
+                                            <label for="" class="control-label">Ngày ký hợp đồng:</label>&nbsp; &nbsp;
+                                            @Html.TextBoxFor(model => model.Ngaykyhopdong, "{0:dd/mm/yyyy}", new { @class = "datepicker kihopdong", @required = "required" })
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Ngaykyhopdong)
+                                        </div>
+
+                                        <div class="col-md-3 pull-left">
+                                            <label for="" class="control-label">Ngày áp định:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Ngayap, "{0:dd/mm/yyyy}", new { @class = "datepicker apdinh" })
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Ngayap)
+                                        </div>
+
+                                        <div class="col-md-3 pull-left">
+                                            <label for="" class="control-label">Ngày hết định:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Ngayhetap, "{0:dd/mm/yyyy}", new { @class = "datepicker hetdinh" })
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Ngayhetap)
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin: 1% 0 0 0%">
+
+
+                                    </div>
+
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-3 pull-left">
+                                            <label for="" class="control-label">Loại khách hàng:</label>&nbsp;&nbsp;
+                                            @Html.DropDownList("LoaiKHID")
+                                            @Html.ValidationMessageFor(model => model.LoaiKHID)
+                                        </div>
+                                        <!-- Số nhân khẩu -->
+                                        <!-- Số hộ khẩu -->
+                                        <div class="col-md-3 pull-left hoGD">
+                                            <label for="" class="control-label">Số hộ:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Soho, new { @type = "number", @min = 1, @Value = 1 })
+                                            <br />
+                                        </div>
+
+
+                                        <div class="col-md-3 pull-left hoGD">
+                                            <label for="" class="control-label">Số nhân khẩu:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Sonhankhau, new { @type = "number", @min = 1, @Value = 1 })
+                                        </div>
+                                    </div>
+
+                                    <!-- Lọai khách hàng-->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-6 pull-left" style="margin-right:20%">
+                                            <label for="" class="control-label">Hình thức thanh toán:</label>&nbsp;&nbsp;
+                                            @Html.DropDownList("HinhthucttID")
+                                            @Html.ValidationMessageFor(model => model.HinhthucttID)
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-6 pull-left" style="margin-right:20%">
+                                            <label for="" class="control-label">Phí môi trường:</label>&nbsp;&nbsp;
+
+                                            @Html.TextBoxFor(model => model.Tilephimoitruong, new { @Value = "10", style = "width:10%" }) %
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Tilephimoitruong)
+                                        </div>
+
+                                        <div class="col-md-6 pull-right" style="margin-right:20%">
+                                            <label for="" class="control-label">Tuyến ống kỹ thuật:</label>&nbsp;&nbsp;
+                                            <select name="TuyenongkythuatID" class="dropdown tuyenong">
+                                                @foreach (var item in tuyenOngKTID)
+                                                {
+                                                    <option value="@item.TuyenongID">@item.Matuyen - @item.Tentuyen</option>
+                                                }
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.TuyenongkythuatID)
+                                        </div>
+                                    </div>
+
+                                    <!-- Nếu là giá áp tổng hợp thì hiện dòng này lên-->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-3 pull-left">
+                                            <label for="" class="control-label">Giá áp:</label>&nbsp;&nbsp;
+                                            @Html.DropDownList("LoaiapgiaID")
+                                            @Html.ValidationMessageFor(model => model.LoaiapgiaID)
+                                        </div>
+                                        <!-- Chỉ số đầu-->
+                                        <div class="col-md-3 pull-left">
+                                            <label for="" class="control-label">Chỉ số đầu:</label>&nbsp;&nbsp;
+                                            @Html.TextBox("ChiSoDau")
+                                        </div>
+                                        <!-- Thứ tự đọc-->
+                                        <div class="col-md-3 pull-left">
+                                            <label for="" class="control-label">Thứ tự đọc:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(p => p.TTDoc, new { @required = true, @style = "width:30%" })
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.TTDoc)
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <!-- Nếu là giá tổng hợp -->
+                                    <div class="row tonghop hide" style="margin: 1% 0 0 0%;">
+                                        <div class="col-md-6 pull-left">
+                                            <label class="control-label"></label>
+                                            <div class="controls">
+                                                <label class="radio inline">
+                                                    <input type="radio" name="loaiChiSo" value="0" checked>Nhập số khoán
+                                                </label>
+
+                                                <label class="radio inline">
+                                                    <input type="radio" name="loaiChiSo" value="1">Nhập % định mức
+                                                </label>
+                                            </div>	<!-- /controls -->
+                                            <!-- Phần trăm và chỉ số -->
+                                        </div>
+                                    </div>
+
+                                    <div class="row tonghop hide" style="margin:1% 0 0 0">
+                                        <div class="col-md-12 col-xs-6">
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước sinh hoạt</label>&nbsp;&nbsp;
+                                                <input type="number" name="SH" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước kinh doanh</label>&nbsp;&nbsp;
+                                                <input type="number" name="KD" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước sản xuất</label>&nbsp;&nbsp;
+                                                <input type="number" name="SX" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước hành chính</label>&nbsp;&nbsp;
+                                                <input type="number" name="HC" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước công cộng</label>&nbsp;&nbsp;
+                                                <input type="number" name="CC" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <!-- Hết giá áp tổng hợp-->
+                                    <!-- Nếu là giá áp đặc biệt (áp khoán)-->
+                                    <div class="row dacbiet hide" style="margin:1% 0 0 0">
+                                        <div class="col-md-12 col-xs-6">
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước sinh hoạt</label>&nbsp;&nbsp;
+                                                <input type="number" name="SHDB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước kinh doanh</label>&nbsp;&nbsp;
+                                                <input type="number" name="KDDB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước sản xuất</label>&nbsp;&nbsp;
+                                                <input type="number" name="SXDB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước hành chính</label>&nbsp;&nbsp;
+                                                <input type="number" name="HCDB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước công cộng</label>&nbsp;&nbsp;
+                                                <input type="number" name="CCDB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+                                            <!-- Đặc biệt, chỉ có SH1, SH2, SH3, SH4 -->
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước SH1</label>&nbsp;&nbsp;
+                                                <input type="number" name="SH1DB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước SH2</label>&nbsp;&nbsp;
+                                                <input type="number" name="SH2DB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước SH3</label>&nbsp;&nbsp;
+                                                <input type="number" name="SH3DB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+                                            <div class="col-md-2 pull-left" style=" margin-left:10%">
+                                                <label for="" class="control-label">Nước SH4</label>&nbsp;&nbsp;
+                                                <input type="number" name="SH4DB" min="0" class="form-control width9" placeholder="" style="width:80px" /><span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Hết áp giá khoán đặc biệt-->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-12">
+                                            <label for="" class="control-label">Ghi chú:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Ghichu, new { @style = "width:78.5%" })
+                                            @Html.ValidationMessageFor(model => model.Ghichu)
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button type="button" class="btn btn-info addCustomer">Thêm mới</button>
+                                        <button type="button" class="btn btn-default" onclick="history.go(-1)">Quay lại</button>
+                                    </div> <!-- /form-actions -->
+                                </form>
+                            </div> <!-- /widget-content -->
+                        </div> <!-- /widget -->
+                    </div> <!-- /span8 -->
+                </div> <!-- /row -->
+            </div> <!-- /container -->
+        </div> <!-- /main-inner -->
+    </div> <!-- /main -->
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(function () {
+        var tongHop = @HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
+        //nếu loại áp giá được chọn là áp giá tổng hợp
+        $("#LoaiapgiaID").change(function () {
+            if ($(this).val() == tongHop) {
+                $(".tonghop").show();
+            }
+            else {
+                $(".tonghop").hide();
+            }
+        });
+
+        //nếu nhập loại giá là % thay vì số
+        $("input[name='loaiChiSo']").change(function () {
+            if ($(this).val() == 1) {
+                $(".width9").next("span").text(" %");
+            } else {
+                $(".width9").next("span").text("");
+            }
+        });
+
+        $(".addCustomer").click(function(){
+
+            //kiểm tra thứ tự đọc
+            var ttDoc = $("#TTDoc");
+            var tuyenID = $("select[name='TuyenKHID']").val();
+            var ttDocValue = ttDoc.val();
+            //check thứ tự đọc trong csdl
+            $.ajax({
+                url:'/KhachHang/checkTTDoc',
+                method:"POST",
+                dataType:"json",
+                contentType:"application/json;charset=utf-8",
+                data:JSON.stringify({TTDoc:ttDocValue,tuyenID:tuyenID}),
+                success:function(result){
+                    if(result==1){
+                        var isConfirmed = confirm("Thứ tự đọc này đã có trong hệ thống, bạn có muốn chèn khách hàng này vào không");
+                        if(isConfirmed){
+                            $("form").submit();
+                        }
+                    }else{
+                        $("form").submit();
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .pull-right {
+        margin-right: 4% !important;
+    }
+
+    .main {
+        padding-bottom: 0em;
+    }
+</style>

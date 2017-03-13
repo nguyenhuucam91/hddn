@@ -1,0 +1,2318 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B53D8E11-1720-49B1-B2A0-AF424B28F9D3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HoaDonNuocHaDong</RootNamespace>
+    <AssemblyName>HoaDonNuocHaDong</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.10.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Areas\Services\Models\" />
+    <Folder Include="Views\Admin\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Apgia.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApGiaDacBiet.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Apgiatonghop.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Services\Controllers\NhanVienController.cs" />
+    <Compile Include="Areas\Services\Controllers\QuanHuyenController.cs" />
+    <Compile Include="Areas\Services\Controllers\ToController.cs" />
+    <Compile Include="Areas\Services\Controllers\TuyenController.cs" />
+    <Compile Include="Areas\Services\ServicesAreaRegistration.cs" />
+    <Compile Include="Areas\ThuNgan\Controllers\HoaDonController.cs" />
+    <Compile Include="Areas\ThuNgan\Controllers\BaoCaoController.cs" />
+    <Compile Include="Areas\ThuNgan\Controllers\TuyenKhachHangController.cs" />
+    <Compile Include="Areas\ThuNgan\Models\DuCoFilterModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\DuCoModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\DuNoFilterModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\DuNoModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\HoaDonFilterModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\HoaDonModel.cs" />
+    <Compile Include="Areas\ThuNgan\ThuNganAreaRegistration.cs" />
+    <Compile Include="Base\SecuredController.cs" />
+    <Compile Include="Captuyen.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chinhanh.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chisocap.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chisonuoctheotuyen.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chitietchisonuoctheotuyen.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chitietcongno.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chitiethoadonnuoc.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chucnangchuongtrinh.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chucvu.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Congno.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\ApgiaController.cs" />
+    <Compile Include="Controllers\BaoCaoController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\BaoCaoInHoaDonController.cs" />
+    <Compile Include="Controllers\BaoCaoKinhDoanhController.cs" />
+    <Compile Include="Base\BaseController.cs" />
+    <Compile Include="Controllers\ChucvuController.cs" />
+    <Compile Include="Controllers\CongnoController.cs" />
+    <Compile Include="Controllers\CumdancuController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\HoadonController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KhachhangController.cs" />
+    <Compile Include="Controllers\KhuvucController.cs" />
+    <Compile Include="Controllers\KiemdinhController.cs" />
+    <Compile Include="Controllers\LoaiApGiaController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\NguoidungController.cs" />
+    <Compile Include="Controllers\NhanvienController.cs" />
+    <Compile Include="Controllers\NhapChiSoCapController.cs" />
+    <Compile Include="Controllers\PhongbanController.cs" />
+    <Compile Include="Controllers\PhuongxaController.cs" />
+    <Compile Include="Controllers\PrintController.cs" />
+    <Compile Include="Controllers\QuanhuyenController.cs" />
+    <Compile Include="Controllers\SecureController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\SoLieuTieuThuController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\ThongbaoController.cs" />
+    <Compile Include="Controllers\ThuNganController.cs" />
+    <Compile Include="Controllers\ToQuanHuyenController.cs" />
+    <Compile Include="Controllers\TuyenController.cs" />
+    <Compile Include="Controllers\TuyenongController.cs" />
+    <Compile Include="CoreReport\ControllerBase.cs" />
+    <Compile Include="CoreReport\DataConfig.cs" />
+    <Compile Include="CoreReport\ModelBase.cs" />
+    <Compile Include="Cumdancu.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Dangnhap.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Donghotong.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DuCo.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GiaoDich.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Hangsanxuat.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\ApGiaHelper.cs" />
+    <Compile Include="Helper\ChiSo.cs" />
+    <Compile Include="Helper\ChucVuHelper.cs" />
+    <Compile Include="Helper\ConfigHelper.cs" />
+    <Compile Include="Helper\Converter.cs" />
+    <Compile Include="Helper\ConvertMoney.cs" />
+    <Compile Include="Helper\HoaDonNuoc.cs" />
+    <Compile Include="Helper\KhachHang.cs" />
+    <Compile Include="Helper\KiemDinh.cs" />
+    <Compile Include="Helper\Log.cs" />
+    <Compile Include="Helper\NguoidungHelper.cs" />
+    <Compile Include="Helper\NhanVienHelper.cs" />
+    <Compile Include="Helper\PhongbanHelper.cs" />
+    <Compile Include="Helper\Tuyen.cs" />
+    <Compile Include="Helper\TuyenOng.cs" />
+    <Compile Include="Helper\UserInfo.cs" />
+    <Compile Include="Hinhthucthanhtoan.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HoaDonHaDong.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HoaDonHaDong.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HoaDonHaDong.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HoaDonHaDong.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HoaDonHaDong.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Hoadonnuoc.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Hoadonnuocbihuy.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Khachhang.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Kiemdinh.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Lichsuhoadon.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Lichsusudungct.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Loaiapgia.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Loaidongho.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoaiKH.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Metadata.cs" />
+    <Compile Include="ModelReport\Apgia.cs" />
+    <Compile Include="Models\BaoCaoInHoaDon\BaoCaoHoaDonNhan.cs" />
+    <Compile Include="Models\BaoCaoInHoaDon\BaoCaoPhiNuocThai.cs" />
+    <Compile Include="Models\BaoCaoInHoaDon\BaoCaoSanLuongDoanhThu.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoThatThoat.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoTongHopKhachHangQuanLy.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoTongHopSanLuong.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCacLoaiGiaKhac.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCapNuocTroLai.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCoGhiChu.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCoSanLuongDotBien.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangHetHanDinhMuc.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangKhongSanLuong.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangKyHopDongMoi.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangLoaiGiaDacBiet.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangLoaiGiaTongHop.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTamNgungCapNuoc.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangThanhLyHopDong.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTheoDinhMuc.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTheoDongHoTongCap2.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTheoDonViQuanLy.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTheoNhanVien.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTheoToQuanLy.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTheoTuyenKhachHang.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangTheoTuyenOngKyThuat.cs" />
+    <Compile Include="Models\BaoCaoSanLuongDoanhThu.cs" />
+    <Compile Include="Models\BaoCaoTongHopDoanhThuSanLuongTheoTuyen.cs" />
+    <Compile Include="Models\ChiSoCapModel.cs" />
+    <Compile Include="Models\DanhSachKhachHangInXongHoaDon.cs" />
+    <Compile Include="Models\HoaDonDayDu.cs" />
+    <Compile Include="Models\Hoadonnuocbihuy\Hoadonnuocbihuy.cs" />
+    <Compile Include="Models\InHoaDon\TuyenTinhTien.cs" />
+    <Compile Include="Models\KhachHang\KhachHangModel.cs" />
+    <Compile Include="Models\KhachHang\LocChiSo.cs" />
+    <Compile Include="Models\KhachHang\ModelKhachHang.cs" />
+    <Compile Include="Models\MTuyenong.cs" />
+    <Compile Include="Models\NhapChiSoCap.cs" />
+    <Compile Include="Models\SoLieuTieuThu\HoaDonNuoc.cs" />
+    <Compile Include="Models\ToQuanHuyen\ToQuanHuyen.cs" />
+    <Compile Include="Models\TuyenKhachHang\TuyenKhachHang.cs" />
+    <Compile Include="Nguoidung.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Nhanvien.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Nhomchucnang.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PartialClasses.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+    <Compile Include="Phongban.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Phuongxa.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quanhuyen.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Quyen.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Quyencuanguoidung.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet1.cs">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Report.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Report.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Repositories\AdminUnitOfWork.cs" />
+    <Compile Include="Repositories\DangNhapRepository.cs" />
+    <Compile Include="Repositories\HDNHDUnitOfWork.cs" />
+    <Compile Include="Repositories\HoaDonRepository.cs" />
+    <Compile Include="Repositories\DuCoRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IDangNhapRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IDuCoRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IHoaDonRepository.cs" />
+    <Compile Include="Repositories\Interfaces\INguoiDungRepository.cs" />
+    <Compile Include="Repositories\Interfaces\INhanVienRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IPhongBanRepository.cs" />
+    <Compile Include="Repositories\Interfaces\ITuyenKHRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IQuanHuyenRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IToRepository.cs" />
+    <Compile Include="Repositories\NguoiDungRepository.cs" />
+    <Compile Include="Repositories\NhanVienRepository.cs" />
+    <Compile Include="Repositories\PhongBanRepository.cs" />
+    <Compile Include="Repositories\ToRepository.cs" />
+    <Compile Include="Repositories\TuyenKHRepository.cs" />
+    <Compile Include="Repositories\QuanHuyenRepository.cs" />
+    <Compile Include="SoTienNopTheoThang.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Thongbao.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="To.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ToQuanHuyen.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TuyenDuocChot.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tuyenkhachhang.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tuyenong.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tuyenongkythuat.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tuyentheonhanvien.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="Assets\BaoCaoJs\buttons.html5.min.js" />
+    <Content Include="Assets\BaoCaoJs\dataTables.buttons.min.js" />
+    <Content Include="Assets\BaoCaoJs\jszip.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\.gitignore" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.min.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.standalone.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.standalone.min.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.min.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.standalone.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.standalone.min.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\js\bootstrap-datepicker.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\js\bootstrap-datepicker.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ar.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.az.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.bg.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.bs.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ca.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.cs.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.cy.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.da.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.de.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.el.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.en-AU.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.en-GB.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.eo.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.es.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.et.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.eu.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.fa.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.fi.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.fo.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.fr-CH.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.fr.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.gl.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.he.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.hr.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.hu.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.hy.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.id.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.is.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.it-CH.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.it.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ja.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ka.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.kh.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.kk.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ko.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.kr.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.lt.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.lv.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.me.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.mk.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.mn.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ms.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.nb.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.nl-BE.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.nl.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.no.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.pl.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.pt-BR.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.pt.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ro.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.rs-latin.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.rs.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.sk.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.sl.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.sq.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.sr-latin.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.sr.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.sv.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.sw.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.th.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.tr.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.uk.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.vi.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.zh-CN.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\requirements.txt" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\demo_head.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\markup_component.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\markup_daterange.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\markup_inline.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\markup_input.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_calendarweeks.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_clearbtn.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_daysofweekdisabled.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_enddate.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_language.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_multidate.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_startdate.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_todaybtn.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_todayhighlight.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\option_weekstart.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\script\common.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\script\common.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\script\debug.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\script\html-imports.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_screenshots\script\screenshot.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\demo_head.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\markup_component.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\markup_daterange.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\markup_inline.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\markup_input.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_calendarweeks.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_clearbtn.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_daysofweekdisabled.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_enddate.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_language.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_multidate.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_startdate.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_todaybtn.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_todayhighlight.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\_static\screenshots\option_weekstart.png" />
+    <Content Include="Assets\components\bootstrap-datepicker\Gruntfile.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\bootstrap-datepicker.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ar.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.az.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.bg.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.bs.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ca.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.cs.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.cy.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.da.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.de.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.el.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.en-AU.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.en-GB.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.eo.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.es.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.et.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.eu.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.fa.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.fi.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.fo.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.fr-CH.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.fr.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.gl.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.he.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.hr.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.hu.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.hy.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.id.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.is.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.it-CH.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.it.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ja.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ka.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.kh.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.kk.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ko.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.kr.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.lt.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.lv.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.me.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.mk.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.mn.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ms.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.nb.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.nl-BE.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.nl.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.no.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.pl.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.pt-BR.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.pt.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ro.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.rs-latin.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.rs.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.ru.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.sk.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.sl.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.sq.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.sr-latin.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.sr.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.sv.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.sw.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.th.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.tr.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.uk.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.vi.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.zh-CN.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\locales\bootstrap-datepicker.zh-TW.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\assets\coverage.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\assets\jquery-1.7.1.min.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\assets\mock.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\assets\qunit-logging.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\assets\qunit.css" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\assets\qunit.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\assets\utils.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\calendar-weeks.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\component.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\data-api.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\events.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\formats.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\inline.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\keyboard_navigation\2011.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\keyboard_navigation\2012.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\keyboard_navigation\all.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\methods.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\methods_jquery.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\mouse_navigation\2011.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\mouse_navigation\2012.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\mouse_navigation\all.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\noconflict.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\options.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\suites\timezone.js" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\tests.html" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\timezone.html" />
+    <Content Include="Assets\components\ckeditor\adapters\jquery.js" />
+    <Content Include="Assets\components\ckeditor\build-config.js" />
+    <Content Include="Assets\components\ckeditor\ckeditor.js" />
+    <Content Include="Assets\components\ckeditor\config.js" />
+    <Content Include="Assets\components\ckeditor\contents.css" />
+    <Content Include="Assets\components\ckeditor\lang\af.js" />
+    <Content Include="Assets\components\ckeditor\lang\ar.js" />
+    <Content Include="Assets\components\ckeditor\lang\bg.js" />
+    <Content Include="Assets\components\ckeditor\lang\bn.js" />
+    <Content Include="Assets\components\ckeditor\lang\bs.js" />
+    <Content Include="Assets\components\ckeditor\lang\ca.js" />
+    <Content Include="Assets\components\ckeditor\lang\cs.js" />
+    <Content Include="Assets\components\ckeditor\lang\cy.js" />
+    <Content Include="Assets\components\ckeditor\lang\da.js" />
+    <Content Include="Assets\components\ckeditor\lang\de-ch.js" />
+    <Content Include="Assets\components\ckeditor\lang\de.js" />
+    <Content Include="Assets\components\ckeditor\lang\el.js" />
+    <Content Include="Assets\components\ckeditor\lang\en-au.js" />
+    <Content Include="Assets\components\ckeditor\lang\en-ca.js" />
+    <Content Include="Assets\components\ckeditor\lang\en-gb.js" />
+    <Content Include="Assets\components\ckeditor\lang\en.js" />
+    <Content Include="Assets\components\ckeditor\lang\eo.js" />
+    <Content Include="Assets\components\ckeditor\lang\es.js" />
+    <Content Include="Assets\components\ckeditor\lang\et.js" />
+    <Content Include="Assets\components\ckeditor\lang\eu.js" />
+    <Content Include="Assets\components\ckeditor\lang\fa.js" />
+    <Content Include="Assets\components\ckeditor\lang\fi.js" />
+    <Content Include="Assets\components\ckeditor\lang\fo.js" />
+    <Content Include="Assets\components\ckeditor\lang\fr-ca.js" />
+    <Content Include="Assets\components\ckeditor\lang\fr.js" />
+    <Content Include="Assets\components\ckeditor\lang\gl.js" />
+    <Content Include="Assets\components\ckeditor\lang\gu.js" />
+    <Content Include="Assets\components\ckeditor\lang\he.js" />
+    <Content Include="Assets\components\ckeditor\lang\hi.js" />
+    <Content Include="Assets\components\ckeditor\lang\hr.js" />
+    <Content Include="Assets\components\ckeditor\lang\hu.js" />
+    <Content Include="Assets\components\ckeditor\lang\id.js" />
+    <Content Include="Assets\components\ckeditor\lang\is.js" />
+    <Content Include="Assets\components\ckeditor\lang\it.js" />
+    <Content Include="Assets\components\ckeditor\lang\ja.js" />
+    <Content Include="Assets\components\ckeditor\lang\ka.js" />
+    <Content Include="Assets\components\ckeditor\lang\km.js" />
+    <Content Include="Assets\components\ckeditor\lang\ko.js" />
+    <Content Include="Assets\components\ckeditor\lang\ku.js" />
+    <Content Include="Assets\components\ckeditor\lang\lt.js" />
+    <Content Include="Assets\components\ckeditor\lang\lv.js" />
+    <Content Include="Assets\components\ckeditor\lang\mk.js" />
+    <Content Include="Assets\components\ckeditor\lang\mn.js" />
+    <Content Include="Assets\components\ckeditor\lang\ms.js" />
+    <Content Include="Assets\components\ckeditor\lang\nb.js" />
+    <Content Include="Assets\components\ckeditor\lang\nl.js" />
+    <Content Include="Assets\components\ckeditor\lang\no.js" />
+    <Content Include="Assets\components\ckeditor\lang\pl.js" />
+    <Content Include="Assets\components\ckeditor\lang\pt-br.js" />
+    <Content Include="Assets\components\ckeditor\lang\pt.js" />
+    <Content Include="Assets\components\ckeditor\lang\ro.js" />
+    <Content Include="Assets\components\ckeditor\lang\ru.js" />
+    <Content Include="Assets\components\ckeditor\lang\si.js" />
+    <Content Include="Assets\components\ckeditor\lang\sk.js" />
+    <Content Include="Assets\components\ckeditor\lang\sl.js" />
+    <Content Include="Assets\components\ckeditor\lang\sq.js" />
+    <Content Include="Assets\components\ckeditor\lang\sr-latn.js" />
+    <Content Include="Assets\components\ckeditor\lang\sr.js" />
+    <Content Include="Assets\components\ckeditor\lang\sv.js" />
+    <Content Include="Assets\components\ckeditor\lang\th.js" />
+    <Content Include="Assets\components\ckeditor\lang\tr.js" />
+    <Content Include="Assets\components\ckeditor\lang\tt.js" />
+    <Content Include="Assets\components\ckeditor\lang\ug.js" />
+    <Content Include="Assets\components\ckeditor\lang\uk.js" />
+    <Content Include="Assets\components\ckeditor\lang\vi.js" />
+    <Content Include="Assets\components\ckeditor\lang\zh-cn.js" />
+    <Content Include="Assets\components\ckeditor\lang\zh.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\af.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ar.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\bg.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ca.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\cs.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\cy.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\da.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\de-ch.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\de.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\el.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\en-gb.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\en.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\eo.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\es.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\et.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\eu.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\fa.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\fi.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\fo.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\fr-ca.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\fr.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\gl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\gu.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\he.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\hi.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\hr.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\hu.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\id.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\it.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ja.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\km.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ko.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ku.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\lt.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\lv.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\mk.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\mn.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\nb.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\nl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\no.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\pl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\pt-br.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\pt.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ro.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ru.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\si.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\sk.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\sl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\sq.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\sr-latn.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\sr.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\sv.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\th.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\tr.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\tt.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\ug.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\uk.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\vi.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\zh-cn.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\zh.js" />
+    <Content Include="Assets\components\ckeditor\plugins\a11yhelp\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Assets\components\ckeditor\plugins\about\dialogs\about.js" />
+    <Content Include="Assets\components\ckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png" />
+    <Content Include="Assets\components\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="Assets\components\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Assets\components\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="Assets\components\ckeditor\plugins\icons.png" />
+    <Content Include="Assets\components\ckeditor\plugins\icons_hidpi.png" />
+    <Content Include="Assets\components\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="Assets\components\ckeditor\plugins\image\images\noimage.png" />
+    <Content Include="Assets\components\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="Assets\components\ckeditor\plugins\link\dialogs\link.js" />
+    <Content Include="Assets\components\ckeditor\plugins\link\images\anchor.png" />
+    <Content Include="Assets\components\ckeditor\plugins\link\images\hidpi\anchor.png" />
+    <Content Include="Assets\components\ckeditor\plugins\magicline\images\hidpi\icon-rtl.png" />
+    <Content Include="Assets\components\ckeditor\plugins\magicline\images\hidpi\icon.png" />
+    <Content Include="Assets\components\ckeditor\plugins\magicline\images\icon-rtl.png" />
+    <Content Include="Assets\components\ckeditor\plugins\magicline\images\icon.png" />
+    <Content Include="Assets\components\ckeditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="Assets\components\ckeditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="Assets\components\ckeditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\af.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\ar.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\bg.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\ca.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\cs.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\cy.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\da.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\de-ch.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\de.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\el.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\en-gb.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\en.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\eo.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\es.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\et.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\eu.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\fa.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\fi.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\fr-ca.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\fr.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\gl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\he.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\hr.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\hu.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\id.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\it.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\ja.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\km.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\ko.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\ku.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\lt.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\lv.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\nb.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\nl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\no.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\pl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\pt-br.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\pt.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\ru.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\si.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\sk.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\sl.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\sq.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\sv.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\th.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\tr.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\tt.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\ug.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\uk.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\vi.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\zh-cn.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\zh.js" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\lang\_translationstatus.txt" />
+    <Content Include="Assets\components\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="Assets\components\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="Assets\components\ckeditor\plugins\table\dialogs\table.js" />
+    <Content Include="Assets\components\ckeditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="Assets\components\ckeditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="Assets\components\ckeditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="Assets\components\ckeditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="Assets\components\ckeditor\plugins\wsc\dialogs\wsc_ie.js" />
+    <Content Include="Assets\components\ckeditor\samples\css\samples.css" />
+    <Content Include="Assets\components\ckeditor\samples\img\github-top.png" />
+    <Content Include="Assets\components\ckeditor\samples\img\header-bg.png" />
+    <Content Include="Assets\components\ckeditor\samples\img\header-separator.png" />
+    <Content Include="Assets\components\ckeditor\samples\img\logo.png" />
+    <Content Include="Assets\components\ckeditor\samples\img\navigation-tip.png" />
+    <Content Include="Assets\components\ckeditor\samples\index.html" />
+    <Content Include="Assets\components\ckeditor\samples\js\sample.js" />
+    <Content Include="Assets\components\ckeditor\samples\js\sf.js" />
+    <Content Include="Assets\components\ckeditor\samples\old\ajax.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\api.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\appendto.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\assets\inlineall\logo.png" />
+    <Content Include="Assets\components\ckeditor\samples\old\assets\outputxhtml\outputxhtml.css" />
+    <Content Include="Assets\components\ckeditor\samples\old\assets\sample.jpg" />
+    <Content Include="Assets\components\ckeditor\samples\old\assets\uilanguages\languages.js" />
+    <Content Include="Assets\components\ckeditor\samples\old\datafiltering.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\dialog\assets\my_dialog.js" />
+    <Content Include="Assets\components\ckeditor\samples\old\dialog\dialog.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\divreplace.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\enterkey\enterkey.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\htmlwriter\assets\outputforflash\outputforflash.swf" />
+    <Content Include="Assets\components\ckeditor\samples\old\htmlwriter\assets\outputforflash\swfobject.js" />
+    <Content Include="Assets\components\ckeditor\samples\old\htmlwriter\outputforflash.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\htmlwriter\outputhtml.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\index.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\inlineall.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\inlinebycode.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\inlinetextarea.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\jquery.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\magicline\magicline.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\readonly.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\replacebyclass.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\replacebycode.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\sample.css" />
+    <Content Include="Assets\components\ckeditor\samples\old\sample.js" />
+    <Content Include="Assets\components\ckeditor\samples\old\tabindex.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\toolbar\toolbar.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\uicolor.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\uilanguages.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\wysiwygarea\fullpage.html" />
+    <Content Include="Assets\components\ckeditor\samples\old\xhtmlstyle.html" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\css\fontello.css" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\font\fontello.svg" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\font\LICENSE.txt" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\index.html" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\js\abstracttoolbarmodifier.js" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\js\fulltoolbareditor.js" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\js\toolbarmodifier.js" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\js\toolbartextmodifier.js" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\lib\codemirror\codemirror.css" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\lib\codemirror\codemirror.js" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\lib\codemirror\javascript.js" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\lib\codemirror\neo.css" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\lib\codemirror\show-hint.css" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\lib\codemirror\show-hint.js" />
+    <Content Include="Assets\components\ckeditor\skins\moono\dialog.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\dialog_ie.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\dialog_ie7.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\dialog_ie8.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\dialog_iequirks.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\editor.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\editor_gecko.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\editor_ie.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\editor_ie7.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\editor_ie8.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\editor_iequirks.css" />
+    <Content Include="Assets\components\ckeditor\skins\moono\icons.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\icons_hidpi.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\arrow.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\close.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\hidpi\close.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\hidpi\lock-open.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\hidpi\lock.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\hidpi\refresh.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\lock-open.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\lock.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\refresh.png" />
+    <Content Include="Assets\components\ckeditor\skins\moono\images\spinner.gif" />
+    <Content Include="Assets\components\ckeditor\styles.js" />
+    <Content Include="Assets\components\datatables\license.txt" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.bootstrap.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.bootstrap.min.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.bootstrap4.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.bootstrap4.min.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.foundation.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.foundation.min.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.jqueryui.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.jqueryui.min.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.material.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.material.min.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.semanticui.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.semanticui.min.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.uikit.css" />
+    <Content Include="Assets\components\datatables\media\css\dataTables.uikit.min.css" />
+    <Content Include="Assets\components\datatables\media\css\jquery.dataTables.css" />
+    <Content Include="Assets\components\datatables\media\css\jquery.dataTables.min.css" />
+    <Content Include="Assets\components\datatables\media\css\jquery.dataTables_themeroller.css" />
+    <Content Include="Assets\components\datatables\media\images\favicon.ico" />
+    <Content Include="Assets\components\datatables\media\images\sort_asc.png" />
+    <Content Include="Assets\components\datatables\media\images\sort_asc_disabled.png" />
+    <Content Include="Assets\components\datatables\media\images\sort_both.png" />
+    <Content Include="Assets\components\datatables\media\images\sort_desc.png" />
+    <Content Include="Assets\components\datatables\media\images\sort_desc_disabled.png" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.bootstrap.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.bootstrap.min.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.bootstrap4.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.bootstrap4.min.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.foundation.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.foundation.min.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.jqueryui.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.jqueryui.min.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.material.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.material.min.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.semanticui.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.semanticui.min.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.uikit.js" />
+    <Content Include="Assets\components\datatables\media\js\dataTables.uikit.min.js" />
+    <Content Include="Assets\components\datatables\media\js\jquery.dataTables.js" />
+    <Content Include="Assets\components\datatables\media\js\jquery.dataTables.min.js" />
+    <Content Include="Assets\components\datatables\media\js\jquery.js" />
+    <Content Include="Assets\components\font-awesome\css\font-awesome-ie7.css" />
+    <Content Include="Assets\components\font-awesome\css\font-awesome-ie7.min.css" />
+    <Content Include="Assets\components\font-awesome\css\font-awesome.css" />
+    <Content Include="Assets\components\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Assets\components\font-awesome\font\fontawesome-webfont.svg" />
+    <Content Include="Assets\components\font-awesome\src\assets\css\prettify.css" />
+    <Content Include="Assets\components\font-awesome\src\assets\css\pygments.css" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\font\fontawesome-webfont.svg" />
+    <Content Include="Assets\components\font-awesome\src\assets\ico\favicon.ico" />
+    <Content Include="Assets\components\font-awesome\src\assets\img\contribution-sample.png" />
+    <Content Include="Assets\components\font-awesome\src\assets\img\fort_awesome.jpg" />
+    <Content Include="Assets\components\font-awesome\src\assets\img\glyphicons-halflings-white.png" />
+    <Content Include="Assets\components\font-awesome\src\assets\img\glyphicons-halflings.png" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\backbone.min.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\bootstrap-2.3.1.min.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\bootstrap-222.min.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\jquery-1.7.1.min.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\prettify.min.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\site.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\underscore.min.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\ZeroClipboard-1.1.7.min.js" />
+    <Content Include="Assets\components\font-awesome\src\assets\js\ZeroClipboard-1.1.7.swf" />
+    <Content Include="Assets\components\font-awesome\src\cheatsheet.html" />
+    <Content Include="Assets\components\font-awesome\src\community.html" />
+    <Content Include="Assets\components\font-awesome\src\design.html" />
+    <Content Include="Assets\components\font-awesome\src\examples.html" />
+    <Content Include="Assets\components\font-awesome\src\get-started.html" />
+    <Content Include="Assets\components\font-awesome\src\icons.html" />
+    <Content Include="Assets\components\font-awesome\src\index.html" />
+    <Content Include="Assets\components\font-awesome\src\license.html" />
+    <Content Include="Assets\components\font-awesome\src\test.html" />
+    <Content Include="Assets\components\font-awesome\src\whats-new.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\ads\carbon-dark-vertical.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\ads\carbon-light-horizontal.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\ads\carbon-light-vertical.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\brand-license.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\cheatsheet.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\community.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\community\getting-support.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\community\project-milestones.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\community\reporting-bugs.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\community\requesting-new-icons.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\community\submitting-pull-requests.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\animated-spinner.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\bordered-pulled.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\bulleted-lists.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\button-dropdowns.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\button-groups.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\buttons.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\custom.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\form-inputs.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\inline-icons.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\larger-icons.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\navigation.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\new.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\rotated-flipped.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\examples\stacked.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\footer.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\get-started.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\brand.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\currency.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\directional.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\medical.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\new.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\text-editor.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\video-player.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\icons\web-application.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\jumbotron-slider.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\jumbotron.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\license.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\navbar.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\stripe-ad.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\stripe-social.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\tell-me-thanks.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\tests\rotated-flipped-inside-anchor.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\tests\rotated-flipped-inside-btn.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\tests\rotated-flipped.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\tests\stacked-inside-anchor.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\tests\stacked.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\thanks-to.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\whats-new.html" />
+    <Content Include="Assets\components\font-awesome\src\_includes\why.html" />
+    <Content Include="Assets\components\font-awesome\src\_layouts\base.html" />
+    <Content Include="Assets\components\font-awesome\src\_layouts\icon.html" />
+    <Content Include="Assets\components\jquery\dist\jquery.js" />
+    <Content Include="Assets\components\jquery\dist\jquery.min.js" />
+    <Content Include="Assets\components\jquery\MIT-LICENSE.txt" />
+    <Content Include="Assets\components\jquery\src\ajax.js" />
+    <Content Include="Assets\components\jquery\src\ajax\jsonp.js" />
+    <Content Include="Assets\components\jquery\src\ajax\load.js" />
+    <Content Include="Assets\components\jquery\src\ajax\parseJSON.js" />
+    <Content Include="Assets\components\jquery\src\ajax\parseXML.js" />
+    <Content Include="Assets\components\jquery\src\ajax\script.js" />
+    <Content Include="Assets\components\jquery\src\ajax\var\nonce.js" />
+    <Content Include="Assets\components\jquery\src\ajax\var\rquery.js" />
+    <Content Include="Assets\components\jquery\src\ajax\xhr.js" />
+    <Content Include="Assets\components\jquery\src\attributes.js" />
+    <Content Include="Assets\components\jquery\src\attributes\attr.js" />
+    <Content Include="Assets\components\jquery\src\attributes\classes.js" />
+    <Content Include="Assets\components\jquery\src\attributes\prop.js" />
+    <Content Include="Assets\components\jquery\src\attributes\support.js" />
+    <Content Include="Assets\components\jquery\src\attributes\val.js" />
+    <Content Include="Assets\components\jquery\src\callbacks.js" />
+    <Content Include="Assets\components\jquery\src\core.js" />
+    <Content Include="Assets\components\jquery\src\core\access.js" />
+    <Content Include="Assets\components\jquery\src\core\init.js" />
+    <Content Include="Assets\components\jquery\src\core\parseHTML.js" />
+    <Content Include="Assets\components\jquery\src\core\ready.js" />
+    <Content Include="Assets\components\jquery\src\core\var\rsingleTag.js" />
+    <Content Include="Assets\components\jquery\src\css.js" />
+    <Content Include="Assets\components\jquery\src\css\addGetHookIf.js" />
+    <Content Include="Assets\components\jquery\src\css\curCSS.js" />
+    <Content Include="Assets\components\jquery\src\css\defaultDisplay.js" />
+    <Content Include="Assets\components\jquery\src\css\hiddenVisibleSelectors.js" />
+    <Content Include="Assets\components\jquery\src\css\support.js" />
+    <Content Include="Assets\components\jquery\src\css\swap.js" />
+    <Content Include="Assets\components\jquery\src\css\var\cssExpand.js" />
+    <Content Include="Assets\components\jquery\src\css\var\isHidden.js" />
+    <Content Include="Assets\components\jquery\src\css\var\rmargin.js" />
+    <Content Include="Assets\components\jquery\src\css\var\rnumnonpx.js" />
+    <Content Include="Assets\components\jquery\src\data.js" />
+    <Content Include="Assets\components\jquery\src\data\accepts.js" />
+    <Content Include="Assets\components\jquery\src\data\support.js" />
+    <Content Include="Assets\components\jquery\src\deferred.js" />
+    <Content Include="Assets\components\jquery\src\deprecated.js" />
+    <Content Include="Assets\components\jquery\src\dimensions.js" />
+    <Content Include="Assets\components\jquery\src\effects.js" />
+    <Content Include="Assets\components\jquery\src\effects\animatedSelector.js" />
+    <Content Include="Assets\components\jquery\src\effects\support.js" />
+    <Content Include="Assets\components\jquery\src\effects\Tween.js" />
+    <Content Include="Assets\components\jquery\src\event.js" />
+    <Content Include="Assets\components\jquery\src\event\alias.js" />
+    <Content Include="Assets\components\jquery\src\event\support.js" />
+    <Content Include="Assets\components\jquery\src\exports\amd.js" />
+    <Content Include="Assets\components\jquery\src\exports\global.js" />
+    <Content Include="Assets\components\jquery\src\intro.js" />
+    <Content Include="Assets\components\jquery\src\jquery.js" />
+    <Content Include="Assets\components\jquery\src\manipulation.js" />
+    <Content Include="Assets\components\jquery\src\manipulation\support.js" />
+    <Content Include="Assets\components\jquery\src\manipulation\var\rcheckableType.js" />
+    <Content Include="Assets\components\jquery\src\manipulation\_evalUrl.js" />
+    <Content Include="Assets\components\jquery\src\offset.js" />
+    <Content Include="Assets\components\jquery\src\outro.js" />
+    <Content Include="Assets\components\jquery\src\queue.js" />
+    <Content Include="Assets\components\jquery\src\queue\delay.js" />
+    <Content Include="Assets\components\jquery\src\selector-sizzle.js" />
+    <Content Include="Assets\components\jquery\src\selector.js" />
+    <Content Include="Assets\components\jquery\src\serialize.js" />
+    <Content Include="Assets\components\jquery\src\sizzle\dist\sizzle.js" />
+    <Content Include="Assets\components\jquery\src\sizzle\dist\sizzle.min.js" />
+    <Content Include="Assets\components\jquery\src\support.js" />
+    <Content Include="Assets\components\jquery\src\traversing.js" />
+    <Content Include="Assets\components\jquery\src\traversing\findFilter.js" />
+    <Content Include="Assets\components\jquery\src\traversing\var\rneedsContext.js" />
+    <Content Include="Assets\components\jquery\src\var\class2type.js" />
+    <Content Include="Assets\components\jquery\src\var\concat.js" />
+    <Content Include="Assets\components\jquery\src\var\deletedIds.js" />
+    <Content Include="Assets\components\jquery\src\var\hasOwn.js" />
+    <Content Include="Assets\components\jquery\src\var\indexOf.js" />
+    <Content Include="Assets\components\jquery\src\var\pnum.js" />
+    <Content Include="Assets\components\jquery\src\var\push.js" />
+    <Content Include="Assets\components\jquery\src\var\rnotwhite.js" />
+    <Content Include="Assets\components\jquery\src\var\slice.js" />
+    <Content Include="Assets\components\jquery\src\var\strundefined.js" />
+    <Content Include="Assets\components\jquery\src\var\support.js" />
+    <Content Include="Assets\components\jquery\src\var\toString.js" />
+    <Content Include="Assets\components\jquery\src\var\trim.js" />
+    <Content Include="Assets\components\jquery\src\wrap.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\.gitattributes" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\.gitignore" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\api.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\common.css" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\common_ie6.css" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\apiMenu.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\apiMenu.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\background.jpg" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\chinese.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\close.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\contact-bg.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\english.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\header-bg.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\lightbulb.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\overlay_arrow.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\overlay_arrow.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\overlay_bg.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\overlay_close_IE6.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\zTreeStandard.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\img\zTreeStandard.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\jquery-1.6.2.min.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\jquery.ztree.core.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\apiCss\zTreeStyleForApi.css" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\API_cn.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\API_en.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\fn.zTree.destroy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\fn.zTree.getZTreeObj.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\fn.zTree.init.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\fn.zTree._z.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.autoParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.contentType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.dataFilter.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.dataType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.otherParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.type.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.async.url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeAsync.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeCollapse.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeDblClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeDrag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeDragOpen.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeDrop.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeEditName.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeExpand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeMouseDown.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeMouseUp.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeRemove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeRename.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.beforeRightClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onAsyncError.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onAsyncSuccess.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onCollapse.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onDblClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onDrag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onDragMove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onDrop.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onExpand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onMouseDown.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onMouseUp.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onNodeCreated.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onRemove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onRename.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.callback.onRightClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.check.autoCheckTrigger.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.check.chkboxType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.check.chkDisabledInherit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.check.chkStyle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.check.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.check.nocheckInherit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.check.radioType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.keep.leaf.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.keep.parent.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.key.checked.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.key.children.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.key.name.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.key.title.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.key.url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.simpleData.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.simpleData.idKey.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.simpleData.pIdKey.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.data.simpleData.rootPId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.autoExpandTrigger.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.autoOpenTime.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.borderMax.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.borderMin.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.inner.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.isCopy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.isMove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.maxShowNodeNum.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.minMoveSize.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.next.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.drag.prev.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.editNameSelectAll.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.removeTitle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.renameTitle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.showRemoveBtn.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.edit.showRenameBtn.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.treeId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.treeObj.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.addDiyDom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.addHoverDom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.autoCancelSelected.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.dblClickExpand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.expandSpeed.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.fontCss.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.nameIsHTML.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.removeHoverDom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.selectedMulti.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.showIcon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.showLine.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.showTitle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\setting.view.txtSelectedEnable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.checked.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.checkedOld.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.check_Child_State.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.check_Focus.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.children.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.chkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.click.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.diy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.editNameFlag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.getCheckStatus.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.getIndex.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.getNextNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.getParentNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.getPath.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.getPreNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.halfCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.icon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.iconClose.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.iconOpen.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.iconSkin.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.isAjaxing.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.isFirstNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.isHidden.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.isHover.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.isLastNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.isParent.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.level.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.name.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.nocheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.open.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.parentTId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.target.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.tId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\treeNode.zAsync.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.addNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.cancelEditName.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.cancelSelectedNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.checkAllNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.checkNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.copyNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.destroy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.editName.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.expandAll.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.expandNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getChangeCheckedNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getCheckedNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getNodeByParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getNodeByTId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getNodeIndex.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getNodesByFilter.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getNodesByParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getNodesByParamFuzzy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.getSelectedNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.hideNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.hideNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.moveNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.reAsyncChildNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.refresh.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.removeChildNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.removeNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.selectNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.setChkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.setEditable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.setting.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.showNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.showNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.transformToArray.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.transformTozTreeNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\cn\zTreeObj.updateNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\fn.zTree.destroy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\fn.zTree.getZTreeObj.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\fn.zTree.init.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\fn.zTree._z.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.autoParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.contentType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.dataFilter.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.dataType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.otherParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.type.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.async.url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeAsync.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeCollapse.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeDblClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeDrag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeDragOpen.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeDrop.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeEditName.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeExpand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeMouseDown.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeMouseUp.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeRemove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeRename.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.beforeRightClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onAsyncError.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onAsyncSuccess.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onCollapse.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onDblClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onDrag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onDragMove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onDrop.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onExpand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onMouseDown.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onMouseUp.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onNodeCreated.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onRemove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onRename.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.callback.onRightClick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.check.autoCheckTrigger.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.check.chkboxType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.check.chkDisabledInherit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.check.chkStyle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.check.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.check.nocheckInherit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.check.radioType.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.keep.leaf.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.keep.parent.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.key.checked.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.key.children.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.key.name.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.key.title.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.key.url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.simpleData.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.simpleData.idKey.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.simpleData.pIdKey.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.data.simpleData.rootPId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.autoExpandTrigger.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.autoOpenTime.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.borderMax.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.borderMin.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.inner.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.isCopy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.isMove.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.maxShowNodeNum.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.minMoveSize.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.next.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.drag.prev.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.editNameSelectAll.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.enable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.removeTitle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.renameTitle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.showRemoveBtn.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.edit.showRenameBtn.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.treeId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.treeObj.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.addDiyDom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.addHoverDom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.autoCancelSelected.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.dblClickExpand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.expandSpeed.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.fontCss.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.nameIsHTML.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.removeHoverDom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.selectedMulti.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.showIcon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.showLine.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.showTitle.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\setting.view.txtSelectedEnable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.checked.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.checkedOld.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.check_Child_State.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.check_Focus.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.children.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.chkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.click.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.diy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.editNameFlag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.getCheckStatus.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.getIndex.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.getNextNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.getParentNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.getPath.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.getPreNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.halfCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.icon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.iconClose.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.iconOpen.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.iconSkin.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.isAjaxing.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.isFirstNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.isHidden.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.isHover.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.isLastNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.isParent.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.level.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.name.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.nocheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.open.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.parentTId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.target.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.tId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\treeNode.zAsync.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.addNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.cancelEditName.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.cancelSelectedNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.checkAllNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.checkNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.copyNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.destroy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.editName.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.expandAll.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.expandNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getChangeCheckedNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getCheckedNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getNodeByParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getNodeByTId.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getNodeIndex.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getNodesByFilter.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getNodesByParam.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getNodesByParamFuzzy.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.getSelectedNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.hideNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.hideNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.moveNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.reAsyncChildNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.refresh.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.removeChildNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.removeNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.selectNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.setChkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.setEditable.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.setting.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.showNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.showNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.transformToArray.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.transformTozTreeNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\api\en\zTreeObj.updateNode.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\awesomeStyle\awesome.css" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\awesomeStyle\img\loading.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\demo.css" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\metroStyle\img\line_conn.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\metroStyle\img\loading.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\metroStyle\img\metro.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\metroStyle\img\metro.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\metroStyle\metroStyle.css" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\1_close.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\1_open.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\2.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\3.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\4.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\5.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\6.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\7.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\8.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\diy\9.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\line_conn.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\loading.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\zTreeStandard.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\img\zTreeStandard.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\zTreeStyle\zTreeStyle.css" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\bigdata\common.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\bigdata\diy_async.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\bigdata\page.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\async.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\async_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\click.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\custom_font.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\custom_icon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\custom_iconSkin.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\expand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\noicon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\noline.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\otherMouse.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\searchNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\simpleData.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\standardData.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\update_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\core\url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\checkbox.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\checkbox_chkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\checkbox_count.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\checkbox_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\checkbox_halfCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\checkbox_nocheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\radio_chkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\radio_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\radio_halfCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\excheck\radio_nocheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\async_edit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\drag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\drag_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\drag_super.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\edit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\edit_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\edit_super.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exedit\multiTree.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exhide\checkbox.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exhide\common.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\exhide\radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\index.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\asyncForAll.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\awesome.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\checkbox_radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\diydom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\dragWithOther.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\left_menu.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\left_menuForOutLook.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\left_menuForOutLook.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\left_menuForOutLook.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\metro.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\oneclick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\oneroot.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\rightClickMenu.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\select_menu.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\select_menu_checkbox.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\select_menu_radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\super\singlepath.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\bigdata\common.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\bigdata\diy_async.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\bigdata\page.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\async.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\async_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\click.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\custom_font.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\custom_icon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\custom_iconSkin.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\expand.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\noicon.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\noline.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\otherMouse.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\searchNodes.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\simpleData.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\standardData.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\update_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\core\url.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\checkbox.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\checkbox_chkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\checkbox_count.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\checkbox_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\checkbox_halfCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\checkbox_nocheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\radio_chkDisabled.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\radio_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\radio_halfCheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\excheck\radio_nocheck.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\async_edit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\drag.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\drag_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\drag_super.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\edit.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\edit_fun.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\edit_super.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exedit\multiTree.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exhide\checkbox.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exhide\common.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\exhide\radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\index.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\asyncForAll.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\awesome.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\checkbox_radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\diydom.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\dragWithOther.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\left_menu.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\left_menuForOutLook.gif" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\left_menuForOutLook.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\left_menuForOutLook.png" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\metro.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\oneclick.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\oneroot.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\rightClickMenu.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\select_menu.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\select_menu_checkbox.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\select_menu_radio.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\singlepath.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\super\ztree.html" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery-1.4.4.min.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.all.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.all.min.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.core.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.core.min.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.excheck.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.excheck.min.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.exedit.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.exedit.min.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.exhide.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\js\jquery.ztree.exhide.min.js" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\log v3.x.txt" />
+    <Content Include="Assets\components\select2\dist\css\select2.min.css" />
+    <Content Include="Assets\components\select2\dist\js\select2.min.js" />
+    <Content Include="Assets\css\bootstrap-responsive.min.css" />
+    <Content Include="Assets\css\bootstrap.css" />
+    <Content Include="Assets\css\bootstrap.min.css" />
+    <Content Include="Assets\css\buttons.dataTables.min.css" />
+    <Content Include="Assets\css\dashboard.css" />
+    <Content Include="Assets\css\fixedHeader.dataTables.min.css" />
+    <Content Include="Assets\css\font-awesome.min.css" />
+    <Content Include="Assets\css\signin.css" />
+    <Content Include="Assets\css\style.css" />
+    <Content Include="Assets\img\signIn\body-bg.png" />
+    <Content Include="Assets\img\signIn\check.png" />
+    <Content Include="Assets\img\signIn\fb_btn.png" />
+    <Content Include="Assets\img\signIn\password.png" />
+    <Content Include="Assets\img\signIn\twitter_btn.png" />
+    <Content Include="Assets\img\signIn\user.png" />
+    <Content Include="Assets\js\BaoCao.js" />
+    <Content Include="Assets\js\butils.js" />
+    <Content Include="Assets\js\ckeditor.js" />
+    <Content Include="Assets\js\colResizable-1.6.min.js" />
+    <Content Include="Assets\js\CommonHandler.js" />
+    <Content Include="Assets\js\CongNo.js" />
+    <Content Include="Assets\js\dataTables.fixedHeader.min.js" />
+    <Content Include="Assets\js\datatable_custom.js" />
+    <Content Include="Assets\js\globalizationDatePicker.js" />
+    <Content Include="Assets\js\jquery.dataTables.min.js" />
+    <Content Include="Assets\js\KhachHang.js" />
+    <Content Include="Assets\js\LogHandler.js" />
+    <Content Include="Assets\js\select2.js" />
+    <Content Include="Assets\js\tn_common.js" />
+    <Content Include="Assets\js\toggle.js" />
+    <Content Include="Assets\js\TuyenOng.js" />
+    <Content Include="bin\Antlr3.Runtime.dll" />
+    <Content Include="bin\CrystalDecisions.CrystalReports.Engine.dll" />
+    <Content Include="bin\CrystalDecisions.Shared.dll" />
+    <Content Include="bin\EPPlus.dll" />
+    <Content Include="bin\HoaDonNuocHaDong.dll" />
+    <Content Include="bin\HoaDonNuocHaDong.pdb" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Optimization.dll" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\WebGrease.dll" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Style.css" />
+    <Content Include="Controllers\doanhthu.txt" />
+    <Content Include="Controllers\isChecked.txt" />
+    <Content Include="Css\base-admin-responsive.css" />
+    <Content Include="Css\bootstrap-responsive.min.css" />
+    <Content Include="Css\bootstrap.css" />
+    <Content Include="Css\bootstrap.min.css" />
+    <Content Include="Css\font-awesome-ie7.css" />
+    <Content Include="Css\font-awesome-ie7.min.css" />
+    <Content Include="Css\font-awesome.css" />
+    <Content Include="Css\font-awesome.min.css" />
+    <Content Include="Css\pages\dashboard.css" />
+    <Content Include="Css\pages\faq.css" />
+    <Content Include="Css\pages\plans.css" />
+    <Content Include="Css\pages\reports.css" />
+    <Content Include="Css\pages\signin.css" />
+    <Content Include="Css\style.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\OpenSans.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="img\body-bg.png" />
+    <Content Include="img\signin\password.png" />
+    <Content Include="img\signin\user.png" />
+    <Content Include="Js\base.js" />
+    <Content Include="Js\bootstrap.js" />
+    <Content Include="Js\chart.min.js" />
+    <Content Include="Js\charts\area.js" />
+    <Content Include="Js\charts\bar.js" />
+    <Content Include="Js\charts\donut.js" />
+    <Content Include="Js\charts\line.js" />
+    <Content Include="Js\charts\pie.js" />
+    <Content Include="Js\excanvas.min.js" />
+    <Content Include="Js\faq.js" />
+    <Content Include="Js\full-calendar\fullcalendar.css" />
+    <Content Include="Js\full-calendar\fullcalendar.min.js" />
+    <Content Include="Js\guidely\guidely-number.png" />
+    <Content Include="Js\guidely\guidely.css" />
+    <Content Include="Js\guidely\guidely.min.js" />
+    <Content Include="Js\jquery-1.7.2.min.js" />
+    <Content Include="Js\signin.js" />
+    <Content Include="obj\Debug\HoaDonNuocHaDong.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\TempPE\HoaDonHaDong.cs.dll" />
+    <Content Include="obj\Debug\TempPE\HoaDonHaDong.Designer.cs.dll" />
+    <Content Include="obj\Debug\TempPE\HoaDonNuocHaDong.cs.dll" />
+    <Content Include="obj\Debug\TempPE\HoaDonNuocHaDong.Designer.cs.dll" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Assets\.bowerrc" />
+    <Content Include="Assets\bower.json" />
+    <Content Include="Assets\components\datatables\.bower.json" />
+    <Content Include="Assets\components\datatables\bower.json" />
+    <Content Include="Assets\components\datatables\Contributing.md" />
+    <Content Include="Assets\components\datatables\ISSUE_TEMPLATE.md" />
+    <Content Include="Assets\components\datatables\media\images\Sorting icons.psd" />
+    <Content Include="Assets\components\datatables\Readme.md" />
+    <Content Include="Assets\components\font-awesome\.bower.json" />
+    <Content Include="Assets\components\font-awesome\.gitignore" />
+    <Content Include="Assets\components\font-awesome\.ruby-version" />
+    <Content Include="Assets\components\font-awesome\composer.json" />
+    <Content Include="Assets\components\font-awesome\CONTRIBUTING.md" />
+    <Content Include="Assets\components\font-awesome\font\fontawesome-webfont.eot" />
+    <Content Include="Assets\components\font-awesome\font\fontawesome-webfont.ttf" />
+    <Content Include="Assets\components\font-awesome\font\fontawesome-webfont.woff" />
+    <Content Include="Assets\components\font-awesome\font\FontAwesome.otf" />
+    <Content Include="Assets\components\font-awesome\Gemfile" />
+    <Content Include="Assets\components\font-awesome\Gemfile.lock" />
+    <Content Include="Assets\components\font-awesome\less\bootstrap.less" />
+    <Content Include="Assets\components\font-awesome\less\core.less" />
+    <Content Include="Assets\components\font-awesome\less\extras.less" />
+    <Content Include="Assets\components\font-awesome\less\font-awesome-ie7.less" />
+    <Content Include="Assets\components\font-awesome\less\font-awesome.less" />
+    <Content Include="Assets\components\font-awesome\less\icons.less" />
+    <Content Include="Assets\components\font-awesome\less\mixins.less" />
+    <Content Include="Assets\components\font-awesome\less\path.less" />
+    <Content Include="Assets\components\font-awesome\less\variables.less" />
+    <Content Include="Assets\components\font-awesome\package.json" />
+    <Content Include="Assets\components\font-awesome\README.md" />
+    <Content Include="Assets\components\font-awesome\scss\font-awesome-ie7.scss" />
+    <Content Include="Assets\components\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Assets\components\font-awesome\scss\_bootstrap.scss" />
+    <Content Include="Assets\components\font-awesome\scss\_core.scss" />
+    <Content Include="Assets\components\font-awesome\scss\_extras.scss" />
+    <Content Include="Assets\components\font-awesome\scss\_icons.scss" />
+    <Content Include="Assets\components\font-awesome\scss\_mixins.scss" />
+    <Content Include="Assets\components\font-awesome\scss\_path.scss" />
+    <Content Include="Assets\components\font-awesome\scss\_variables.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\font\fontawesome-webfont.eot" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\font\fontawesome-webfont.ttf" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\font\fontawesome-webfont.woff" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\font\FontAwesome.otf" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\bootstrap.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\core.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\extras.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\font-awesome-ie7.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\font-awesome.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\icons.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\mixins.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\path.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\less\variables.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\font-awesome-ie7.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\font-awesome.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\_bootstrap.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\_core.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\_extras.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\_icons.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\_mixins.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\_path.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\font-awesome\scss\_variables.scss" />
+    <Content Include="Assets\components\font-awesome\src\assets\img\icon-flag.pdf" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\accordion.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\alerts.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\bootstrap.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\breadcrumbs.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\button-groups.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\buttons.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\carousel.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\close.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\code.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\component-animations.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\dropdowns.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\forms.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\grid.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\hero-unit.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\labels-badges.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\layouts.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\media.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\mixins.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\modals.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\navbar.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\navs.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\pager.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\pagination.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\popovers.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\progress-bars.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\reset.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\responsive-1200px-min.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\responsive-767px-max.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\responsive-768px-979px.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\responsive-navbar.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\responsive-utilities.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\responsive.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\scaffolding.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\sprites.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\tables.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\thumbnails.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\tooltip.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\type.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\utilities.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\variables.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\bootstrap-2.3.2\wells.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\lazy.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\mixins.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\responsive-1200px-min.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\responsive-767px-max.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\responsive-768px-979px.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\responsive-navbar.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\responsive.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\site.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\sticky-footer.less" />
+    <Content Include="Assets\components\font-awesome\src\assets\less\variables.less" />
+    <Content Include="Assets\components\font-awesome\src\CNAME" />
+    <Content Include="Assets\components\font-awesome\src\icons.yml" />
+    <Content Include="Assets\components\font-awesome\src\Makefile" />
+    <Content Include="Assets\components\font-awesome\src\_includes\license-code.less" />
+    <Content Include="Assets\components\font-awesome\src\_plugins\icon_page_generator.rb" />
+    <Content Include="Assets\components\font-awesome\src\_plugins\site.rb" />
+    <Content Include="Assets\components\font-awesome\_config.yml" />
+    <Content Include="Assets\components\jquery\.bower.json" />
+    <Content Include="Assets\components\jquery\bower.json" />
+    <Content Include="Assets\components\jquery\dist\jquery.min.map" />
+    <Content Include="Assets\components\jquery\src\sizzle\dist\sizzle.min.map" />
+    <Content Include="obj\Debug\build.force" />
+    <Content Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\HoaDonHaDong.csdl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\HoaDonHaDong.msl" />
+    <Content Include="obj\Debug\edmxResourcesToEmbed\HoaDonHaDong.ssdl" />
+    <Content Include="obj\Debug\HoaDonNuocHaDong.csprojResolveAssemblyReference.cache" />
+    <Content Include="Assets\components\ckeditor\CHANGES.md" />
+    <Content Include="Assets\components\ckeditor\LICENSE.md" />
+    <Content Include="Assets\components\ckeditor\plugins\scayt\CHANGELOG.md" />
+    <Content Include="Assets\components\ckeditor\plugins\scayt\LICENSE.md" />
+    <Content Include="Assets\components\ckeditor\plugins\scayt\README.md" />
+    <Content Include="Assets\components\ckeditor\plugins\wsc\LICENSE.md" />
+    <Content Include="Assets\components\ckeditor\plugins\wsc\README.md" />
+    <Content Include="Assets\components\ckeditor\README.md" />
+    <Content Include="Assets\components\ckeditor\samples\old\assets\posteddata.php" />
+    <Content Include="Assets\components\ckeditor\samples\old\htmlwriter\assets\outputforflash\outputforflash.fla" />
+    <Content Include="Assets\components\ckeditor\samples\old\sample_posteddata.php" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\font\config.json" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\font\fontello.eot" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\font\fontello.ttf" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\font\fontello.woff" />
+    <Content Include="Assets\components\ckeditor\samples\toolbarconfigurator\lib\codemirror\LICENSE" />
+    <Content Include="Assets\components\ckeditor\skins\moono\readme.md" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\awesomeStyle\awesome.less" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\css\awesomeStyle\fa.less" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\asyncData\getNodes.php" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\cn\asyncData\getNodesForBigData.php" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\asyncData\getNodes.php" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\demo\en\asyncData\getNodesForBigData.php" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\README.md" />
+    <Content Include="Assets\components\jTreeView\zTree_v3-master\zTree.v3.jquery.json" />
+    <Content Include="Assets\components\bootstrap-datepicker\.bower.json" />
+    <Content Include="Assets\components\bootstrap-datepicker\.editorconfig" />
+    <Content Include="Assets\components\bootstrap-datepicker\.npmignore" />
+    <Content Include="Assets\components\bootstrap-datepicker\.travis.yml" />
+    <Content Include="Assets\components\bootstrap-datepicker\bower.json" />
+    <Content Include="Assets\components\bootstrap-datepicker\build\build.less" />
+    <Content Include="Assets\components\bootstrap-datepicker\build\build3.less" />
+    <Content Include="Assets\components\bootstrap-datepicker\build\build_standalone.less" />
+    <Content Include="Assets\components\bootstrap-datepicker\build\build_standalone3.less" />
+    <Content Include="Assets\components\bootstrap-datepicker\CHANGELOG.md" />
+    <Content Include="Assets\components\bootstrap-datepicker\composer.json" />
+    <Content Include="Assets\components\bootstrap-datepicker\CONTRIBUTING.md" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.min.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.standalone.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker.standalone.min.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.min.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.standalone.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.standalone.min.css.map" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\conf.py" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\events.rst" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\i18n.rst" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\index.rst" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\keyboard.rst" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\make.bat" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\Makefile" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\markup.rst" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\methods.rst" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\options.rst" />
+    <Content Include="Assets\components\bootstrap-datepicker\docs\README.md" />
+    <Content Include="Assets\components\bootstrap-datepicker\grunt\.jshintrc" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\.jscsrc" />
+    <Content Include="Assets\components\bootstrap-datepicker\js\.jshintrc" />
+    <Content Include="Assets\components\bootstrap-datepicker\less\.csslintrc" />
+    <Content Include="Assets\components\bootstrap-datepicker\less\datepicker.less" />
+    <Content Include="Assets\components\bootstrap-datepicker\less\datepicker3.less" />
+    <Content Include="Assets\components\bootstrap-datepicker\LICENSE" />
+    <Content Include="Assets\components\bootstrap-datepicker\package.json" />
+    <Content Include="Assets\components\bootstrap-datepicker\README.md" />
+    <Content Include="Assets\components\bootstrap-datepicker\tests\README.md" />
+    <EntityDeploy Include="HoaDonHaDong.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>HoaDonHaDong.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="HoaDonHaDong.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HoaDonHaDong.edmx</DependentUpon>
+      <LastGenOutput>HoaDonHaDong.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="HoaDonHaDong.edmx.diagram">
+      <DependentUpon>HoaDonHaDong.edmx</DependentUpon>
+    </Content>
+    <Content Include="HoaDonHaDong.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>HoaDonHaDong.edmx</DependentUpon>
+      <LastGenOutput>HoaDonHaDong.cs</LastGenOutput>
+    </Content>
+    <Content Include="Reports\DataSet1.xsc">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Content>
+    <Content Include="Areas\ThuNgan\Views\web.config" />
+    <Content Include="Areas\ThuNgan\Views\HoaDon\Index.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Services\Views\web.config" />
+    <Content Include="Areas\ThuNgan\Views\Shared\_HoaDonFilter.cshtml" />
+    <Content Include="Areas\Services\_ViewStart.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\BaoCao\Index.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\BaoCao\DuCo.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\BaoCao\DuNo.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\BaoCao\DoanhThu.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\TuyenKhachHang\Index.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\Shared\_BaoCaoFilter.cshtml" />
+    <None Include="Reports\DataSet1.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Reports\DataSet1.xss">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Content>
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Khachhang\Create.cshtml" />
+    <Content Include="Views\Khachhang\Delete.cshtml" />
+    <Content Include="Views\Khachhang\Details.cshtml" />
+    <Content Include="Views\Khachhang\Edit.cshtml" />
+    <Content Include="Views\Khachhang\Index.cshtml" />
+    <Content Include="Views\Khuvuc\Create.cshtml" />
+    <Content Include="Views\Khuvuc\Delete.cshtml" />
+    <Content Include="Views\Khuvuc\Details.cshtml" />
+    <Content Include="Views\Khuvuc\Edit.cshtml" />
+    <Content Include="Views\Khuvuc\Index.cshtml" />
+    <Content Include="Views\Nhanvien\Create.cshtml" />
+    <Content Include="Views\Nhanvien\Delete.cshtml" />
+    <Content Include="Views\Nhanvien\Details.cshtml" />
+    <Content Include="Views\Nhanvien\Edit.cshtml" />
+    <Content Include="Views\Nhanvien\Index.cshtml" />
+    <Content Include="Views\Hoadon\Create.cshtml" />
+    <Content Include="Views\Hoadon\Delete.cshtml" />
+    <Content Include="Views\Hoadon\Details.cshtml" />
+    <Content Include="Views\Hoadon\Edit.cshtml" />
+    <Content Include="Views\Hoadon\Index.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\Shared\_HeaderLoggedIn.cshtml" />
+    <Content Include="Views\Shared\_LoggedIn.cshtml" />
+    <Content Include="Views\Shared\_FilterKhachHang.cshtml" />
+    <Content Include="Views\SoLieuTieuThu\Index.cshtml" />
+    <Content Include="Views\Kiemdinh\Create.cshtml" />
+    <Content Include="Views\Apgia\Create.cshtml" />
+    <Content Include="Views\Apgia\Delete.cshtml" />
+    <Content Include="Views\Apgia\Details.cshtml" />
+    <Content Include="Views\Apgia\Edit.cshtml" />
+    <Content Include="Views\Apgia\Index.cshtml" />
+    <Content Include="Views\SoLieuTieuThu\ViewDetail.cshtml" />
+    <Content Include="Views\Kiemdinh\Index.cshtml" />
+    <Content Include="Views\Phongban\Create.cshtml" />
+    <Content Include="Views\Phongban\Delete.cshtml" />
+    <Content Include="Views\Phongban\Details.cshtml" />
+    <Content Include="Views\Phongban\Edit.cshtml" />
+    <Content Include="Views\Phongban\Index.cshtml" />
+    <Content Include="Views\Chinhanh\Create.cshtml" />
+    <Content Include="Views\Chinhanh\Delete.cshtml" />
+    <Content Include="Views\Chinhanh\Details.cshtml" />
+    <Content Include="Views\Chinhanh\Edit.cshtml" />
+    <Content Include="Views\Chinhanh\Index.cshtml" />
+    <Content Include="Views\Quanhuyen\Create.cshtml" />
+    <Content Include="Views\Quanhuyen\Delete.cshtml" />
+    <Content Include="Views\Quanhuyen\Details.cshtml" />
+    <Content Include="Views\Quanhuyen\Edit.cshtml" />
+    <Content Include="Views\Quanhuyen\Index.cshtml" />
+    <Content Include="Views\Phuongxa\Create.cshtml" />
+    <Content Include="Views\Phuongxa\Delete.cshtml" />
+    <Content Include="Views\Phuongxa\Details.cshtml" />
+    <Content Include="Views\Phuongxa\Edit.cshtml" />
+    <Content Include="Views\Phuongxa\Index.cshtml" />
+    <Content Include="Views\Tuyen\Create.cshtml" />
+    <Content Include="Views\Tuyen\Delete.cshtml" />
+    <Content Include="Views\Tuyen\Details.cshtml" />
+    <Content Include="Views\Tuyen\Edit.cshtml" />
+    <Content Include="Views\Tuyen\Index.cshtml" />
+    <Content Include="Views\Chucvu\Create.cshtml" />
+    <Content Include="Views\Chucvu\Delete.cshtml" />
+    <Content Include="Views\Chucvu\Details.cshtml" />
+    <Content Include="Views\Chucvu\Edit.cshtml" />
+    <Content Include="Views\Chucvu\Index.cshtml" />
+    <Content Include="Views\Nguoidung\Create.cshtml" />
+    <Content Include="Views\Nguoidung\Delete.cshtml" />
+    <Content Include="Views\Nguoidung\Details.cshtml" />
+    <Content Include="Views\Nguoidung\Edit.cshtml" />
+    <Content Include="Views\Nguoidung\Index.cshtml" />
+    <Content Include="Views\Thongbao\Create.cshtml" />
+    <Content Include="Views\Thongbao\Delete.cshtml" />
+    <Content Include="Views\Thongbao\Details.cshtml" />
+    <Content Include="Views\Thongbao\Edit.cshtml" />
+    <Content Include="Views\Thongbao\Index.cshtml" />
+    <Content Include="Views\Tuyenong\Create.cshtml" />
+    <Content Include="Views\Tuyenong\Delete.cshtml" />
+    <Content Include="Views\Tuyenong\Details.cshtml" />
+    <Content Include="Views\Tuyenong\Edit.cshtml" />
+    <Content Include="Views\Tuyenong\Index.cshtml" />
+    <Content Include="Views\Tuyenong\ViewAsTree.cshtml" />
+    <Content Include="Views\LoaiApGia\Create.cshtml" />
+    <Content Include="Views\LoaiApGia\Delete.cshtml" />
+    <Content Include="Views\LoaiApGia\Details.cshtml" />
+    <Content Include="Views\LoaiApGia\Edit.cshtml" />
+    <Content Include="Views\LoaiApGia\Index.cshtml" />
+    <Content Include="Views\Khachhang\ViewDetail.cshtml" />
+    <Content Include="Views\SoLieuTieuThu\Apgiadacbiet.cshtml" />
+    <Content Include="Views\Log\Index.cshtml" />
+    <Content Include="Views\Log\Listfunctionmodule.cshtml" />
+    <Content Include="Views\Log\Listmodule.cshtml" />
+    <Content Include="Views\Print\Index.cshtml" />
+    <Content Include="Views\Print\Index_hd.cshtml" />
+    <Content Include="Views\Shared\_InhoadonMenuPartial.cshtml" />
+    <Content Include="Views\Settings\Restore.cshtml" />
+    <Content Include="Views\Print\Preview.cshtml" />
+    <Content Include="Views\Cumdancu\Create.cshtml" />
+    <Content Include="Views\Cumdancu\Delete.cshtml" />
+    <Content Include="Views\Cumdancu\Details.cshtml" />
+    <Content Include="Views\Cumdancu\Edit.cshtml" />
+    <Content Include="Views\Cumdancu\Index.cshtml" />
+    <Content Include="Views\Vidu\Index.cshtml" />
+    <Content Include="Views\ToQuanHuyen\Index.cshtml" />
+    <Content Include="Views\ToQuanHuyen\Create.cshtml" />
+    <Content Include="Views\ToQuanHuyen\Delete.cshtml" />
+    <Content Include="Views\ToQuanHuyen\Details.cshtml" />
+    <Content Include="Views\ToQuanHuyen\Edit.cshtml" />
+    <Content Include="Views\Phongban\IndexPhongban.cshtml" />
+    <Content Include="Views\Print\HasNumber.cshtml" />
+    <Content Include="Views\Home\EditProfile.cshtml" />
+    <Content Include="Views\Congno\baoCaoCongNo.cshtml" />
+    <Content Include="Views\Congno\BaoCaoDuNo.cshtml" />
+    <Content Include="Views\Congno\congNoChuyenKhoan.cshtml" />
+    <Content Include="Views\Congno\congNoDoanhNghiep.cshtml" />
+    <Content Include="Views\Congno\Create.cshtml" />
+    <Content Include="Views\Congno\DanhSachKhachHangInHoaDon.cshtml" />
+    <Content Include="Views\Congno\Delete.cshtml" />
+    <Content Include="Views\Congno\Details.cshtml" />
+    <Content Include="Views\Congno\Edit.cshtml" />
+    <Content Include="Views\Congno\ExportFile.cshtml" />
+    <Content Include="Views\Congno\Index.cshtml" />
+    <Content Include="Views\Congno\ReportList.cshtml" />
+    <Content Include="Views\BaoCao\BangKeKhachHangDuNoThang.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoDoanhThuTheoThang.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoSanLuongDoanhThu.cshtml" />
+    <Content Include="Views\BaoCao\BaoCaoTongHopDoanhThuSanLuongTheoTuyen.cshtml" />
+    <Content Include="Views\BaoCao\DanhSachKhachHangInHoaDonTheoThang.cshtml" />
+    <Content Include="Views\BaoCao\DanhSachKhachHangKhongThuPhiBVMT.cshtml" />
+    <Content Include="Views\BaoCao\LichSuDungNuocCuaKhachHang.cshtml" />
+    <Content Include="Views\Print\PrintPreview.cshtml" />
+    <Content Include="Views\Kiemdinh\Edit.cshtml" />
+    <Content Include="Views\Khachhang\TongDanhSach.cshtml" />
+    <Content Include="Views\NhapChiSoCap\Index.cshtml" />
+    <Content Include="Views\NhapChiSoCap\NhapChiSoCap.cshtml" />
+    <Content Include="Views\NhapChiSoCap\NhapChiSoCapThanhCong.cshtml" />
+    <Content Include="Views\Shared\FormNgayThangNam.cshtml" />
+    <Content Include="Views\Shared\FormThangNam.cshtml" />
+    <Content Include="Views\Khachhang\Inactive.cshtml" />
+    <Content Include="Views\Khachhang\Catnuoc.cshtml" />
+    <Content Include="Views\Khachhang\Caplainuoc.cshtml" />
+    <Content Include="Views\Print\ChiSoTuyen.cshtml" />
+    <Content Include="Views\Print\Xemchitiet.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\BaoCaoKinhDoanh.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\BaoCaoThatThoat.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\BaoCaoTongHopKhachHangQuanLy.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\BaoCaoTongHopSanLuong.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangCacLoaiGiaKhac.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangCapNuocTroLai.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangCoGhiChu.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangCoSanLuongDotBien.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangHetHanDinhMuc.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangKhongSanLuong.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangLoaiGiaDacBiet.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangLoaiGiaTongHop.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTamNgungCapNuoc.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangThanhLyHopDong.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTheoDinhMuc.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTheoDongHoTongCap2.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTheoDonViQuanLy.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTheoNhanVien.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTheoToQuanLy.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTheoTuyenKhachHang.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHangTheoTuyenOngKyThuat.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhanhHangKyHopDongMoi.cshtml" />
+    <Content Include="Views\Shared\BaoCaoKinhDoanh.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyBaoCaoThatThoat.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyBaoCaoTongHopKhachHangQuanLy.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyBaoCaoTongHopSanLuong.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangCacLoaiGiaKhac.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangCapNuocTroLai.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangCoGhiChu.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangCoSanLuongDotBien.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangHetHanDinhMuc.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangKhongSanLuong.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangLoaiGiaDacBiet.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangLoaiGiaTongHop.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTamNgungCapNuoc.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangThanhLyHopDong.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTheoDinhMuc.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTheoDongHoTongCap2.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTheoDonViQuanLy.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTheoNhanVien.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTheoToQuanLy.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTheoTuyenKhachHang.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhachHangTheoTuyenOngKyThuat.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\XuLyDanhSachKhanhHangKyHopDongMoi.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\BaoCaoSanLuongDoanhThu.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\Index.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\XuliBaoCaoSanLuongDoanhThu.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\BaoCaoNuocThai.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\XuLiBaoCaoNuocThai.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\BaoCaoHoaDonNhan.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\XuliBaoCaoHoaDonNhan.cshtml" />
+    <Content Include="Views\Congno\Join.cshtml" />
+    <Content Include="Views\Shared\_FilterThuNgan.cshtml" />
+    <Content Include="Views\SoLieuTieuThu\LoadKhongBt.cshtml" />
+    <Content Include="Views\Congno\DanhDauTatCa.cshtml" />
+    <Content Include="Views\Congno\KhachHangChuaNopTien.cshtml" />
+    <Content Include="Views\Congno\QuanLyDuCo.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\duno.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\duco.cshtml" />
+    <Content Include="Views\Congno\KhachHangChuyenKhoanNo.cshtml" />
+    <Content Include="Views\Congno\KhachHangDoanhNghiepNo.cshtml" />
+    <Content Include="Views\Congno\KhachHangGiaDinhNo.cshtml" />
+    <Content Include="Views\Tuyenong\NhapChiSo.cshtml" />
+    <Content Include="Views\Print\HuyHoaDon.cshtml" />
+    <Content Include="Views\Print\DsHuyHoaDon.cshtml" />
+    <Content Include="Views\Print\EditHuyhoadon.cshtml" />
+    <Content Include="Views\Congno\DanhSachHoaDonDaIn.cshtml" />
+    <Content Include="Views\Congno\DanhSachTuyenHoaDonDaIn.cshtml" />
+    <Content Include="Views\Congno\XemChiTiet.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Shared\_Pager.cshtml" />
+    <Content Include="Views\Secure\Login.cshtml" />
+    <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Views\Shared\_MenuThuNgan.cshtml" />
+    <Content Include="Views\Shared\_MenuAdmin.cshtml" />
+    <Content Include="Views\Shared\_MenuInHoaDon.cshtml" />
+    <Content Include="Views\Shared\_MenuKinhDoanh.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Report.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>Report.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HDNHD.Core\HDNHD.Core.csproj">
+      <Project>{42221db2-6129-4a83-bccf-68efcf8c2aac}</Project>
+      <Name>HDNHD.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HDNHD.Models\HDNHD.Models.csproj">
+      <Project>{c43d08dc-b275-4535-8b18-e95a0f8fcb9c}</Project>
+      <Name>HDNHD.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2219</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:1933/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

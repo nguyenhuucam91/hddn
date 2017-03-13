@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "Danh sách tuyến đã có chỉ số";
+
+    var beforeFiltered = ViewBag.beforeFiltered;
+    var selectedMonth = ViewBag.selectedMonth;
+    var selectedYear = ViewBag.selectedYear;
+    List<Tuyenkhachhang> ls = ViewData["tuyen"] as List<Tuyenkhachhang>;
+    String title = ViewBag.hasNumber as String;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>@title</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <form action="/Print/ChiSoTuyen" method="post">
+                                <br />
+                                <div class="form-group">
+                                    <label for="" class="" style="float:left;margin: .5% 1% 0 0%"><strong>Tháng:</strong></label>
+                                    <input name="thang" type="number" min="1" max="12" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Month" />
+
+                                    <label for="" class="" style="float:left;margin: .5% 1% 0 3%"><strong>Năm:</strong></label>
+                                    <input name="nam" type="number" min="0" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Year" />
+                                    <button type="submit" class="btn btn-default" style="text-align:center;margin-left:12px">Lọc</button>
+
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <!-- Đã có thành tiền hay chưa-->
+                                <div class="clearfix"></div>
+                            </form>
+                            <!-- Hướng dẫn -->
+                            <div class="huongDan">
+                                <span>Những tuyến nào đã tính tiền thì cột "Tính tiền" hiển thị màu đỏ, nếu tuyến đã in hết khách hàng thì hiển thị màu xanh lam</span>
+                            </div>
+                            @if (!beforeFiltered)
+                            {
+                                <table class="example table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tuyến</th>
+                                            <th>Trạng thái tính tiền</th>
+                                            <th>Trạng thái in</th>
+                                            <th>Ngày in xong</th>
+                                            <th>Tổng số tiền</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @{
+                                int i = 1;
+                                        }
+                                        @foreach (var item in ls)
+                                        {
+                                            HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+                                            int monthInt = Convert.ToInt32(selectedMonth);
+                                            int yearInt = Convert.ToInt32(selectedYear);
+                                            TuyenDuocChot chot = db.TuyenDuocChots.FirstOrDefault(p => p.Thang == monthInt && p.Nam == yearInt && p.TuyenKHID == item.TuyenKHID);
+                                            bool isTinhTien = false;
+                                            if (chot != null)
+                                            {
+                                                isTinhTien = chot.TrangThaiTinhTien.Value;
+                                            }
+
+                                            //số lượng hóa đơn thực của tuyến đó
+                                            var soLuongKHThuc = (from hd in db.Hoadonnuocs
+                                                                 join r in db.Khachhangs on hd.KhachhangID equals r.KhachhangID
+                                                                 where r.TuyenKHID == item.TuyenKHID && hd.ThangHoaDon == monthInt && hd.NamHoaDon == yearInt
+                                                                 select new
+                                                                 {
+                                                                     TTIn = hd.Trangthaiin,
+                                                                     NgayIn = hd.NgayIn
+                                                                 });
+                                            var soLuongKHInHoaDon = soLuongKHThuc.Where(p => p.TTIn == true);
+                                            //tổng số tiền của tuyến
+                                            var tongSoTienTuyen = (from hd in db.Hoadonnuocs
+                                                                   join r in db.Lichsuhoadons on hd.HoadonnuocID equals r.HoaDonID
+                                                                   where r.TuyenKHID == item.TuyenKHID && hd.ThangHoaDon == monthInt && hd.NamHoaDon == yearInt
+                                                                   orderby r.ID descending
+                                                                   select new
+                                                                   {
+                                                                       tongTien = r.ChiSoCongDon
+                                                                   }).FirstOrDefault();
+                                            //nếu số lượng khách hàng đã in xong hóa đơn bằng số lượng khách hàng thực
+                                            if (soLuongKHInHoaDon.Count() == soLuongKHThuc.Count())
+                                            {
+                                                <tr style="background-color:#50cac8">
+                                                    <td>@i</td>
+                                                    <td>@item.Ten</td>
+                                                    @if (isTinhTien)
+                                                    {
+                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
+                                                    }
+                                                    @if (soLuongKHInHoaDon.Count() == soLuongKHThuc.Count())
+                                                    {
+                                                        <td style="color:blue"> Đã in xong </td>
+                                                    }
+                                                    <!-- Ngày in xong hóa đơn -->
+                                                    @if(soLuongKHThuc.Max(p=>p.NgayIn)!=null){
+                                                        <td>@String.Format("{0:dd/MM/yyyy}",soLuongKHThuc.Max(p=>p.NgayIn).Value)</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                        @if (tongSoTienTuyen != null)
+                                                    {
+                                                            <td>@String.Format("{0:n0}", tongSoTienTuyen.tongTien)</td>
+                                                    }
+                                                    </tr>
+                                                    i++;
+                                                    }
+                                                    //nếu chưa in xong
+                                                    else
+                                                    {
+                                                    <tr>
+                                                        <td>@i</td>
+                                                        <td>@item.Ten</td>
+                                                        @if (isTinhTien)
+                                                    {
+                                                            <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
+                                                    }
+                                                    else
+                                                    {
+                                                            <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
+                                                    }
+
+                                                        <td>In (@soLuongKHInHoaDon.Count() / @soLuongKHThuc.Count())</td>
+                                                        <td></td>
+                                                        @if (tongSoTienTuyen != null)
+                                                    {
+                                                            <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
+                                                    }
+                                                    </tr>
+                                                    i++;
+                                                    }
+                                                    }
+                                                </tbody>
+                                            </table>
+                            }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

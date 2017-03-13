@@ -1,0 +1,338 @@
+﻿@model HoaDonNuocHaDong.Khachhang
+@{
+    ViewBag.Title = "Xem chi tiết thông tin khách hàng";
+
+    var kiemDinh = ViewBag.kiemDinh;
+    var ttChiSo = ViewBag.ttChiSo;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem thông tin chi tiết của khách hàng</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="tabbable">
+                                <!-- Tên tabs -->
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#khachhang" data-toggle="tab">Thông tin khách hàng</a></li>
+                                    <li><a href="#suachua" data-toggle="tab">Lịch sử kiểm định</a></li>
+                                    <li><a href="#chiso" data-toggle="tab">Chỉ số tiêu thụ</a></li>
+                                </ul><br>
+
+                                <div class="tab-content">
+
+                                    <!-- Khách hàng -->
+                                    <div class="tab-pane active" id="khachhang">
+                                        <form id="edit-profile" class="form-horizontal">
+
+                                            <!-- Tên khách hàng -->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-6 pull-left">
+                                                    <label for="" class="control-label">Mã khách hàng:</label>&nbsp;&nbsp;
+                                                    @Html.TextBoxFor(model => model.MaKhachHang, new { @readonly = true })
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.MaKhachHang)
+                                                </div>
+                                                <div class="col-md-6 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Tên khách hàng:</label>&nbsp;&nbsp;
+                                                    @Html.EditorFor(model => model.Ten)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Ten)
+                                                </div>
+                                            </div>
+
+                                            <!-- Tuyến khách hàng -->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-4 pull-left">
+                                                    <label for="" class="control-label">Tuyến khách hàng:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownList("TuyenKHID", (SelectList)ViewBag._TuyenKHID, new { @class = "dropdown" })
+                                                    @Html.ValidationMessageFor(model => model.TuyenKHID)
+                                                </div>
+                                                <div class="col-md-3 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Số hợp đồng:</label>&nbsp;&nbsp;
+                                                    @Html.EditorFor(model => model.Sohopdong)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Sohopdong)
+                                                </div>
+                                            </div>
+
+                                            <!-- Số điện thoại-->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-3 pull-left" style="margin-right:20%">
+                                                    <label for="" class="control-label">Số điện thoại:</label>&nbsp;&nbsp;
+                                                    @Html.EditorFor(model => model.Dienthoai)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Dienthoai)
+                                                </div>
+
+                                                <div class="col-md-3 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">TT Đọc:</label>&nbsp;&nbsp;
+                                                    @Html.EditorFor(model => model.TTDoc)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.TTDoc)
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-3 pull-left" style="float:left">
+                                                    <label for="" class="control-label">Quận:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownList("QuanhuyenID", (SelectList)ViewBag._QuanhuyenID, new { @class = "dropdown" })
+                                                    @Html.ValidationMessageFor(model => model.QuanhuyenID)
+                                                </div>
+                                                <div class="col-md-3 " style="float:left">
+                                                    <label for="" class="control-label">Phường:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownList("PhuongxaID", (SelectList)ViewBag._PhuongxaID, new { @class = "dropdown" })
+                                                    @Html.ValidationMessageFor(model => model.PhuongxaID)
+                                                </div>
+                                                <div class="col-md-3 " style="float:left">
+                                                    <label for="" class="control-label">Phố:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownList("CumdancuID", (SelectList)ViewBag._CumdancuID, new { @class = "dropdown" })
+                                                    @Html.ValidationMessageFor(model => model.CumdancuID)
+                                                </div>
+                                            </div>
+                                            <!-- Địa chỉ -->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-12">
+                                                    <label for="" class="control-label">Địa chỉ đọc đồng hồ:</label>&nbsp;&nbsp;
+                                                    @Html.TextBoxFor(model => model.Diachi, new { style = "width:80%" })
+                                                    <br />
+
+                                                    @Html.ValidationMessageFor(model => model.Diachi)
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-12">
+                                                    <label for="" class="control-label">Địa chỉ thu tiền:</label>&nbsp;&nbsp;
+                                                    @Html.TextBoxFor(model => model.Diachithutien, new { style = "width:80%" })
+                                                    <br />
+
+                                                    @Html.ValidationMessageFor(model => model.Diachithutien)
+                                                </div>
+
+                                            </div>
+                                            <!-- Khu vực -->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-12 pull-left" style="margin-right:35%">
+                                                    <label for="" class="control-label">Khu vực:</label>&nbsp;&nbsp;
+                                                    <select class="form-control">
+                                                        <option value="">1</option>
+                                                        <option>2</option>
+                                                        <option>2_NT</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Số tài khoản -->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-6 pull-left">
+                                                    <label for="" class="control-label">Số tài khoản:</label>&nbsp;&nbsp;
+                                                    @Html.EditorFor(model => model.Sotaikhoan)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Sotaikhoan)
+                                                </div>
+                                                <div class="col-md-6 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Mã số thuế:</label>&nbsp;&nbsp;
+                                                    @Html.EditorFor(model => model.Masothue)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Masothue)
+                                                </div>
+                                            </div>
+                                            <!-- Ngày kí hợp đồng -->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-6 pull-left">
+                                                    <label for="" class="control-label">Ngày ký hợp đồng:</label>&nbsp; &nbsp;
+                                                    <input type="text" value="@String.Format("{0:dd/MM/yyyy}", Model.Ngaykyhopdong)" />
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Ngaykyhopdong)
+                                                </div>
+                                                <!-- Phí môi trường -->
+                                                <div class="col-md-6 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Phí môi trường:</label>&nbsp;&nbsp;
+
+                                                    @Html.TextBoxFor(model => model.Tilephimoitruong, new { @Value = "10", style = "width:10%" }) %
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Tilephimoitruong)
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-6 pull-left">
+                                                    <label for="" class="control-label">Ngày áp định:</label>&nbsp;&nbsp;
+                                                    <input type="text" value="@String.Format("{0:dd/MM/yyyy}", Model.Ngayap)" />
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Ngayap)
+                                                </div>
+                                                <div class="col-md-6 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Ngày hết định:</label>&nbsp;&nbsp;
+                                                    <input type="text" value="@String.Format("{0:dd/MM/yyyy}", Model.Ngayhetap)" />
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Ngayhetap)
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <!-- Số hộ khẩu -->
+                                                <div class="col-md-6 pull-left">
+                                                    <label for="" class="control-label">Số hộ:</label>&nbsp;&nbsp;
+                                                    @Html.TextBoxFor(model => model.Soho)
+                                                    <br />
+                                                </div>
+                                                <!-- Số nhân khẩu -->
+                                                <div class="col-md-6 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Số nhân khẩu:</label>&nbsp;&nbsp;
+                                                    @Html.TextBoxFor(model => model.Sonhankhau)
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Lọai khách hàng-->
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-6 pull-left">
+                                                    <label for="" class="control-label">Loại khách hàng:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownListFor(model => model.LoaiKHID, (SelectList)ViewBag._LoaiKHID)
+                                                    @Html.ValidationMessageFor(model => model.LoaiKHID)
+                                                </div>
+                                                <div class="col-md-6 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Hình thức thanh toán:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownList("HinhthucttID", (SelectList)ViewBag._HinhthucttID)
+                                                    @Html.ValidationMessageFor(model => model.HinhthucttID)
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-6 pull-left">
+                                                    <label for="" class="control-label">Giá áp:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownList("LoaiapgiaID", (SelectList)ViewBag._LoaiapgiaID)
+                                                    @Html.ValidationMessageFor(model => model.LoaiapgiaID)
+                                                </div>
+                                                <div class="col-md-6 pull-right" style="margin-right:20%">
+                                                    <label for="" class="control-label">Tuyến ống kỹ thuật:</label>&nbsp;&nbsp;
+                                                    @Html.DropDownList("TuyenongkythuatID", (SelectList)ViewBag._TuyenongkythuatID)
+                                                    @Html.ValidationMessageFor(model => model.TuyenongkythuatID)
+                                                </div>
+                                            </div>
+
+                                            <div class="row" style="margin: 1% 0 0 0%">
+                                                <div class="col-md-12">
+                                                    <label for="" class="control-label">Ghi chú:</label>&nbsp;&nbsp;
+                                                    @Html.TextBoxFor(model => model.Ghichu, new { style = "width:80%" })
+                                                    @Html.ValidationMessageFor(model => model.Ghichu)
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                    <!-- Kiểm định -->
+                                    <div class="tab-pane" id="suachua">
+
+                                        <div class="row" style="margin: 0% 0 0 1%" id="scrolltable">
+                                            <table class="table table-striped example" border="0" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>STT</th>
+                                                        <th>Ngày kiểm định</th>
+                                                        <th>Chỉ số cũ</th>
+                                                        <th>Chỉ số trước kiểm định</th>
+                                                        <th>Chỉ số sau kiểm định</th>
+                                                        <th>Ghi chú</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{int i = 1;}
+                                                    @foreach (var item in kiemDinh)
+                                                    {
+                                                        <tr>
+                                                            <td>@i</td>
+                                                            <td>@item.Ngaykiemdinh</td>
+                                                            <td>@item.Chisoluckiemdinh</td>
+                                                            <td>@item.Chisosaukiemdinh</td>
+                                                            <td>@item.Ghichu</td>
+                                                        </tr>
+                                                        i++;
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <!-- THông tin chỉ số chi tiết-->
+                                    <div class="tab-pane" id="chiso">
+
+                                        <table class="table table-striped example" border="0" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ngày hóa đơn</th>
+                                                    <th>Chỉ số cũ</th>
+                                                    <th>Chỉ số mới</th>
+                                                    <th>Tổng sản lượng</th>
+                                                    <th style="color:blue">SH1</th>
+                                                    <th style="color:blue">SH2</th>
+                                                    <th style="color:blue">SH3</th>
+                                                    <th style="color:blue">SH4</th>
+                                                    <th style="color:blue">HC</th>
+                                                    <th style="color:blue">CC</th>
+                                                    <th style="color:blue">KDDV</th>
+                                                    <th style="color:blue">SXXD</th>
+                                                    <th>Thành tiền</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in ttChiSo)
+                                                {
+                                                   
+                                                    int HoaDonNuocID = Convert.ToInt32(item.GetType().GetProperty("HoaDonID").GetValue(item, null));
+                                                    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+                                                    var lichSuHoaDon = db.Lichsuhoadons.Where(p => p.HoaDonID == HoaDonNuocID).FirstOrDefault();
+                                                    double tongCong = 0;
+                                                    if (lichSuHoaDon != null)
+                                                    {
+                                                        tongCong = lichSuHoaDon.TongCong;
+                                                    }
+                                                    
+                                                    <tr>
+                                                        <td>@item.GetType().GetProperty("NgayHoaDon").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("ChiSoCu").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("ChiSoMoi").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("SanLuong").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("SH1").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("SH2").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("SH3").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("SH4").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("HC").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("CC").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("KDDV").GetValue(item, null)</td>
+                                                        <td>@item.GetType().GetProperty("SXXD").GetValue(item, null)</td>
+                                                        <td>@String.Format("{0:n0}",tongCong)</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pull-right {
+        margin-right: 0% !important;
+    }
+</style>

@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Hủy hóa đơn cho khách hàng";
+
+    var hasMaKhachHang = ViewBag.hasMaKhachHang;
+    var hoadonID = ViewBag.hoadonid;
+    var maKH = ViewBag.maKH;
+    HoaDonNuocHaDong.Models.Hoadonnuocbihuy.Hoadonnuocbihuy kh = ViewData["khachHang"] as HoaDonNuocHaDong.Models.Hoadonnuocbihuy.Hoadonnuocbihuy;
+    Hoadonnuocbihuy _hd = ViewData["huyHoaDon"] as Hoadonnuocbihuy;
+    var id = ViewBag.id;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Hủy hóa đơn cho khách hàng</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+
+                            <!-- Bảng kê chi tiết thông tin hủy hóa đơn-->
+                            @using (Html.BeginForm("Editxacnhanhuy", "Print", new {id=@id }))
+                            {
+                                
+                                <div>
+                                    <h3 style="text-align:center">Cập nhật thông tin hủy hóa đơn cho khách hàng </h3>
+                                    <br />
+                                    <table class="table table-hover table-bordered" style="width:60%;margin-left:auto;margin-right:auto">
+                                        
+                                        <tr>
+                                            <td>Tên khách hàng</td>
+                                            <td>@kh.tenKH</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Địa chỉ</td>
+                                            <td>@kh.diachi</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ngày hủy hóa đơn</td>
+                                            <td><input type="text" class="datepicker" name="ngayhuyhoadon" value="@String.Format("{0:dd/MM/yyyy}", _hd.Ngayhuyhoadon)"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Người phê duyệt</td>
+                                            <td><input type="text" name="ngpheduyet"  value="@_hd.Nguoipheduyet"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Lí do hủy hóa đơn</td>
+                                            <td><textarea rows="3" name="lidohuy" style="min-width:347px">@_hd.Lidohuyhoadon</textarea></td>
+                                        </tr>
+                                    </table>
+                                    <p style="text-align:center">
+                                        <button type="submit" class="btn btn-success">Xác nhận</button>
+                                        <button type="button" class="btn btn-default" onclick="history.go(-1)">Quay lại</button>
+                                    </p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

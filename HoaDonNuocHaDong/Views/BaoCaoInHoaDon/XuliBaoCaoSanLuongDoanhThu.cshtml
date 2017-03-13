@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "XuliBaoCaoSanLuongDoanhThu";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    int month = ViewBag.selectedMonth;
+    int year = ViewBag.selectedYear;
+    HoaDonNuocHaDong.Models.BaoCaoInHoaDon.BaoCaoSanLuongDoanhThu lst = ViewData["baoCaoSanLuongDoanhThu"] as HoaDonNuocHaDong.Models.BaoCaoInHoaDon.BaoCaoSanLuongDoanhThu;
+    }
+
+<style type="text/css">
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 29px;
+        font-weight: bold;       
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;    
+    }
+   tr:last-child,td:last-child{
+        font-weight:bold;
+    }
+</style>
+
+<div class="ten center">Báo cáo sản lượng doanh thu</div>
+<br/>
+<div class="loc center">Tháng @month năm @year</div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Các mức</th>
+                <th>Sản lượng</th>
+                <th>DThu Trước Thuế</th>
+                <th>VAT</th>
+                <th>Phí nước thải</th>
+                <th>Tổng cộng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>SH1</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH1)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH1TruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH1VAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiSH1)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongSH1)</td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>SH2</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH2)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH2TruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH2VAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiSH2)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongSH2)</td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td>SH3</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH3)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH3TruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH3VAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiSH3)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongSH3)</td>
+            </tr>
+
+            <tr>
+                <td>4</td>
+                <td>SH4</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH4)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH4TruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSH4VAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiSH4)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongSH4)</td>
+            </tr>
+
+            <tr>
+                <td>5</td>
+                <td>SX</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSX)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSXTruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongSXVAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiSX)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongSX)</td>
+            </tr>
+
+
+            <tr>
+                <td>6</td>
+                <td>CC</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongCC)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongCCTruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongCCVAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiCC)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongCC)</td>
+            </tr>
+
+            <tr>
+                <td>7</td>
+                <td>HC</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongHC)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongHCTruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongHCVAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiHC)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongHC)</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>KD</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongKD)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongKDTruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.SanLuongKDVAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.PhiNuocThaiKD)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongKD)</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Tổng cộng</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCongSanLuong)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongGiaTruocThue)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongVAT)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency( lst.PhiNuocThaiTongCong)</td>
+                <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(lst.TongCong)</td>
+            </tr>
+        </tbody>
+    </table>
+<p style="float:right">Hà đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</p>
+<div class="clearfix"></div>
+<div class="span3 center">
+    Người lập biểu
+</div>
+
+<div class="span3 center">
+   Kế toán trưởng
+</div>
+
+<div class="span4 center">
+    Tổng giám đốc
+</div>

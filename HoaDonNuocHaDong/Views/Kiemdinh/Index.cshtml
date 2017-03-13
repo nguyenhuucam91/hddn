@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "Danh sách kiểm định";
+
+    var kiemDinh = ViewBag.kiemDinh;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Danh sách kiểm định</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="form-group">
+                                        <!-- Thêm mới kiểm định-->
+                                        <p>
+                                            <a class="btn btn-primary" href="@Url.Action("Create", "Kiemdinh")" role="button">Thêm mới kiểm định</a>
+                                        </p>
+                                        <!-- Hướng dẫn tìm kiếm -->
+                                        <div class="huongDan">
+                                            <p>Lọc ds khách hàng kiểm định theo tháng và năm, nếu không nhập sẽ lấy ds khách hàng kiểm định tháng hiện tại trong hệ thống</p>
+                                            <p>Tìm kiếm theo mã khách hàng bằng cách nhập vào ô tìm kiếm trên bảng kê chi tiết</p>
+                                        </div>
+                                        <!-- bộ lọc kiểm định -->
+                                        <div style="margin:25px; margin-left:10px">
+
+                                            @using (Html.BeginForm("Index", "KiemDinh"))
+                                            {                                               
+                                                <div class="form-group">
+                                                    <label for="" class="" style="float:left;margin: 0.5% 1% 0 0%">
+                                                        <strong>Lọc theo ngày kiểm định: </strong>
+                                                    </label>
+
+                                                    <label for="" class="" style="float:left;margin: 0.5% 1% 0 1%"><strong>Tháng:</strong></label>
+                                                    <input type="number" name="month" min="1" max="12" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Month" />
+
+                                                    <label for="" class="" style="float:left;margin: 0.5% 1% 0 2%"><strong>Năm:</strong></label>
+                                                    <input list="number" name="year" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Year" />
+
+                                                    <button type="submit" class="btn btn-default" style="margin-left:1%">Lọc</button>
+                                                </div>
+                                            }
+                                        </div>
+
+                                    </div>
+                                    <table class="example table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Mã khách hàng</th>
+                                                <th>Tên</th>
+                                                <th>Ngày kiểm định</th>
+                                                <th>Chỉ số cũ</th>
+                                                <th>Chỉ số trước kiểm định</th>
+                                                <th>Chỉ số sau kiểm định</th>
+                                                <th>Ghi chú</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        @{
+                                            int i = 1;
+                                        }
+                                        <tbody>
+                                            @foreach (var item in kiemDinh)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @i
+                                                    </td>
+                                                    <td>
+                                                        @item.GetType().GetProperty("MaKhachHang").GetValue(item, null)
+                                                    </td>
+                                                    <td>
+                                                        @item.GetType().GetProperty("TenKhachHang").GetValue(item, null)
+                                                    </td>
+                                                    <td>
+                                                        @item.GetType().GetProperty("NgayKiemDinh").GetValue(item, null).ToString("dd-MM-yyyy")
+                                                    </td>
+                                                    <td>
+                                                        @HoaDonHaDong.Helper.ChiSo.getChiSoMoiThangTruoc(item.GetType().GetProperty("KhachHangID").GetValue(item, null))
+                                                    </td>
+                                                    <td>
+                                                        @item.GetType().GetProperty("ChiSoLucKiemDinh").GetValue(item, null)
+                                                    </td>
+                                                    <td>
+                                                        @item.GetType().GetProperty("ChiSoSauKiemDinh").GetValue(item, null)
+                                                    </td>
+                                                    <td>
+                                                        @item.GetType().GetProperty("GhiChu").GetValue(item, null)
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Sửa", "Edit", new { id = item.GetType().GetProperty("KiemDinhID").GetValue(item, null) }) |
+                                                        @Html.ActionLink("Xóa", "Delete", new { id = item.GetType().GetProperty("KiemDinhID").GetValue(item, null) }, new { onclick = "return confirm('Bạn có muốn xóa kiểm định cho khách hàng này không')" })
+                                                    </td>
+                                                </tr>
+                                                i++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

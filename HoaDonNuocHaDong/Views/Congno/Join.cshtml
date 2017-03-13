@@ -1,0 +1,27 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Models.HoaDonDayDu>
+
+@Model.Count() <br />
+@ViewBag.l
+@foreach (HoaDonNuocHaDong.Models.HoaDonDayDu item in Model)
+{
+    
+    @item.h.Khachhang.Ten @Html.Raw("-") @item.h.Khachhang.MaKhachHang
+    
+    <br />
+    
+    if (item.h.SoTienNopTheoThang != null) { 
+     @item.h.SoTienNopTheoThang.SoTienPhaiNop 
+    }
+    else
+    {
+        @Html.Raw("0")
+    }
+    if (item.d != null)
+    {
+        @item.d.SoTienDu<br />
+    }
+    else
+    {
+        @Html.Raw("0")<br />
+    }
+}

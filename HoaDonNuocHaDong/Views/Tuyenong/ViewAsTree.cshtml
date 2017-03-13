@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Xem dạng bảng";
+    String actionName = ViewContext.RouteData.GetRequiredString("action");
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Danh sách tuyến ống</h3>
+                        </div>
+                        <div class="widget-content">
+                            <!-- THêm mới -->
+                            <div class="controls">
+                                <!-- Button to trigger modal -->
+                                <a href="@Url.Action("Create","Tuyenong")" role="button" class="btn btn-primary" data-toggle="modal">Thêm mới tuyến ống</a>
+                                <br /><br />
+
+                                <div class="alert alert-success container-fluid">
+                                    <!-- Xem theo dạng bảng -->
+                                    @if (actionName.Equals("Index"))
+                                    {
+                                        <input type="radio" name="viewDetail" onclick="window.location.href='@Url.Action("Index","Tuyenong")'" checked /> @Html.Raw("Xem theo dạng bảng")
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="viewDetail" onclick="window.location.href='@Url.Action("Index","Tuyenong")'" /> @Html.Raw("Xem theo dạng bảng")
+                                    }
+                                    <!-- Xem theo dạng cây -->
+                                    @if (actionName.Equals("ViewAsTree"))
+                                    {
+                                        <input type="radio" name="viewDetail" value="tree" onclick="window.location.href='@Url.Action("ViewAsTree","Tuyenong")'" checked style="margin-left:20px" /> @Html.Raw("Xem theo dạng cây")
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="viewDetail" value="tree" onclick="window.location.href='@Url.Action("ViewAsTree","Tuyenong")'" style="margin-left:20px" k /> @Html.Raw("Xem theo dạng cây")
+                                    }
+
+                                </div>
+                                
+                                <!-- Load tuyến ống dưới dạng tree view-->
+                                <ul id="treeDemo" class="ztree"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var setting = {
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+
+    var zNodes = [
+        @foreach (var item in Model)
+        {
+            var tenTuyen = '"'+ (item.Matuyen+" - "+item.Tentuyen)+'"';
+            if (item.TuyenongPID == null) {
+
+                @Html.Raw("{id:"+item.TuyenongID+",pId:0"+",name:"+tenTuyen+",open:true},")
+            }
+            else
+            {
+                @Html.Raw("{id:"+item.TuyenongID+",pId:"+item.TuyenongPID+",name:"+tenTuyen+",open:true},")
+            }
+        }
+    ]
+
+
+    $(document).ready(function () {
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    });
+
+</script>

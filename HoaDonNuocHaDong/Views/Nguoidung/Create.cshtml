@@ -1,0 +1,106 @@
+﻿@model HoaDonNuocHaDong.Nguoidung
+
+@{
+    ViewBag.Title = "Thêm người dùng mới";
+
+    var passwordMesg = ViewBag.passwordMesg;
+    var nhanVien = ViewBag.NhanvienID;
+    var isDuplicate = ViewBag.isDuplicate;
+}
+
+@using (Html.BeginForm("Create", "Nguoidung"))
+{
+    @Html.AntiForgeryToken()
+    <div class="main form-horizontal">
+        <div class="main-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <div class="widget ">
+                            <div class="widget-header">
+                                <i class="icon-user"></i>
+                                <h3>Thêm người dùng mới</h3>
+                            </div> <!-- /widget-header -->
+                            <div class="widget-content">
+                                <form id="edit-profile" class="form-horizontal">
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-8 pull-left">
+                                            <label for="" class="col-sm-2 control-label">Tên đăng nhập:</label>&nbsp;&nbsp;
+                                            @Html.EditorFor(model => model.Taikhoan)
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.Taikhoan)
+                                            @if (isDuplicate!=null)
+                                            {
+                                                <span class="red">Người dùng này đã có trong cơ sở dữ liệu</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-12">
+                                            <label for="" class="control-label">Mật khẩu:</label>&nbsp;&nbsp;
+                                            @Html.TextBoxFor(model => model.Matkhau, new { @type = "password" })
+                                            @Html.ValidationMessageFor(model => model.Matkhau)
+                                        </div>
+                                    </div>
+
+                                    <!-- Nhập lại mật khẩu-->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-12">
+                                            <label for="" class="control-label">Nhập lại mật khẩu:</label>&nbsp;&nbsp;
+                                            @Html.TextBox("RepeatMatKhau", "", new { @type = "password" })
+                                            @if (passwordMesg != "")
+                                            {
+                                                <span class="red" style="color:red">@passwordMesg</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- Là admin hay không -->
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-4 pull-left">
+                                            <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
+                                            <input type="radio" value="1" name="isAdmin" checked /> Có
+                                            <input type="radio" value="0" name="isAdmin" style="margin-left:15px" /> Không
+                                        </div>
+                                    </div>
+
+                                    <!-- Nhân viên-->
+                                    <div class="row nhanVienRadio hide" style="margin: 1% 0 0 0%">
+                                        <div class="span7 pull-left">
+                                            <label for="" class="control-label">Nhân viên:</label>&nbsp;&nbsp;
+
+                                            <select name="NhanvienID" class="dropdown nhanvien" style="width:80%">
+                                                @foreach (var item in nhanVien)
+                                                {
+                                                    <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+                                                }
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.NhanvienID)
+                                            <!-- Thêm mới nhân viên link-->
+                                            @Html.ActionLink("Thêm mới", "Create", "Nhanvien")
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-info">Thêm mới</button>
+                                        <button class="btn btn-default" type="button">@Html.ActionLink("Quay lại", "Index")</button>
+                                    </div> <!-- /form-actions -->
+                                </form>
+                            </div>
+                            <!-- /widget-content -->
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span6 -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main-inner -->
+    </div>
+  <!-- /main -->
+}
+
+

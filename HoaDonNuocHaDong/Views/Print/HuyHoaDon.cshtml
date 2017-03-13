@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Hủy hóa đơn cho khách hàng";
+
+    var hasMaKhachHang = ViewBag.hasMaKhachHang;
+    var hoaDonObj = ViewData["hoadon"] as Hoadonnuoc;
+    var maKH = ViewBag.maKH;
+    Khachhang kh = ViewData["khachHang"] as Khachhang;
+    SoTienNopTheoThang soTienObj = ViewData["soTienPhaiNop"] as SoTienNopTheoThang;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Hủy hóa đơn cho khách hàng</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            @using (Html.BeginForm("HuyHoaDon", "Print", FormMethod.Post))
+                            {
+                                <div class="form-group">
+                                    Mã khách hàng: <input type="text" name="maKH" class="form-control" placeholder="Nhập mã khách hàng" />
+                                    Tháng: <input type="text" name="month"/>
+                                    Năm: <input type="text" name="year"/>
+                                  
+                                    <p style="text-align:center"><button class="btn btn-default" type="submit" style="margin-left:1%">Lọc danh sách</button></p>
+                                </div>
+                            }
+
+                            <!-- Bảng kê chi tiết thông tin hủy hóa đơn-->
+                            @if (hasMaKhachHang != null && hasMaKhachHang == true)
+                            {
+                                using (Html.BeginForm("Xacnhanhuy", "Print", FormMethod.Post))
+                                {
+                                    <hr />
+                                    <div>
+                                        <h3 style="text-align:center">Thêm mới thông tin hủy hóa đơn cho khách hàng có mã @maKH </h3>
+                                        <br />
+                                        <table class="table table-hover table-bordered" style="width:60%;margin-left:auto;margin-right:auto">
+                                            <tr class="hide">
+                                                <td>HoadonID</td>
+                                                <td><input type="hidden" value="@hoaDonObj.HoadonnuocID" name="hoadonid" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tên khách hàng</td>
+                                                <td>@kh.Ten</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Địa chỉ</td>
+                                                <td>@kh.Diachi</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>Số hóa đơn</td>
+                                                <td><input type="text" name="soHoaDon"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sản lượng</td>
+                                                <td>@hoaDonObj.Tongsotieuthu</td>
+                                            </tr>   
+                                            <tr>
+                                                <td>Số tiền phải nộp</td>
+                                                <td>@String.Format("{0:n0}",soTienObj.SoTienPhaiNop)</td>
+                                            </tr>                                                                                    
+                                            <tr>
+                                                <td>Ngày hủy hóa đơn</td>
+                                                <td><input type="text" class="datepicker" name="ngayhuyhoadon" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Người yêu cầu hủy</td>
+                                                <td><input type="text" name="ngyeucauhuy" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lí do hủy hóa đơn</td>
+                                                <td><textarea  rows="3" name="lidohuy" style="min-width:347px"></textarea></td>
+                                            </tr>
+                                        </table>
+                                        <p style="text-align:center">
+                                            <button type="submit" class="btn btn-success">Xác nhận</button>
+                                            <button type="button" class="btn btn-default" onclick="history.go(-1)">Quay lại</button>
+                                        </p>
+                                    </div>
+                                }
+                            }
+
+                            else
+                            {
+                                        <!--Nếu không có mã khách hàng trong hệ thống-->
+                                <h3 class="center">Không có mã khách hàng trong hệ thống</h3>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

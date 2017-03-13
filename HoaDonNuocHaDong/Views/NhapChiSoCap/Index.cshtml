@@ -1,0 +1,42 @@
+﻿@using HoaDonNuocHaDong.Models;
+@{
+    ViewBag.Title = "Index";
+
+}
+<link href="~/Content/Style.css" rel="stylesheet" />
+<div class="row" style="margin-left:4%">
+    <!-- /span6 -->
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <i class="icon-bookmark"></i>
+                <h3>Tùy chọn nhập chỉ số cấp nước tháng </h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                @using (Html.BeginForm("NhapChiSoCap", "NhapChiSoCap"))
+                {
+                    List<NhapChiSoCap> lst = (List<NhapChiSoCap>)ViewData["lst"];
+                    <div class="xulybc">
+                        <p>
+                        Chi nhánh:
+                            <select style="margin-left:65px" name="s1">
+                                @for(int i=0;i<lst.Count;i++)
+                                { 
+                                  <option value="@lst[i].ChinhanhID">@lst[i].Ten</option>
+                                }
+                            </select>
+                        </p>
+                        <p>
+                            Tháng : <input type="number" class="form-control " name="m1" id="m1" style="margin-left:85px" min="1" max="12" required>
+                        </p>
+                        <p>
+                            năm: <input type="number" class="form-control " min="2016" name="y1" id="y1" style="margin-left:100px" required>
+                        </p>
+                        <p><input type="submit" class="btn btn-success" value="Nhập chỉ số"></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

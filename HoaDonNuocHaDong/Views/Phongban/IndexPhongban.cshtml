@@ -1,0 +1,31 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Phongban>
+
+@{
+    ViewBag.Title = "Danh sách phòng ban";
+
+}
+
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Quản lý phòng ban</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <!-- Thêm mới -->
+                            <button class="btn btn-primary" onclick="window.location.href='@Url.Action("Create","Phongban")'">Thêm mới phòng ban</button>
+                            <br /><br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,25 @@
+{
+  "name": "Assets",
+  "authors": [
+    "nguyenhuucam91 <nguyenhuucam91@gmail.com>"
+  ],
+  "description": "Folder which save libraries",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "datatables": "^1.10.12",
+    "font-awesome": "3.2.1",
+    "jquery": "1.11.0",
+    "bootstrap-datepicker": "^1.6.4"
+  }
+}

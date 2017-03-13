@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "BaoCaoNuocThai";
+
+    List<LoaiKH> loaiKH = ViewData["loaiKhachHang"] as List<LoaiKH>;
+    List<Loaiapgia> loaiApGia = ViewData["loaiApGia"] as List<Loaiapgia>;
+}
+
+
+<link href="~/Content/Style.css" rel="stylesheet" />
+<div class="row" style="margin-left:4%">
+    <!-- /span6 -->
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <i class="icon-bookmark"></i>
+                <h3>Tùy chọn báo cáo nước thải</h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                @using (Html.BeginForm("XuliBaoCaoNuocThai", "BaocaoInHoaDon"))
+                {
+                    <div class="xulybc">
+                        <div class="form-group">
+                            <label>Tỉ lệ phí nước thải:</label>
+                            <input type="number" name="phinuocthai" placeholder="0" class="negNumber form-control" />%
+                            <label>Loại khách hàng:</label>
+                            <select name="customerType">
+                                @foreach (var item in loaiKH)
+                                {
+                                    <option value="@item.LoaiKHID">@item.Ten</option>
+                                }
+                            </select>
+                            <label>Loại áp giá:</label>
+                            <select name="apgiaType">
+                                @foreach (var item in loaiApGia)
+                                {
+                                    <option value="@item.LoaiapgiaID">@item.Ten</option>
+                                }
+                            </select>
+                            <label>Tháng:</label>
+                            <input class="form-control" name="month"/>
+                            <label>Năm:</label>
+                            <input class="form-control" name="year"/>
+                        </div>
+                        <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,271 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Khachhang>
+
+@{
+    ViewBag.Title = "Danh sách khách hàng";
+    var chiNhanh = ViewBag.chiNhanh;
+    var khachHang = ViewBag.khachHang;
+    //sesion id
+    var tuyenTheoNhanVien = ViewBag.tuyenTheoNhanVien;
+    var shownKhachHang = ViewBag.showKhachHang;
+    //chọn tổ, tuyến và nhân viên được chọn
+    var selectedNhanVien = Convert.ToInt32(ViewBag.selectedNhanVien);
+    var selectedTuyen = Convert.ToInt32(ViewBag.selectedTuyen);
+    var selectedTo = ViewBag.selectedTo;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Quản lý khách hàng</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="tabbable">
+                                <ul class="nav nav-tabs">
+                                    <li class="index active"><a href="@Url.Action("Index","Khachhang")">Danh sách khách hàng</a>
+                                    <li class="filter"><a href="@Url.Action("FilterMaKH","Khachhang")">Lọc khách hàng</a></li>
+                                </ul>
+
+                                <div class="tab-content">
+
+                                    <div class="tab-content tab-pane active" id="tab-khachhang">
+                                        <div class="form-group">
+                                            <p style="float:left;margin-right:5%">
+
+                                                <a class="btn btn-primary" href="@Url.Action("Create", "Khachhang")" role="button">Thêm mới khách hàng</a>
+
+                                                <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#myModal">Thanh lí hợp đồng</button>
+                                                <!-- Modal content để thanh lí hợp đồng-->
+                                                <div id="myModal" class="modal fade" role="dialog">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                <h4 class="modal-title">Thanh lí hợp đồng</h4>
+                                                            </div>
+                                                            @using (Html.BeginForm("Inactive", "Khachhang"))
+                                                            {
+                                                                <input type="hidden" name="thanhLy" class="khachHangSelectedHidden" />
+                                                                <div class="modal-body">
+                                                                    <input type="text" class="datepicker" name="ngayThanhLy" placeholder="Ngày thanh lý" />
+                                                                    <textarea name="Lydothanhly" style="min-width:519px;min-height:89px" placeholder="Lí do thanh lý hợp đồng"></textarea>
+                                                                    <!-- -->
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="submit" class="btn btn-default">Lưu</button>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--  cắt nước-->
+                                                @if (String.IsNullOrEmpty(Request.QueryString["catnuoc"]) || Request.QueryString["catnuoc"] == "0")
+                                                {
+                                                    <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#catNuocModal">Cắt nước</button>
+                                            <!-- Modal để cắt nước -->
+                                                    <div id="catNuocModal" class="modal fade" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    <h4 class="modal-title">Cắt nước</h4>
+                                                                </div>
+                                                                @using (Html.BeginForm("CatNuoc", "Khachhang"))
+                                                                {
+                                                                    <input type="hidden" name="ngungcapnuoc" class="khachHangSelectedHidden" />
+                                                                    <div class="modal-body">
+                                                                        <input type="text" class="datepicker" name="Ngayngungcapnuoc" placeholder="Ngày cắt nước" />
+                                                                        <textarea name="Lydongungcapnuoc" style="min-width:519px;min-height:89px" placeholder="Lí do cắt nước"></textarea>
+                                                                        <!-- -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit" class="btn btn-default">Lưu</button>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#capLaiNuocModal">Cấp nước trở lại</button>
+                                            <!-- Modal để cắt nước -->
+                                                    <div id="capLaiNuocModal" class="modal fade" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    <h4 class="modal-title">Câp nước trở lại</h4>
+                                                                </div>
+                                                                @using (Html.BeginForm("Caplainuoc", "Khachhang"))
+                                                                {
+                                                                    <input type="hidden" name="capnuoclai" class="khachHangSelectedHidden" />
+                                                                    <div class="modal-body">
+                                                                        <input type="text" class="datepicker" name="Ngaycapnuoclai" placeholder="Ngày câp nước lại" />
+                                                                        <textarea name="Lydocapnuoclai" style="min-width:519px;min-height:89px" placeholder="Lí do cấp nước lại"></textarea>
+                                                                        <!-- -->
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="submit" class="btn btn-default">Lưu</button>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                <!-- Tái sử dụng nước-->
+                                            </p>
+
+                                            <!-- Modal để tái sử dụng nước-->
+                                            <div class="clearfix"></div>
+                                            <!--Định nghĩa tình trạng sử dụng cho sẵn-->
+                                            @{
+                                                var list = new SelectList(new[]
+                                            {
+                                                new {ID="0", Name="Còn hiệu lực"},
+                                                new {ID="1", Name="Đã thanh lý hợp đồng"},
+                                            },
+                                                "ID", "Name", 0);
+
+                                                var catNuoc = new SelectList(new[]
+                                            {
+                                                new {ID="0", Name="Đang sử dụng nước"},
+                                                new {ID="1", Name="Đã bị cắt nước"},
+                                            },
+                                                "ID", "Name", 0);
+                                            }
+                                            <!-- load tình trạng sử dụng vào dropdown Tình trạng sử dụng -->
+                                            @using (Html.BeginForm("Index", "KhachHang", FormMethod.Get))
+                                            {
+                                                <p>
+                                                    Tình trạng hợp đồng: @Html.DropDownList("Tinhtrang", list, new { @onchange = "this.form.submit()" })
+                                                    <span class="catnuoc">Tình trạng cắt nước: @Html.DropDownList("Catnuoc", catNuoc, new { @onchange = "this.form.submit()" }) </span>
+                                                </p>
+                                            }
+
+                                        </div>
+                                        <!-- partial view hiển thị phần lọc khách hàng -->
+                                        <form action="/KhachHang/Index?TinhTrang=@Request.QueryString["TinhTrang"]&catnuoc=@Request.QueryString["catnuoc"]" method="post">
+                                            @Html.Partial("_FilterKhachHang")
+                                            <br />
+                                            <div class="form-control" style="text-align:center">
+                                                <button type="submit" class="btn btn-default" style="text-align:center">Tìm kiếm</button>
+                                            </div>
+                                        </form>
+                                        <div class="huongDan">
+                                            <p>
+                                                Lọc danh sách khách hàng theo tổ, nhân viên và tuyến bằng cách chọn từ menu.
+                                            </p>
+                                        </div>
+                                        <hr />
+
+                                        <div class="clearfix"></div>
+                                        <!-- Hướng dẫn -->
+                                        <!-- Bảng hiện danh sách-->
+                                        @if ((bool)shownKhachHang)
+                                        {
+                                            <table class="example table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>STT</th>
+                                                        <th>Mã khách hàng</th>
+                                                        <th>Mã hợp đồng</th>
+                                                        <th>Tên khách hàng</th>
+                                                        <th>Địa chỉ</th>
+                                                        <th>Số điện thoại</th>
+                                                        <th>Thứ tự đọc</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Because model is in the type of LISt (storage - multiple records), so in order
+                                                    to get EACH RECORD, u need to iterate VIA LOOP -->
+                                                    @{int i = 1;}
+                                                    @foreach (var item in khachHang)
+                                                    {
+                                                        <tr>
+                                                            <td><input type="checkbox" name="check" value="@item.KhachhangID" /></td>
+                                                            <td>@i</td>
+                                                            <td>
+                                                                @item.MaKhachHang
+                                                            </td>
+                                                            <td>
+                                                                @item.Sohopdong
+                                                            </td>
+                                                            <td>
+                                                                <a href="@Url.Action("ViewDetail", "Khachhang", new { @id = item.KhachhangID})" target="_blank">@item.Ten</a>
+                                                            </td>
+
+                                                            <td>
+                                                                @item.Diachi
+                                                            </td>
+                                                            <td>
+                                                                @item.Dienthoai
+                                                            </td>
+                                                            <td>
+                                                                @item.TTDoc
+                                                            </td>
+
+                                                            <td>
+                                                                @Html.ActionLink("Sửa", "Edit", new { id = item.KhachhangID, toID = selectedTo, nhanvienIDUrl = selectedNhanVien, tuyenIDUrl = selectedTuyen }) |
+                                                                @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen }, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" }) |
+                                                                @if (item.Tinhtrang == 0 || item.Tinhtrang == null)
+                                                                {
+                                                                    @Html.ActionLink("Thanh lý HD", "Inactive", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
+                                                                    @Html.Raw("|")
+                                                                    if (String.IsNullOrEmpty(Request.QueryString["catnuoc"]) || Request.QueryString["catnuoc"] == "0")
+                                                                    {
+                                                                        @Html.ActionLink("Cắt nước", "Catnuoc", new { id = item.KhachhangID, TinhTrang = 0, toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.ActionLink("Cấp lại nước", "Caplainuoc", new { id = item.KhachhangID, TinhTrang = 0, toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@Url.Action("Inactive", new { @id = item.KhachhangID, toID = selectedTo,nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })" target="_blank">Xem thanh lý</a>
+                                                                }
+
+                                                            </td>
+                                                        </tr>
+                                                                i++;
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts để chuyển hướng khi mà tình trạng hợp đồng  = 1 (thanh lý) => cắt nước = cắt nước -->
+<script type="text/javascript">
+    $(function () {
+        $("#Tinhtrang").change(function () {
+            if ($(this).val() == 1) {
+                window.location.href = "/KhachHang?TinhTrang=1&Catnuoc=1";
+            }
+        });
+
+        //ẩn cắt nước <=> thanh lý = 1
+        @if (Request.QueryString["TinhTrang"] != null && Request.QueryString["TinhTrang"] == "1")
+        {
+            <text>
+        $(".catnuoc").hide();
+        </text>
+        }
+    });
+</script>

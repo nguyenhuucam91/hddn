@@ -1,0 +1,51 @@
+﻿@model HoaDonNuocHaDong.Tuyenong
+
+@{
+    ViewBag.Title = "Details";
+
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Tuyenong</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TuyenongPID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TuyenongPID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Matuyen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Matuyen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tentuyen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tentuyen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Captuyen.Ten)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Captuyen.Ten)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TuyenongID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

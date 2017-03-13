@@ -1,0 +1,96 @@
+﻿@model HDNHD.Core.Models.Pager
+
+@if (Model.NoPages > 0)
+{
+    <style>
+        .bpager {
+            margin: 15px 0;
+        }
+
+            .bpager div, .bpager span {
+                display: inline-block;
+            }
+
+            .bpager .left {
+                float: left;
+            }
+
+            .bpager .right {
+                float: right;
+            }
+
+            .bpager a, .bpager input, .bpager select {
+                font-size: 12px;
+                text-align: center;
+                margin: 0;
+            }
+
+            .bpager select {
+                width: auto;
+            }
+
+            .bpager .bpagination .btn-prev {
+                border-radius: 4px 0 0 4px;
+            }
+
+            .bpager .bpagination .btn-next {
+                border-radius: 0 4px 4px 0;
+            }
+
+            .bpager .bpagination #bpager-page {
+                border-radius: 0;
+                margin-left: -5px;
+                margin-right: -5px;
+                width: 30px;
+            }
+    </style>
+    <div class="bpager">
+        <div class="left">
+            <span>Trang:</span>
+            <div class="bpagination">
+                <span>
+                    <a @(Model.Page != 1 ? "href=" + Model.UrlPrev() : "") class="btn btn-prev">❮ Trước</a>
+                </span>
+                <input type="text" id="bpager-page" value="@Model.Page" class="form-control" />
+                <span>
+                    <a @(Model.Page != Model.NoPages ? "href=" + Model.UrlNext() : "") class="btn btn-next">Sau ❯</a>
+                </span>
+            </div>
+            <span>/ tổng số <strong>@Model.NoPages</strong> trang</span>
+        </div>
+        <div class="right">
+            <span>
+                Hiển thị:
+                <select id="bpager-pagesize">
+                    <option value="20" @(Model.PageSize == 25 ? "selected" : "")>25</option>
+                    <option value="50" @(Model.PageSize == 50 ? "selected" : "")>50</option>
+                    <option value="100" @(Model.PageSize == 100 ? "selected" : "")>100</option>
+                    <option value="0" @(Model.PageSize == 0 ? "selected" : "")>Tất cả</option>
+                </select>
+            </span>
+            <span class="separator">|</span>
+            <span>Tổng cộng: <strong>@Model.NoItems</strong> kết quả</span>
+        </div>
+    </div>
+    <script>
+        $("#bpager-page").on("change", function () {
+            var url = "@Model.UrlPage(Model.Page)",
+            page = $(this).val();
+            if (!BUtils.isNumeric(page)  || page < 1 || page > @Model.NoPages) {
+            $(this).val(@Model.Page);
+        } else {
+            window.location.href = url.replace("Page=@Model.Page", "Page="+page);
+        }
+        });
+        $("#bpager-pagesize").on("change", function () {
+            var url = "@Model.UrlPageSize(Model.PageSize)",
+            pagesize = $(this).val();
+            if (pagesize == @HDNHD.Core.Models.Pager.SHOW_ALL) {
+                var confirm = confirm("Xử lý 'hiển thị tất cả' có thể sẽ mất nhiều thời gian. Xác nhận?");
+
+                if (confirm)
+                    window.location.href = url.replace("PageSize=@Model.PageSize", "PageSize="+pagesize);
+            }
+        });
+    </script>
+}

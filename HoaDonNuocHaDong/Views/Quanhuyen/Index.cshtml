@@ -1,0 +1,101 @@
+﻿@model IEnumerable<HoaDonNuocHaDong.Quanhuyen>
+
+@{
+    ViewBag.Title = "Danh sách quận huyện";
+
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <!-- /span6 -->
+                <div class="span12" style="margin-left:1% !important">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-list"></i>
+                            <h3>Quản lý quận huyện</h3>
+                        </div>
+                        <div class="widget-content">
+                            <!-- Thêm mới quận huyện sử dụng modal box-->
+                            <div class="controls">
+                                <!-- Button to trigger modal -->
+                                <a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal">Thêm mới quận huyện</a>
+
+                                <!-- Modal -->
+                                @using (Html.BeginForm("Create", "Quanhuyen"))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h3 id="myModalLabel">Thêm mới quận huyện</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Tên quận huyện</p>
+                                            <p><input class="text-box single-line" id="Ten" required="true" name="Ten" value="" type="text" style="width:98%" maxlength="40" onblur=""></p>
+                                            <span class="hide required red">Không được để trống</span>
+                                            <p>Điện thoại</p>
+                                            <p><input class="text-box single-line" id="DienThoai" name="DienThoai" maxlength="50" value="" type="text" style="width:98%"></p>
+                                            <p>Điện thoại 2</p>
+                                            <p><input class="text-box single-line" id="DienThoai2" name="DienThoai2" maxlength="50" value="" type="text" style="width:98%"></p>
+                                            <p>Điện thoại 3</p>
+                                            <p><input class="text-box single-line" id="DienThoai3" name="DienThoai3" maxlength="50" value="" type="text" style="width:98%"></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-primary createNew">Thêm mới</button>
+                                            <button class="btn" data-dismiss="modal" aria-hidden="true">Hủy</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <!-- Bảng quận huyện -->
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>
+                                            Tên quận huyện
+                                        </th>
+                                        <th>Số điện thoại</th>
+                                        <th>Số điện thoại 2</th>
+                                        <th>Số điện thoại 3</th>
+                                        <th>
+                                            Hành động
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 1;}
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ten)
+                                            </td>
+
+                                            <td>@item.DienThoai</td>
+                                            <td>@item.DienThoai2</td>
+                                            <td>@item.DienThoai3</td>
+                                            <td>
+                                                @Html.ActionLink("Sửa", "Edit", new { id = item.QuanhuyenID }) |
+                                                @Html.ActionLink("Xóa", "Delete", new { id = item.QuanhuyenID }, new
+                                           {
+                                               @onclick = "return confirm('Bạn có muốn xóa quận huyện này không.')"
+                                           }
+                                           )
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

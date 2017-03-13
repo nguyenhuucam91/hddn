@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "Danh sách in hóa đơn";
+
+
+    //Áp giá mặc định
+    int SH1Price = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("SH1").Value;
+    int SH2Price = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("SH2").Value;
+    int SH3Price = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("SH3").Value;
+    int SH4Price = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("SH4").Value;
+    int HCPrice = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("HC").Value;
+    int CCPrice = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("CC").Value;
+    int SXPrice = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("SX-XD").Value;
+    int KDPrice = HoaDonHaDong.Helper.ChiSo.getSoTienTheoApGia("KDDV").Value;
+    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem danh sách hóa đơn</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <button class="btn btn-default" onclick="history.go(-1)">Quay lại</button>
+                            <table class="example table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="display:none">HoaDonNuoc</th>
+                                        <th>#</th>
+                                        <th>Mã khách hàng</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>SH1</th>
+                                        <th>SH2</th>
+                                        <th>SH3</th>
+                                        <th>SH4</th>
+                                        <th>HC</th>
+                                        <th>CC</th>
+                                        <th>KD</th>
+                                        <th>SX</th>
+                                        <th>Tổng cộng</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                        var dsKH = ViewBag.dsachKH;
+                                    }
+                                    @foreach (var item in dsKH)
+                                    {
+                                        int hoaDonNuocID = item.GetType().GetProperty("HoaDonNuoc").GetValue(item, null);
+                                        double SH1 = item.GetType().GetProperty("SH1").GetValue(item, null);
+                                        double SH2 = item.GetType().GetProperty("SH2").GetValue(item, null);
+                                        double SH3 = item.GetType().GetProperty("SH3").GetValue(item, null);
+                                        double SH4 = item.GetType().GetProperty("SH4").GetValue(item, null);
+                                        double HC = item.GetType().GetProperty("HC").GetValue(item, null);
+                                        double CC = item.GetType().GetProperty("CC").GetValue(item, null);
+                                        double KD = item.GetType().GetProperty("KD").GetValue(item, null);
+                                        double SX = item.GetType().GetProperty("SX").GetValue(item, null);
+
+                                        double SH1Total = 0;
+                                        double SH2Total = 0;
+                                        double SH3Total = 0;
+                                        double SH4Total = 0;
+                                        double HCTotal = 0;
+                                        double CCTotal = 0;
+                                        double KDTotal = 0;
+                                        double SXTotal = 0;
+                                        double Sum = 0;
+                                        var hasApGia = db.ApGiaDacBiets.FirstOrDefault(p => p.HoaDonNuocID == hoaDonNuocID);
+                                        //tìm kiếm trong áp giá đặc biệt, nếu có sẽ tính theo giá đặc biệt
+                                        if (hasApGia == null)
+                                        {
+                                            SH1Total = SH1 * SH1Price;
+                                            SH2Total = SH2 * SH2Price;
+                                            SH3Total = SH3 * SH3Price;
+                                            SH4Total = SH4 * SH4Price;
+                                            HCTotal = HC * HCPrice;
+                                            CCTotal = CC * CCPrice;
+                                            KDTotal = KD * KDPrice;
+                                            SXTotal = SX * SXPrice;
+                                        }
+                                        else
+                                        {
+                                            SH1Total = SH1 * (hasApGia.SH1).Value;
+                                            SH2Total = SH2 * (hasApGia.SH2).Value;
+                                            SH3Total = SH3 * (hasApGia.SH3).Value;
+                                            SH4Total = SH4 * (hasApGia.SH4).Value;
+                                            HCTotal = HC * (hasApGia.HC).Value;
+                                            CCTotal = CC * (hasApGia.CC).Value;
+                                            KDTotal = KD * (hasApGia.KDDV).Value;
+                                            SXTotal = SX * (hasApGia.SXSD).Value;
+                                        }
+                                        Sum = SH1Total + SH2Total + SH3Total + SH4Total + HCTotal + CCTotal + KDTotal + SXTotal;
+
+                                        <tr>
+                                            <td style="display:none">@item.GetType().GetProperty("HoaDonNuoc").GetValue(item, null)</td>
+                                            <td>@i</td>
+                                            <td>@item.GetType().GetProperty("MaKH").GetValue(item, null)</td>
+                                            <td>@item.GetType().GetProperty("TenKH").GetValue(item, null)</td>
+                                            <td>@String.Format("{0:n0}", SH1Total)</td>
+                                            <td>@String.Format("{0:n0}", SH2Total)</td>
+                                            <td>@String.Format("{0:n0}", SH3Total)</td>
+                                            <td>@String.Format("{0:n0}", SH4Total)</td>
+                                            <td>@String.Format("{0:n0}", HCTotal)</td>
+                                            <td>@String.Format("{0:n0}", CCTotal)</td>
+                                            <td>@String.Format("{0:n0}", KDTotal)</td>
+                                            <td>@String.Format("{0:n0}", SXTotal)</td>
+                                            <td>@String.Format("{0:n0}", Sum)</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

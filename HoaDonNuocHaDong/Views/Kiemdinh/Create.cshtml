@@ -1,0 +1,145 @@
+﻿@model HoaDonNuocHaDong.Kiemdinh
+
+@{
+    ViewBag.Title = "Kiểm định đồng hồ";
+
+    var maKH = ViewBag.maKH;
+    var statusResult = ViewBag.result;
+    var message = ViewBag.message;
+    var khachHang = ViewBag.khachHang;
+    var chiSoMoiThangTruoc = ViewBag.chiSoThangTruoc;
+    var khachHangID = ViewBag.khachHangID;
+    var dsKhachHang = ViewBag.dsKhachHang;
+    HoaDonNuocHaDong.Helper.KhachHang kHHelper = new HoaDonNuocHaDong.Helper.KhachHang();
+}
+
+<script>
+    $(function () {
+        $(".tuyen").addClass("hasDefaultVal");
+    });
+</script>
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row" style="min-height:440px">
+                <div class="widget">
+                    <div class="widget widget-table action-table">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Kiểm định đồng hồ</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <div class="row" style="margin:1% 0 0 0">
+                                <div id="search" style="margin-left:2%">
+                                    @using (Html.BeginForm("Create", "KiemDinh"))
+                                    {
+                                        <span>Nhập mã khách hàng: </span><input type="text" name="maKhachHang" />
+                                        <button type="submit" class="btn btn-default" id="btn_search">Tìm kiếm</button>
+                                    }
+                                </div>
+                            </div>
+                            <!-- Hiển thị thông tin mã khách hàng-->
+                            @if (statusResult == true)
+                            {
+                                using (Html.BeginForm("AddKiemDinh", "KiemDinh"))
+                                {
+                                    <hr />
+                                    <div>
+                                        <h3 style="text-align:center">Thêm mới kiểm định của khách hàng có mã: @maKH </h3>
+                                        <br />
+                                        <input type="hidden" value="@khachHangID" name="khachHangID" />
+                                        <table class="table table-hover table-bordered" style="width:60%;margin-left:auto;margin-right:auto">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Mã khách hàng</td>
+                                                    <td>@maKH</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tên khách hàng</td>
+                                                    <td>@khachHang.Ten</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Quận / Huyện</td>
+                                                    @{
+                                    int id = khachHang.QuanhuyenID;
+                                                    }
+                                                    <td>@Html.Raw(kHHelper.getQuan(id))</td>
+
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Phường / Xã</td>
+                                                    @{
+                                    int pxID = khachHang.PhuongxaID;
+                                                    }
+                                                    <td>@Html.Raw(kHHelper.getPhuong(pxID))</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Cụm dân cư</td>
+                                                    <td>@kHHelper.getCumDanCu(khachHang.CumdancuID)</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Tuyến</td>
+                                                    <td>@HoaDonNuocHaDong.Helper.KhachHang.getTuyenKH(khachHang.TuyenKHID)</td>
+                                                </tr>
+                                                <!--Ngày kiểm định-->
+                                                <tr>
+                                                    <td>Ngày kiểm định</td>
+                                                    <td>
+                                                        @Html.TextBoxFor(model => model.Ngaykiemdinh, new { @required = "required", @class = "datepicker" })
+                                                    </td>
+                                                    <br />
+                                                    @Html.ValidationMessageFor(model => model.Ngaykiemdinh)
+                                                </tr>
+                                                <!--Chỉ số tháng trước-->
+                                                <tr>
+                                                    <td>Chỉ số tháng trước</td>
+                                                    <td><input type="text" readonly name="chiSoThangTruoc" value="@chiSoMoiThangTruoc" /></td>
+                                                </tr>
+                                                <!-- Chỉ số trước khi kiểm định -->
+                                                <tr>
+                                                    <td>Chỉ số trước khi kiểm định</td>
+                                                    <td><input type="number" name="chiSoTruocKiemDinh" min="@chiSoMoiThangTruoc" value="@chiSoMoiThangTruoc" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Chỉ số sau khi kiểm định</td>
+                                                    <td><input type="number" name="chiSoSauKhiKiemDinh" value="0" /></td>
+                                                </tr>
+                                                <!--Ghi chú-->
+                                                <tr>
+                                                    <td>Ghi chú</td>
+                                                    <td><textarea name="ghiChu" style="width:90%" rows="5"></textarea></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <br />
+                                        <p style="text-align:center">
+                                            <button type="submit" class="btn btn-success">Lưu</button>
+                                            <button type="button" class="btn btn-default" onclick="history.go(-1)">Quay lại</button>
+                                        </p>
+                                        <br />
+                                    </div>
+                                }
+                            }
+                            <!-- Nếu không tìm thấy record trong db thì hiển thị ra lỗi (không tìm thấy khách hàng trong hệ thống)-->
+                            @if (message != null)
+                            {
+                                <h3 style="margin:20px">Không tìm thấy khách hàng có mã <span style="color:red">@maKH</span> trong hệ thống</h3>
+                            }
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span6 -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main-inner -->
+    </div>
+</div>
+

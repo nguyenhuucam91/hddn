@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Listmodule";
+
+    var controllerList = ViewBag.logList;
+}
+
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem danh sách module hệ thống</h3>
+                        </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            <table class="example table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            STT
+                                        </th>
+                                        <th>
+                                            Tên controller
+                                        </th>
+                                        <th>
+                                            Tên hiển thị
+                                        </th>
+                                        <th>
+                                            Hành động
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                    }
+                                    @foreach (var item in controllerList)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.TenController</td>
+                                            <td><input type="text" name="friendlyName" style="width:95%" class="friendlyName" id="@item.NhomchucnangID" value="@item.Ten"/></td>
+                                            <td>
+                                                <a href="@Url.Action("Listfunctionmodule", "Log", new { controllerName=item.TenController,id=item.NhomchucnangID})">Xem danh sách action</a>
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Áp giá đặc biệt";
+
+    var id = ViewBag.id;
+    var maKH = ViewBag.maKH;
+    var tenKH = ViewBag.tenKH;
+    var tuyenKH = ViewBag.tuyenKH;
+    var month = ViewBag.month;
+    var year = ViewBag.year;
+    var maSoThue = ViewBag.maSoThue;
+    int sanLuong = ViewBag.sanLuong == null ? 0 : (int)ViewBag.sanLuong;
+    String loaiApGia = ViewBag.tenApGia as string;
+    ApGiaDacBiet giaDacBiet = ViewData["giaDacBiet"] as ApGiaDacBiet;
+    //helper class để xem ai áp giá đặc biệt
+    var startDate = ViewBag.startDate;
+    var endDate = ViewBag.endDate;
+}
+
+<div class="main">
+
+    <div class="main-inner">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="span12">
+
+                    <div class="widget ">
+
+                        <div class="widget-header">
+                            <i class="icon-user"></i>
+                            <h3>Bảng áp giá đặc biệt cho khách hàng tháng @month năm @year</h3>
+                        </div> <!-- /widget-header -->
+
+                        <div class="widget-content">
+                            @using (Html.BeginForm("Nhapgiadacbiet", "Solieutieuthu", new { @id = id }, FormMethod.Post, new { id = "dacBietForm" }))
+                            {
+                                <div class="form-control ">
+                                    <div class="pull-left">
+                                        <label>Mã khách hàng: @maKH</label>
+                                        <label>Tên khách hàng: @tenKH</label>
+                                        <label>Thuộc tuyến: @tuyenKH</label>
+                                        <label>Mã số thuế: @maSoThue</label>
+                                        <label>Loại áp giá:@loaiApGia</label>
+                                        <label>Sản lượng: <span class="sanLuong">@sanLuong</span></label>
+                                    </div>
+                                    <div class="clearfix" />
+                                </div>
+                                <!-- Hướng dẫn sử dụng-->
+                                <div class="huongDan">
+                                    <span>
+                                        Nhập sản lượng tương ứng với tháng đặc biệt, trong trường hợp dồn số thì ấn vào ô trước ô nhập sản lượng, rồi ấn
+                                        "Lưu áp giá đặc biệt" để tiến hành áp giá
+                                    </span>
+                                </div>
+                                <hr />
+                                <!-- Số liệu chi tiết -->
+                                <div class="col-md-6" style="width:50%;float:left">
+                                    <div class="form-control">
+                                        <label for="SH1">Sản lượng SH1</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="SH1" name="SH1" value="@giaDacBiet.SH1" />
+
+                                        <label for="SH2">Sản lượng SH2</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="SH2" name="SH2" value="@giaDacBiet.SH2" />
+
+                                        <label for="SH3">Sản lượng SH3</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="SH3" name="SH3" value="@giaDacBiet.SH3" />
+
+                                        <label for="SH4">Sản lượng SH4</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="SH4" name="SH4" value="@giaDacBiet.SH4" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" style="width:50%;float:left">
+                                    <div class="form-control">
+                                        <label for="HC">Sản lượng Cơ quan hành chính sự nghiêp</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="HC" name="HC" value="@giaDacBiet.HC" />
+
+                                        <label for="CC">Sản lượng Đơn vị sự nghiệp, dịch vụ công cộng	</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="CC" name="CC" value="@giaDacBiet.CC" />
+
+                                        <label for="SX">Sản lượng Sản xuất vật chất	</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="SX" name="SX" value="@giaDacBiet.SXSD" />
+
+                                        <label for="KD">Sản lượng Kinh doanh dịch vụ</label>
+                                        <input type="checkbox" />
+                                        <input type="number" id="KD" name="KD" value="@giaDacBiet.KDDV" />
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <hr />
+                                <div class="form-control" style="text-align:center">
+                                    <button type="button" class="btn btn-info special">Lưu áp giá đặc biệt</button>
+                                    <button type="button" class="btn btn-default" onclick="history.go(-1)">Quay lại</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //giáng chỉ số còn lại sau khi trừ sản lượng vào dấu tích
+    $("input[type='checkbox']").change(function () {
+        var SH1Val = parseInt($("#SH1").val()) || 0;
+        var SH2Val = parseInt($("#SH2").val()) || 0;
+        var SH3Val = parseInt($("#SH3").val()) || 0;
+        var SH4Val = parseInt($("#SH4").val()) || 0;
+        var CCVal = parseInt($("#CC").val()) || 0;
+        var HCVal = parseInt($("#HC").val()) || 0;
+        var SXVal = parseInt($("#SX").val()) || 0;
+        var KDVal = parseInt($("#KD").val()) || 0;
+        var Sum = SH1Val + SH2Val + SH3Val + SH4Val + CCVal + HCVal + SXVal + KDVal;
+        //nếu tick
+        if ($(this).is(":checked")) {
+            var sanLuongAsInt = parseInt($("span.sanLuong").text());
+            var remainer = sanLuongAsInt - Sum;
+            $(this).next("input").val(remainer);
+        } else {
+            $(this).next("input").val("");
+        }
+    });
+
+    //khi ấn nút gửi thì mới tiến hành gửi form
+    $(".special").click(function () {
+        $("#dacBietForm").submit();
+    });
+</script>

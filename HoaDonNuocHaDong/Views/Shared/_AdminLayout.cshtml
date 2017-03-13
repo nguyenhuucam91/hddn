@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    @Styles.Render("~/Assets/css/bootstrap.min.css")
+    @*@Styles.Render("~/Assets/css/bootstrap.css")*@
+    @Styles.Render("~/Assets/css/bootstrap-responsive.min.css")
+    <title>@Html.Raw(ViewBag.Title)</title>
+
+    @Styles.Render("~/Assets/css/style.css")
+    @Styles.Render("~/Assets/css/dashboard.css")
+    @Styles.Render("~/Assets/components/datatables/media/css/jquery.dataTables.min.css")
+    @Styles.Render("~/fonts/OpenSans.css")
+    @Styles.Render("~/Assets/components/font-awesome/css/font-awesome.css")
+    @Styles.Render("~/Assets/components/select2/dist/css/select2.min.css")
+    @Styles.Render("~/Assets/components/jTreeView/zTree_v3-master/css/zTreeStyle/zTreeStyle.css")
+    @Styles.Render("~/Assets/components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css")
+    @Styles.Render("/Assets/css/buttons.dataTables.min.css")
+    <style>
+        .dataTables_wrapper {
+            overflow-x: auto;
+        }
+
+        .red {
+            color: red;
+        }
+
+        table.dataTable thead th, table.dataTable thead td {
+            padding: 10px 10px !important;
+        }
+    </style>
+
+    @RenderSection("Styles", required: false)
+    <!-- Jquery -->
+    @Scripts.Render("~/Assets/components/jquery/dist/jquery.js")
+
+</head>
+<body>
+    <div style="display:none" id="viewname">
+        @ViewContext.RouteData.GetRequiredString("action")
+    </div>
+    <!-- Header (navigation) -->
+    @{
+        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+    }
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </a><a class="brand" href="#">Công ty TNHH Một thành viên nước sạch Hà Đông</a>
+                <div class="nav-collapse">
+                    <ul class="nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-user"></i> @HDNHD.Core.Models.RequestScope.LoggedInUser.Taikhoan <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="@Url.Action("EditProfile","Home")">Hồ sơ cá nhân</a></li>
+                                <li><a href="@Url.Action("Logout", "Secure", new { area=""})">Đăng xuất</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-search pull-right">
+                        <input type="text" class="search-query" placeholder="Tìm kiếm">
+                    </form>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /navbar-inner -->
+    </div>
+    <!-- /navbar -->
+    <div class="subnavbar">
+        <div class="subnavbar-inner">
+            <div class="container">
+                <!-- main menu -->
+                @Html.Partial("_Menu" + HDNHD.Core.Models.RequestScope.UserRole)
+                <!-- END main menu -->
+            </div>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- main -->
+    @RenderBody()
+    <!-- footer -->
+    @RenderPage("~/Views/Shared/_Footer.cshtml")
+
+    <!-- Le javascript
+      ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/Assets/components/datatables/media/js/jquery.dataTables.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Assets/components/ckeditor/ckeditor.js")
+    @Scripts.Render("~/Assets/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js")
+    @Scripts.Render("~/Assets/components/jTreeView/zTree_v3-master/js/jquery.ztree.core.js")
+    @Scripts.Render("~/Assets/js/datatable_custom.js")
+
+    @Scripts.Render("~/Assets/js/toggle.js")
+    @Scripts.Render("~/Assets/js/ckeditor.js")
+    @Scripts.Render("~/Assets/js/CongNo.js")
+    @Scripts.Render("~/Assets/js/KhachHang.js")
+    @Scripts.Render("~/Assets/js/LogHandler.js")
+    @Scripts.Render("~/Assets/js/CommonHandler.js")
+    @Scripts.Render("~/Assets/components/select2/dist/js/select2.min.js")
+    @Scripts.Render("~/Assets/js/select2.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/dataTables.buttons.min.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/buttons.html5.min.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/jszip.min.js");
+    <!-- Script để load trang phụ -->
+    <script type="text/javascript">
+
+        function OpenPopup(Url, WindowName, width, height, extras, scrollbars) {
+            var wide = width;
+            var high = height;
+            var additional = extras;
+            var top = (screen.height - high) / 2;
+            var leftside = (screen.width - wide) / 2; newWindow = window.open('' + Url +
+              '', '' + WindowName + '', 'width=' + wide + ',height=' + high + ',top=' +
+              top + ',left=' + leftside + ',features=' + additional + '' +
+              ',scrollbars=1');
+            newWindow.focus();
+        }
+
+    </script>
+
+    <!-- Drop down toggle trên nav bảr-->
+    <script type="text/javascript">
+        var view = $("#viewname").html().trim();
+        $(document).ready(function () {
+            //thêm nút tải file lên cho công nợ chuyển khoản
+            if (view == "congNoChuyenKhoan") {
+                $("#DataTables_Table_0_filter").append(" <button>Tải file lên</button>");
+                $("#DataTables_Table_1_filter").append(" <button>Tải file lên</button>");
+            }
+
+        });
+        $('#advancedSearch').click(function () {
+            $("#showSearch").toggle();
+        });
+        var infor;
+        var thanhtoan;
+        var loaiKH;
+        $(".passmodal").click(function () {
+            infor = parseInt($(this).attr('data-khachhang'));
+            thanhtoan = parseInt($(this).attr('data-thanhtoan'));
+            loaiKH = parseInt($(this).attr('data-loaikhachhang'));
+            $("div.modal-body a").attr("href", "/BaoCao/LichSuDungNuocCuaKhachHang?id=" + infor + "");
+            $("div.modal-body > a").attr("href", "/BaoCao/LichSuDungNuocCuaKhachHang?id=" + infor + "")
+            // thêm ô chọn loại khách hàng
+            if (loaiKH == 1)
+                var hd = "<br><div class='span5'> <form><h4 style='color:purple;'>Thay đổi loại khách hàng</h4>Hộ gia đình<input type='radio' name='loaiKH' value='1' checked><br>Doanh nghiệp<input type='radio' name='loaiKH' value='2'></form><button id='change'>Thay đổi</button></div>";
+            else
+                var hd = "<br><div class='span5'> <form><h4 style='color:purple;'>Thay đổi loại khách hàng</h4>Hộ gia đình<input type='radio' name='loaiKH' value='1' ><br>Doanh nghiệp<input type='radio' name='loaiKH' value='2' checked></form><button id='change'>Thay đổi</button></div>";
+            //thanh toán
+            if (thanhtoan == 1)
+                var hd = hd + "<hr style = 'clear:both'><br><div class='span5'> <form><h4 style='color:purple;'>Thay đổi hình thức thanh toán</h4>Tiền mặt<input type='radio' name='thanhtoanID' value='1' checked><br>Chuyển khoản ngân hàng<input type='radio' name='thanhtoanID' value='2'></form><button id='changett'>Thay đổi</button></div>";
+            else
+                var hd = hd + "<hr style = 'clear:both'><br><div class='span5'> <form><h4 style='color:purple;'>Thay đổi hình thức thanh toán</h4>Tiền mặt<input type='radio' name='thanhtoanID' value='1' ><br>Chuyển khoản ngân hàng<input type='radio' name='thanhtoanID' value='2' checked></form><button id='changett'>Thay đổi</button></div>";
+
+            $("#thongtin").append(thanhtoan);
+            $("#thongtin").html(hd);
+
+        });
+
+        //hàm sử dụng ajax để thay đổi loại khách hàng, mặc định 1 là hộ gia đình, 2 là cơ quan tổ chức
+        $(document).on('click', '#change', function () {
+            var loai = parseInt($("input[name=loaiKH]:checked").val());
+            var conf;
+            //kiểm tra loại khách hàng đã chọn, tạo alert và confirm
+            if (loaiKH == "1" && loaiKH != loai) {
+                alert("Bạn đang thực hiện thao tác thay đổi loại khách hàng từ hộ gia đình sang doanh nghiệp");
+                conf = confirm("Bạn có chắc chắn muốn thay đổi khách hàng này từ nước sinh hoạt sang doanh nghiệp");
+            }
+            else if (loaiKH == "2" && loaiKH != loai) {
+                alert("Bạn đang thực hiện thao tác thay đổi loại khách hàng từ doanh nghiệp sang hộ gia đình");
+                conf = confirm("Bạn có chắc chắn muốn thay đổi khách hàng này từ doanh nghiệp sang  nước sinh hoạt");
+            }
+
+            if (conf == true) {
+                if (view.toString() == "Index") {
+                    $.post("Congno/ChangeStt", { KhachhangID: infor, loaiKH: loai, action: view },
+                    function (data) {
+                        //alert(data);
+                        //$("#thongtin").append(data);
+                    }
+                    );
+                    location.reload(true);
+                }
+                else {
+                    $.post("ChangeStt", { KhachhangID: infor, loaiKH: loai, action: view },
+                   function (data) {
+                       //alert(data);
+                       //$("#thongtin").append(data);
+                   });
+                    location.reload(true);
+                }
+            }
+            else
+                location.reload(true);
+        });
+        //hàm sử dụng ajax để thay đổi loại khách hàng, mặc định 1 là hộ gia đình, 2 là cơ quan tổ chức
+        $(document).on('click', '#change', function () {
+            var loai = parseInt($("input[name=loaiKH]:checked").val());
+            var conf;
+            //kiểm tra loại khách hàng đã chọn, tạo alert và confirm
+            if (loaiKH == "1" && loaiKH != loai) {
+                alert("Bạn đang thực hiện thao tác thay đổi loại khách hàng từ hộ gia đình sang doanh nghiệp");
+                conf = confirm("Bạn có chắc chắn muốn thay đổi khách hàng này từ nước sinh hoạt sang doanh nghiệp");
+            }
+            else if (loaiKH == "2" && loaiKH != loai) {
+                alert("Bạn đang thực hiện thao tác thay đổi loại khách hàng từ doanh nghiệp sang hộ gia đình");
+                conf = confirm("Bạn có chắc chắn muốn thay đổi khách hàng này từ doanh nghiệp sang  nước sinh hoạt");
+            }
+            if (conf == true) {
+                if (view.toString() == "Index") {
+                    $.post("Congno/ChangeStt", { KhachhangID: infor, loaiKH: loai, action: view },
+                    function (data) {
+                        //alert(data);
+                        //$("#thongtin").append(data);
+                    }
+                    );
+                    location.reload(true);
+                }
+                else {
+                    $.post("ChangeStt", { KhachhangID: infor, loaiKH: loai, action: view },
+                   function (data) {
+                   });
+                    location.reload(true);
+                }
+            }
+            else
+                location.reload(true);
+        });
+
+        //hàm sử dung ajax để thay đổi hình thức thanh toán, mắc định 1 là sử dụng tiền mặt, 2 là chuyển khoản
+        $(document).on('click', '#changett', function () {
+
+            var loaitt = parseInt($("input[name=thanhtoanID]:checked").val());
+
+            var conf;
+
+
+            //kiểm tra loại khách hàng đã chọn, tạo alert và confirm
+            if (thanhtoan == 1 && thanhtoan != loaitt) {
+                alert("Bạn đang thực hiện thao tác thay đổi hình thức thanh toán từ tiền mặt sang chuyển khoản ngân hàng");
+                conf = confirm("Bạn có chắc chắn muốn thay đổi hình thức thanh toán của khách hàng từ tiền mặt sang chuyển khoản ngân hàng");
+            }
+            else if (thanhtoan == 2 && thanhtoan != loaitt) {
+                alert("Bạn đang thực hiện thao tác thay đổi hình thức thanh toán từ chuyển khoản ngân hàng sang tiền mặt");
+                conf = confirm("Bạn có chắc chắn muốn thay đổi hình thức thanh toán của khách hàng từ chuyển khoản ngân hàng sang tiền mặt");
+            }
+
+            if (conf == true) {
+                if (view.toString() == "Index") {
+                    $.post("Congno/ChangeHinhThucTT", { KhachhangID: infor, loaitt: loaitt, action: view },
+                    function (data) {
+                    },
+                    function (data, status) {
+                        alert("Data: " + data + "\nStatus: " + status);
+                    });
+                    location.reload(true);
+                }
+                else {
+                    $.post("ChangeHinhThucTT", { KhachhangID: infor, loaitt: loaitt, action: view },
+                   function (data) {
+                   },
+                    function (data, status) {
+                        alert("Data: " + data + "\nStatus: " + status);
+                    });
+                    location.reload(true);
+                }
+            }
+            else
+                location.reload(true);
+        });
+    </script>
+
+    <!-- Script để sửa báo cáo hóa đơn của Huyền-->
+    <script type="text/javascript">
+        $(function () {
+            $(".ten").addClass('center');
+        });
+
+        @if (ViewContext.RouteData.GetRequiredString("controller").ToLower() == "Baocaokinhdoanh".ToLower() || ViewContext.RouteData.GetRequiredString("controller").ToLower() == "BaoCaoInHoaDon".ToLower()||
+            ViewContext.RouteData.GetRequiredString("controller").ToLower() == "Baocao")
+            {
+                <text>
+        $('.row').wrap("<div class='container'>");
+        </text>
+            }
+
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

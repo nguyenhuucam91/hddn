@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="HoaDonHaDong" Class="AdminMembershipDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=BIPARTNER\BiSQL;Initial Catalog=HoaDonHaDong;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="HoaDonHaDongConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Nguoidung" Member="Nguoidungs">
+    <Type Name="Nguoidung">
+      <Column Name="NguoidungID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NhanvienID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Taikhoan" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="Matkhau" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="Isadmin" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Nguoidung_Dangnhap" Member="Dangnhaps" ThisKey="NguoidungID" OtherKey="NguoidungID" Type="Dangnhap" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Dangnhap" Member="Dangnhaps">
+    <Type Name="Dangnhap">
+      <Column Name="DangnhapID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="NguoidungID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Solandangnhapsai" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Thoigiandangnhap" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Trangthaikhoa" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Thoigianhethankhoa" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Nguoidung_Dangnhap" Member="Nguoidung" ThisKey="NguoidungID" OtherKey="NguoidungID" Type="Nguoidung" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
