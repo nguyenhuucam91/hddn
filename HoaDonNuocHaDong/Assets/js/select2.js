@@ -291,7 +291,6 @@ function ajaxApGiaDacBietTongHopFn(khachHangID, month, year, item) {
         data: { KhachHangID: khachHangID, thang: month, nam: year },
         success: function (result) {
             var str = "";
-
             $.each(result, function (index, value) {
                 var appendedTr = "<span>"
                   + (value.LoaiApGia == 1 ? "Sinh hoạt" : value.LoaiApGia == 2 ? "Hành chính" : value.LoaiApGia == 3 ? "Sự nghiệp" : value.LoaiApGia == 4 ? "Kinh doanh" : value.LoaiApGia == 5 ? "Sản xuất" : value.LoaiApGia == 9 ? "SH1" : value.LoaiApGia == 10 ? "SH2" : value.LoaiApGia == 11 ? "SH3" : "SH4")
@@ -446,6 +445,7 @@ $("input[name='soKhoan']").change(function () {
 //chỉnh sửa lên xuống phải trái, bằng cách ấn enter (focus vào ô đó)
 $(document).on('keyup', function (e) {
     var cachTinhGia = $(".cachTinhGia");
+    cachTinhGia.text("");
     var focusedElement = $("input[autofocus='autofocus']");
       if (focusedElement.length > 1) {
           focusedElement = $(".detail-focused");
