@@ -20,6 +20,7 @@ namespace HoaDonNuocHaDong
         public string Sotaikhoan { get; set; }
 
         public string Masothue { get; set; }
+        [Required(ErrorMessage = "Ngày kí hợp đồng không được để trống")]
         public Nullable<System.DateTime> Ngaykyhopdong { get; set; }
         [Required(ErrorMessage = "Tỉ lệ phí môi trường không để trống")]
         public Nullable<int> Tilephimoitruong { get; set; }
@@ -119,7 +120,7 @@ namespace HoaDonNuocHaDong
         public int ToQuanHuyenID { get; set; }
 
         [Required(ErrorMessage = "Mã không được để trống")]
-        public string Ma { get; set; }        
+        public string Ma { get; set; }
         public Nullable<int> SoCN { get; set; }
         public Nullable<int> QuanHuyenID { get; set; }
         public Nullable<bool> IsDelete { get; set; }
@@ -129,7 +130,7 @@ namespace HoaDonNuocHaDong
     {
         public int ApgiaID { get; set; }
         public Nullable<int> LoaiapgiaID { get; set; }
-        [Range(1,100,ErrorMessage="Đến mức không âm")]
+        [Range(1, 100, ErrorMessage = "Đến mức không âm")]
         public Nullable<int> Denmuc { get; set; }
         public Nullable<double> Gia { get; set; }
         public string Ten { get; set; }
@@ -156,9 +157,9 @@ namespace HoaDonNuocHaDong
     {
 
         public int Id { get; set; }
-        [Required(ErrorMessage="Tiêu đề không được để trống")]
+        [Required(ErrorMessage = "Tiêu đề không được để trống")]
         public string Tieude { get; set; }
-        [Required(ErrorMessage="Nội dung không được để trống")]
+        [Required(ErrorMessage = "Nội dung không được để trống")]
         public string Noidung { get; set; }
         public Nullable<int> Nguoitao { get; set; }
         public Nullable<System.DateTime> Ngaytao { get; set; }
@@ -179,7 +180,7 @@ namespace HoaDonNuocHaDong
         public int NhanvienID { get; set; }
 
         public Nullable<int> PhongbanID { get; set; }
-        [Required(ErrorMessage = "Chức vụ không để trống")]
+
         public Nullable<int> ChucvuID { get; set; }
         [Required(ErrorMessage = "Tên nhân viên không để trống")]
         public string Ten { get; set; }

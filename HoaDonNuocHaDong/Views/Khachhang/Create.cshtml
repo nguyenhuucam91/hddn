@@ -74,18 +74,19 @@
                                                 {
                                                     int TuyenKH = item.TuyenCuaKH;
                                                     String TenTuyenKH = item.TenTuyen;
+                                                    String maTuyen = item.MaTuyenKH;
                                                     if (isReentered != null)
                                                     {
                                                         if (item.TuyenCuaKH == selectedTuyenKHID)
                                                         {
-                                                            <option value="@TuyenKH" selected>@TenTuyenKH</option>
+                                                            <option value="@TuyenKH" selected>@maTuyen - @TenTuyenKH</option>
                                                         }
                                                         else
                                                         {
-                                                            <option value="@TuyenKH">@TenTuyenKH</option>
+                                                            <option value="@TuyenKH">@maTuyen - @TenTuyenKH</option>
                                                         }
                                                     }
-                                                    <option value="@TuyenKH">@TenTuyenKH</option>
+                                                    <option value="@TuyenKH">@maTuyen - @TenTuyenKH</option>
                                                 }
                                             </select>
                                             @Html.ValidationMessageFor(model => model.TuyenKHID)

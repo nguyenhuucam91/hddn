@@ -67,9 +67,7 @@ namespace HoaDonNuocHaDong.Controllers
                                          select r).ToList();
                 tuyensLs.AddRange(tuyenTheoNhanVien);
             }
-            ViewBag.tuyen = tuyensLs;
-            //xem danh sách khách hàng
-            ViewBag.showKhachHang = false;
+          
             if (TempData["to"] != null && TempData["nhanvien"] != null && TempData["tuyen"] != null)
             {
                 int nhanVienIDFromIndex = Convert.ToInt32(TempData["nhanvien"]);
@@ -104,7 +102,9 @@ namespace HoaDonNuocHaDong.Controllers
 
                 }
             }
-
+            ViewBag.tuyen = tuyensLs;
+            //xem danh sách khách hàng
+            ViewBag.showKhachHang = false;
             return View();
         }
 
@@ -461,9 +461,11 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.MaKH = 1;
             }
 
-            int phongBanID = Convert.ToInt32(Session["phongBan"]);
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
+            var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+            int phongBanID = phongBan.PhongbanID;
             //lấy danh sách tuyến thuộc cả 1 tổ
-            String nhanVienSession = Session["nhanVienID"].ToString();
+            String nhanVienSession = LoggedInUser.NhanvienID.ToString();
             //lấy danh sách tuyến thuộc nhân viên ID
             if (!String.IsNullOrEmpty(nhanVienSession))
             {
@@ -625,6 +627,7 @@ namespace HoaDonNuocHaDong.Controllers
                 try
                 {
                     db.SaveChanges();
+                    ViewBag.successfulMessage = "Thêm mới khách hàng thành công";
                 }
                 catch (DbEntityValidationException dbEx)
                 {
@@ -674,9 +677,11 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.MaKH = 1;
             }
 
-            int phongBanID = Convert.ToInt32(Session["phongBan"]);
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
+            var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+            int phongBanID = phongBan.PhongbanID;
             //lấy danh sách tuyến thuộc cả 1 tổ
-            String nhanVienSession = Session["nhanVienID"].ToString();
+            String nhanVienSession = LoggedInUser.NhanvienID.ToString();
             //lấy danh sách tuyến thuộc nhân viên ID
             if (!String.IsNullOrEmpty(nhanVienSession))
             {
@@ -705,7 +710,6 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
             ViewBag.selectedTuyenKHID = khachhang.TuyenKHID;
             ViewBag.reEnterCustomer = true;
-            ViewBag.successfulMessage = "Thêm mới khách hàng thành công";
             return View(khachhang);
 
         }
@@ -715,7 +719,9 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
-            int phongBanID = Convert.ToInt32(Session["phongBan"]);
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
+            var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+            int phongBanID = phongBan.PhongbanID;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -877,7 +883,9 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
-            int phongBanID = Convert.ToInt32(Session["phongBan"]);
+           var phongBanRepository = uow.Repository<PhongBanRepository>();
+            var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+            int phongBanID = phongBan.PhongbanID;
             int KHID = Convert.ToInt32(form["KhachhangID"]);
             khachhang.IsDelete = false;
             //lấy TTDoc trước
