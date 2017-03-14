@@ -1,7 +1,4 @@
-﻿//xóa localStorage cho ngày bắt đầu và ngày kết thúc nếu có
-localStorage.removeItem("startDate");
-localStorage.removeItem("endDate");
-
+﻿
 /*sửa select2.js sau khi chọn bị mất focus*/
 $('.dropdown').on("select2:selecting", function (e) {
     // what you would like to happen
@@ -312,14 +309,11 @@ $("table tbody tr td input").click(function () {
 
 //nếu như ngày bắt đầu và ngày kết thúc để trống thì tải lại trang để cập nhật vào ô ngày bắt đầu và ngày kết thúc tương ứng của khách hàng
 $(document).ready(function () {
-    $("#startDateFixedTop").change(function () {
-        //lưu qua localStorage
-        localStorage.setItem("startDate", $(this).val());
-    });
-    //
-    $("#endDateFixedTop").on('change', function () {
-        //lưu qua localStorage
-        localStorage.setItem("endDate", $(this).val());
+    //xóa localStorage cho ngày bắt đầu và ngày kết thúc nếu có
+    localStorage.removeItem("startDate");
+    localStorage.removeItem("endDate");
+    $("#endDateFixedTop").datepicker().on('changeDate', function (ev) {
+       localStorage.setItem("endDate", $(this).val());
     });
 });
 
@@ -327,48 +321,26 @@ $(document).ready(function () {
 $(document).ready(function () {
     $("input[name='chiSoMoi']").change(function () {
         //nếu hóa đơn đã được nhập từ tháng trước thì không cần nhập lại ngày bắt đầu nữa
-        var startFixedTop = localStorage.getItem("startDate");
         var endFixedTop = localStorage.getItem("endDate");
-        var hasNgayBatDau = $(this).parent('td').siblings(".startDate").find('input[type="hidden"]');
-        //nếu có ngày bắt đầu, i.e. hasNgayBatDau = 1 thì k cần ngày bắt đầu trên thanh fixedTop, nếu bằng 0 mới kiểm tra trên fixedTop
-        if (hasNgayBatDau.val() == "0") {
-            //nếu fixedTop khác null thì xử lí bt
-            if (startFixedTop != null) {
-                var dateStartInput = $(this).parent('td').siblings(".startDate").find('input[type="text"]');
-                var startDateFixedTop = startFixedTop;
-                dateStartInput.val(startDateFixedTop);
-                var dateStart = dateStartInput.val();
-            }
-                // nếu fixedTop = empty thì mới báo alert
-            else {
-                alert("Ngày bắt đầu không để trống");
+
+        var dateStart = $(this).parent('td').siblings(".startDate").find('input[name="startDate"]').val();
+        var endDateValue = $(this).parent('td').siblings(".endDate").find('input[name="endDate"]').val();
+        if (endDateValue == "") {
+            //đặt endDate cho ngày kết thúc dựa theo ngày kết thúc trên fixed navbar
+            if (endFixedTop != null) {
+                var dateEndInput = $(this).parent('td').siblings(".endDate").find('input');
+                var dateEndFixedTop = endFixedTop;
+                dateEndInput.val(dateEndFixedTop);
+                var dateEnd = dateEndInput.val();
+            } else {
+                alert("Ngày kết thúc không để trống");
                 $(this).val("");
-                //focus vào ngày bắt đầu trên thanh fixedTop
-                $("#startDateFixedTop").focus();
+                $("#endDateFixedTop").focus();
                 return;
             }
-        }
-            //nếu có ngày bắt đầu, trong trường hợp muốn sửa, ví dụ hiển thị 01/01/0001 thì ghi lại ngày bắt đầu, nếu không thì không cho sửa
-        else {
-            var dateStartInput = $(this).parent('td').siblings(".startDate").find('input[type="text"]');
-            if (dateStartInput.val() == "01/01/0001" || dateStartInput.val() == "") {
-                var startDateFixedTop = startFixedTop;
-                dateStartInput.val(startDateFixedTop);
-                var dateStart = dateStartInput.val();
-            }
-        }
-
-        //đặt endDate cho ngày kết thúc dựa theo ngày kết thúc trên fixed navbar
-        if (endFixedTop != null) {
-            var dateEndInput = $(this).parent('td').siblings(".endDate").find('input');
-            var dateEndFixedTop = endFixedTop;
-            dateEndInput.val(dateEndFixedTop);
-            var dateEnd = dateEndInput.val();
         } else {
-            alert("Ngày kết thúc không để trống");
-            $(this).val("");
-            $("#endDateFixedTop").focus();
-            return;
+            var dateEndInput = $(this).parent('td').siblings(".endDate").find('input');
+            var dateEnd = dateEndInput.val();
         }
 
         var hoaDonID = $(this).data("hoadonid");
