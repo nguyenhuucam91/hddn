@@ -425,9 +425,9 @@ namespace HoaDonHaDong.Helper
             if (hoaDon != null)
             {
                 bool? ttChot = hoaDon.Trangthaichot;
-                if (ttChot != null)
+                if (ttChot == null || ttChot == false)
                 {
-                    return ttChot.Value;
+                    return false;
                 }
             }
             return true;
