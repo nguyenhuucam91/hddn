@@ -446,9 +446,9 @@ $(document).on('keyup', function (e) {
     var cachTinhGia = $(".cachTinhGia");
     cachTinhGia.text("");
     var focusedElement = $("input[autofocus='autofocus']");
-      if (focusedElement.length > 1) {
-          focusedElement = $(".detail-focused");
-      }
+    if (focusedElement.length > 1) {
+        focusedElement = $(".detail-focused");
+    }
     //lấy vị trí cột dựa theo index
     var index = focusedElement.closest("td").index();
     //nếu nút ấn là nút Enter
@@ -457,7 +457,7 @@ $(document).on('keyup', function (e) {
     if (e.which == ENTERKEYCODE) {
 
         if (focusedElement.hasClass('sanLuong')) {
-            var nextParent = focusedElement.parent().parent().next("tr.traverse");           
+            var nextParent = focusedElement.parent().parent().next("tr.traverse");
             var nextElement = nextParent.find("td:eq(" + index + ")").find("input");
             focusedElement.blur();
             nextElement.attr("autofocus", true).focus();
@@ -469,8 +469,8 @@ $(document).on('keyup', function (e) {
                 var month = $(".detail-focused").data('month');
                 var year = $(".detail-focused").data('year');
                 ajaxApGiaDacBietTongHopFn(khachHangID, month, year, cachTinhGia);
-            }      
-        }        
+            }
+        }
         else {
             var nextParent = focusedElement.parents("tr").next("tr");
             var nextElement = nextParent.find("td:eq(" + index + ")").find("input");
@@ -483,13 +483,13 @@ $(document).on('keyup', function (e) {
 
     else if (e.which === UPARROW) {
         if (focusedElement.hasClass('sanLuong')) {
-         
+
             //traverse up
             var prevParent = focusedElement.parent().parent().prev("tr.traverse");
             var prevElement = prevParent.find("td:eq(" + index + ")").find("input");
-           
+
             focusedElement.blur();
-            prevElement.attr("autofocus", true).focus();            
+            prevElement.attr("autofocus", true).focus();
             focusedElement.removeClass('detail-focused');
             prevElement.addClass('detail-focused');
             //nếu là áp giá tổng hợp / áp giá đặc biệt thì load 2 dòng cách tính ra, nếu không thì không load và chuyển tới element tiếp theo
@@ -505,7 +505,7 @@ $(document).on('keyup', function (e) {
             focusedElement.blur();
             prevElement.attr("autofocus", true).focus();
             focusedElement.removeClass('detail-focused');
-            prevElement.addClass('detail-focused');          
+            prevElement.addClass('detail-focused');
         }
     }
 });
@@ -573,7 +573,7 @@ $(document).ready(function () {
             dataType: "json",
             method: "GET",
             contentType: "application/json",
-            data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thang: nextMonth, nam: nextYear },            
+            data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thang: nextMonth, nam: nextYear },
         });
     });
 });
@@ -635,23 +635,22 @@ $(function () {
 });
 /*----------------------Hiển thị datepicker cho ngày bắt đầu và ngày kết thúc (bên cạnh thông tin tuyên-người dùng) trong phần nhập số liệu tiêu thụ----------------*/
 
-$("#startDateFixedTop").datepicker({
-    todayBtn: "linked",
-    format: 'dd/mm/yyyy',
-});
+$("#startDateFixedTop").prop('disabled', true);
+
 $("#endDateFixedTop").datepicker({
     todayBtn: "linked",
     format: 'dd/mm/yyyy',
 });
 
-$("input[name='startDate']").datepicker({
-    todayBtn: "linked",
-    format: 'dd/mm/yyyy',
-});
+$("input[name='startDate']").prop('disabled', true);
+
 $("input[name='endDate']").datepicker({
     todayBtn: "linked",
     format: 'dd/mm/yyyy',
 });
+
+$(".disabledEndDate").prop('disabled', true);
+
 
 /*----Xóa phần chi tiết chia áp giá khi click vào body--------*/
 $(function () {

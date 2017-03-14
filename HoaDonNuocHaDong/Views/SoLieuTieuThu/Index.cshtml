@@ -143,9 +143,9 @@
 
                                         <tbody>
                                             @{
-                                int i = 1;
-                                int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
-                                int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
+                                                int i = 1;
+                                                int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
+                                                int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
                                             }
                                             @foreach (var item in kH)
                                             {
@@ -170,28 +170,30 @@
                                                     {
                                                         <td class="startDate">
                                                             <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
-                                                            <input readonly type="text" style="width:90%" name="startDate" value="@String.Format("{0:dd/MM/yyyy}",thisMonthReceipt.Ngaybatdausudung)" data-hoadonid="@item.HoaDonNuocID" />
+                                                            <input type="text" style="width:90%" name="startDate"
+                                                                   value="@String.Format("{0:dd/MM/yyyy}",thisMonthReceipt.Ngaybatdausudung)" 
+                                                                   data-hoadonid="@item.HoaDonNuocID" readonly/>
                                                         </td>
                                                     }
                                                     else
                                                     {
                                                         <td class="startDate">
                                                             <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="0" />
-                                                            <input readonly type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" />
+                                                            <input type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" readonly/>
                                                         </td>
                                                     }
                                                     <td class="endDate">
                                                         @if (nextMonthReceipt != null)
                                                         {
                                                             if (!cS.isChotHoaDon(hoaDonID))
-                                                            {
+                                                            {                                                                
                                                                 <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
                                                                        value="@String.Format("{0:dd/MM/yyyy}", nextMonthReceipt.Ngaybatdausudung)"
                                                                        data-hoadonid="@item.HoaDonNuocID" />
                                                             }
                                                             else
-                                                            {
-                                                                <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID" disabled
+                                                            {                                                                
+                                                                <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
                                                                        value="@String.Format("{0:dd/MM/yyyy}", nextMonthReceipt.Ngaybatdausudung)"
                                                                        data-hoadonid="@item.HoaDonNuocID" />
                                                             }
@@ -206,7 +208,7 @@
                                                             }
                                                             else
                                                             {
-                                                                <input type="text" style="width:90%" name="endDate"
+                                                                <input class="disabledEndDate" type="text" style="width:90%" name="endDate"
                                                                        data-khid="@item.KhachHangID"
                                                                        data-hoadonid="@item.HoaDonNuocID" disabled />
                                                             }
@@ -214,26 +216,28 @@
                                                     </td>
                                                     <!-- Chỉ số cũ -->
                                                     <td><input type="text" style="width:55px" value="@item.ChiSoCu" disabled /></td>
+
                                                     <!-- Chỉ số mới: nếu là nhân viên, nếu đã chốt thì disabled đối với nhân viên(enable với trưởng phòng), nếu chưa chốt thì mở ô ra cho nhập -->
                                                     @if (isChot == null || isChot == false)
                                                     {
-                                                        <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@item.ChiSoMoi"></td>
+                                                        String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
+                                                        <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@chiSoMoi"></td>
                                                     }
                                                     //nếu đã chốt hóa đơn (chốt = true) mà phòng in hóa đơn tiến hành hủy hóa đơn thì vấn edit lại được
                                                     else
                                                     {
+                                                        String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
                                                         if (cS.isChotHoaDon(hoaDonID))
                                                         {
-                                                            <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" disabled="disabled" value="@item.ChiSoMoi"></td>
+                                                            <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" disabled="disabled" value="@chiSoMoi"></td>
                                                         }
                                                         else
                                                         {
-                                                            <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" value="@item.ChiSoMoi"></td>
+                                                            <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" value="@chiSoMoi"></td>
                                                         }
                                                     }
-                                                    <!-- Sản lượng -->
+                                                   
                                                     <td><input type="text" style="width:55px" name="sanLuong" readonly value="@item.SanLuong" /></td>
-                                                    <!-- Số khoán -->
                                                     <td>
                                                         @if (isChot == null || isChot == false)
                                                         {
