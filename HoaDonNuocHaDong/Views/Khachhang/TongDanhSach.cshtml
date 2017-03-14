@@ -5,7 +5,6 @@
     List<HoaDonNuocHaDong.Models.KhachHang.KhachHangModel> ls = ViewData["khachHang"] as List<HoaDonNuocHaDong.Models.KhachHang.KhachHangModel>;
     var selectedNhanVien = Convert.ToInt32(ViewBag.selectedNhanVien);
     var selectedTuyen = Convert.ToInt32(ViewBag.selectedTuyen);
-    String[] tuyenIDSession = Session["tuyenID"].ToString().Split(',');
 }
 
 <div class="main">
@@ -25,13 +24,9 @@
                                     <!-- Thêm mới và lọc theo tình trạng, chỉ available khi là nhân viên, trưởng phòng k thêm mới-->
                                     <div class="form-group">
                                         <p style="float:left;margin-right:5%">
-                                            @if (tuyenIDSession.Count() != 0)
-                                            {
-                                                if (tuyenIDSession[0] != "0")
-                                                {
-                                                    <a class="btn btn-primary" href="@Url.Action("Create", "Khachhang")" role="button">Thêm mới khách hàng</a>
-                                                }
-                                            }
+
+                                            <a class="btn btn-primary" href="@Url.Action("Create", "Khachhang")" role="button">Thêm mới khách hàng</a>
+
                                             <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#myModal">Thanh lí hợp đồng</button>
                                             <!-- Modal content để thanh lí hợp đồng-->
                                             <div id="myModal" class="modal fade" role="dialog">
@@ -172,8 +167,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <!-- Because model is in the type of LISt (storage - multiple records), so in order
-                                                to get EACH RECORD, u need to iterate VIA LOOP -->
+                                           
                                             @foreach (var item in ls)
                                             {
                                                 <tr>

@@ -228,7 +228,7 @@ namespace HoaDonNuocHaDong.Controllers
                                   NgayCapNuocLai = i.Ngaycapnuoclai,
                               });
 
-            //lọc kèm theo tình trạng
+            
             if (String.IsNullOrEmpty(TinhTrang) || TinhTrang == "0" || String.IsNullOrEmpty(Request.QueryString["TinhTrang"]))
             {
                 khachhangs = khachhangs.Where(p => p.Tinhtrang == 0 || p.Tinhtrang == null);
@@ -238,7 +238,7 @@ namespace HoaDonNuocHaDong.Controllers
                 int tinhTrang = int.Parse(TinhTrang);
                 khachhangs = khachhangs.Where(p => p.Tinhtrang == tinhTrang);
             }
-            //đã thanh lý hợp đồng
+
             if (TinhTrang != "1")
             {
                 //KH bị cắt nước khi và chỉ khi ngày cắt nước <= ngày hiện tại

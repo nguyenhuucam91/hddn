@@ -127,8 +127,8 @@ namespace HoaDonNuocHaDong.Controllers
 
             if (ModelState.IsValid)
             {
-                Tuyenong tuyenOng = db.Tuyenongs.FirstOrDefault(p => p.Tentuyen == tuyenong.Tentuyen && p.Matuyen == tuyenong.Matuyen);
-                if (tuyenong == null) {
+                Tuyenong firstPlumber = db.Tuyenongs.FirstOrDefault(p => p.Tentuyen == tuyenong.Tentuyen && p.Matuyen == tuyenong.Matuyen);
+                if (firstPlumber == null) {
                     db.Tuyenongs.Add(tuyenong);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -193,16 +193,7 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Tuyenong/Delete/5
         public ActionResult Delete(int? id)
         {
-            //List<Tuyenongkythuat> tuyenOngKiThuat = db.Tuyenongkythuats.Where(p => p.TuyenongID == id).ToList();
-            //foreach (var item in tuyenOngKiThuat)
-            //{
-            //    db.Tuyenongkythuats.Remove(item);
-            //}
-            ////xóa hết child liên quan tới parent tuyến ống
-            //db.Tuyenongs.Where(p => p.TuyenongPID == id).FirstOrDefault();
-            ////xóa đến parent
-            //Tuyenong tuyenong = db.Tuyenongs.Find(id);
-            //db.Tuyenongs.Remove(tuyenong);
+            
             Tuyenong tuyenOng = db.Tuyenongs.Find(id);
             tuyenOng.IsDelete = true;
             db.SaveChanges();
