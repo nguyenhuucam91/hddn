@@ -65,14 +65,14 @@
     <select class=" dropdown form-control tuyen" style="width: 20%; float: left; margin-right: 3%" name="tuyen">
         <option></option>
         @foreach (var item in tuyen)
-        {
+        {            
             if (selectedTuyen == item.TuyenKHID)
             {
-                <option value="@item.TuyenKHID" selected>@item.Ten</option>
+                <option value="@item.TuyenKHID" selected>@item.Matuyen - @item.Ten</option>
             }
             else
             {
-                <option value="@item.TuyenKHID">@item.Ten</option>
+                <option value="@item.TuyenKHID">@item.Matuyen - @item.Ten</option>
             }
         }
     </select>

@@ -253,7 +253,7 @@ $(".nhanvien").change(function () {
         data: { NhanVienID: selectedVal },
         success: function (result) {
             $.each(result, function (key, value) {
-                $(".tuyen").append("<option value=" + value.TuyenID + ">" + value.Ten + "</option>");
+                $(".tuyen").append("<option value=" + value.TuyenID + ">" + value.Matuyen +'-'+value.Ten + "</option>");
             });
         }
     });
