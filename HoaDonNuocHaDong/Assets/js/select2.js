@@ -117,7 +117,6 @@ $(".dropdown.phongBan").select2({
 });
 
 
-//gửi request ajax dạng GET, khi quận thay đổi thì phường thay đổi theo.
 $(".quan,.quanAllowClear").change(function () {
     //clear result trước khi thay đổi
     $(".phuong,.phuongAllowClear").find("option").remove().end();
@@ -229,7 +228,7 @@ $(".to").change(function () {
                         data: { NhanVienID: nhanVienFirst },
                         success: function (result) {
                             $.each(result, function (key, value) {
-                                $(".tuyen").append("<option value=" + value.TuyenID + ">" + value.Ten + "</option>");
+                                $(".tuyen").append("<option value=" + value.TuyenID + ">" + (value.Matuyen + "-" + value.Ten) + "</option>");
                             });
                         }
                     });
@@ -253,7 +252,7 @@ $(".nhanvien").change(function () {
         data: { NhanVienID: selectedVal },
         success: function (result) {
             $.each(result, function (key, value) {
-                $(".tuyen").append("<option value=" + value.TuyenID + ">" + value.Matuyen +'-'+value.Ten + "</option>");
+                $(".tuyen").append("<option value=" + value.TuyenID + ">" + (value.Matuyen + "-" + value.Ten) + "</option>");
             });
         }
     });
