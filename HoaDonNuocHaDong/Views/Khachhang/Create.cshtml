@@ -86,7 +86,11 @@
                                                             <option value="@TuyenKH">@maTuyen - @TenTuyenKH</option>
                                                         }
                                                     }
-                                                    <option value="@TuyenKH">@maTuyen - @TenTuyenKH</option>
+                                                    else
+                                                    {
+                                                        <option value="@TuyenKH">@maTuyen - @TenTuyenKH</option>
+                                                    }
+
                                                 }
                                             </select>
                                             @Html.ValidationMessageFor(model => model.TuyenKHID)

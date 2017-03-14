@@ -66,20 +66,20 @@
                                     <div class="col-md-4 pull-left">
                                         <label for="" class="control-label">Tuyến khách hàng:</label>&nbsp;&nbsp;
                                         <select name="TuyenKHID" class="dropdown tuyen">
-                                            @foreach (var item in toQHLs)
-                                            {
-                                                var TuyenKH = item.TuyenCuaKH;
-                                                var TenTuyenKH = item.TenTuyen;                                               
-                                                
-                                                if (Convert.ToInt32(ViewBag.SelectedTuyen) == TuyenKH)
-                                                {
-                                                    <option value="@TuyenKH" selected="selected">@TenTuyenKH</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@TuyenKH">@TenTuyenKH</option>
-                                                }
-                                            }
+                                           @foreach (var item in toQHLs)
+                                           {
+                                               var TuyenKH = item.TuyenCuaKH;
+                                               var TenTuyenKH = item.TenTuyen;
+                                               var maTuyen = item.MaTuyenKH;
+                                               if (Convert.ToInt32(ViewBag.SelectedTuyen) == TuyenKH)
+                                               {
+                                                <option value="@TuyenKH" selected="selected">@maTuyen - @TenTuyenKH</option>
+                                               }
+                                               else
+                                               {
+                                                <option value="@TuyenKH">@maTuyen - @TenTuyenKH</option>
+                                               }
+                                           }
                                         </select>
 
                                         @Html.ValidationMessageFor(model => model.TuyenKHID)

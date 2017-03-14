@@ -35,12 +35,14 @@ namespace HoaDonNuocHaDong.Controllers
         public static int makh { get; private set; }
         public ActionResult Index(string TinhTrang = null, string catNuoc = null)
         {
+            //xem danh sách khách hàng
+            ViewBag.showKhachHang = false;
             //code lại từ đầu
             int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             ViewBag.selectedChiNhanh = quanHuyenID;
             ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-            
-            
+
+
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
@@ -67,7 +69,7 @@ namespace HoaDonNuocHaDong.Controllers
                                          select r).ToList();
                 tuyensLs.AddRange(tuyenTheoNhanVien);
             }
-          
+
             if (TempData["to"] != null && TempData["nhanvien"] != null && TempData["tuyen"] != null)
             {
                 int nhanVienIDFromIndex = Convert.ToInt32(TempData["nhanvien"]);
@@ -99,12 +101,10 @@ namespace HoaDonNuocHaDong.Controllers
                     ViewBag.selectedTuyen = selectedTuyenTmpData;
                     ViewBag.khachHang = khachHangIQueryable.OrderBy(p => p.TTDoc).ToList();
                     ViewBag.showKhachHang = true;
-
                 }
             }
             ViewBag.tuyen = tuyensLs;
-            //xem danh sách khách hàng
-            ViewBag.showKhachHang = false;
+
             return View();
         }
 
@@ -145,7 +145,7 @@ namespace HoaDonNuocHaDong.Controllers
             //load viewbag mặc định
             ViewBag.chiNhanh = db.Chinhanhs.OrderBy(p => p.Ten).ToList();
             ViewBag.to = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
-            ViewBag.nhanVien = db.Nhanviens.OrderBy(p => p.Ten).Where(p => p.ToQuanHuyenID == toForm && (p.IsDelete == false || p.IsDelete == null) && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
+            ViewBag.nhanVien = db.Nhanviens.Where(p => p.ToQuanHuyenID == toForm && (p.IsDelete == false || p.IsDelete == null)).ToList();
             var tuyenTheoNhanVien = from i in db.Tuyentheonhanviens
                                     join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
                                     join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
@@ -575,10 +575,10 @@ namespace HoaDonNuocHaDong.Controllers
                 //lấy last inserted id của khách hàng
                 hoaDonNuoc.KhachhangID = db.Khachhangs.Max(p => p.KhachhangID);
                 //lấy nhân viên ID đang đăng nhập hệ thống
-                if (Session["nhanVienID"] != null)
+                if (LoggedInUser.NhanvienID != null)
                 {
-                    int ngDungID = Convert.ToInt32(Session["nhanVienID"]);
-                    hoaDonNuoc.NhanvienID = ngDungID;
+                    int nhanvienID = LoggedInUser.NhanvienID.Value;
+                    hoaDonNuoc.NhanvienID = nhanvienID;
                 }
                 else
                 {
@@ -883,7 +883,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
-           var phongBanRepository = uow.Repository<PhongBanRepository>();
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
             int KHID = Convert.ToInt32(form["KhachhangID"]);
@@ -1009,10 +1009,8 @@ namespace HoaDonNuocHaDong.Controllers
                 return RedirectToAction("Index");
             }
 
-            //lấy danh sách tuyến thuộc cả 1 tổ
-            String nhanVienSession = Session["nhanVienID"].ToString();
             //lấy danh sách tuyến thuộc nhân viên ID
-            if (!String.IsNullOrEmpty(nhanVienSession))
+            if (nhanVien != null)
             {
                 //lấy danh sách tổ của người dùng
                 List<Models.TuyenKhachHang.TuyenKhachHang> _tuyen = new List<Models.TuyenKhachHang.TuyenKhachHang>();
@@ -1022,7 +1020,8 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     _tuyen.AddRange(tuyenHelper.getTuyenByTo(item.ToQuanHuyenID));
                 }
-                ViewBag.TuyenKHID = _tuyen;
+                ViewBag._TuyenKHID = _tuyen;
+                ViewBag.SelectedTuyen = khachhang.TuyenKHID;
             }
 
             ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);

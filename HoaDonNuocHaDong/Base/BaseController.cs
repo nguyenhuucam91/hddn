@@ -1,6 +1,7 @@
 ﻿using HDNHD.Core.Controllers;
 using HDNHD.Core.Models;
 using HDNHD.Models.Constants;
+using HoaDonNuocHaDong.Models.KhachHang;
 using HoaDonNuocHaDong.Repositories;
 using HoaDonNuocHaDong.Repositories.Interfaces;
 using System;
@@ -59,6 +60,10 @@ namespace HoaDonNuocHaDong.Base
             }
             // cache role
             RequestScope.UserRole = role;
+            //kiểm tra ngày tháng hiện tại, nếu ngày tháng hiện tại mà lớn hơn ngày hết áp định thì cho số hộ(số định mức) = 1
+            var currentDate = DateTime.Now;
+            ModelKhachHang modelKH = new ModelKhachHang();
+            modelKH.updateKHHetHanApGia(currentDate);
         }
 
         protected override void OnResultExecuting(ResultExecutingContext filterContext)
