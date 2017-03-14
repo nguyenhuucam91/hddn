@@ -140,7 +140,7 @@ $(".quan").change(function () {
     $(".to").find("option").remove().end();
     var selectedVal = $(this).val();
     $.ajax({
-        url: '/khachhang/FillToByQuan',
+        url: '/khachhang/filltobyquan',
         method: "GET",
         data: { ChiNhanhID: selectedVal },
         success: function (result) {

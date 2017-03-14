@@ -2,8 +2,10 @@
 using HDNHD.Core.Repositories;
 using HDNHD.Models.DataContexts;
 using HoaDonNuocHaDong.Repositories.Interfaces;
+using HvitFramework.CoreData;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -22,8 +24,13 @@ namespace HoaDonNuocHaDong.Repositories
 
             if (dangNhap != null)
             {
-                dangNhap.Thoigiandangnhap = DateTime.Now;
-                context.SubmitChanges();
+                SqlConnection conn = new SqlConnection(DataConfig.connectionString);
+                conn.Open();
+                String sql = "UPDATE [dbo].[Dangnhap]  SET [Thoigiandangnhap] = @newLoginTime WHERE [NguoidungID] = @nguoiDungId";
+                System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand(sql,conn);                
+                command.Parameters.AddWithValue("@newLoginTime", DateTime.Now);
+                command.Parameters.AddWithValue("@nguoiDungId", dangNhap.NguoidungID);
+                command.ExecuteNonQuery();
             }
 
             return dangNhap;
