@@ -17,6 +17,7 @@ using System.Data.SqlClient;
 using HoaDonNuocHaDong.Models.KhachHang;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
+using HDNHD.Models.Constants;
 
 
 namespace HoaDonNuocHaDong.Controllers
@@ -484,7 +485,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
             ViewBag.CumdancuID = db.Cumdancus.Where(p => p.IsDelete == false).ToList();
             ViewBag.HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten");
-            ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != KhachHang.DACBIET), "LoaiapgiaID", "Ten");
+            ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int) EApGia.DacBiet), "LoaiapgiaID", "Ten");
             ViewBag.LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten");
             ViewBag.PhuongxaID = db.Phuongxas.Where(p => p.QuanhuyenID == selectedQuanHuyenID && p.IsDelete == false).ToList();
             ViewBag.QuanhuyenID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList(), "QuanhuyenID", "Ten");
@@ -554,22 +555,7 @@ namespace HoaDonNuocHaDong.Controllers
                         KhachHang.saveGiaTongHop(khachhang.KhachhangID, 0, SH, KD, HC, CC, SX, DateTime.Now.Month, Convert.ToInt16(DateTime.Now.Year));
                     }
                 }
-
-                else if (khachhang.LoaiapgiaID == KhachHang.DACBIET)
-                {
-                    String kDDB = form["KDDB"];
-                    double KD = form["KDDB"] == "" ? -1 : Convert.ToDouble(form["KDDB"]);
-                    double SH = form["SHDB"] == "" ? -1 : Convert.ToDouble(form["SHDB"]);
-                    double SX = form["SXDB"] == "" ? -1 : Convert.ToDouble(form["SXDB"]);
-                    double HC = form["HCDB"] == "" ? -1 : Convert.ToDouble(form["HCDB"]);
-                    double CC = form["CCDB"] == "" ? -1 : Convert.ToDouble(form["CCDB"]);
-                    double SH1 = form["SH1DB"] == "" ? -1 : Convert.ToDouble(form["SH1DB"]);
-                    double SH2 = form["SH2DB"] == "" ? -1 : Convert.ToDouble(form["SH2DB"]);
-                    double SH3 = form["SH3DB"] == "" ? -1 : Convert.ToDouble(form["SH3DB"]);
-                    double SH4 = form["SH4DB"] == "" ? -1 : Convert.ToDouble(form["SH4DB"]);
-                    khachHangHelper.saveGiaDacBiet(khachhang.KhachhangID, SH, KD, HC, CC, SX, SH1, SH2, SH3, SH4, DateTime.Now.Month, Convert.ToInt16(DateTime.Now.Year));
-                }
-
+                
                 //thêm mới trong bảng hóa đơn và chi tiết hóa đơn nước(tháng hiện tại)
                 Hoadonnuoc hoaDonNuoc = new Hoadonnuoc();
                 //lấy last inserted id của khách hàng
@@ -702,7 +688,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.CumdancuID = db.Cumdancus.Where(p => p.IsDelete == false).ToList();
             ViewBag.selectedCumDanCu = khachhang.CumdancuID;
             ViewBag.HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
-            ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != KhachHang.DACBIET), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
+            ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
             ViewBag.LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
             ViewBag.PhuongxaID = db.Phuongxas.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             ViewBag.selectedPhuongXa = khachhang.PhuongxaID;
@@ -865,7 +851,7 @@ namespace HoaDonNuocHaDong.Controllers
             //thông tin dropdown
             ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
             ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
-            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias, "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
+            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
             ViewBag._LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
             ViewBag._PhuongxaID = new SelectList(db.Phuongxas.Where(p => p.IsDelete == false || p.IsDelete == null), "PhuongxaID", "Ten", khachhang.PhuongxaID);
             ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
@@ -980,23 +966,7 @@ namespace HoaDonNuocHaDong.Controllers
                         sLTT.tachSoTongHop(hD.HoadonnuocID, 0, khachhang.KhachhangID, sanLuongTieuThu);
                     }
                     //chia lại giá                    
-                }
-                //Áp giá đặc biệt
-                else if (loaiApGiaID == KhachHang.DACBIET)
-                {
-                    double KD = form["KDDB"] == "" ? -1 : Convert.ToDouble(form["KDDB"]);
-                    double SH = form["SHDB"] == "" ? -1 : Convert.ToDouble(form["SHDB"]);
-                    double SX = form["SXDB"] == "" ? -1 : Convert.ToDouble(form["SXDB"]);
-                    double HC = form["HCDB"] == "" ? -1 : Convert.ToDouble(form["HCDB"]);
-                    double CC = form["CCDB"] == "" ? -1 : Convert.ToDouble(form["CCDB"]);
-                    double SH1 = form["SH1DB"] == "" ? -1 : Convert.ToDouble(form["SH1DB"]);
-                    double SH2 = form["SH2DB"] == "" ? -1 : Convert.ToDouble(form["SH2DB"]);
-                    double SH3 = form["SH3DB"] == "" ? -1 : Convert.ToDouble(form["SH3DB"]);
-                    double SH4 = form["SH4DB"] == "" ? -1 : Convert.ToDouble(form["SH4DB"]);
-                    khachHangHelper.saveGiaDacBiet(khachhang.KhachhangID, SH, KD, HC, CC, SX, SH1, SH2, SH3, SH4, DateTime.Now.Month, Convert.ToInt16(DateTime.Now.Year));
-                    //tách lại chỉ số giá đặc biệt
-                    sLTT.tachSoTongHop(hD.HoadonnuocID, -1, khachhang.KhachhangID, sanLuongTieuThu);
-                }
+                }                
                 //tách lại chỉ số giá khác
                 else
                 {
@@ -1026,7 +996,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
             ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
-            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias, "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
+            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p=>p.LoaiapgiaID!=(int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
             ViewBag._LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
             ViewBag._PhuongxaID = new SelectList(db.Phuongxas, "PhuongxaID", "Ten", khachhang.PhuongxaID);
             ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens, "QuanhuyenID", "Ten", khachhang.QuanhuyenID);

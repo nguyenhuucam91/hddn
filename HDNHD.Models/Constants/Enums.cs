@@ -40,4 +40,11 @@ namespace HDNHD.Models.Constants
         KinhDoanh = 3,
         ThuNgan = 4
     }
+
+    public enum ECachTinhGia
+    {
+        DACBIET = -1,
+        TONGHOPSOKHOAN = 0,
+        TONGHOPPHANTRAM = 1
+    }
 }
