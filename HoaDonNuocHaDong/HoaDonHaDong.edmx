@@ -21,14 +21,14 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="HoaDonNuocID" Type="int" />
-          <Property Name="SH1" Type="int" />
-          <Property Name="SH2" Type="int" />
-          <Property Name="SH3" Type="int" />
-          <Property Name="SH4" Type="int" />
-          <Property Name="HC" Type="int" />
-          <Property Name="CC" Type="int" />
-          <Property Name="SXSD" Type="int" />
-          <Property Name="KDDV" Type="int" />
+          <Property Name="SH1" Type="float" />
+          <Property Name="SH2" Type="float" />
+          <Property Name="SH3" Type="float" />
+          <Property Name="SH4" Type="float" />
+          <Property Name="HC" Type="float" />
+          <Property Name="CC" Type="float" />
+          <Property Name="SXSD" Type="float" />
+          <Property Name="KDDV" Type="float" />
         </EntityType>
         <EntityType Name="Apgiatonghop">
           <Key>
@@ -236,6 +236,7 @@
           <Property Name="NgayNopTien" Type="date" />
           <Property Name="NgayIn" Type="date" />
           <Property Name="Ngaybatdausudung" Type="date" />
+          <Property Name="Ngayketthucsudung" Type="date" />
         </EntityType>
         <EntityType Name="Hoadonnuocbihuy">
           <Key>
@@ -364,6 +365,7 @@
           </Key>
           <Property Name="LoaiapgiaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Ten" Type="nvarchar" MaxLength="50" />
+          <Property Name="MucDoUuTienTinhGia" Type="smallint" />
         </EntityType>
         <EntityType Name="Loaidongho">
           <Key>
@@ -1525,14 +1527,14 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="HoaDonNuocID" Type="Int32" />
-          <Property Name="SH1" Type="Int32" />
-          <Property Name="SH2" Type="Int32" />
-          <Property Name="SH3" Type="Int32" />
-          <Property Name="SH4" Type="Int32" />
-          <Property Name="HC" Type="Int32" />
-          <Property Name="CC" Type="Int32" />
-          <Property Name="SXSD" Type="Int32" />
-          <Property Name="KDDV" Type="Int32" />
+          <Property Name="SH1" Type="Double" />
+          <Property Name="SH2" Type="Double" />
+          <Property Name="SH3" Type="Double" />
+          <Property Name="SH4" Type="Double" />
+          <Property Name="HC" Type="Double" />
+          <Property Name="CC" Type="Double" />
+          <Property Name="SXSD" Type="Double" />
+          <Property Name="KDDV" Type="Double" />
         </EntityType>
         <EntityType Name="Apgiatonghop">
           <Key>
@@ -1766,6 +1768,7 @@
           <Property Name="NgayNopTien" Type="DateTime" Precision="0" />
           <Property Name="NgayIn" Type="DateTime" Precision="0" />
           <Property Name="Ngaybatdausudung" Type="DateTime" Precision="0" />
+          <Property Name="Ngayketthucsudung" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Chitiethoadonnuocs" Relationship="HoaDonHaDongModel.FK_Chitiethoadonnuoc_Hoadonnuoc" FromRole="Hoadonnuoc" ToRole="Chitiethoadonnuoc" />
           <NavigationProperty Name="Khachhang" Relationship="HoaDonHaDongModel.FK_Hoadonnuoc_Khachhang" FromRole="Hoadonnuoc" ToRole="Khachhang" />
           <NavigationProperty Name="Nhanvien" Relationship="HoaDonHaDongModel.FK_Hoadonnuoc_Nhanvien" FromRole="Hoadonnuoc" ToRole="Nhanvien" />
@@ -1909,6 +1912,7 @@
           </Key>
           <Property Name="LoaiapgiaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Ten" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MucDoUuTienTinhGia" Type="Int16" />
           <NavigationProperty Name="Apgias" Relationship="HoaDonHaDongModel.FK_Apgia_Loaiapgia" FromRole="Loaiapgia" ToRole="Apgia" />
         </EntityType>
         <EntityType Name="Loaidongho">
@@ -2894,6 +2898,7 @@
           <EntitySetMapping Name="Hoadonnuocs">
             <EntityTypeMapping TypeName="HoaDonHaDongModel.Hoadonnuoc">
               <MappingFragment StoreEntitySet="Hoadonnuoc">
+                <ScalarProperty Name="Ngayketthucsudung" ColumnName="Ngayketthucsudung" />
                 <ScalarProperty Name="Ngaybatdausudung" ColumnName="Ngaybatdausudung" />
                 <ScalarProperty Name="NgayIn" ColumnName="NgayIn" />
                 <ScalarProperty Name="NgayNopTien" ColumnName="NgayNopTien" />
@@ -3045,6 +3050,7 @@
           <EntitySetMapping Name="Loaiapgias">
             <EntityTypeMapping TypeName="HoaDonHaDongModel.Loaiapgia">
               <MappingFragment StoreEntitySet="Loaiapgia">
+                <ScalarProperty Name="MucDoUuTienTinhGia" ColumnName="MucDoUuTienTinhGia" />
                 <ScalarProperty Name="Ten" ColumnName="Ten" />
                 <ScalarProperty Name="LoaiapgiaID" ColumnName="LoaiapgiaID" />
               </MappingFragment>

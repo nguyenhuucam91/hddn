@@ -40,6 +40,7 @@ namespace HoaDonNuocHaDong
         public Nullable<System.DateTime> NgayNopTien { get; set; }
         public Nullable<System.DateTime> NgayIn { get; set; }
         public Nullable<System.DateTime> Ngaybatdausudung { get; set; }
+        public Nullable<System.DateTime> Ngayketthucsudung { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Chitiethoadonnuoc> Chitiethoadonnuocs { get; set; }

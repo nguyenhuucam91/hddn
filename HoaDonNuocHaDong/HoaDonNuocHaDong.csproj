@@ -315,6 +315,7 @@
     </Compile>
     <Compile Include="Metadata.cs" />
     <Compile Include="ModelReport\Apgia.cs" />
+    <Compile Include="Models\ApGia\ApGia.cs" />
     <Compile Include="Models\BaoCaoInHoaDon\BaoCaoHoaDonNhan.cs" />
     <Compile Include="Models\BaoCaoInHoaDon\BaoCaoPhiNuocThai.cs" />
     <Compile Include="Models\BaoCaoInHoaDon\BaoCaoSanLuongDoanhThu.cs" />
@@ -2253,6 +2254,7 @@
     <Content Include="Views\Shared\_MenuAdmin.cshtml" />
     <Content Include="Views\Shared\_MenuInHoaDon.cshtml" />
     <Content Include="Views\Shared\_MenuKinhDoanh.cshtml" />
+    <Content Include="Views\Khachhang\FilterMaKH.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

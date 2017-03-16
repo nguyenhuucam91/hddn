@@ -22,6 +22,7 @@ namespace HoaDonNuocHaDong
     
         public int LoaiapgiaID { get; set; }
         public string Ten { get; set; }
+        public Nullable<short> MucDoUuTienTinhGia { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Apgia> Apgias { get; set; }

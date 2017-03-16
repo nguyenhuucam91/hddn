@@ -16,13 +16,13 @@ namespace HoaDonNuocHaDong
     {
         public int ID { get; set; }
         public Nullable<int> HoaDonNuocID { get; set; }
-        public Nullable<int> SH1 { get; set; }
-        public Nullable<int> SH2 { get; set; }
-        public Nullable<int> SH3 { get; set; }
-        public Nullable<int> SH4 { get; set; }
-        public Nullable<int> HC { get; set; }
-        public Nullable<int> CC { get; set; }
-        public Nullable<int> SXSD { get; set; }
-        public Nullable<int> KDDV { get; set; }
+        public Nullable<double> SH1 { get; set; }
+        public Nullable<double> SH2 { get; set; }
+        public Nullable<double> SH3 { get; set; }
+        public Nullable<double> SH4 { get; set; }
+        public Nullable<double> HC { get; set; }
+        public Nullable<double> CC { get; set; }
+        public Nullable<double> SXSD { get; set; }
+        public Nullable<double> KDDV { get; set; }
     }
 }
