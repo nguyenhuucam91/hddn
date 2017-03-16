@@ -390,6 +390,7 @@ $("input[name='soKhoan']").change(function () {
     var soKhoanInputValue = $(this).val();
     var hoaDonID = $(this).data("hoadonid");
     var KHID = $(this).data("khid");
+    var soHoaDon = $(this).data("sohoadon");
 
     var chiSoMoiValue = $(this).parent('td').prev('td').prev('td').find('input').val();
     var chiSoCuValue = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
@@ -404,12 +405,7 @@ $("input[name='soKhoan']").change(function () {
         datatype: "json",
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoanInputValue, KHID: KHID, dateStart: dateStart, dateEnd: dateEnd }),
-        success: function (result) {
-            console.log(JSON.stringify({ HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoanInputValue, KHID: KHID, dateStart: dateStart, dateEnd: dateEnd }));
-        }, error: function (result) {
-            console.log("errror");
-        }
+        data: JSON.stringify({ HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoanInputValue, KHID: KHID, dateStart: dateStart, dateEnd: dateEnd, sohoadon : soHoaDon }),        
     });
 });
 
@@ -426,7 +422,9 @@ $(document).on('keyup', function (e) {
     //nếu nút ấn là nút Enter
     var ENTERKEYCODE = 13;
     var UPARROW = 38;
-    if (e.which == ENTERKEYCODE) {
+    var DOWNARROW = 40;
+
+    if (e.which == ENTERKEYCODE || e.which == DOWNARROW) {
 
         if (focusedElement.hasClass('sanLuong')) {
             var nextParent = focusedElement.parent().parent().next("tr.traverse");
@@ -539,13 +537,14 @@ $(document).ready(function () {
         var month = $("input[name='thang']").val();
         var year = $("input[name='nam']").val();
         var nextMonth = parseInt(month) + 1 > 12 ? 1 : parseInt(month) + 1;
-        var nextYear = month + 1 > 12 ? parseInt(year) + 1 : parseInt(year);
+        var nextYear = parseInt(month) + 1 > 12 ? parseInt(year) + 1 : parseInt(year);
+
         $.ajax({
             url: "/SoLieuTieuThu/capnhatketthuc",
             dataType: "json",
             method: "GET",
             contentType: "application/json",
-            data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thang: nextMonth, nam: nextYear },
+            data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thang: nextMonth, nam: nextYear },          
         });
     });
 });

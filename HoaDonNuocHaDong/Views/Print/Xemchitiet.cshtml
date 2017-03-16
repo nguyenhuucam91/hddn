@@ -31,7 +31,7 @@
                         <!-- /widget-header -->
                         <div class="widget-content">
                             <button type="button" onclick="history.go(-1)" class="btn btn-default">Quay lại</button>
-                            <button type="button" class="btn btn-default" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear})')">In</button>
+                            <button type="button" class="btn btn-default" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear})')">In tất cả</button>
                             <p></p>
                             <!--Form in danh sách khách hàng được chọn-->
                             <form action="/Print/PrintSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">

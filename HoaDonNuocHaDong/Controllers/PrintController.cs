@@ -56,8 +56,9 @@ namespace HoaDonNuocHaDong.Controllers
             int namIn = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt32(year);
 
             List<Models.InHoaDon.TuyenTinhTien> danhSach = (from i in db.Lichsuhoadons
-                                                            where i.TuyenKHID == _tuyenID && i.ThangHoaDon == thangIn && i.NamHoaDon == namIn
-                                                            select new Models.InHoaDon.TuyenTinhTien
+                                                            where i.TuyenKHID == _tuyenID && i.ThangHoaDon == thangIn 
+                                                                  && i.NamHoaDon == namIn && i.SanLuongTieuThu > 0
+                                                            select new Models.InHoaDon.TuyenTinhTien                                                            
                                                             {
                                                                 HoaDonNuoc = i.HoaDonID,
                                                                 MaKH = i.MaKH,

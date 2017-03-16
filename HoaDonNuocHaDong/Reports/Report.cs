@@ -90,8 +90,7 @@ namespace HoaDonNuocHaDong.Reports {
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedReport : Component
-    { // , ICachedReport
+    public class CachedReport : Component, ICachedReport {
         
         public CachedReport() {
         }
@@ -118,16 +117,16 @@ namespace HoaDonNuocHaDong.Reports {
             }
         }
         
-        //[Browsable(false)]
-        //[DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
-        //public virtual System.TimeSpan CacheTimeOut {
-        //    get {
-        //        return CachedReportConstants.DEFAULT_TIMEOUT;
-        //    }
-        //    set {
-        //        // 
-        //    }
-        //}
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public virtual System.TimeSpan CacheTimeOut {
+            get {
+                return CachedReportConstants.DEFAULT_TIMEOUT;
+            }
+            set {
+                // 
+            }
+        }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
             Report rpt = new Report();

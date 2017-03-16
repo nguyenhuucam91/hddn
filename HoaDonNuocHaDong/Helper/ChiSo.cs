@@ -160,18 +160,19 @@ namespace HoaDonHaDong.Helper
             int _hoaDonNuoc = khachHangModel[0].count;
             return _hoaDonNuoc;
         }
+
         /// <summary>
         /// Kiểm tra xem chỉ số có NULL hay ko, nếu null thì trả về 0
         /// </summary>
         /// <param name="chiSo"></param>
         /// <returns></returns>
-        public static int checkChiSoNull(String chiSo)
+        public static double checkChiSoNull(String chiSo)
         {
             if (String.IsNullOrEmpty(chiSo))
             {
                 return 0;
             }
-            return Convert.ToInt32(chiSo);
+            return Convert.ToDouble(chiSo);
         }
 
         /// <summary>
@@ -327,7 +328,8 @@ namespace HoaDonHaDong.Helper
         public double tinhThue(int hoaDonNuocID, double SH1, double SH2, double SH3, double SH4, double HC, double CC, double KD, double SX, double? tileBVMT)
         {
             double dinhMuc = tinhTongTienTheoDinhMuc(hoaDonNuocID, SH1, SH2, SH3, SH4, HC, CC, KD, SX);
-            return dinhMuc * tileBVMT.Value / 100;
+            double thueBVMT = dinhMuc * tileBVMT.Value / 100;
+            return Math.Round(thueBVMT, MidpointRounding.AwayFromZero);
         }
 
         /// <summary>
@@ -375,9 +377,8 @@ namespace HoaDonHaDong.Helper
             KDTotal = KD * KDPrice;
             SXTotal = SX * SXPrice;
 
-
             Sum = SH1Total + SH2Total + SH3Total + SH4Total + HCTotal + CCTotal + KDTotal + SXTotal;
-            return Sum;
+            return Math.Round(Sum, MidpointRounding.AwayFromZero);
         }
 
         /// <summary>

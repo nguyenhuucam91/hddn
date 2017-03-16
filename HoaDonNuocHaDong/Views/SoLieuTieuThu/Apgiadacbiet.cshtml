@@ -6,6 +6,7 @@
     var tuyenKH = ViewBag.tuyenKH;
     var month = ViewBag.month;
     var year = ViewBag.year;
+    var soHoaDon = ViewBag.sohoadon;
     var maSoThue = ViewBag.maSoThue;
     int sanLuong = ViewBag.sanLuong == null ? 0 : (int)ViewBag.sanLuong;
     String loaiApGia = ViewBag.tenApGia as string;
@@ -47,6 +48,9 @@
                                         <label>Mã số thuế: @maSoThue</label>
                                         <label>Loại áp giá:@loaiApGia</label>
                                         <label>Sản lượng: <span class="sanLuong">@sanLuong</span></label>
+                                        <input type="hidden" name="startDateApGiaDacBiet" value="@startDate"/>
+                                        <input type="hidden" name="endDateApGiaDacBiet" value="@endDate" />
+                                        <input type="hidden" name="soHoaDon" value="@soHoaDon"/>
                                     </div>
                                     <div class="clearfix" />
                                 </div>

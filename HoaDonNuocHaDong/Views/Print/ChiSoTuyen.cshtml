@@ -94,7 +94,7 @@
                                             {
                                                 <tr style="background-color:#50cac8">
                                                     <td>@i</td>
-                                                    <td>@item.Ten</td>
+                                                    <td>@item.Matuyen - @item.Ten</td>
                                                     @if (isTinhTien)
                                                     {
                                                         <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
@@ -108,52 +108,53 @@
                                                         <td style="color:blue"> Đã in xong </td>
                                                     }
                                                     <!-- Ngày in xong hóa đơn -->
-                                                    @if(soLuongKHThuc.Max(p=>p.NgayIn)!=null){
-                                                        <td>@String.Format("{0:dd/MM/yyyy}",soLuongKHThuc.Max(p=>p.NgayIn).Value)</td>
+                                                    @if (soLuongKHThuc.Max(p => p.NgayIn) != null)
+                                                    {
+                                                        <td>@String.Format("{0:dd/MM/yyyy}", soLuongKHThuc.Max(p => p.NgayIn).Value)</td>
                                                     }
                                                     else
                                                     {
                                                         <td></td>
                                                     }
-                                                        @if (tongSoTienTuyen != null)
+                                                    @if (tongSoTienTuyen != null)
                                                     {
-                                                            <td>@String.Format("{0:n0}", tongSoTienTuyen.tongTien)</td>
+                                                        <td>@String.Format("{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
-                                                    </tr>
+                                                </tr>
                                                     i++;
+                                            }
+                                            //nếu chưa in xong
+                                            else
+                                            {
+                                                <tr>
+                                                    <td>@i</td>
+                                                    <td>@item.Matuyen - @item.Ten</td>
+                                                    @if (isTinhTien)
+                                                    {
+                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
                                                     }
-                                                    //nếu chưa in xong
                                                     else
                                                     {
-                                                    <tr>
-                                                        <td>@i</td>
-                                                        <td>@item.Ten</td>
-                                                        @if (isTinhTien)
-                                                    {
-                                                            <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
-                                                    }
-                                                    else
-                                                    {
-                                                            <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
+                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
                                                     }
 
-                                                        <td>In (@soLuongKHInHoaDon.Count() / @soLuongKHThuc.Count())</td>
-                                                        <td></td>
-                                                        @if (tongSoTienTuyen != null)
+                                                    <td>In (@soLuongKHInHoaDon.Count() / @soLuongKHThuc.Count())</td>
+                                                    <td></td>
+                                                    @if (tongSoTienTuyen != null)
                                                     {
-                                                            <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
+                                                        <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
-                                                    </tr>
+                                                </tr>
                                                     i++;
-                                                    }
-                                                    }
-                                                </tbody>
-                                            </table>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
                             }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>

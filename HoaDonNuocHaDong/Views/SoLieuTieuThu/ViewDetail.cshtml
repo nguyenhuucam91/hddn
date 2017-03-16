@@ -45,9 +45,11 @@
                         <!--Chốt số liệu-->
                         <form action="/Solieutieuthu/chotSoLieu?tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
                             <button type="button" onclick="history.go(-1)" class="btn btn-success">Trở lại</button>
+
                             @if(tuyenDuocChot==0){
                             <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
                             }
+                            
                         </form>
 
                         <!-- Hướng dẫn tìm kiếm-->
