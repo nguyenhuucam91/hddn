@@ -380,8 +380,6 @@ namespace HoaDonNuocHaDong.Controllers
                 }
             }
 
-
-
             ViewBag.beforeFiltered = false;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewBag.selectedMonth = month;
