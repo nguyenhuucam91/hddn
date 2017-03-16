@@ -516,7 +516,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc).Sum(p => p.TongCong);
             }
-            double tongCongCongDon = Convert.ToInt32(tongTienHoaDon + congDonHDTruoc);
+            double tongCongCongDon = tongTienHoaDon + congDonHDTruoc;
 
             insertToLichSuSuDungNuoc(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value, cT.SH1.Value,
                 cS.getSoTienTheoApGia("SH1").Value, cT.SH2.Value, cS.getSoTienTheoApGia("SH2").Value, cT.SH3.Value, cS.getSoTienTheoApGia("SH3").Value, cT.SH4.Value, cS.getSoTienTheoApGia("SH4").Value,
@@ -780,7 +780,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc).Sum(p => p.TongCong);
             }
-            double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
+            double tongCongCongDon = tongTienHoaDon + congDonHDTruoc;
             //thu ngân
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon;
 

@@ -26,8 +26,8 @@ namespace HoaDonNuocHaDong.Controllers
     {
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         private ChiSo cS = new ChiSo();
-        private NguoidungHelper ngHelper = new NguoidungHelper();     
-
+        private NguoidungHelper ngHelper = new NguoidungHelper();
+        private HoaDonNuocHaDong.Helper.Tuyen _tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
         //
         // GET: /Print/
         public ActionResult Index()
@@ -201,7 +201,7 @@ namespace HoaDonNuocHaDong.Controllers
             for (int i = from; i <= to; i++)
             {
                 var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTThungan.Contains(" - " + i)
+                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTThungan.Contains(" - " + i)                              
                               select new
                               {
                                   HoaDonID = p.HoaDonID,
@@ -268,7 +268,7 @@ namespace HoaDonNuocHaDong.Controllers
             Report report = new Report();
             report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
             var source = (from p in db.Lichsuhoadons
-                          where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year
+                          where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.SanLuongTieuThu > 0
                           orderby p.TTDoc
                           select new
                           {
@@ -338,6 +338,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.beforeFiltered = true;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewData["tuyen"] = new List<Tuyenkhachhang>();
+            ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             return View();
         }
 
@@ -349,17 +350,37 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult ChiSoTuyen(FormCollection form)
         {
+            //lấy danh sách tổ 
+            ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
             int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
             int year = String.IsNullOrEmpty(form["year"]) ? DateTime.Now.Year : Convert.ToInt32(form["year"]);
-
+            int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
             List<Tuyenkhachhang> newLs = new List<Tuyenkhachhang>();
-            List<TuyenDuocChot> tuyen = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).ToList();
-            foreach (var item in tuyen)
+            //nếu tổ ko đc chọn
+            if (to == 0)
             {
-                Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
-                newLs.Add(tuyenKH);
+                //lấy toàn bộ danh sách tuyến trong hệ thống không lọc                
+                List<TuyenDuocChot> tuyen = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).ToList();
+                foreach (var item in tuyen)
+                {
+                    Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
+                    newLs.Add(tuyenKH);
+                }
             }
+            else
+            {
+                //Lấy danh sách tuyến trong hệ thống lọc theo tổ
+                List<int> danhSachTuyenThuocTo = _tuyen.getTuyenByTo(to).Select(p=>p.TuyenCuaKH).Distinct().ToList();
+                List<int> danhSachTuyenDaChot = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).Select(p => p.TuyenKHID.Value).ToList();
+                foreach (var r in danhSachTuyenThuocTo.Intersect(danhSachTuyenDaChot))
+                {                    
+                    Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(r);
+                    newLs.Add(tuyen);
+                }
+            }
+
+
 
             ViewBag.beforeFiltered = false;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
