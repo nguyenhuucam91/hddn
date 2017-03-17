@@ -1034,6 +1034,7 @@ namespace HoaDonNuocHaDong.Controllers
                         ViewBag.hasTongHop = true;
                         ViewBag.hasDacBiet = false;
                     }
+
                     //nếu là áp giá đặc biệt
                     else if (khachhang.LoaiapgiaID == KhachHang.DACBIET)
                     {
