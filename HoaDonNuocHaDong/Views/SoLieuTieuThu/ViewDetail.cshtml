@@ -29,6 +29,10 @@
     table.dataTable thead th, table.dataTable thead td {
         padding: 10px 10px !important;
     }
+
+    form{
+        display:inline
+    }
 </style>
 
 <div class="main">
@@ -42,14 +46,21 @@
                     </div> <!-- /widget-header -->
 
                     <div class="widget-content">
-                        <!--Chốt số liệu-->
-                        <form action="/Solieutieuthu/chotSoLieu?tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
-                            <button type="button" onclick="history.go(-1)" class="btn btn-success">Trở lại</button>
 
-                            @if(tuyenDuocChot==0){
-                            <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
+                        <form action="/solieutieuthu" method="post">
+                            <input type="hidden" name="to" value="@Request.QueryString["toID"]" />
+                            <input type="hidden" name="thang" value="@Request.QueryString["month"]" />
+                            <input type="hidden" name="nam" value="@Request.QueryString["year"]" />
+                            <input type="hidden" name="tuyen" value="@Request.QueryString["tuyenID"]" />
+                            <input type="hidden" name="nhanvien" value="@Request.QueryString["nvquanly"]" />
+                            <button type="submit" class="btn btn-success">Trở lại</button>
+                        </form>
+
+                        <form action="/Solieutieuthu/chotSoLieu?tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
+                            @if (tuyenDuocChot == 0)
+                            {
+                                <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
                             }
-                            
                         </form>
 
                         <!-- Hướng dẫn tìm kiếm-->
@@ -260,8 +271,8 @@
         @{
             int tongHop = HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
         }
-    $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
-    $("tr.dacbiet").css({ "background-color": "#e47b0f", "color": "black" });
+        $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
+        $("tr.dacbiet").css({ "background-color": "#e47b0f", "color": "black" });
 
     });
 

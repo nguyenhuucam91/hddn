@@ -98,7 +98,9 @@
                             - <a class="toggle-vis" data-column="4">TTDoc</a>
                             - <a class="toggle-vis" data-column="5">Bắt đầu</a>
                             - <a class="toggle-vis" data-column="6">Kết thúc</a>
-                            <button style="float:right" type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new { tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' class="btn btn-default" style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
+                            <button type="button" 
+                                    onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new {toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' 
+                                    class="btn btn-info" style="float:right; margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
 
                         </div>
                         <div class="clearfix"></div>
