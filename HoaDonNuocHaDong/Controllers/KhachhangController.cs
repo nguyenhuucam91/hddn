@@ -772,51 +772,18 @@ namespace HoaDonNuocHaDong.Controllers
                     //nếu là áp giá tổng hợp
                     if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
                     {
-                        ViewBag.option = ls[0].CachTinh;
+                        if (ls.Count() > 0)
+                        {
+                            ViewBag.option = ls[0].CachTinh;
+                        }
+                        else
+                        {
+                            ViewBag.option = 0;
+                        }
+                        
                         ViewBag.hasTongHop = true;
                         ViewBag.hasDacBiet = false;
-                    }
-                    //nếu là áp giá đặc biệt
-                    else if (khachhang.LoaiapgiaID == KhachHang.DACBIET)
-                    {
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH1) == null)
-                        {
-                            ViewBag.SH1 = "";
-                        }
-                        else
-                        {
-                            ViewBag.SH1 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH1).SanLuong.Value;
-                        }
-
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH2) == null)
-                        {
-                            ViewBag.SH2 = "";
-                        }
-                        else
-                        {
-                            ViewBag.SH2 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH2).SanLuong.Value;
-                        }
-
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH3) == null)
-                        {
-                            ViewBag.SH3 = "";
-                        }
-                        else
-                        {
-                            ViewBag.SH3 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH3).SanLuong.Value;
-                        }
-
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH4) == null)
-                        {
-                            ViewBag.SH4 = "";
-                        }
-                        else
-                        {
-                            ViewBag.SH4 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH4).SanLuong.Value;
-                        }
-                        ViewBag.hasTongHop = false;
-                        ViewBag.hasDacBiet = true;
-                    }
+                    }                    
                 }
 
             }
@@ -1055,7 +1022,14 @@ namespace HoaDonNuocHaDong.Controllers
                     //nếu là áp giá tổng hợp
                     if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
                     {
-                        ViewBag.option = ls[0].CachTinh;
+                        if (ls.Count() > 0)
+                        {
+                            ViewBag.option = ls[0].CachTinh;
+                        }
+                        else
+                        {
+                            ViewBag.option = 0;
+                        }
                         ViewBag.hasTongHop = true;
                         ViewBag.hasDacBiet = false;
                     }
