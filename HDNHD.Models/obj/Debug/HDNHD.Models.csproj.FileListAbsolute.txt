@@ -7,6 +7,6 @@ E:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\HoaDonNuocHaDong\src\hddn\
 F:\Project\hddn\HDNHD.Models\bin\HDNHD.Models.dll.config
 F:\Project\hddn\HDNHD.Models\bin\HDNHD.Models.dll
 F:\Project\hddn\HDNHD.Models\bin\HDNHD.Models.pdb
-F:\Project\hddn\HDNHD.Models\obj\Debug\HDNHD.Models.csprojResolveAssemblyReference.cache
 F:\Project\hddn\HDNHD.Models\obj\Debug\HDNHD.Models.dll
 F:\Project\hddn\HDNHD.Models\obj\Debug\HDNHD.Models.pdb
+F:\Project\hddn\HDNHD.Models\obj\Debug\HDNHD.Models.csprojResolveAssemblyReference.cache
