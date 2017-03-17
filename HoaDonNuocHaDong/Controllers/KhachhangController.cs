@@ -1019,6 +1019,7 @@ namespace HoaDonNuocHaDong.Controllers
                     {
                         ViewBag.SX = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT).SanLuong.Value;
                     }
+
                     //nếu là áp giá tổng hợp
                     if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
                     {
