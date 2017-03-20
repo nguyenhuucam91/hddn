@@ -577,9 +577,7 @@ $("button.xemChiTietKD").click(function () {
                     //append sau trRow
                     trRow.after(appendedTr);
                 });
-
             },
-
         });
     }
         //nếu đã có class toggled thì tìm đến <tr> gần nhât, tìm <tr> tiếp theo và xóa class đó đi

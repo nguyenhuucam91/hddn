@@ -209,7 +209,14 @@
                         </table>
 
                         <div class="form-actions">
-                            <button type="button" onclick="history.go(-1)" class="btn btn-success">Trở lại</button>
+                            <form action="/solieutieuthu" method="post">
+                                <input type="hidden" name="to" value="@Request.QueryString["toID"]" />
+                                <input type="hidden" name="thang" value="@Request.QueryString["month"]" />
+                                <input type="hidden" name="nam" value="@Request.QueryString["year"]" />
+                                <input type="hidden" name="tuyen" value="@Request.QueryString["tuyenID"]" />
+                                <input type="hidden" name="nhanvien" value="@Request.QueryString["nvquanly"]" />
+                                <button type="submit" class="btn btn-success">Trở lại</button>
+                            </form>
                             <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
                         </div> <!-- /form-actions -->
 
