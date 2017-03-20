@@ -334,7 +334,7 @@
                         }
                         <!-- Operation -->
                         <div class="form-actions">
-                            <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new { tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' class="btn btn-default" style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
+                            <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new { toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' class="btn btn-default" style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
                         </div> <!-- /form-actions -->
 
                     </div> <!-- /widget-content -->
@@ -356,7 +356,7 @@
         $(document).keyup(function (event) {
             if (event.ctrlKey && (event.which === 88)) {
                 //xem chỉ số chi tiết
-                window.location.href = "/Solieutieuthu/ViewDetail?tuyenID=@selectedTuyen&month=@month&year=@year&nvquanly=@selectedNhanvien";
+                window.location.href = "/Solieutieuthu/ViewDetail?toID =@toID &tuyenID=@selectedTuyen&month=@month&year=@year&nvquanly=@selectedNhanvien";
             }
         });
     });
