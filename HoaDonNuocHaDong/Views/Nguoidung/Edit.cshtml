@@ -2,10 +2,10 @@
 
 @{
     ViewBag.Title = "Chỉnh sửa thông tin người dùng";
-
     var passwordMesg = ViewBag.passwordMesg;
     var selectedNhanVien = ViewBag.selectedNhanVien;
     var nhanVien = ViewBag.NhanvienID;
+    var loggedInUserIsAdmin = ViewBag.isAdmin;
 }
 
 @using (Html.BeginForm("Edit", "Nguoidung"))
@@ -53,21 +53,24 @@
                                     </div>
 
                                     <!-- Là admin hay không -->
-                                    <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-4 pull-left">
-                                            <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
-                                            @if (Model.Isadmin != null)
-                                            {
-                                                <input type="radio" value="1" name="isAdmin" checked /> @Html.Raw("Có")
-                                                <input type="radio" value="0" name="isAdmin" style="margin-left:15px" /> @Html.Raw("Không")
-                                            }
-                                            else
-                                            {
-                                                <input type="radio" value="1" name="isAdmin" />@Html.Raw("Có")
-                                                <input type="radio" value="0" name="isAdmin" style="margin-left:15px" checked /> @Html.Raw("Không")
-                                            }
+                                    @if (loggedInUserIsAdmin != null)
+                                    {
+                                        <div class="row" style="margin: 1% 0 0 0%">
+                                            <div class="col-md-4 pull-left">
+                                                <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
+                                                @if (Model.Isadmin.Value == true)
+                                                {
+                                                    <input type="radio" value="1" name="isAdmin" checked /> @Html.Raw("Có")
+                                                    <input type="radio" value="0" name="isAdmin" style="margin-left:15px" /> @Html.Raw("Không")
+                                                }
+                                                else
+                                                {
+                                                    <input type="radio" value="1" name="isAdmin" />@Html.Raw("Có")
+                                                    <input type="radio" value="0" name="isAdmin" style="margin-left:15px" checked /> @Html.Raw("Không")
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
 
                                     <!-- Nhân viên (nếu k phải là admin)-->
 

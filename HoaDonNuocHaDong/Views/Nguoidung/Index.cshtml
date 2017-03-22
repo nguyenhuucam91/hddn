@@ -2,10 +2,10 @@
 
 @{
     ViewBag.Title = "Danh sách người dùng";
-
     var phongBan = ViewBag.phongBan as List<Phongban>;
     var chiNhanh = ViewBag.chinhanh;
     List<ToQuanHuyen> toQuanHuyens = ViewData["toQuanHuyens"] as List<ToQuanHuyen>;
+    var loggedInUserIsAdmin = ViewBag.isAdmin;
 }
 
 <div class="main">
@@ -45,7 +45,7 @@
                                             {
                                                 <option value="@item.PhongbanID">@item.Ten</option>
                                             }
-                                        </select>                                        
+                                        </select>
 
                                         <select class="dropdown form-control admin" style="width:150px;margin-right:3%" name="isAdmin">
                                             <option disabled="disabled" selected="selected">--Chức vụ--</option>
@@ -131,18 +131,21 @@
                                                     <a href="javascript:void(0)" class="unlockAcc" data-rowid="@item.NguoidungID">Mở khóa</a>
                                                     <span>|</span>
                                                 }
-                                                @if (item.Isadmin == false)
-                                                {
 
-                                                    @Html.ActionLink("Đặt admin", "SetAsAdmin", new { id = item.NguoidungID })
-                                                    @Html.Raw("|")
-                                                }
-                                                else
+                                                @if (loggedInUserIsAdmin != null)
                                                 {
-                                                    if (Convert.ToInt32(Session["nguoiDungID"]) != item.NguoidungID)
+                                                    if (item.Isadmin == false)
                                                     {
-                                                        @Html.ActionLink("Hủy admin", "RemoveAdmin", new { id = item.NguoidungID }, new { @style = "color:red" })
+                                                        @Html.ActionLink("Đặt admin", "SetAsAdmin", new { id = item.NguoidungID })
                                                         @Html.Raw("|")
+                                                    }
+                                                    else
+                                                    {
+                                                        if (Convert.ToInt32(Session["nguoiDungID"]) != item.NguoidungID)
+                                                        {
+                                                            @Html.ActionLink("Hủy admin", "RemoveAdmin", new { id = item.NguoidungID }, new { @style = "color:red" })
+                                                            @Html.Raw("|")
+                                                        }
                                                     }
                                                 }
 

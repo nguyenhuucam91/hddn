@@ -89,6 +89,16 @@
                                         @Html.ActionLink("Thêm mới", "Create", "ToQuanHuyen")
                                         @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
                                     </div>
+                                </div>                                
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4">
+                                        <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
+                                        @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown phongban" })
+                                        @Html.ActionLink("Thêm mới", "Create", "Phongban")
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
+                                    </div>
                                 </div>
 
                                 <div class="row" style="margin: 1% 0 0 0%">
@@ -101,15 +111,6 @@
                                     </div>
                                 </div>
 
-                                <div class="row" style="margin: 1% 0 0 0%">
-                                    <div class="col-md-4">
-                                        <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
-                                        @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown phongban" })
-                                        @Html.ActionLink("Thêm mới", "Create", "Phongban")
-                                        <br />
-                                        @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
-                                    </div>
-                                </div>
                                 <!-- Tuyến khách hàng-->
                                 <div class="row" style="margin: 1% 0 0 0%">
                                     <div class="col-md-4">
