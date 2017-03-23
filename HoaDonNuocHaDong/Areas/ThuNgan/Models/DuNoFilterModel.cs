@@ -18,7 +18,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public override void ApplyFilter(ref IQueryable<DuNoModel> items)
         {
             var context = (HDNHDDataContext)GetDataContext(items);
-
+            
+            items = items.Where(m => m.HoaDon.Trangthaithu != true);
+            
             if (Year != null)
             {
                 items = items.Where(m => m.HoaDon.NamHoaDon == Year);
@@ -29,6 +31,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             }
 
             // join all 
+
 
             if (NhanVienID != null)
             {

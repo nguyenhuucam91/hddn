@@ -23,6 +23,7 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
         {
             var models = tuyenKHRepository.GetByNhanVienID(nhanVienID).Select(m => new { 
                 TuyenKHID = m.TuyenKHID,
+                MaTuyen = m.Matuyen,
                 Ten = m.Ten
             });
             return new AjaxResult()

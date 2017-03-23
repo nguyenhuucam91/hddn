@@ -24,16 +24,14 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult DuCo(DuCoFilterModel filter, Pager pager)
         {
-            IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
-            IToRepository toRepository = uow.Repository<ToRepository>();
+            var duCoRepository = uow.Repository<DuCoRepository>();
+            var toRepository = uow.Repository<ToRepository>();
 
             // default values
             if (filter.Mode == null) // not in filter
             {
-                if (filter.Year == null)
                     filter.Year = DateTime.Now.Year;
-                if (filter.Month == null)
-                    filter.Year = DateTime.Now.Month;
+                    filter.Month = DateTime.Now.Month;
 
                 // set selected to, quan huyen = nhanVien's to, quan huyen
                 if (nhanVien != null)

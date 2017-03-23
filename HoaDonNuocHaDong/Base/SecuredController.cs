@@ -41,6 +41,9 @@ namespace HoaDonNuocHaDong.Base
             if (dangNhap != null)
             {
                 LoggedInUser = nguoiDungRepository.GetByID(dangNhap.NguoidungID);
+                // update last_login
+                dangNhap.Thoigiandangnhap = DateTime.Now;
+                adminUow.SubmitChanges();
             }
 
             if (LoggedInUser == null)

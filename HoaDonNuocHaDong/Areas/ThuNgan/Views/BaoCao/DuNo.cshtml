@@ -52,7 +52,7 @@
                                                             <td>@item.KhachHang.Diachi</td>
                                                             <td>@item.TuyenKhachHang.Ten</td>
                                                             <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-                                                            <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop)</td>
+                                                            <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop : 0)</td>
                                                             <td>@item.NhanVien.Ten</td>
                                                         </tr>
                                                     }
@@ -100,5 +100,4 @@
 
     </div>
 </div>
-
 <!-- end modal -->

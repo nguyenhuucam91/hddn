@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HoaDonNuocHaDong.Repositories.Interfaces
 {
-    interface IPhongBanRepository : IRepository<HDNHD.Models.DataContexts.Phongban>
+    public interface IPhongBanRepository : IRepository<HDNHD.Models.DataContexts.Phongban>
     {
     }
 }

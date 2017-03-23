@@ -16,7 +16,9 @@ namespace HoaDonNuocHaDong.Base
     {
         protected HDNHDUnitOfWork uow;
         protected INhanVienRepository nhanVienRepository;
+        protected IPhongBanRepository phongBanRepository;
         protected HDNHD.Models.DataContexts.Nhanvien nhanVien;
+        protected HDNHD.Models.DataContexts.Phongban phongBan;
 
         // view data
         protected string title;
@@ -25,6 +27,7 @@ namespace HoaDonNuocHaDong.Base
         {
             uow = new HDNHDUnitOfWork();
             nhanVienRepository = uow.Repository<NhanVienRepository>();
+            phongBanRepository = uow.Repository<PhongBanRepository>();
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -37,8 +40,7 @@ namespace HoaDonNuocHaDong.Base
 
             if (nhanVien != null)
             {
-                var phongBanRepository = uow.Repository<PhongBanRepository>();
-                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+                phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
 
                 if (phongBan != null)
                 {

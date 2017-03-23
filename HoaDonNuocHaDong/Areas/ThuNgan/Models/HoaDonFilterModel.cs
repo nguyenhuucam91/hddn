@@ -97,7 +97,16 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                     };
 
             if (LoaiKhachHang != null)
-                items = items.Where(m => m.KhachHang.LoaiKHID == (int)LoaiKhachHang.Value);
+            {
+                if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
+                {
+                    items = items.Where(m => m.KhachHang.LoaiKHID != (int)ELoaiKhachHang.HoGiaDinh);
+                } else
+                {
+                    items = items.Where(m => m.KhachHang.LoaiKHID == (int)LoaiKhachHang.Value);
+                }
+            }
+                
 
             if (HinhThucThanhToan != null)
                 items = items.Where(m => m.KhachHang.HinhthucttID == (int)EHinhThucThanhToan.ChuyenKhoan);

@@ -21,18 +21,6 @@ namespace HoaDonNuocHaDong.Repositories
             var dangNhap = GetSingle(m => m.Trangthaikhoa != true
                 && AuthHelpers.MD5(m.NguoidungID.ToString()) == loginToken
                 && m.Thoigiandangnhap > validTime);
-
-            if (dangNhap != null)
-            {
-                SqlConnection conn = new SqlConnection(DataConfig.connectionString);
-                conn.Open();
-                String sql = "UPDATE [dbo].[Dangnhap]  SET [Thoigiandangnhap] = @newLoginTime WHERE [NguoidungID] = @nguoiDungId";
-                System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand(sql,conn);                
-                command.Parameters.AddWithValue("@newLoginTime", DateTime.Now);
-                command.Parameters.AddWithValue("@nguoiDungId", dangNhap.NguoidungID);
-                command.ExecuteNonQuery();
-            }
-
             return dangNhap;
         }
 

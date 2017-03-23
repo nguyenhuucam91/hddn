@@ -126,9 +126,10 @@ function loadTuyen($slTuyen, nhanVienID, tuyenID) {
         data: { nhanVienID: nhanVienID }
     }).done(function (data) {
         if (data.IsSuccess) {
+            console.log(items);
             var items = [];
             $.each(data.Data, function (index, item) {
-                items.push({ "id": item.TuyenKHID, "text": item.TuyenKHID + " - " + item.Ten });
+                items.push({ "id": item.TuyenKHID, "text": item.MaTuyen + " - " + item.Ten });
             });
 
             $slTuyen.select2({ data: items });
