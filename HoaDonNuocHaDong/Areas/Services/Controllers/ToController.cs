@@ -26,5 +26,16 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
                 Data = tos.ToList()
             };
         }
+
+        public AjaxResult Query(int quanHuyenID, int? phongBanID)
+        {
+            var tos = toRepository.Query(quanHuyenID, phongBanID);
+
+
+            return new AjaxResult()
+            {
+                Data = tos.ToList()
+            };
+        }
 	}
 }

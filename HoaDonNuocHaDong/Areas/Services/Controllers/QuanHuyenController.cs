@@ -27,5 +27,13 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
                 Data = models.ToList()
             };
         }
+
+        public AjaxResult GetByID(int id)
+        {
+            return new AjaxResult()
+            {
+                Data = quanHuyenRepository.GetByID(id)
+            };
+        }
 	}
 }

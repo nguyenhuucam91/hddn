@@ -9,6 +9,8 @@ namespace HoaDonNuocHaDong.Repositories.Interfaces
 {
     interface IToRepository : IRepository<HDNHD.Models.DataContexts.ToQuanHuyen>
     {
-        IQueryable<HDNHD.Models.DataContexts.ToQuanHuyen> GetByQuanHuyenID(int xiNghiepID);
+        IQueryable<HDNHD.Models.DataContexts.ToQuanHuyen> GetByQuanHuyenID(int quanHuyenID);
+
+        IQueryable<HDNHD.Models.DataContexts.ToQuanHuyen> Query(int quanHuyenID, int? phongBanID);
     }
 }

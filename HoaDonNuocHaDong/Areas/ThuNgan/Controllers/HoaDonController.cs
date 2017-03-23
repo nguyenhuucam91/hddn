@@ -68,9 +68,18 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             else
                 sectionTitle += "Cơ quan, tổ chức";
 
+            // load ds to thuoc filter.quanhuyen
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             ViewBag.SectionTitle = sectionTitle;
+            // quan huyen
+            // ds to theo quan huyen & phong ban
+            if (phongBan != null)
+                ViewBag.PhongBanID = phongBan.PhongbanID;
+            if (filter.QuanHuyenID != null)
+            {
+                ViewBag.QuanHuyen = quanHuyenRepository.GetByID(filter.QuanHuyenID);
+            }
             #endregion
             return View(items.ToList());
         }

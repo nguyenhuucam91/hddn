@@ -200,7 +200,11 @@
     <script type="text/javascript">
         $(document).ready(function () {
             // onInit:
-            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+            @if (ViewBag.Filter.QuanHuyenID != null) {
+                Html.Raw("getQuanHuyenByID($('.sl-quan-huyen), '"+ViewBag.Filter.QuanHuyenID+"'));");
+            } else  {
+                loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+            }
         });
 
         // load data onChange
@@ -209,7 +213,7 @@
             var quanHuyenID = $(this).val();
 
             // loadTo
-            loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID");
+            queryTo($(".sl-to"), quanHuyenID, "@ViewBag.PhongBanID", "@ViewBag.Filter.ToID");
         });
 
         $(".sl-to").on("change", function () {
