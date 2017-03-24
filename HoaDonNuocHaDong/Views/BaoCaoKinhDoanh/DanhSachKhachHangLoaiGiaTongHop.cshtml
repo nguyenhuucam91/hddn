@@ -3,7 +3,7 @@
     ViewBag.Title = "DanhSachKhachHangLoaiGiaTongHop";
     Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
     DateTime d1 = ViewBag.dt1;
-    dynamic d = ViewData["khachHang"];
+    List<DanhSachKhachHangApGiaChung> d = ViewData["khachHang"] as List<DanhSachKhachHangApGiaChung>;
     HoaDonNuocHaDong.Helper.ApGiaHelper apGia = new HoaDonNuocHaDong.Helper.ApGiaHelper();
 }
 <style>
@@ -53,30 +53,31 @@
         </tr>
     </thead>
     <tbody>
-        @{
-            int i = 1;
-            int j = 1;
-        }
-        @foreach (var item in d)
-        {
-            int KHID = Convert.ToInt32(item.GetType().GetProperty("KhachHangID").GetValue(item, null));
-            <tr>
-                <td>@i</td>
-                <td>@item.GetType().GetProperty("MaKH").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("HoTen").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("DiaChi").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("Tuyen").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("TTDoc").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("CachTinh").GetValue(item, null)</td>
-                <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.SINHHOAT)</td>
-                <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.SANXUAT)</td>
-                <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH)</td>
-                <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP)</td>
-                <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU)</td>
-            </tr>
-            j = i;
-            i++;
-        }
-    </tbody>
+            @{
+                int i = 1;
+                int j = 1;
+            }
+
+            @foreach (var item in d)
+            {
+                int KHID = item.KhachHangID;
+                <tr>
+                    <td>@i</td>
+                    <td>@item.MaKH</td>
+                    <td>@item.HoTen</td>
+                    <td>@item.DiaChi</td>
+                    <td>@item.Tuyen</td>
+                    <td>@item.TTDoc</td>
+                    <td>@item.CachTinh</td>
+                    <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.SINHHOAT)</td>
+                    <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.SANXUAT)</td>
+                    <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH)</td>
+                    <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP)</td>
+                    <td>@apGia.getChiSoApGiaTongHop(KHID, HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU)</td>
+                </tr>
+                j = i;
+                i++;
+            }
+        </tbody>
 </table>
 <div class="tong"><b>Tổng cộng: @j khách hàng</b></div>

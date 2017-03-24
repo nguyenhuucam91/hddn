@@ -10,13 +10,11 @@
     <title>@ViewBag.title</title>
     <!-- Styles CSS -->
     @Styles.Render("~/Css/bootstrap.css")
-    @Styles.Render("~/Css/bootstrap.min.css")
-    @Styles.Render("~/Assets/components/font-awesome/css/font-awesome.min.css")
+    @Styles.Render("~/Css/bootstrap.min.css")    
     @Styles.Render("~/Css/style.css")
-    @Styles.Render("~/Css/pages/signin.css")
-    @Styles.Render("http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600")
+    @Styles.Render("~/Css/pages/signin.css")    
     @Styles.Render("~/Content/Style.css")
-    @Styles.Render("/Assets/css/buttons.dataTables.min.css")
+    @Styles.Render("~/Assets/css/buttons.dataTables.min.css")
     <style>
         .center {
             text-align: center;
@@ -52,7 +50,7 @@
     @Scripts.Render("~/Assets/components/datatables/media/js/jquery.dataTables.min.js")
     @Scripts.Render("~/Assets/BaoCaoJs/dataTables.buttons.min.js")
     @Scripts.Render("~/Assets/BaoCaoJs/buttons.html5.min.js")
-    @Scripts.Render("~/Assets/BaoCaoJs/jszip.min.js");
+  
 
     @RenderSection("scripts", required: false)
     <script>
@@ -60,7 +58,7 @@
         $("table tr th").css({ "text-align": "center", "vertical-align": "middle" });
     </script>
     <script>
-        /*Export to Excel plugins*/
+        
         $(document).ready(function () {
             $('.table').DataTable({
                 dom: 'Bfrtip',
