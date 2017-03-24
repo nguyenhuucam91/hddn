@@ -2,6 +2,7 @@
 using HoaDonNuocHaDong.Helper;
 using HoaDonNuocHaDong.Models.BaoCaoInHoaDon;
 using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+using HoaDonNuocHaDong.Repositories;
 using HvitFramework;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,8 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class BaoCaoKinhDoanhController : BaseController
     {
-        HoaDonHaDongEntities db = new HoaDonHaDongEntities();       
+        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        HoaDonNuocHaDong.Helper.ApGiaHelper apGia = new HoaDonNuocHaDong.Helper.ApGiaHelper();
 
         public ActionResult BaoCaoKinhDoanh()
         {
@@ -58,24 +60,46 @@ namespace HoaDonNuocHaDong.Controllers
             ViewData["nhanvien"] = nhanVien;
             return View();
         }
+
         public ActionResult XuLyDanhSachKhachHangTheoToQuanLy()
         {
-            List<ToQuanHuyen> ls = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            int phongBanId = getPhongBanNguoiDung();
+            List<ToQuanHuyen> ls = db.ToQuanHuyens.Where(p => (p.IsDelete == false || p.IsDelete == null) && p.PhongbanID == phongBanId).ToList();
             ViewData["to"] = ls;
             return View();
         }
+
         public ActionResult XuLyDanhSachKhachHangTheoDonViQuanLy()
         {
             return View();
         }
+        public int getPhongBanNguoiDung()
+        {
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
+            if (nhanVien != null)
+            {
+                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+                int phongBanID = phongBan.PhongbanID;
+                return phongBanID;
+            }
+            return 0;
+        }
+
         public ActionResult XuLyDanhSachKhachHangLoaiGiaTongHop()
+        {
+            DateTime d1 = DateTime.Now;
+            ViewBag.dt1 = d1;
+            return View("Danhsachkhachhangloaigiatonghop");
+        }
+
+        public JsonResult getKhachHangApGiaTongHop()
         {
             DateTime d1 = DateTime.Now;
             var khachHang = (from i in db.Khachhangs
                              join s in db.Apgiatonghops on i.KhachhangID equals s.KhachhangID
                              join t in db.Tuyenkhachhangs on i.TuyenKHID equals t.TuyenKHID
                              where i.LoaiapgiaID == KhachHang.TONGHOP
-                             select new
+                             select new DanhSachKhachHangApGiaChung
                              {
                                  MaKH = i.MaKhachHang,
                                  HoTen = i.Ten,
@@ -83,12 +107,35 @@ namespace HoaDonNuocHaDong.Controllers
                                  Tuyen = t.Matuyen,
                                  TTDoc = i.TTDoc,
                                  CachTinh = s.CachTinh == 1 ? "Phần trăm" : "Số khoán",
-                                 KhachHangID = i.KhachhangID
-                             }).Distinct().OrderBy(p => p.TTDoc).ToList();
-            ViewData["khachHang"] = khachHang;
-            ViewBag.dt1 = d1;
-            return View("Danhsachkhachhangloaigiatonghop");
+                                 KhachHangID = i.KhachhangID,                            
+                             }).Distinct().OrderBy(p => p.Tuyen).ThenBy(p => p.TTDoc).ToList();
+
+            List<DanhSachKhachHangApGiaChung> dsApTongHop = jSonTransformDanhSachApGia(khachHang);
+            return Json(dsApTongHop);
         }
+
+        public List<DanhSachKhachHangApGiaChung> jSonTransformDanhSachApGia(List<DanhSachKhachHangApGiaChung> dsKhachHang)
+        {
+            List<DanhSachKhachHangApGiaChung> dsApGiaChung = new List<DanhSachKhachHangApGiaChung>();
+            foreach (var item in dsKhachHang)
+            {
+                DanhSachKhachHangApGiaChung khachHang = new DanhSachKhachHangApGiaChung();
+                khachHang.KhachHangID = item.KhachHangID;
+                khachHang.MaKH = item.MaKH;
+                khachHang.HoTen = item.HoTen;
+                khachHang.DiaChi = item.DiaChi;
+                khachHang.Tuyen = item.Tuyen;
+                khachHang.TTDoc = item.TTDoc;
+                khachHang.CachTinh = item.CachTinh;
+                khachHang.SinhHoat = apGia.getChiSoApGiaTongHop(item.KhachHangID, HoaDonNuocHaDong.Helper.KhachHang.SINHHOAT);
+                khachHang.SanXuat = apGia.getChiSoApGiaTongHop(item.KhachHangID, HoaDonNuocHaDong.Helper.KhachHang.SANXUAT);
+                khachHang.CongCong = apGia.getChiSoApGiaTongHop(item.KhachHangID, HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH);
+                khachHang.KinhDoanh = apGia.getChiSoApGiaTongHop(item.KhachHangID, HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU);
+                dsApGiaChung.Add(khachHang);
+            }
+            return dsApGiaChung;
+        }
+
         public ActionResult XuLyDanhSachKhachHangLoaiGiaDacBiet()
         {
             DateTime d1 = DateTime.Now;
@@ -136,12 +183,12 @@ namespace HoaDonNuocHaDong.Controllers
         }
         public ActionResult XuLyDanhSachKhachHangCoSanLuongDotBien()
         {
-            DateTime d1 = new DateTime(DateTime.Now.Year,DateTime.Now.Month,1);
+            DateTime d1 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             ControllerBase<DanhSachKhachHangCoSanLuongDotBien> cb = new ControllerBase<DanhSachKhachHangCoSanLuongDotBien>();
             List<DanhSachKhachHangCoSanLuongDotBien> lst = cb.Query(
                 "BC17",
                 new SqlParameter("@d1", d1));
-            
+
             ViewData["lst"] = lst;
             ViewBag.dt1 = d1;
             return View("Danhsachkhachhangcosanluongdotbien");

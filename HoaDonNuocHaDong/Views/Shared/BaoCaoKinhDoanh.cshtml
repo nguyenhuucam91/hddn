@@ -15,6 +15,8 @@
     @Styles.Render("~/Css/pages/signin.css")    
     @Styles.Render("~/Content/Style.css")
     @Styles.Render("~/Assets/css/buttons.dataTables.min.css")
+    @Scripts.Render("~/js/jquery-1.7.2.min.js")
+
     <style>
         .center {
             text-align: center;
@@ -44,13 +46,12 @@
         </div>
     </div>
     <!-- Javascript file-->
-    @Scripts.Render("~/js/jquery-1.7.2.min.js")
     @Scripts.Render("~/js/signin.js")
     @Scripts.Render("~/js/bootstrap.js")
     @Scripts.Render("~/Assets/components/datatables/media/js/jquery.dataTables.min.js")
     @Scripts.Render("~/Assets/BaoCaoJs/dataTables.buttons.min.js")
     @Scripts.Render("~/Assets/BaoCaoJs/buttons.html5.min.js")
-  
+    @Scripts.Render("~/Assets/BaoCaoJs/jszip.min.js");
 
     @RenderSection("scripts", required: false)
     <script>
@@ -59,23 +60,23 @@
     </script>
     <script>
         
-        $(document).ready(function () {
-            $('.table').DataTable({
-                dom: 'Bfrtip',
-                "bFilter": false,
-                "bPaginate": false,
-                "bSort":false,
-                "language": {
-                    "emptyTable": "Không có dữ liệu"
-                },
-                buttons: [
-                    'excelHtml5',
-                ],
-            });
+        //$(document).ready(function () {
+        //    $('.table').DataTable({
+        //        dom: 'Bfrtip',
+        //        "bFilter": false,
+        //        "bPaginate": false,
+        //        "bSort":false,
+        //        "language": {
+        //            "emptyTable": "Không có dữ liệu"
+        //        },
+        //        buttons: [
+        //            'excelHtml5',
+        //        ],
+        //    });
 
-            //Đổi chữ trong tất cả các báo cáo từ Excel => xuất Excel
-            $(".buttons-excel").text("Xuất Excel");
-        });
+        //    //Đổi chữ trong tất cả các báo cáo từ Excel => xuất Excel
+        //    $(".buttons-excel").text("Xuất Excel");
+        //});
     </script>
 </body>
 </html>
