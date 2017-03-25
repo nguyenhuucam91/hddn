@@ -395,8 +395,7 @@ $("input[name='soKhoan']").change(function () {
     var chiSoMoiValue = $(this).parent('td').prev('td').prev('td').find('input').val();
     var chiSoCuValue = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
 
-    //console.log(JSON.stringify(sanLuongValue.));
-    var sanLuong = $(this).parent('td').prev('td').find('input').val();
+    var sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
     var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue);
 
     //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
