@@ -218,8 +218,9 @@
                                                                 {
                                                                     @Html.ActionLink("Thanh lý HD", "Inactive", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
                                                                     @Html.Raw("|")
-                                                                    if (String.IsNullOrEmpty(Request.QueryString["catnuoc"]) || Request.QueryString["catnuoc"] == "0")
+                                                                    if ((item.Ngayngungcapnuoc == null && item.Ngaycapnuoclai == null) ||item.Ngaycapnuoclai <= DateTime.Now)
                                                                     {
+                                                                        
                                                                         @Html.ActionLink("Cắt nước", "Catnuoc", new { id = item.KhachhangID, TinhTrang = 0, toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
                                                                     }
                                                                     else

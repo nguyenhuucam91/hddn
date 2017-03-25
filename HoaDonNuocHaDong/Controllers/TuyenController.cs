@@ -10,6 +10,7 @@ using HoaDonNuocHaDong;
 using System.Web.Routing;
 using System.Data.Entity.Validation;
 using HoaDonNuocHaDong.Base;
+using HoaDonNuocHaDong.Repositories;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -17,15 +18,32 @@ namespace HoaDonNuocHaDong.Controllers
     {
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
-        
+
 
         // GET: /Tuyen/
         public ActionResult Index()
         {
             var nhanVien = db.Nhanviens.ToList();
+            if(!LoggedInUser.Isadmin.Value){
+                int phongBanId = getPhongBanNguoiDung();
+                nhanVien = db.Nhanviens.Where(p=>p.PhongbanID == phongBanId).ToList();
+            }
             var tuyenkhachhangs = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).Include(t => t.Cumdancu).Include(t => t.To);
             ViewBag._nhanVien = nhanVien;
             return View(tuyenkhachhangs.OrderByDescending(p=>p.TuyenKHID).ToList());
+        }
+
+
+        public int getPhongBanNguoiDung()
+        {
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
+            if (nhanVien != null)
+            {
+                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+                int phongBanID = phongBan.PhongbanID;
+                return phongBanID;
+            }
+            return 0;
         }
 
         [HttpPost]
@@ -39,7 +57,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 //nếu trống thì chọn tất cả
                 var nhanVienFilter = db.Nhanviens.ToList();
-                tuyenkhachhangs = db.Tuyenkhachhangs.Include(t => t.Cumdancu).Include(t => t.To).OrderByDescending(p=>p.TuyenKHID);
+                tuyenkhachhangs = db.Tuyenkhachhangs.Include(t => t.Cumdancu).Include(t => t.To).OrderByDescending(p => p.TuyenKHID);
                 ViewBag._nhanVien = nhanVienFilter;
                 ViewBag.chiNhanh = db.Chinhanhs;
                 return View(tuyenkhachhangs.ToList());
@@ -59,7 +77,7 @@ namespace HoaDonNuocHaDong.Controllers
                 tuyenkhachhangs = tuyenTheoNhanVien.Select(p => p.TuyenKhachHang);
                 //nếu để trống thì chọn tất cả
                 var nhanVienFilter = db.Nhanviens.ToList();
-                ViewBag._nhanVien = nhanVienFilter;               
+                ViewBag._nhanVien = nhanVienFilter;
                 return View(tuyenkhachhangs.ToList());
             }
         }
@@ -179,7 +197,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
 
                 db.Entry(tuyenkhachhang).State = EntityState.Modified;
-                db.SaveChanges();                
+                db.SaveChanges();
                 return RedirectToAction("Index");
 
             }
