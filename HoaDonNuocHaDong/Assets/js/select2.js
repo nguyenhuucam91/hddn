@@ -303,8 +303,9 @@ function ajaxApGiaDacBietTongHopFn(khachHangID, month, year, item) {
 /*------------------- Số liệu tiêu thụ -----------------------------*/
 //nếu ấn chuột vào ô nào đó thì nhân focus vào ô đó, đặt autofocus = true
 $("table tbody tr td input").click(function () {
+    $('.detail-focused').removeClass('detail-focused');
     $("table tbody tr td input").attr("autofocus", false);
-    $(this).attr("autofocus", true);
+    $(this).attr("autofocus", true);   
 });
 
 //nếu như ngày bắt đầu và ngày kết thúc để trống thì tải lại trang để cập nhật vào ô ngày bắt đầu và ngày kết thúc tương ứng của khách hàng
