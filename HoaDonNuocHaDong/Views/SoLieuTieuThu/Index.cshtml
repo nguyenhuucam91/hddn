@@ -24,7 +24,7 @@
     //danh sách nhập chỉ số tiêu thụ được chọn
     var toID = ViewBag.selectedTo;
     var nhanVienID = ViewBag.selectedNhanVien;
-    var tuyenID = ViewBag.selectedTuyen; 
+    var tuyenID = ViewBag.selectedTuyen;
 }
 <script src="~/Assets/js/jquery.dataTables.min.js"></script>
 <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
@@ -87,23 +87,6 @@
                             </form>
                         </div>
                         <!-- Tắt bật cột -->
-                        <!--Tắt bật cột-->
-                        <div class="form-actions">
-                            Tắt bật cột (Màu đỏ là cột được ẩn):
-
-                            <a class="toggle-vis" data-column="0">MãKH</a>
-                            - <a class="toggle-vis" data-column="1">TênKH</a>
-                            - <a class="toggle-vis" data-column="2">Số hộ</a>
-                            - <a class="toggle-vis" data-column="3">Số khẩu</a>
-                            - <a class="toggle-vis" data-column="4">TTDoc</a>
-                            - <a class="toggle-vis" data-column="5">Bắt đầu</a>
-                            - <a class="toggle-vis" data-column="6">Kết thúc</a>
-                            <button type="button" 
-                                    onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new {toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' 
-                                    class="btn btn-info" style="float:right; margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
-
-                        </div>
-                        <div class="clearfix"></div>
                         <!-- Operation in ấn và xuất hóa đơn -->
                         @if (errorList.Count() > 0)
                         {
@@ -118,6 +101,26 @@
                         {
                             if ((bool)receiptIsShown)
                             {
+                                 <!--Tắt bật cột-->
+                                <div class="form-actions">
+                                    Tắt bật cột (Màu đỏ là cột được ẩn):
+
+                                    <a class="toggle-vis" data-column="0">MãKH</a>
+                                    - <a class="toggle-vis" data-column="1">TênKH</a>
+                                    - <a class="toggle-vis" data-column="2">Số hộ</a>
+                                    - <a class="toggle-vis" data-column="3">Số khẩu</a>
+                                    - <a class="toggle-vis" data-column="4">TTDoc</a>
+                                    - <a class="toggle-vis" data-column="5">Bắt đầu</a>
+                                    - <a class="toggle-vis" data-column="6">Kết thúc</a>
+                                    <button type="button"
+                                            onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new {toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"'
+                                            class="btn btn-info" style="float:right; margin-left: 20px; margin-top: -10px;">
+                                        Xem chỉ số chi tiết
+                                    </button>
+
+                                </div>
+                                <div class="clearfix"></div>
+
                                 <div class="outerTable">
                                     <table class="table table-bordered hoaDonNuoc">
                                         <thead>
@@ -180,12 +183,11 @@
                                                     else
                                                     {
                                                         var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
-                                                        
+
                                                         <td class="startDate">
                                                             <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="0" />
                                                             <input type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" readonly
-                                                                   value="@String.Format("{0:dd/MM/yyyy}",khachHangData.Ngaykyhopdong)" 
-                                                                   />
+                                                                   value="@String.Format("{0:dd/MM/yyyy}",khachHangData.Ngaykyhopdong)" />
                                                         </td>
                                                     }
                                                     <td class="endDate">
@@ -330,12 +332,14 @@
                                     </table>
                                     <!--end table-->
                                 </div>
+                              <!-- Operation -->
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new { toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' class="btn btn-default" style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
+                                </div> <!-- /form-actions -->
+
                             }
                         }
-                        <!-- Operation -->
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new { toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' class="btn btn-default" style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
-                        </div> <!-- /form-actions -->
+
 
                     </div> <!-- /widget-content -->
 

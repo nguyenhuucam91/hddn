@@ -2,6 +2,7 @@
     ViewBag.Title = "BaoCaoTongHopSanLuong";
     Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
     var tong = ViewBag.tong as List<HoaDonNuocHaDong.Models.BaoCaoKinhDoanh.BaoCaoTongHopSanLuong>;
+    var columnTitle = ViewBag.columnTitle;
 }
 <style>
     .xulybc {
@@ -22,11 +23,11 @@
 <br />
 <div class="loc center">Tháng @DateTime.Now.Month - Năm @DateTime.Now.Year</div>
 
-<table class="table table-bordered">
+<table class="table table-bordered processedInServer">
     <thead style="text-align:center">
         <tr>
             <th rowspan="2">TT</th>
-            <th rowspan="2">Tuyến ống</th>
+            <th rowspan="2">@columnTitle</th>
             <th colspan="4">Sinh hoạt</th>
             <th rowspan="2">Công cộng</th>
             <th rowspan="2">Hành chính</th>
@@ -72,7 +73,7 @@
 
             <tr>
                 <td>@i</td>
-                <td>@item.TenTuyen</td>
+                <td style="width:50% !important">@item.TenTuyen</td>
                 <td>@item.SH1Sum</td>
                 <td>@item.SH2Sum</td>
                 <td>@item.SH3Sum</td>
@@ -109,3 +110,42 @@
         </tr>
     </tbody>
 </table>
+
+<script>   
+
+    var table = $(document).ready(function () {
+        $('.table').DataTable({
+            dom: 'Bfrtip',
+            "bFilter": false,
+            "bPaginate": false,
+            "bSort": false,
+            columnDefs:[
+                null,
+                {width:"10%",targets:0},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            fixedColumns: true,
+            "language": {
+                "emptyTable": "Không có dữ liệu"
+            },
+            buttons: [
+                'excelHtml5',
+            ],
+        });
+
+        //Đổi chữ trong tất cả các báo cáo từ Excel => xuất Excel
+        $(".buttons-excel").text("Xuất Excel");
+    });
+</script>

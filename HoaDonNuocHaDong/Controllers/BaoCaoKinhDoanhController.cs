@@ -550,24 +550,28 @@ namespace HoaDonNuocHaDong.Controllers
             if (type == 0)
             {
                 List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenOng();
+                ViewBag.columnTitle = "Tuyến ống";
                 ViewBag.tong = ls;
             }
             //tuyến
             else if (type == 1)
             {
                 List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenKH();
+                ViewBag.columnTitle = "Tuyến khách hàng";
                 ViewBag.tong = ls;
             }
             //nhân viên
             else if (type == 2)
             {
                 List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien();
+                ViewBag.columnTitle = "Nhân viên";
                 ViewBag.tong = ls;
             }
             //tổ kĩ thuật
             else if (type == 3)
             {
                 List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoToQuanHuyen();
+                ViewBag.columnTitle = "Tổ kĩ thuật";
                 ViewBag.tong = ls;
             }
 
