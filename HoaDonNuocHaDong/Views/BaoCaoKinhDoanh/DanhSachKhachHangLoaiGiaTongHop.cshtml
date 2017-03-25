@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
     DateTime d1 = ViewBag.dt1;
     HoaDonNuocHaDong.Helper.ApGiaHelper apGia = new HoaDonNuocHaDong.Helper.ApGiaHelper();
+    var soLuongKhachHangApTongHop = ViewBag.soLuongKhachHangApTongHop;
 }
 <style>
     .xulybc {
@@ -30,9 +31,10 @@
 <div class="ten">Danh sách Khách hàng Loại giá tổng hợp</div>
 <div class="loc">Tháng @d1.Month năm @d1.Year</div>
 
-<table class="table table-bordered">
+<table class="table table-bordered processedInServer">
     <thead>
-        <tr>            
+        <tr>         
+            <th rowspan="2">STT</th>   
             <th rowspan="2">Mã KH</th>
             <th rowspan="2">Họ và Tên</th>
             <th rowspan="2">Địa Chỉ</th>
@@ -49,9 +51,7 @@
             <th>Kinh doanh</th>
         </tr>
     </thead>   
-    <tfoot>
-
-    </tfoot> 
+    
 </table>
-
-<script src="~/js/DanhSachKhachHangApGiaChung.js"></script>
+<div class="tong"><b>Tổng cộng: @soLuongKhachHangApTongHop khách hàng</b></div>
+<script src="~/js/BaoCaoKinhDoanh/DanhSachKhachHangApGiaTongHop.js"></script>

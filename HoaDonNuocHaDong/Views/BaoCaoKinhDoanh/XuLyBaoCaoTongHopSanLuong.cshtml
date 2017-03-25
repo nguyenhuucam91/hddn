@@ -1,12 +1,7 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "XuLyBaoCaoTongHopSanLuong";
-
-    List<Tuyenong> tuyenOng = ViewData["tuyenOng"] as List<Tuyenong>;
-    List<Tuyenkhachhang> tuyenKH = ViewData["tuyenKH"] as List<Tuyenkhachhang>;
-    List<Nhanvien> nhanvien = ViewData["nhanvien"] as List<Nhanvien>;
-    List<ToQuanHuyen> to = ViewData["toKT"] as List<ToQuanHuyen>;
 }
+
 <link href="~/Content/Style.css" rel="stylesheet" />
 <div class="row" style="margin-left:4%">
     <!-- /span6 -->
@@ -28,7 +23,7 @@
                 }
                 <!-- Tuyến khách hàng -->
                 <!-- Theo tuyến ống kĩ thuật type = 1-->
-                @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type=1}))
+                @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type = 1}))
                 {
                     <div class="xulybc">
                         <label>Tuyến khách hàng:</label>

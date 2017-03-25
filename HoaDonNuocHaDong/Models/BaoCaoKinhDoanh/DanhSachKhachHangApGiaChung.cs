@@ -8,19 +8,24 @@ namespace HoaDonNuocHaDong.Models.BaoCaoKinhDoanh
 {
     public class DanhSachKhachHangApGiaChung : ModelBase
     {
-
-        public String MaKH { get { return GetSTR(0); } set { SetSTR(0, value); } }
-        public String HoTen { get { return GetSTR(1); } set { SetSTR(1, value); } }
-        public String DiaChi { get { return GetSTR(2); } set { SetSTR(2, value); } }
-        public String Tuyen { get { return GetSTR(3); } set { SetSTR(3, value); } }
-        public int? TTDoc { get { return GetINT(4); } set { SetINT(4, value); } }
-        public String CachTinh { get { return GetSTR(5); } set { SetSTR(5, value); } }
-        public int KhachHangID { get { return GetINT(6); } set { SetINT(6, value); } }
+        public int STT { get; set; }
+        public String MaKH { get; set; }
+        public String HoTen { get; set; }
+        public String DiaChi { get; set; }
+        public String Tuyen { get; set; }
+        public int? TTDoc { get; set; }
+        public String CachTinh { get; set; }
+        public int KhachHangID { get; set; }
         public String SinhHoat { get; set; }
         public String SanXuat { get; set; }
         public String HanhChinh { get; set; }
         public String CongCong { get; set; }
         public String KinhDoanh { get; set; }
+
+        public String SH1 { get; set; }
+        public String SH2 { get; set; }
+        public String SH3 { get; set; }
+        public String SH4 { get; set; }
 
         public DanhSachKhachHangApGiaChung()
         {
@@ -28,7 +33,7 @@ namespace HoaDonNuocHaDong.Models.BaoCaoKinhDoanh
         }
         protected override Type TransferType()
         {
-            return this.GetType();    
+            return this.GetType();
         }
     }
 }

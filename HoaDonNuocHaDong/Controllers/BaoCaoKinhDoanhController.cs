@@ -18,6 +18,7 @@ namespace HoaDonNuocHaDong.Controllers
     {
         HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         HoaDonNuocHaDong.Helper.ApGiaHelper apGia = new HoaDonNuocHaDong.Helper.ApGiaHelper();
+        HoaDonHaDong.Helper.ChiSo chiSo = new HoaDonHaDong.Helper.ChiSo();
 
         public ActionResult BaoCaoKinhDoanh()
         {
@@ -85,16 +86,25 @@ namespace HoaDonNuocHaDong.Controllers
             return 0;
         }
 
+        #region BaoCaoKhachHangApGiaTongHop
+
         public ActionResult XuLyDanhSachKhachHangLoaiGiaTongHop()
         {
             DateTime d1 = DateTime.Now;
             ViewBag.dt1 = d1;
+            ViewBag.soLuongKhachHangApTongHop = filterDanhSachKhachHangApGiaTongHop().Count();
             return View("Danhsachkhachhangloaigiatonghop");
         }
 
-        public JsonResult getKhachHangApGiaTongHop()
+        public JsonResult jsonTransformKhachHangApGiaTongHop()
         {
-            DateTime d1 = DateTime.Now;
+            var khachHangApTongHop = filterDanhSachKhachHangApGiaTongHop();
+            List<DanhSachKhachHangApGiaChung> dsApTongHop = createDanhSachKhachHangApGiaTongHop(khachHangApTongHop);
+            return Json(dsApTongHop);
+        }
+
+        public List<DanhSachKhachHangApGiaChung> filterDanhSachKhachHangApGiaTongHop()
+        {
             var khachHang = (from i in db.Khachhangs
                              join s in db.Apgiatonghops on i.KhachhangID equals s.KhachhangID
                              join t in db.Tuyenkhachhangs on i.TuyenKHID equals t.TuyenKHID
@@ -107,19 +117,19 @@ namespace HoaDonNuocHaDong.Controllers
                                  Tuyen = t.Matuyen,
                                  TTDoc = i.TTDoc,
                                  CachTinh = s.CachTinh == 1 ? "Phần trăm" : "Số khoán",
-                                 KhachHangID = i.KhachhangID,                            
+                                 KhachHangID = i.KhachhangID,
                              }).Distinct().OrderBy(p => p.Tuyen).ThenBy(p => p.TTDoc).ToList();
-
-            List<DanhSachKhachHangApGiaChung> dsApTongHop = jSonTransformDanhSachApGia(khachHang);
-            return Json(dsApTongHop);
+            return khachHang;
         }
 
-        public List<DanhSachKhachHangApGiaChung> jSonTransformDanhSachApGia(List<DanhSachKhachHangApGiaChung> dsKhachHang)
+        public List<DanhSachKhachHangApGiaChung> createDanhSachKhachHangApGiaTongHop(List<DanhSachKhachHangApGiaChung> dsKhachHang)
         {
             List<DanhSachKhachHangApGiaChung> dsApGiaChung = new List<DanhSachKhachHangApGiaChung>();
+            int i = 1;
             foreach (var item in dsKhachHang)
             {
                 DanhSachKhachHangApGiaChung khachHang = new DanhSachKhachHangApGiaChung();
+                khachHang.STT = i;
                 khachHang.KhachHangID = item.KhachHangID;
                 khachHang.MaKH = item.MaKH;
                 khachHang.HoTen = item.HoTen;
@@ -132,34 +142,61 @@ namespace HoaDonNuocHaDong.Controllers
                 khachHang.CongCong = apGia.getChiSoApGiaTongHop(item.KhachHangID, HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH);
                 khachHang.KinhDoanh = apGia.getChiSoApGiaTongHop(item.KhachHangID, HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU);
                 dsApGiaChung.Add(khachHang);
+                i++;
             }
             return dsApGiaChung;
         }
 
+        #endregion
+
+        #region DanhSachKhachHangApGiaDacBiet
         public ActionResult XuLyDanhSachKhachHangLoaiGiaDacBiet()
         {
             DateTime d1 = DateTime.Now;
+            ViewBag.dt1 = d1;
+            ViewBag.soLuongKhachHangApGiaDacBiet = filterDanhSachKhachHangLoaiGiaDacBiet().Count();
+            return View("Danhsachkhachhangloaigiadacbiet");
+        }
+
+        public List<DanhSachKhachHangApGiaChung> filterDanhSachKhachHangLoaiGiaDacBiet()
+        {     
             var khachHang = (from i in db.Khachhangs
-                             join s in db.Apgiatonghops on i.KhachhangID equals s.KhachhangID
+                             join r in db.Hoadonnuocs on i.KhachhangID equals r.KhachhangID
+                             join s in db.ApGiaDacBiets on r.HoadonnuocID equals s.HoaDonNuocID
                              join t in db.Tuyenkhachhangs on i.TuyenKHID equals t.TuyenKHID
-                             where i.LoaiapgiaID == KhachHang.DACBIET
-                             select new
-                             {
+                             where r.ThangHoaDon == DateTime.Now.Month && r.NamHoaDon == DateTime.Now.Year
+                             select new DanhSachKhachHangApGiaChung
+                             {                                       
                                  MaKH = i.MaKhachHang,
                                  HoTen = i.Ten,
                                  DiaChi = i.Diachi,
                                  Tuyen = t.Matuyen,
                                  TTDoc = i.TTDoc,
-                                 KhachHangID = i.KhachhangID
+                                 KhachHangID = i.KhachhangID,
+                                 SH1 = s.SH1.ToString(),
+                                 SH2 = s.SH2.ToString(),
+                                 SH3 = s.SH3.ToString(),
+                                 SH4 = s.SH4.ToString(),
+                                 KinhDoanh = s.KDDV.ToString(),
+                                 SanXuat = s.SXSD.ToString(),
+                                 HanhChinh = s.HC.ToString(),
+                                 CongCong = s.CC.ToString()
                              }).Distinct().OrderBy(p => p.TTDoc).ToList();
-            ViewData["khachHang"] = khachHang;
-            ViewBag.dt1 = d1;
-            return View("Danhsachkhachhangloaigiadacbiet");
+            return khachHang;
         }
+
+        public JsonResult getDanhSachKhachHangApGiaDacBietToJson()
+        {
+            List<DanhSachKhachHangApGiaChung> danhSachKhachHangLoaiGiaDacBiet = filterDanhSachKhachHangLoaiGiaDacBiet();
+            return Json(danhSachKhachHangLoaiGiaDacBiet);
+        }
+
+        #endregion
         public ActionResult XuLyDanhSachKhachHangCacLoaiGiaKhac()
         {
             return View();
         }
+
         public ActionResult XuLyDanhSachKhachHangCoGhiChu()
         {
             DateTime d1 = DateTime.Now;
@@ -173,6 +210,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View("Danhsachkhachhangcoghichu");
 
         }
+
         public ActionResult XuLyDanhSachKhachHangTheoDinhMuc()
         {
             return View();
@@ -199,10 +237,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
         public ActionResult XuLyBaoCaoTongHopSanLuong()
         {
-            ViewData["tuyenOng"] = db.Tuyenongs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
-            ViewData["tuyenKH"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
-            ViewData["nhanvien"] = db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
-            ViewData["toKT"] = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+          
             return View();
         }
         public ActionResult XuLyBaoCaoTongHopKhachHangQuanLy()
@@ -514,32 +549,8 @@ namespace HoaDonNuocHaDong.Controllers
             //tuyến ống
             if (type == 0)
             {
-                var ls = (from i in db.Lichsuhoadons
-                          join r in db.Hoadonnuocs on i.HoaDonID equals r.HoadonnuocID
-                          join s in db.Khachhangs on r.KhachhangID equals s.KhachhangID
-                          join t in db.Tuyenongs on s.TuyenongkythuatID equals t.TuyenongID
-                          group i by new { t.Tentuyen } into g
-                          select new
-                          {
-                              TenTuyen = g.Key.Tentuyen,
-                              SH1Sum = g.Sum(p => p.SH1),
-                              SH2Sum = g.Sum(p => p.SH2),
-                              SH3Sum = g.Sum(p => p.SH3),
-                              SH4Sum = g.Sum(p => p.SH4),
-                              CCSum = g.Sum(p => p.CC),
-                              HCSum = g.Sum(p => p.HC),
-                              SXSum = g.Sum(p => p.SX),
-                              KDSum = g.Sum(p => p.KD),
-                              TongSL = g.Sum(p => p.SH1) + g.Sum(p => p.SH2) + g.Sum(p => p.SH3) + g.Sum(p => p.SH4) + g.Sum(p => p.CC) + g.Sum(p => p.HC) + g.Sum(p => p.SX) + g.Sum(p => p.KD),
-                              SLTruocThue = g.Sum(p => p.SH1) * g.FirstOrDefault().SH1Price + g.Sum(p => p.SH2) * g.FirstOrDefault().SH2Price + g.Sum(p => p.SH3) * g.FirstOrDefault().SH3Price + g.Sum(p => p.SH4) * g.FirstOrDefault().SH4Price
-                              + g.Sum(p => p.CC) * g.FirstOrDefault().CCPrice + g.Sum(p => p.HC) * g.FirstOrDefault().HCPrice + g.Sum(p => p.SX) * g.FirstOrDefault().SXPrice + g.Sum(p => p.KD) * g.FirstOrDefault().KDPrice,
-                              TongVAT = g.Sum(p => p.ThueSuatPrice),
-                              TongBVMT = g.Sum(p => p.PhiBVMT),
-                              TongCong = g.Sum(p => p.TongCong)
-                          }).ToList();
-
+                List<BaoCaoTongHopSanLuong> ls = xemDanhSachBaoCaoSanLuongTheoTuyenOng();
                 ViewBag.tong = ls;
-
             }
             //tuyến
             else if (type == 1)
@@ -632,6 +643,25 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag.dt1 = d1;
             return View();
+        }
+
+        public List<BaoCaoTongHopSanLuong> xemDanhSachBaoCaoSanLuongTheoTuyenOng()
+        {
+            DateTime currentDate = DateTime.Now;
+            ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
+            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoTuyenOng", 
+                new SqlParameter("@d1", currentDate.Month),
+                new SqlParameter("@d2", currentDate.Year),
+                new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
+                new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
+                new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
+                new SqlParameter("@SH4Price", chiSo.getSoTienTheoApGia("SH4")),
+                new SqlParameter("@CCPrice", chiSo.getSoTienTheoApGia("CC")),
+                new SqlParameter("@HCPrice", chiSo.getSoTienTheoApGia("HC")),
+                new SqlParameter("@SXXDPrice", chiSo.getSoTienTheoApGia("SXXD")),
+                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV"))
+                );
+            return lst;
         }
 
         [HttpPost]

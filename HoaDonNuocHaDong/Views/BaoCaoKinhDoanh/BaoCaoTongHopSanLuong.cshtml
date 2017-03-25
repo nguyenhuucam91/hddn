@@ -1,10 +1,10 @@
 ﻿@{
     ViewBag.Title = "BaoCaoTongHopSanLuong";
     Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
-    var tong = ViewBag.tong;
+    var tong = ViewBag.tong as List<HoaDonNuocHaDong.Models.BaoCaoKinhDoanh.BaoCaoTongHopSanLuong>;
 }
 <style>
-    .xulybc {        
+    .xulybc {
         margin: 2% 10%;
     }
 
@@ -19,15 +19,15 @@
     }
 </style>
 <div class="ten center">Báo cáo tổng hợp sản lượng</div>
-<br/>
+<br />
 <div class="loc center">Tháng @DateTime.Now.Month - Năm @DateTime.Now.Year</div>
 
 <table class="table table-bordered">
     <thead style="text-align:center">
         <tr>
             <th rowspan="2">TT</th>
-            <th rowspan="2"></th>
-            <th colspan="4">Sinh hoạt</th>           
+            <th rowspan="2">Tuyến ống</th>
+            <th colspan="4">Sinh hoạt</th>
             <th rowspan="2">Công cộng</th>
             <th rowspan="2">Hành chính</th>
             <th rowspan="2">SX-XD</th>
@@ -40,7 +40,6 @@
             <th>SH2</th>
             <th>SH3</th>
             <th>SH4</th>
-
             <th>Trước thuế, phí</th>
             <th>Thuế VAT</th>
             <th>Phí NT</th>
@@ -49,15 +48,15 @@
     </thead>
     <tbody>
         @{int i = 1;
-        int sumSH1 = 0; int sumHC = 0; int sumTongSL = 0; int TongCong = 0;
-        int sumSH2 = 0; int sumCC = 0; int truocThue = 0;
-        int sumSH3 = 0; int sumKDDV = 0; int VAT = 0;
-        int sumSH4 = 0; int sumSX = 0; int PhiNT = 0;
+        double sumSH1 = 0; double sumHC = 0; double sumTongSL = 0; double TongCong = 0;
+        double sumSH2 = 0; double sumCC = 0; double truocThue = 0;
+        double sumSH3 = 0; double sumKDDV = 0; double VAT = 0;
+        double sumSH4 = 0; double sumSX = 0; double PhiMT = 0;
         }
         @foreach (var item in tong)
         {
 
-            sumSH1 = sumSH1 + Convert.ToInt32(item.GetType().GetProperty("SH1Sum").GetValue(item, null));
+            sumSH1 = sumSH1 + Convert.ToInt32(item.SH1Sum);
             sumSH2 = sumSH2 + Convert.ToInt32(item.GetType().GetProperty("SH2Sum").GetValue(item, null));
             sumSH3 = sumSH3 + Convert.ToInt32(item.GetType().GetProperty("SH3Sum").GetValue(item, null));
             sumSH4 = sumSH4 + Convert.ToInt32(item.GetType().GetProperty("SH4Sum").GetValue(item, null));
@@ -66,27 +65,27 @@
             sumSX = sumSX + Convert.ToInt32(item.GetType().GetProperty("SXSum").GetValue(item, null));
             sumKDDV = sumKDDV + Convert.ToInt32(item.GetType().GetProperty("KDSum").GetValue(item, null));
             sumTongSL = sumTongSL + Convert.ToInt32(item.GetType().GetProperty("TongSL").GetValue(item, null));
-            truocThue += item.GetType().GetProperty("SLTruocThue").GetValue(item, null);
-            VAT += item.GetType().GetProperty("TongVAT").GetValue(item, null);
-            PhiNT += item.GetType().GetProperty("TongBVMT").GetValue(item, null);
-            TongCong += item.GetType().GetProperty("TongCong").GetValue(item, null);
+            truocThue += item.SLTruocThue;
+            VAT += item.TongVAT;
+            PhiMT += item.TongBVMT;
+            TongCong += item.TongCong;
 
             <tr>
                 <td>@i</td>
-                <td>@item.GetType().GetProperty("TenTuyen").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("SH1Sum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("SH2Sum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("SH3Sum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("SH4Sum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("CCSum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("HCSum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("SXSum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("KDSum").GetValue(item, null)</td>
-                <td>@item.GetType().GetProperty("TongSL").GetValue(item, null)</td>
-                <td>@String.Format("{0:n0}",item.GetType().GetProperty("SLTruocThue").GetValue(item, null))</td>
-                <td>@String.Format("{0:n0}",item.GetType().GetProperty("TongVAT").GetValue(item, null))</td>
-                <td>@String.Format("{0:n0}",item.GetType().GetProperty("TongBVMT").GetValue(item, null))</td>
-                <td>@String.Format("{0:n0}",item.GetType().GetProperty("TongCong").GetValue(item, null))</td>
+                <td>@item.TenTuyen</td>
+                <td>@item.SH1Sum</td>
+                <td>@item.SH2Sum</td>
+                <td>@item.SH3Sum</td>
+                <td>@item.SH4Sum</td>
+                <td>@item.CCSum</td>
+                <td>@item.HCSum</td>
+                <td>@item.SXSum</td>
+                <td>@item.KDSum</td>
+                <td>@item.TongSL</td>
+                <td>@String.Format("{0:n0}", item.SLTruocThue)</td>
+                <td>@String.Format("{0:n0}", item.TongVAT)</td>
+                <td>@String.Format("{0:n0}", item.TongBVMT)</td>
+                <td>@String.Format("{0:n0}", item.TongCong)</td>
             </tr>
             i++;
         }
@@ -103,10 +102,10 @@
             <td>@sumSX</td>
             <td>@sumKDDV</td>
             <td>@sumTongSL</td>
-            <td>@String.Format("{0:n0}",truocThue)</td>
-            <td>@String.Format("{0:n0}",VAT)</td>
-            <td>@String.Format("{0:n0}",PhiNT)</td>
-            <td>@String.Format("{0:n0}",TongCong)</td>
+            <td>@String.Format("{0:n0}", truocThue)</td>
+            <td>@String.Format("{0:n0}", VAT)</td>
+            <td>@String.Format("{0:n0}", PhiMT)</td>
+            <td>@String.Format("{0:n0}", TongCong)</td>
         </tr>
     </tbody>
 </table>

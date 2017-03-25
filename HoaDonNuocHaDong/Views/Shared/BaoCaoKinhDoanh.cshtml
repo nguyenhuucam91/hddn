@@ -10,9 +10,9 @@
     <title>@ViewBag.title</title>
     <!-- Styles CSS -->
     @Styles.Render("~/Css/bootstrap.css")
-    @Styles.Render("~/Css/bootstrap.min.css")    
+    @Styles.Render("~/Css/bootstrap.min.css")
     @Styles.Render("~/Css/style.css")
-    @Styles.Render("~/Css/pages/signin.css")    
+    @Styles.Render("~/Css/pages/signin.css")
     @Styles.Render("~/Content/Style.css")
     @Styles.Render("~/Assets/css/buttons.dataTables.min.css")
     @Scripts.Render("~/js/jquery-1.7.2.min.js")
@@ -57,26 +57,31 @@
     <script>
         /*-------căn ra giữa bảng--------------*/
         $("table tr th").css({ "text-align": "center", "vertical-align": "middle" });
-    </script>
-    <script>
-        
-        //$(document).ready(function () {
-        //    $('.table').DataTable({
-        //        dom: 'Bfrtip',
-        //        "bFilter": false,
-        //        "bPaginate": false,
-        //        "bSort":false,
-        //        "language": {
-        //            "emptyTable": "Không có dữ liệu"
-        //        },
-        //        buttons: [
-        //            'excelHtml5',
-        //        ],
-        //    });
 
-        //    //Đổi chữ trong tất cả các báo cáo từ Excel => xuất Excel
-        //    $(".buttons-excel").text("Xuất Excel");
-        //});
+    </script>
+
+    <script>
+        if ($('table').hasClass('processedInServer')) {
+            table.destroy();
+        }
+
+        $(document).ready(function () {
+            $('.table').DataTable({
+                dom: 'Bfrtip',
+                "bFilter": false,
+                "bPaginate": false,
+                "bSort": false,
+                "language": {
+                    "emptyTable": "Không có dữ liệu"
+                },
+                buttons: [
+                    'excelHtml5',
+                ],
+            });
+
+            //Đổi chữ trong tất cả các báo cáo từ Excel => xuất Excel
+            $(".buttons-excel").text("Xuất Excel");
+        });
     </script>
 </body>
 </html>
