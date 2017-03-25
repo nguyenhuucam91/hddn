@@ -304,6 +304,7 @@ function ajaxApGiaDacBietTongHopFn(khachHangID, month, year, item) {
 //nếu ấn chuột vào ô nào đó thì nhân focus vào ô đó, đặt autofocus = true
 $("table tbody tr td input").click(function () {
     $('.detail-focused').removeClass('detail-focused');
+    $(this).addClass('detail-focused');
     $("table tbody tr td input").attr("autofocus", false);
     $(this).attr("autofocus", true);   
 });

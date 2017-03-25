@@ -148,9 +148,9 @@
 
                                         <tbody>
                                             @{
-                                int i = 1;
-                                int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
-                                int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
+                                            int i = 1;
+                                            int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
+                                            int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
                                             }
                                             @foreach (var item in kH)
                                             {
@@ -246,17 +246,17 @@
                                                     }
 
                                                     <td><input type="text" style="width:55px" name="sanLuong" disabled value="@item.SanLuong" /></td>
-                                                    <td>                                                                                                             
-                                                        
+                                                    <td>
+
                                                         @if (isChot == null || isChot == false)
                                                         {
-                                                            <input type="text" data-khid="@item.KhachHangID"  data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                            <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                         }
                                                         else
                                                         {
                                                             if (cS.isChotHoaDon(hoaDonID))
                                                             {
-                                                                <input disabled type="text" data-khid="@item.KhachHangID"  data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                             }
                                                             else
                                                             {

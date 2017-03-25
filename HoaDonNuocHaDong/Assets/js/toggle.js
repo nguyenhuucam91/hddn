@@ -12,6 +12,12 @@ $(function () {
         $(".nhanVienRadio").removeClass('hide');
     }
 
+    if ($("#LoaiapgiaID").val() == "7") {
+        $(".tonghop").removeClass('hide');
+    } else {
+        $(".tonghop").addClass('hide');
+    }
+
     //nếu admin được check thì ẩn danh sách nhân viên đi (addClass hide), nếu nhân viên được check sẽ hiện danh sách nhân viên lên (removeClass hide)
     $("input[name='isAdmin']").click(function () {
         var isAdminValue = $(this).val();

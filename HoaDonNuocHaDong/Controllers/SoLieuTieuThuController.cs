@@ -87,7 +87,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.ngayBatDau = "";
             ViewBag.ngayKetThuc = "";
             //danh sách lỗi
-            List<string> errors = new List<string>();            
+            List<string> errors = new List<string>();
             ViewData["errorList"] = errors;
             //view
             ViewBag.selectedTo = to;
@@ -295,7 +295,7 @@ namespace HoaDonNuocHaDong.Controllers
             //tongTienHoaDon;
             double dinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value);
             double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
-            double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);                       
+            double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);
             double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + SoHoaDon;
             //cộng dồn
@@ -311,14 +311,14 @@ namespace HoaDonNuocHaDong.Controllers
             }
             double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
 
-            insertToLichSuSuDungNuoc(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu, 
+            insertToLichSuSuDungNuoc(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu,
                 cT.SH1.Value, cS.getSoTienTheoApGia("SH1").Value,
                 cT.SH2.Value, cS.getSoTienTheoApGia("SH2").Value,
                 cT.SH3.Value, cS.getSoTienTheoApGia("SH3").Value,
                 cT.SH4.Value, cS.getSoTienTheoApGia("SH4").Value,
-                cT.HC.Value, cS.getSoTienTheoApGia("HC").Value, 
-                cT.CC.Value, cS.getSoTienTheoApGia("CC").Value, 
-                cT.SXXD.Value, cS.getSoTienTheoApGia("SX-XD").Value, 
+                cT.HC.Value, cS.getSoTienTheoApGia("HC").Value,
+                cT.CC.Value, cS.getSoTienTheoApGia("CC").Value,
+                cT.SXXD.Value, cS.getSoTienTheoApGia("SX-XD").Value,
                 cT.KDDV.Value, cS.getSoTienTheoApGia("KDDV").Value,
                 5, VAT,
                 obj.Tilephimoitruong.Value, thueBVMT, tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
@@ -500,7 +500,7 @@ namespace HoaDonNuocHaDong.Controllers
             //tongTienHoaDon;
             double dinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value);
             double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
-            double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);                        
+            double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);
 
             double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + sohoadon;
@@ -714,7 +714,7 @@ namespace HoaDonNuocHaDong.Controllers
                 db.SaveChanges();
             }
             else
-            {                
+            {
                 apGiaDacBiet.HoaDonNuocID = id;
                 apGiaDacBiet.KDDV = KD;
                 apGiaDacBiet.SH1 = SH1;
@@ -734,7 +734,7 @@ namespace HoaDonNuocHaDong.Controllers
             db.Entry(hoaDonDacBiet).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             //reset chỉ số của tháng đó trước, cho về 0, nếu có ấn nhập giá đặc biệt
-            
+
             //rồi cập nhật lại chỉ số của tháng đó
             Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == id);
             chiTiet.Chisomoi = ChiSoCu + Sum;
@@ -757,7 +757,7 @@ namespace HoaDonNuocHaDong.Controllers
             hD.themMoiSoTienPhaiNop(id.Value);
             //thêm vào bảng lịch sử
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
-           
+
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
             int _month = hoaDonDacBiet.ThangHoaDon.Value;
             int _year = hoaDonDacBiet.NamHoaDon.Value;
@@ -765,7 +765,7 @@ namespace HoaDonNuocHaDong.Controllers
             int ChiSoCuoi = chiTiet.Chisomoi.Value;
             //Giá 
             double dinhMuc = cS.tinhTongTienTheoDinhMuc(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value);
-            double thue = cS.tinhThue(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value, obj.Tilephimoitruong.Value);            
+            double thue = cS.tinhThue(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value, obj.Tilephimoitruong.Value);
             double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
             //chỉ số cộng dồn
             double tongTienHoaDon = dinhMuc + thue + VAT;
@@ -784,21 +784,21 @@ namespace HoaDonNuocHaDong.Controllers
             //thu ngân
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon;
 
-          insertToLichSuSuDungNuoc(id.Value, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau, ChiSoCuoi, Sum, 
-                SH1, cS.getSoTienTheoApGia("SH1").Value, 
-                SH2, cS.getSoTienTheoApGia("SH2").Value, 
-                SH3, cS.getSoTienTheoApGia("SH3").Value, 
-                SH4, cS.getSoTienTheoApGia("SH4").Value,
-                HC, cS.getSoTienTheoApGia("HC").Value, 
-                CC, cS.getSoTienTheoApGia("CC").Value, 
-                SX, cS.getSoTienTheoApGia("SX-XD").Value, 
-                KD, cS.getSoTienTheoApGia("KDDV").Value,
-                5, VAT, obj.Tilephimoitruong.Value, thue,
-                tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
-                db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3,
-                thuNgan, obj.TuyenKHID.Value, obj.TTDoc.Value, tongCongCongDon, startDate, endDate);
-          
-          return RedirectToAction("Index", new { to = to, nhanvien = nhanvien, tuyen = tuyen, thang = thang, nam = nam });
+            insertToLichSuSuDungNuoc(id.Value, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau, ChiSoCuoi, Sum,
+                  SH1, cS.getSoTienTheoApGia("SH1").Value,
+                  SH2, cS.getSoTienTheoApGia("SH2").Value,
+                  SH3, cS.getSoTienTheoApGia("SH3").Value,
+                  SH4, cS.getSoTienTheoApGia("SH4").Value,
+                  HC, cS.getSoTienTheoApGia("HC").Value,
+                  CC, cS.getSoTienTheoApGia("CC").Value,
+                  SX, cS.getSoTienTheoApGia("SX-XD").Value,
+                  KD, cS.getSoTienTheoApGia("KDDV").Value,
+                  5, VAT, obj.Tilephimoitruong.Value, thue,
+                  tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
+                  db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3,
+                  thuNgan, obj.TuyenKHID.Value, obj.TTDoc.Value, tongCongCongDon, startDate, endDate);
+
+            return RedirectToAction("Index", new { to = to, nhanvien = nhanvien, tuyen = tuyen, thang = thang, nam = nam });
         }
 
         public string insertToLichSuSuDungNuoc(int HoaDonID, int thangHoaDon, int namHoaDon, String tenKH, String diaChi, String MST, String maKH, int TuyenKHID, String soHD,
@@ -955,8 +955,8 @@ namespace HoaDonNuocHaDong.Controllers
         /// </summary>
         public void tachSoTongHop(int HoaDonID, int cachTinh, int KhachHangID, double SanLuong)
         {
-            List<Apgiatonghop> _ls = db.Apgiatonghops.Where(p => p.KhachhangID == KhachHangID).ToList();           
-          
+            List<Apgiatonghop> _ls = db.Apgiatonghops.Where(p => p.KhachhangID == KhachHangID).ToList();
+
             double sanLuongThuc = 0;
 
             Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
@@ -1102,8 +1102,8 @@ namespace HoaDonNuocHaDong.Controllers
                     double SanLuongTong = 0;
                     int recordLeftAfterIteration = _ls.Count();
                     foreach (var item in _ls)
-                    {                        
-                        if (item.SanLuong != 0) 
+                    {
+                        if (item.SanLuong != 0)
                         {
                             if (item.IDLoaiApGia == KhachHang.KINHDOANHDICHVU)
                             {
@@ -1172,7 +1172,7 @@ namespace HoaDonNuocHaDong.Controllers
                             db.Entry(chiTiet).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
-                        
+
                         recordLeftAfterIteration--;
                     }
                 }//end cach tinh = 1 
@@ -1329,7 +1329,8 @@ namespace HoaDonNuocHaDong.Controllers
                                       ChiSoMoi = m.Chisomoi,
                                       SanLuong = i.Tongsotieuthu,
                                       ThuTuDoc = r.TTDoc,
-                                      SoHoaDon = t.TTThungan
+                                      SoHoaDon = t.TTThungan,
+                                      SoKhoan = i.SoKhoan
                                   }).ToList();
 
             //load danh sách khách hàng có áp giá đặc biệt
@@ -1340,12 +1341,12 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     danhSachHoaDonBatThuong.Add(item);
                 }
-                if (item.SanLuong >= sanLuongThangTruocCuaKhachHang * 2)
+                if (sanLuongThangTruocCuaKhachHang != -1 && item.SanLuong >= sanLuongThangTruocCuaKhachHang * 2)
                 {
                     danhSachHoaDonBatThuong.Add(item);
                 }
             }
-            ViewBag.khachHang = danhSachHoaDonBatThuong;
+            ViewBag.khachHang = danhSachHoaDonBatThuong.Distinct().ToList();
             ViewBag.currentDate = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month);
             ViewBag.nextMonth = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month + 1 > 12 ? 1 : DateTime.Now.Month + 1);
             ViewData["nhanVienObj"] = db.Nhanviens.Find(nhanvienInt);
@@ -1372,7 +1373,7 @@ namespace HoaDonNuocHaDong.Controllers
                                       }).FirstOrDefault();
             if (sanLuongThangTruoc == null)
             {
-                return 0;
+                return -1;
             }
             return sanLuongThangTruoc.SanLuong == null ? 0 : sanLuongThangTruoc.SanLuong.Value;
         }
