@@ -130,6 +130,7 @@ namespace HoaDonHaDong.Helper
                                    ChiSoMoi = m.Chisomoi,
                                    SanLuong = i.Tongsotieuthu,
                                    ThuTuDoc = r.TTDoc,
+                                   SoKhoan = i.SoKhoan,
                                    NgayKiHopDong = r.Ngaykyhopdong
                                }).ToList();
             return _hoaDonNuoc;

@@ -249,17 +249,17 @@
                                                     <td>
                                                         @if (isChot == null || isChot == false)
                                                         {
-                                                            <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="0" />
+                                                            <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                         }
                                                         else
                                                         {
                                                             if (cS.isChotHoaDon(hoaDonID))
                                                             {
-                                                                <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="0" />
+                                                                <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                             }
                                                             else
                                                             {
-                                                                <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="0" />
+                                                                <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                             }
                                                         }
                                                     </td>

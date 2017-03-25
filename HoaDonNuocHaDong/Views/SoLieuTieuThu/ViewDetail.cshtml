@@ -56,7 +56,7 @@
                             <button type="submit" class="btn btn-success">Trở lại</button>
                         </form>
 
-                        <form action="/Solieutieuthu/chotSoLieu?tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
+                        <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
                             @if (tuyenDuocChot == 0)
                             {
                                 <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
@@ -175,7 +175,7 @@
                                         <td>@item.SoKhoan</td>
                                         <!-- Nếu chỉ số sản lượng != chỉ số mới - chỉ số cũ thì hiện chữ màu đỏ-->
                                         <td>
-                                            <input class="sanLuong" data-khachhangid="@item.KHID"
+                                            <input disabled class="sanLuong" data-khachhangid="@item.KHID"
                                                    style="color:red;width:80%;font-size:15px" value="@item.SanLuong"
                                                    data-month="@item.Thang"
                                                    data-year="@item.Nam" />
@@ -257,7 +257,7 @@
             var isConfirmed = confirm("Danh sách này có khách hàng có sản lượng không bình thường. Bạn có muốn chỉnh sửa không?. ");
             //nếu muốn chỉnh sửa sản lượng không BT thì load trang load không bình thường
             if (isConfirmed) {
-                window.open("/solieutieuthu/loadkhongbt?tuyenID=@selectedTuyen&month=@month&year=@year&nhanvienInt=@nhanVienQLy");
+                window.open("/solieutieuthu/loadkhongbt?toID=@Request.QueryString["toID"]&tuyenID=@selectedTuyen&month=@month&year=@year&nhanvienInt=@nhanVienQLy");
             }
 
             </text>

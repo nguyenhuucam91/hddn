@@ -38,8 +38,8 @@
 
                     <div class="widget-content">
                         <div class="form-actions">
-                            <form action="/Solieutieuthu/chotSoLieu?tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
-                                <button type="button" onclick="location.href='@Url.Action("ViewDetail", new { tuyenID = tuyenID,month = month,year = year, nvquanly = nVQuanLi })'" class="btn btn-success">Trở lại</button>
+                            <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
+                                <button type="button" onclick="location.href='@Url.Action("ViewDetail", new { toID=Request.QueryString["toID"], tuyenID = tuyenID,month = month,year = year, nvquanly = nVQuanLi })'" class="btn btn-success">Trở lại</button>
                                 <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
                             </form>
                         </div> <!-- /form-actions -->
