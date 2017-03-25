@@ -549,95 +549,25 @@ namespace HoaDonNuocHaDong.Controllers
             //tuyến ống
             if (type == 0)
             {
-                List<BaoCaoTongHopSanLuong> ls = xemDanhSachBaoCaoSanLuongTheoTuyenOng();
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenOng();
                 ViewBag.tong = ls;
             }
             //tuyến
             else if (type == 1)
             {
-                var ls = (from i in db.Lichsuhoadons
-                          group i by i.TuyenKHID into g
-                          join t in db.Tuyenkhachhangs on g.FirstOrDefault().TuyenKHID equals t.TuyenKHID
-                          select new
-                          {
-                              TenTuyen = t.Ten,
-                              SH1Sum = g.Sum(p => p.SH1),
-                              SH2Sum = g.Sum(p => p.SH2),
-                              SH3Sum = g.Sum(p => p.SH3),
-                              SH4Sum = g.Sum(p => p.SH4),
-                              CCSum = g.Sum(p => p.CC),
-                              HCSum = g.Sum(p => p.HC),
-                              SXSum = g.Sum(p => p.SX),
-                              KDSum = g.Sum(p => p.KD),
-                              TongSL = g.Sum(p => p.SH1) + g.Sum(p => p.SH2) + g.Sum(p => p.SH3) + g.Sum(p => p.SH4) + g.Sum(p => p.CC) + g.Sum(p => p.HC) + g.Sum(p => p.SX) + g.Sum(p => p.KD),
-                              SLTruocThue = g.Sum(p => p.SH1) * g.FirstOrDefault().SH1Price + g.Sum(p => p.SH2) * g.FirstOrDefault().SH2Price + g.Sum(p => p.SH3) * g.FirstOrDefault().SH3Price + g.Sum(p => p.SH4) * g.FirstOrDefault().SH4Price
-                              + g.Sum(p => p.CC) * g.FirstOrDefault().CCPrice + g.Sum(p => p.HC) * g.FirstOrDefault().HCPrice + g.Sum(p => p.SX) * g.FirstOrDefault().SXPrice + g.Sum(p => p.KD) * g.FirstOrDefault().KDPrice,
-                              TongVAT = g.Sum(p => p.ThueSuatPrice),
-                              TongBVMT = g.Sum(p => p.PhiBVMT),
-                              TongCong = g.Sum(p => p.TongCong)
-                          }).ToList();
-
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenKH();
                 ViewBag.tong = ls;
             }
             //nhân viên
             else if (type == 2)
             {
-                var ls = (from i in db.Lichsuhoadons
-                          join r in db.Hoadonnuocs on i.HoaDonID equals r.HoadonnuocID
-                          join s in db.Khachhangs on r.KhachhangID equals s.KhachhangID
-                          join t in db.Tuyentheonhanviens on s.TuyenKHID equals t.TuyenKHID
-                          join n in db.Nhanviens on t.NhanVienID equals n.NhanvienID
-                          group i by new { n.Ten } into g
-                          select new
-                          {
-                              TenTuyen = g.Key.Ten,
-                              SH1Sum = g.Sum(p => p.SH1),
-                              SH2Sum = g.Sum(p => p.SH2),
-                              SH3Sum = g.Sum(p => p.SH3),
-                              SH4Sum = g.Sum(p => p.SH4),
-                              CCSum = g.Sum(p => p.CC),
-                              HCSum = g.Sum(p => p.HC),
-                              SXSum = g.Sum(p => p.SX),
-                              KDSum = g.Sum(p => p.KD),
-                              TongSL = g.Sum(p => p.SH1) + g.Sum(p => p.SH2) + g.Sum(p => p.SH3) + g.Sum(p => p.SH4) + g.Sum(p => p.CC) + g.Sum(p => p.HC) + g.Sum(p => p.SX) + g.Sum(p => p.KD),
-                              SLTruocThue = g.Sum(p => p.SH1) * g.FirstOrDefault().SH1Price + g.Sum(p => p.SH2) * g.FirstOrDefault().SH2Price + g.Sum(p => p.SH3) * g.FirstOrDefault().SH3Price + g.Sum(p => p.SH4) * g.FirstOrDefault().SH4Price
-                              + g.Sum(p => p.CC) * g.FirstOrDefault().CCPrice + g.Sum(p => p.HC) * g.FirstOrDefault().HCPrice + g.Sum(p => p.SX) * g.FirstOrDefault().SXPrice + g.Sum(p => p.KD) * g.FirstOrDefault().KDPrice,
-                              TongVAT = g.Sum(p => p.ThueSuatPrice),
-                              TongBVMT = g.Sum(p => p.PhiBVMT),
-                              TongCong = g.Sum(p => p.TongCong)
-                          }).ToList();
-
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien();
                 ViewBag.tong = ls;
             }
             //tổ kĩ thuật
             else if (type == 3)
             {
-                var ls = (from i in db.Lichsuhoadons
-                          join r in db.Hoadonnuocs on i.HoaDonID equals r.HoadonnuocID
-                          join s in db.Khachhangs on r.KhachhangID equals s.KhachhangID
-                          join t in db.Tuyentheonhanviens on s.TuyenKHID equals t.TuyenKHID
-                          join n in db.Nhanviens on t.NhanVienID equals n.NhanvienID
-                          join p in db.ToQuanHuyens on n.ToQuanHuyenID equals p.ToQuanHuyenID
-                          group i by new { p.Ma } into g
-                          select new
-                          {
-                              TenTuyen = g.Key.Ma,
-                              SH1Sum = g.Sum(p => p.SH1),
-                              SH2Sum = g.Sum(p => p.SH2),
-                              SH3Sum = g.Sum(p => p.SH3),
-                              SH4Sum = g.Sum(p => p.SH4),
-                              CCSum = g.Sum(p => p.CC),
-                              HCSum = g.Sum(p => p.HC),
-                              SXSum = g.Sum(p => p.SX),
-                              KDSum = g.Sum(p => p.KD),
-                              TongSL = g.Sum(p => p.SH1) + g.Sum(p => p.SH2) + g.Sum(p => p.SH3) + g.Sum(p => p.SH4) + g.Sum(p => p.CC) + g.Sum(p => p.HC) + g.Sum(p => p.SX) + g.Sum(p => p.KD),
-                              SLTruocThue = g.Sum(p => p.SH1) * g.FirstOrDefault().SH1Price + g.Sum(p => p.SH2) * g.FirstOrDefault().SH2Price + g.Sum(p => p.SH3) * g.FirstOrDefault().SH3Price + g.Sum(p => p.SH4) * g.FirstOrDefault().SH4Price
-                              + g.Sum(p => p.CC) * g.FirstOrDefault().CCPrice + g.Sum(p => p.HC) * g.FirstOrDefault().HCPrice + g.Sum(p => p.SX) * g.FirstOrDefault().SXPrice + g.Sum(p => p.KD) * g.FirstOrDefault().KDPrice,
-                              TongVAT = g.Sum(p => p.ThueSuatPrice),
-                              TongBVMT = g.Sum(p => p.PhiBVMT),
-                              TongCong = g.Sum(p => p.TongCong)
-                          }).ToList();
-
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoToQuanHuyen();
                 ViewBag.tong = ls;
             }
 
@@ -645,11 +575,68 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        public List<BaoCaoTongHopSanLuong> xemDanhSachBaoCaoSanLuongTheoTuyenOng()
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoTuyenOng()
         {
             DateTime currentDate = DateTime.Now;
             ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
             List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoTuyenOng", 
+                new SqlParameter("@d1", currentDate.Month),
+                new SqlParameter("@d2", currentDate.Year),
+                new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
+                new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
+                new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
+                new SqlParameter("@SH4Price", chiSo.getSoTienTheoApGia("SH4")),
+                new SqlParameter("@CCPrice", chiSo.getSoTienTheoApGia("CC")),
+                new SqlParameter("@HCPrice", chiSo.getSoTienTheoApGia("HC")),
+                new SqlParameter("@SXXDPrice", chiSo.getSoTienTheoApGia("SXXD")),
+                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV"))
+                );
+            return lst;
+        }
+
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoTuyenKH()
+        {
+            DateTime currentDate = DateTime.Now;
+            ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
+            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoTuyenKhachHang",
+                new SqlParameter("@d1", currentDate.Month),
+                new SqlParameter("@d2", currentDate.Year),
+                new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
+                new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
+                new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
+                new SqlParameter("@SH4Price", chiSo.getSoTienTheoApGia("SH4")),
+                new SqlParameter("@CCPrice", chiSo.getSoTienTheoApGia("CC")),
+                new SqlParameter("@HCPrice", chiSo.getSoTienTheoApGia("HC")),
+                new SqlParameter("@SXXDPrice", chiSo.getSoTienTheoApGia("SXXD")),
+                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV"))
+                );
+            return lst;
+        }
+
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoNhanvien()
+        {
+            DateTime currentDate = DateTime.Now;
+            ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
+            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoNhanvien",
+                new SqlParameter("@d1", currentDate.Month),
+                new SqlParameter("@d2", currentDate.Year),
+                new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
+                new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
+                new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
+                new SqlParameter("@SH4Price", chiSo.getSoTienTheoApGia("SH4")),
+                new SqlParameter("@CCPrice", chiSo.getSoTienTheoApGia("CC")),
+                new SqlParameter("@HCPrice", chiSo.getSoTienTheoApGia("HC")),
+                new SqlParameter("@SXXDPrice", chiSo.getSoTienTheoApGia("SXXD")),
+                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV"))
+                );
+            return lst;
+        }
+
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoToQuanHuyen()
+        {
+            DateTime currentDate = DateTime.Now;
+            ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
+            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoToQuanHuyen",
                 new SqlParameter("@d1", currentDate.Month),
                 new SqlParameter("@d2", currentDate.Year),
                 new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
