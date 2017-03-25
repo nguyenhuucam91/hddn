@@ -19,7 +19,7 @@ namespace HoaDonNuocHaDong.Controllers
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
         public ActionResult Index()
-        {                        
+        {
             ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             ViewBag.phongBan = db.Phongbans.ToList();
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
@@ -28,12 +28,12 @@ namespace HoaDonNuocHaDong.Controllers
             if (phongBanId != 0)
             {
                 nguoidungs = (from i in db.Nguoidungs
-                                  join r in db.Nhanviens on i.NhanvienID equals r.NhanvienID
-                                  where r.PhongbanID == phongBanId
-                                  select new
-                                  {
-                                      nguoiDung = i
-                                  }).Select(p => p.nguoiDung).ToList();
+                              join r in db.Nhanviens on i.NhanvienID equals r.NhanvienID
+                              where r.PhongbanID == phongBanId
+                              select new
+                              {
+                                  nguoiDung = i
+                              }).Select(p => p.nguoiDung).ToList();
             }
             else
             {
@@ -124,6 +124,7 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Nguoidung/Create
         public ActionResult Create()
         {
+            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
             ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
             return View();
         }
@@ -190,6 +191,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
             return View(nguoidung);
         }
 
@@ -254,6 +256,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag.selectedNhanVien = nguoidung.NhanvienID;
             ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
             return View(nguoidung);
         }
 

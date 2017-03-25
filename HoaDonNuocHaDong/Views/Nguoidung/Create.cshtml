@@ -6,6 +6,7 @@
     var passwordMesg = ViewBag.passwordMesg;
     var nhanVien = ViewBag.NhanvienID;
     var isDuplicate = ViewBag.isDuplicate;
+    var isAdmin = ViewBag.isAdmin;
 }
 
 @using (Html.BeginForm("Create", "Nguoidung"))
@@ -29,7 +30,7 @@
                                             @Html.EditorFor(model => model.Taikhoan)
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Taikhoan)
-                                            @if (isDuplicate!=null)
+                                            @if (isDuplicate != null)
                                             {
                                                 <span class="red">Người dùng này đã có trong cơ sở dữ liệu</span>
                                             }
@@ -56,17 +57,29 @@
                                     </div>
 
                                     <!-- Là admin hay không -->
-                                    <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-4 pull-left">
-                                            <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
-                                            <input type="radio" value="1" name="isAdmin" checked /> Có
-                                            <input type="radio" value="0" name="isAdmin" style="margin-left:15px" /> Không
+                                    @if (isAdmin == true)
+                                    {
+                                        <div class="row" style="margin: 1% 0 0 0%">
+                                            <div class="col-md-4 pull-left">
+                                                <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
+                                                <input type="radio" value="1" name="isAdmin" checked /> Có
+                                                <input type="radio" value="0" name="isAdmin" style="margin-left:15px" /> Không
+                                            </div>
                                         </div>
-                                    </div>
-
+                                    }
+                                    else
+                                    {
+                                        <div class="row" style="margin: 1% 0 0 0%">
+                                            <div class="col-md-4 pull-left">
+                                                <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
+                                                
+                                                <input type="radio" value="0" name="isAdmin" style="margin-left:15px" checked /> Không
+                                            </div>
+                                        </div>
+                                    }
                                     <!-- Nhân viên-->
                                     <div class="row nhanVienRadio hide" style="margin: 1% 0 0 0%">
-                                        <div class="span7 pull-left">
+                                        <div class="span10 pull-left">
                                             <label for="" class="control-label">Nhân viên:</label>&nbsp;&nbsp;
 
                                             <select name="NhanvienID" class="dropdown nhanvien" style="width:80%">

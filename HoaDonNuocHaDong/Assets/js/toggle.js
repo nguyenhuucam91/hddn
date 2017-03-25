@@ -6,6 +6,12 @@
 })
 //Ẩn hiện cột nhân viên
 $(function () {
+    if ($("input[name='isAdmin']").val() == "1") {
+        $(".nhanVienRadio").addClass('hide');
+    } else {
+        $(".nhanVienRadio").removeClass('hide');
+    }
+
     //nếu admin được check thì ẩn danh sách nhân viên đi (addClass hide), nếu nhân viên được check sẽ hiện danh sách nhân viên lên (removeClass hide)
     $("input[name='isAdmin']").click(function () {
         var isAdminValue = $(this).val();
@@ -14,7 +20,7 @@ $(function () {
         } else {
             $(".nhanVienRadio").removeClass('hide');
         }
-    })
+    });   
 });
 
 //Unlock account
