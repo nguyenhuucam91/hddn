@@ -21,7 +21,16 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Index()
         {
             ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
-            ViewBag.phongBan = db.Phongbans.ToList();
+            int phongbanId = getPhongBanNguoiDung();
+            if (phongbanId == 0)
+            {
+                ViewBag.phongBan = db.Phongbans.ToList();
+            }
+            else
+            {
+                ViewBag.phongBan = db.Phongbans.Where(p=>p.PhongbanID == phongbanId).ToList();
+            }
+            
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             int phongBanId = getPhongBanNguoiDung();
             var nguoidungs = new List<Nguoidung>();
@@ -101,7 +110,15 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
-            ViewBag.phongBan = db.Phongbans.ToList();
+            int phongbanId = getPhongBanNguoiDung();
+            if (phongbanId == 0)
+            {
+                ViewBag.phongBan = db.Phongbans.ToList();
+            }
+            else
+            {
+                ViewBag.phongBan = db.Phongbans.Where(p => p.PhongbanID == phongbanId).ToList();
+            }
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             return View(nguoiDung.OrderByDescending(p => p.NguoidungID).ToList());
         }
@@ -256,7 +273,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag.selectedNhanVien = nguoidung.NhanvienID;
             ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
-            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
+            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
             return View(nguoidung);
         }
 
