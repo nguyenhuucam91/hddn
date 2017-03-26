@@ -149,9 +149,7 @@
                                         <tbody>
                                             @{
                                             int i = 1;
-                                            int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
-                                            int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
-                                            }
+                                          
                                             @foreach (var item in kH)
                                             {
                                                 int hoaDonID = item.HoaDonNuocID;
@@ -167,7 +165,6 @@
                                                     @{
                                                 HoaDonHaDongEntities db = new HoaDonHaDongEntities();
                                                 Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
-                                                Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == nextMonthReceiptNumber && p.NamHoaDon == nextYearReceiptNumber);
                                                     }
 
                                                     <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
