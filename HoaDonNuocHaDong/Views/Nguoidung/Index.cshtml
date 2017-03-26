@@ -100,7 +100,11 @@
                                             @{
                                             HoaDonHaDongEntities db = new HoaDonHaDongEntities();
                                             Dangnhap dangNhap = db.Dangnhaps.FirstOrDefault(p => p.NguoidungID == item.NguoidungID);
-                                            String lockStatus = dangNhap.Trangthaikhoa == true ? "Khóa" : "";
+                                            if (dangNhap != null)
+                                            {
+                                                String lockStatus = dangNhap.Trangthaikhoa == true ? "Khóa" : "";
+                                            }
+                                            
                                             }
 
                                             <td><label class="lockStatus">@lockStatus</label></td>
