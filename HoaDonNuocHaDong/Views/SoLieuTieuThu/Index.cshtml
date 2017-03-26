@@ -190,19 +190,20 @@
                                                                    value="@String.Format("{0:dd/MM/yyyy}",khachHangData.Ngaykyhopdong)" />
                                                         </td>
                                                     }
+
                                                     <td class="endDate">
                                                         @if (nextMonthReceipt != null)
                                                         {
                                                             if (!cS.isChotHoaDon(hoaDonID))
                                                             {
                                                                 <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                       value="@String.Format("{0:dd/MM/yyyy}", nextMonthReceipt.Ngaybatdausudung)"
+                                                                       value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
                                                                        data-hoadonid="@item.HoaDonNuocID" />
                                                             }
                                                             else
                                                             {
                                                                 <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                       value="@String.Format("{0:dd/MM/yyyy}", nextMonthReceipt.Ngaybatdausudung)"
+                                                                       value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
                                                                        data-hoadonid="@item.HoaDonNuocID" />
                                                             }
                                                         }
