@@ -416,7 +416,15 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
-            ViewBag.Phongban = db.ToQuanHuyens.Where(p => p.IsDelete == false);
+           
+            if (phongBanId == 0)
+            {
+                ViewBag.Phongban = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
+            }
+            else
+            {
+                ViewBag.Phongban = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId);
+            }
             ViewBag.chucVu = db.Chucvus;
             ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             return View("Index", nhanVien);
