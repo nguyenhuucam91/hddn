@@ -6,7 +6,8 @@
 })
 //Ẩn hiện cột nhân viên
 $(function () {
-    if ($("input[name='isAdmin']").val() == "1") {
+    var isAdmin = $("input[name='isAdmin']:checked").val();
+    if (isAdmin == "1") {
         $(".nhanVienRadio").addClass('hide');
     } else {
         $(".nhanVienRadio").removeClass('hide');

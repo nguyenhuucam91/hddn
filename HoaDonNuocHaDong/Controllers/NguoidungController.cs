@@ -236,13 +236,14 @@ namespace HoaDonNuocHaDong.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "NguoidungID,NhanvienID,Taikhoan,Matkhau")] Nguoidung nguoidung, FormCollection form)
+        public ActionResult Edit([Bind(Include = "NguoidungID,NhanvienID,Taikhoan,Matkhau")] Nguoidung nguoidung, int id, FormCollection form)
         {
 
             String repeatMK = form["RepeatMatKhau"];
             //lấy giá trị checkbox
             String isAdmin = form["isAdmin"];
 
+            Nguoidung currentlyEditedNguoiDung = db.Nguoidungs.Find(id);
             //nếu trùng mật khâu nhập đi vs mật khẩu nhập lại thì mới add record, nếu sai thì đưa ra thông báo trùng
             if (repeatMK.Equals(nguoidung.Matkhau))
             {
@@ -250,17 +251,17 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     String matKhau = nguoidung.Matkhau;
                     String firstHash = String.Concat(UserInfo.CreateMD5(matKhau).ToLower(), matKhau);
-                    nguoidung.Matkhau = UserInfo.CreateMD5(firstHash).ToLower();
+                    currentlyEditedNguoiDung.Matkhau = UserInfo.CreateMD5(firstHash).ToLower();
                     //lưu record người dùng vào CSDL                
                     if (Convert.ToInt32(isAdmin) == 1)
                     {
-                        nguoidung.Isadmin = true;
+                        currentlyEditedNguoiDung.Isadmin = true;
                     }
                     else
                     {
-                        nguoidung.Isadmin = false;
+                        currentlyEditedNguoiDung.Isadmin = false;
                     }
-                    db.Entry(nguoidung).State = EntityState.Modified;
+                    db.Entry(currentlyEditedNguoiDung).State = EntityState.Modified;
                     //lưu thay đổi vào hệ thống
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -274,7 +275,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedNhanVien = nguoidung.NhanvienID;
             ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
-            return View(nguoidung);
+            return View(currentlyEditedNguoiDung);
         }
 
         // GET: /Nguoidung/Delete/5
