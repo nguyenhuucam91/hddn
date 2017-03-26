@@ -306,7 +306,7 @@ $("table tbody tr td input").click(function () {
     $('.detail-focused').removeClass('detail-focused');
     $(this).addClass('detail-focused');
     $("table tbody tr td input").attr("autofocus", false);
-    $(this).attr("autofocus", true);   
+    $(this).attr("autofocus", true);
 });
 
 //nếu như ngày bắt đầu và ngày kết thúc để trống thì tải lại trang để cập nhật vào ô ngày bắt đầu và ngày kết thúc tương ứng của khách hàng
@@ -315,7 +315,7 @@ $(document).ready(function () {
     localStorage.removeItem("startDate");
     localStorage.removeItem("endDate");
     $("#endDateFixedTop").datepicker().on('changeDate', function (ev) {
-       localStorage.setItem("endDate", $(this).val());
+        localStorage.setItem("endDate", $(this).val());
     });
 });
 
@@ -406,7 +406,7 @@ $("input[name='soKhoan']").change(function () {
         datatype: "json",
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify({ HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoanInputValue, KHID: KHID, dateStart: dateStart, dateEnd: dateEnd, sohoadon : soHoaDon }),        
+        data: JSON.stringify({ HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoanInputValue, KHID: KHID, dateStart: dateStart, dateEnd: dateEnd, sohoadon: soHoaDon }),
     });
 });
 
@@ -535,8 +535,8 @@ $(document).ready(function () {
         var hoaDonID = $(this).data('hoadonid');
         var khID = $(this).data("khid");
         var newVal = $(this).val();
-        var month = $("input[name='thang']").val();
-        var year = $("input[name='nam']").val();
+        var month = parseInt($("input[name='thang']").val());
+        var year = parseInt($("input[name='nam']").val());
         var nextMonth = parseInt(month) + 1 > 12 ? 1 : parseInt(month) + 1;
         var nextYear = parseInt(month) + 1 > 12 ? parseInt(year) + 1 : parseInt(year);
 
@@ -545,7 +545,13 @@ $(document).ready(function () {
             dataType: "json",
             method: "GET",
             contentType: "application/json",
-            data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thang: nextMonth, nam: nextYear },          
+            data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thangNay: month, thangSau: nextMonth, namNay: year, namSau: nextYear },
+            success: function (result) {
+                console.log('123');
+            },
+            error: function (result) {
+                console.log('222');
+            }
         });
     });
 });
