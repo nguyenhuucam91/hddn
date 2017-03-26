@@ -322,6 +322,7 @@
     <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoThatThoat.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoTongHopKhachHangQuanLy.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoTongHopSanLuong.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangApGiaChung.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCacLoaiGiaKhac.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCapNuocTroLai.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCoGhiChu.cs" />
@@ -355,6 +356,7 @@
     <Compile Include="Models\SoLieuTieuThu\HoaDonNuoc.cs" />
     <Compile Include="Models\ToQuanHuyen\ToQuanHuyen.cs" />
     <Compile Include="Models\TuyenKhachHang\TuyenKhachHang.cs" />
+    <Compile Include="Models\Tuyenong\ChiSoCap.cs" />
     <Compile Include="Nguoidung.cs">
       <DependentUpon>HoaDonHaDong.tt</DependentUpon>
     </Compile>

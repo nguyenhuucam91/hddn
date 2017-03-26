@@ -52,3 +52,5 @@ F:\Project\hddn\HDNHD.Core\bin\System.Web.WebPages.Razor.xml
 F:\Project\hddn\HDNHD.Core\obj\Debug\HDNHD.Core.csprojResolveAssemblyReference.cache
 F:\Project\hddn\HDNHD.Core\obj\Debug\HDNHD.Core.dll
 F:\Project\hddn\HDNHD.Core\obj\Debug\HDNHD.Core.pdb
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Mvc.dll
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Mvc.xml
