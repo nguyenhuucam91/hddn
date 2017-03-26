@@ -103,9 +103,9 @@
                                             String lockStatus = "";
                                             if (dangNhap != null)
                                             {
-                                               lockStatus = dangNhap.Trangthaikhoa == true ? "Khóa" : "";
+                                                lockStatus = dangNhap.Trangthaikhoa == true ? "Khóa" : "";
                                             }
-                                            
+
                                             }
 
                                             <td><label class="lockStatus">@lockStatus</label></td>
@@ -130,11 +130,13 @@
                                             }
 
                                             <td>
-
-                                                @if (dangNhap.Trangthaikhoa == true)
+                                                @if (dangNhap != null)
                                                 {
-                                                    <a href="javascript:void(0)" class="unlockAcc" data-rowid="@item.NguoidungID">Mở khóa</a>
-                                                    <span>|</span>
+                                                    if (dangNhap.Trangthaikhoa == true)
+                                                    {
+                                                        <a href="javascript:void(0)" class="unlockAcc" data-rowid="@item.NguoidungID">Mở khóa</a>
+                                                        <span>|</span>
+                                                    }
                                                 }
 
                                                 @if (loggedInUserIsAdmin != null)
