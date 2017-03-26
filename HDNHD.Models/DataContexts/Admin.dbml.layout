@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="Admin">
-  <DataContextMoniker Name="/AdminDataContext" />
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="AdminMembership">
+  <DataContextMoniker Name="/AdminMembershipDataContext" />
   <nestedChildShapes>
-    <classShape Id="9058c366-3bb2-4fef-be96-3e5171f26000" absoluteBounds="1.875, 2.25, 2, 1.7708968098958331">
-      <DataClassMoniker Name="/AdminDataContext/Nguoidung" />
+    <classShape Id="df02ef2a-68f2-4389-a503-02da62b42453" absoluteBounds="1.125, 0.75, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/AdminMembershipDataContext/Nguoidung" />
       <nestedChildShapes>
-        <elementListCompartment Id="5a5e1c3b-959b-4b79-8145-e9e93c1392ba" absoluteBounds="1.8900000000000001, 2.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f535600a-f8ed-46f3-a055-a14afe6b8b30" absoluteBounds="1.1399999999999997, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="f8524309-41aa-45d1-879a-221f5edda93e" absoluteBounds="4.875, 2.5, 2, 1.9631982421875">
-      <DataClassMoniker Name="/AdminDataContext/Dangnhap" />
+    <classShape Id="de5ae72d-4bd8-4be0-b272-0184a1245f54" absoluteBounds="4.625, 0.75, 2, 1.9631982421875">
+      <DataClassMoniker Name="/AdminMembershipDataContext/Dangnhap" />
       <nestedChildShapes>
-        <elementListCompartment Id="6a867045-562a-4f49-bd8f-32b4157c6829" absoluteBounds="4.89, 2.96, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="0c18a56f-abf2-45cd-a34a-ac024f3cd5bb" absoluteBounds="4.64, 1.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(3.875 : 3.26044840494792); (4.875 : 3.26044840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/AdminDataContext/Nguoidung/Nguoidung_Dangnhap" />
+    <associationConnector edgePoints="[(3.125 : 1.63544840494792); (4.625 : 1.63544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/AdminMembershipDataContext/Nguoidung/Nguoidung_Dangnhap" />
       <nodes>
-        <classShapeMoniker Id="9058c366-3bb2-4fef-be96-3e5171f26000" />
-        <classShapeMoniker Id="f8524309-41aa-45d1-879a-221f5edda93e" />
+        <classShapeMoniker Id="df02ef2a-68f2-4389-a503-02da62b42453" />
+        <classShapeMoniker Id="de5ae72d-4bd8-4be0-b272-0184a1245f54" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

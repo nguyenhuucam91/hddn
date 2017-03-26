@@ -10,14 +10,18 @@
                             <h3>Báo cáo dư nợ</h3>
                         </div>
                         <div class="widget-content">
-                            <h4>Danh sách khách hàng chưa thanh toán: </h4>
                             <div class="tabable">
-                                @Html.Partial("_BaoCaoFilter")
+                                <ul class="nav nav-tabs">
+                                    @*<li class="active"><a href="#tab-khuvuc" data-toggle="tab">Danh sách thu</a></li>*@
+                                    <li><a href="#tab-nhanvien" data-toggle="tab">Danh sách khách hàng chưa thanh toán</a></li>
+                                    <li><a href="@Url.Action("BaoCaoDuNo","Congno")">Báo cáo dư có</a></li>
+                                </ul>
                                 <div class="tab-content">
                                     <!-- Danh sachs bao gồm khách hàng không thanh toán công nợ từ tháng trước -->
-                                    <div class="tab-pane active" id="tab-nhanvien">
+                                    <div class="tab-pane active" id="tab-nhanvien" style="width:95%; margin: auto">
                                         <div>
-                                            <table class="table table-striped table-bordered data-table">
+                                            <span style="color:red; font-size:11px;">Danh sách khách hàng chưa thanh toán</span>
+                                            <table id="example2" class="unlimited table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>Mã khách hàng</th>
@@ -33,9 +37,8 @@
                                                     @{ double tong = 0; }
                                                     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuNoModel item in Model)
                                                     {
-                                                        if (item.HoaDon.SoTienNopTheoThang != null)
-                                                        {
-                                                            tong += item.HoaDon.SoTienNopTheoThang.SoTienPhaiNop ?? 0;
+                                                        if (item.HoaDon.SoTienNopTheoThang != null) {
+                                                            tong = item.HoaDon.SoTienNopTheoThang.SoTienPhaiNop ?? 0;
                                                         }
                                                         <tr>
                                                             <td>@item.KhachHang.MaKhachHang</td>
@@ -55,13 +58,16 @@
                                                     }
                                                 </tbody>
                                                 <tfoot>
-                                                    <tr role="row" style="font-weight:bold">
-                                                        <td colspan="5" style="text-align: right">Tổng</td>
-                                                        <td colspan="2">@tong</td>
+                                                    <tr role="row">
+                                                        <td>Tổng</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>@tong</td>
+                                                        <td></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
-                                            @Html.Partial("_Pager", (object)ViewBag.Pager)
                                         </div>
                                     </div>
                                 </div>
@@ -73,7 +79,7 @@
         </div>
     </div>
 </div>
-@*<!-- modal box cho chọn tên -->
+<!-- modal box cho chọn tên -->
 <div id="myModal" class="modal fade" role="dialog" style="top:50%">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -84,6 +90,7 @@
             </div>
             <div class="modal-body">
                 <h5><a href="profile.html">Xem chi tiết thông tin cá nhân</a></h5>
+
                 <div id="thongtin"></div>
             </div>
             <div class="modal-footer">
@@ -93,31 +100,4 @@
 
     </div>
 </div>
-<!-- end modal -->*@
-
-@section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // onInit:
-            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
-
-        });
-
-        // load data onChange
-        $(".sl-quan-huyen").on("change", function () {
-            // get selected quanHuyenID
-            var quanHuyenID = $(this).val();
-
-            // loadTo
-            loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID");
-        });
-
-        $(".sl-to").on("change", function () {
-            // get selected toID
-            var toID = $(this).val();
-
-            // loadNhanVien
-            loadNhanVien($(".sl-nhan-vien"), toID, "@ViewBag.Filter.NhanVienID");
-        });
-    </script>
-}
+<!-- end modal -->

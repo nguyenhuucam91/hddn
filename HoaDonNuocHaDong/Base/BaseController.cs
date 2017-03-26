@@ -1,5 +1,4 @@
-﻿using HDNHD.Core.Constants;
-using HDNHD.Core.Controllers;
+﻿using HDNHD.Core.Controllers;
 using HDNHD.Core.Models;
 using HDNHD.Models.Constants;
 using HoaDonNuocHaDong.Models.KhachHang;
@@ -22,7 +21,7 @@ namespace HoaDonNuocHaDong.Base
         protected HDNHD.Models.DataContexts.Phongban phongBan;
 
         // view data
-        protected string title = "hdn";
+        protected string title;
 
         public BaseController()
         {
@@ -86,19 +85,6 @@ namespace HoaDonNuocHaDong.Base
         {
             uow.Dispose();
             base.Dispose(disposing);
-        }
-
-        public ViewResult ExcelResult(String view, object data)
-        {
-            Response.Clear();
-            //Response.Buffer = true;
-            Response.ContentType = "application/vnd.ms-excel";
-            Response.ContentEncoding = System.Text.Encoding.UTF8;
-            Response.Charset="utf-8"; 
-            Response.AddHeader("Content-Disposition",
-                String.Format(@"attachment; filename={0}.xls", HDNHD.Core.Helpers.StringHelpers.GenerateSlug(title)));
-
-            return View(view, data);
         }
     }
 }

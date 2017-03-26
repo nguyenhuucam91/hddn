@@ -38,11 +38,8 @@ namespace HDNHD.Core.Models
             ApplyFilter(ref items);
             pager.NoItems = items.Count();
 
-            if (pager.PageSize != Pager.SHOW_ALL)
-            {
-                items = items.Skip((pager.Page - 1) * pager.PageSize);
-                items = items.Take(pager.PageSize);
-            }
+            items.Skip((pager.Page - 1) * pager.PageSize);
+            items.Take(pager.PageSize);
         }
 
         #region utils

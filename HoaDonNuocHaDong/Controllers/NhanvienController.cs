@@ -22,7 +22,16 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Index()
         {
             ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
-            ViewBag.Phongban = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
+            int phongBanId = getPhongBanNguoiDung();
+            if (phongBanId == 0)
+            {
+                ViewBag.Phongban = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
+            }
+            else
+            {
+                ViewBag.Phongban = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId);
+            }
+            
             ViewBag.chucVu = db.Chucvus;
             ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
 
@@ -384,9 +393,17 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult FilterNhanVien(FormCollection form)
         {
+            int phongBanId = getPhongBanNguoiDung();
             int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-
-            List<Nhanvien> nhanVien = db.Nhanviens.Include(n => n.Chucvu).Include(n => n.Phongban).Where(p => p.IsDelete == false).ToList();
+            List<Nhanvien> nhanVien = db.Nhanviens.ToList();
+            if (phongBanId == 0)
+            {
+                nhanVien = db.Nhanviens.Include(n => n.Chucvu).Include(n => n.Phongban).Where(p => p.IsDelete == false).ToList();
+            }
+            else
+            {
+                nhanVien = db.Nhanviens.Where(p=>p.PhongbanID == phongBanId).Include(n => n.Chucvu).Include(n => n.Phongban).Where(p => p.IsDelete == false).ToList();
+            }
             //nếu chi nhánh = "" thì lấy tất
             if (to != 0)
             {

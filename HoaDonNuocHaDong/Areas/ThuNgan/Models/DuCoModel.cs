@@ -12,6 +12,5 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public HDNHD.Models.DataContexts.Nhanvien NhanVien { get; set; }
 
         public HDNHD.Models.DataContexts.DuCo DuCo { get; set; }
-        public HDNHD.Models.DataContexts.Tuyenkhachhang TuyenKH { get; set; }
     }
 }

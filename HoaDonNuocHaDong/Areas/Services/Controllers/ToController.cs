@@ -18,20 +18,22 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
         {
             toRepository = uow.Repository<ToRepository>();
         }
-        
-        /// <summary>
-        /// returns list of ToQuanHuyen of the specified <tt>quanHuyenID</tt> 
-        ///     customized by <tt>this.phongBan</tt> if exist
-        /// </summary>
+
         public AjaxResult GetByQuanHuyenID(int quanHuyenID) {
             var tos = toRepository.GetByQuanHuyenID(quanHuyenID);
 
-            if (phongBan != null)
-            {
-                tos = tos.Where(m => m.PhongbanID == phongBan.PhongbanID);
-            }
-
             return new AjaxResult() { 
+                Data = tos.ToList()
+            };
+        }
+
+        public AjaxResult Query(int quanHuyenID, int? phongBanID)
+        {
+            var tos = toRepository.Query(quanHuyenID, phongBanID);
+
+
+            return new AjaxResult()
+            {
                 Data = tos.ToList()
             };
         }

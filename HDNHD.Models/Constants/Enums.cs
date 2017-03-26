@@ -7,18 +7,14 @@ namespace HDNHD.Models.Constants
 {
     public enum ELoaiKhachHang : int
     {
-        CoQuanToChuc = 0,
         HoGiaDinh = 1,
-        HoKinhDoanhDichVu = 2,
-        CoQuanDoanhNghiep = 4,
-        KhuTapThe = 6 // hợp đồng tổng
+        CoQuanToChuc = 2
     }
 
     public enum EHinhThucThanhToan : int
     {
-        TienMat = 1,
-        ChuyenKhoan = 2,
-        ThuTrucTiep = 3
+        TrucTiep = 1,
+        ChuyenKhoan = 2
     }
 
     public enum EApGia : int

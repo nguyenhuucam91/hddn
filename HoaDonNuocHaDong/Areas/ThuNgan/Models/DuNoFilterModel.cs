@@ -18,52 +18,30 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public override void ApplyFilter(ref IQueryable<DuNoModel> items)
         {
             var context = (HDNHDDataContext)GetDataContext(items);
-
+            
             items = items.Where(m => m.HoaDon.Trangthaithu != true);
-            // year
+            
             if (Year != null)
             {
-                // month
+                items = items.Where(m => m.HoaDon.NamHoaDon == Year);
                 if (Month != null)
                 {
-                    items = items.Where(m => m.HoaDon.NamHoaDon < Year || (m.HoaDon.NamHoaDon == Year && m.HoaDon.ThangHoaDon <= Month));
-                }
-                else
-                {
-                    items = items.Where(m => m.HoaDon.NamHoaDon <= Year);
+                    items = items.Where(m => m.HoaDon.ThangHoaDon == Month);
                 }
             }
 
-            // join all
-            items = from hdm in items
-                    join kh in context.Khachhangs on hdm.HoaDon.KhachhangID equals kh.KhachhangID
-                    join nv in context.Nhanviens on hdm.HoaDon.NhanvienID equals nv.NhanvienID
-                    join stntt in context.SoTienNopTheoThangs on hdm.HoaDon.HoadonnuocID equals stntt.HoaDonNuocID
-                    join t in context.Tuyenkhachhangs on kh.TuyenKHID equals t.TuyenKHID
-                    select new DuNoModel()
-                    {
-                        HoaDon = hdm.HoaDon,
-                        KhachHang = kh,
-                        NhanVien = nv,
-                        SoTienNopTheoThang = stntt,
-                        TuyenKhachHang = t
-                    };
+            // join all 
 
-            // nhan vien
+
             if (NhanVienID != null)
             {
-                items = items.Where(m => m.NhanVien.NhanvienID == NhanVienID);
-            } // to
-            else if (ToID != null)
-            {
-                items = from item in items
-                        join to in context.ToQuanHuyens on item.KhachHang.QuanhuyenID equals to.QuanHuyenID
-                        where to.ToQuanHuyenID == ToID
-                        select item;
-            } // quan huyen
-            else if (QuanHuyenID != null) // find by QuanHuyenID
-            {
-                items = items.Where(m => m.KhachHang.QuanhuyenID == QuanHuyenID);
+                items = from dnm in items
+                        join nv in context.Nhanviens on dnm.HoaDon.NhanvienID equals NhanVienID
+                        select new DuNoModel()
+                        {
+                            HoaDon = dnm.HoaDon,
+                            NhanVien = nv,
+                        };
             }
         }
     }

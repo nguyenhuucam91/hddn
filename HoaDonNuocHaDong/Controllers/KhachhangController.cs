@@ -228,7 +228,7 @@ namespace HoaDonNuocHaDong.Controllers
                                   NgayCapNuocLai = i.Ngaycapnuoclai,
                               });
 
-            
+
             if (String.IsNullOrEmpty(TinhTrang) || TinhTrang == "0" || String.IsNullOrEmpty(Request.QueryString["TinhTrang"]))
             {
                 khachhangs = khachhangs.Where(p => p.Tinhtrang == 0 || p.Tinhtrang == null);
@@ -304,14 +304,42 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns>Chuỗi JSON</returns>
         public JsonResult FillToByQuan(int ChiNhanhID)
         {
-            var to = (from i in db.ToQuanHuyens
+            int phongBanId = getPhongBanNguoiDung();            
+            if (phongBanId == 0)
+            {
+               var to = (from i in db.ToQuanHuyens
                       where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false
                       select new
                       {
                           Ten = i.Ma,
                           ToID = i.ToQuanHuyenID
                       }).Distinct().ToList();
-            return Json(to, JsonRequestBehavior.AllowGet);
+                return Json(to, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+               var to = (from i in db.ToQuanHuyens
+                      where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false && i.PhongbanID == phongBanId
+                      select new
+                      {
+                          Ten = i.Ma,
+                          ToID = i.ToQuanHuyenID
+                      }).Distinct().ToList();
+                return Json(to, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+
+        public int getPhongBanNguoiDung()
+        {
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
+            if (nhanVien != null)
+            {
+                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+                int phongBanID = phongBan.PhongbanID;
+                return phongBanID;
+            }
+            return 0;
         }
 
         /// <summary>
@@ -484,7 +512,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
             ViewBag.CumdancuID = db.Cumdancus.Where(p => p.IsDelete == false).ToList();
             ViewBag.HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten");
-            ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int) EApGia.DacBiet), "LoaiapgiaID", "Ten");
+            ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten");
             ViewBag.LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten");
             ViewBag.PhuongxaID = db.Phuongxas.Where(p => p.QuanhuyenID == selectedQuanHuyenID && p.IsDelete == false).ToList();
             ViewBag.QuanhuyenID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList(), "QuanhuyenID", "Ten");
@@ -554,7 +582,7 @@ namespace HoaDonNuocHaDong.Controllers
                         KhachHang.saveGiaTongHop(khachhang.KhachhangID, 0, SH, KD, HC, CC, SX, DateTime.Now.Month, Convert.ToInt16(DateTime.Now.Year));
                     }
                 }
-                
+
                 //thêm mới trong bảng hóa đơn và chi tiết hóa đơn nước(tháng hiện tại)
                 Hoadonnuoc hoaDonNuoc = new Hoadonnuoc();
                 //lấy last inserted id của khách hàng
@@ -779,10 +807,10 @@ namespace HoaDonNuocHaDong.Controllers
                         {
                             ViewBag.option = 0;
                         }
-                        
+
                         ViewBag.hasTongHop = true;
                         ViewBag.hasDacBiet = false;
-                    }                    
+                    }
                 }
 
             }
@@ -932,7 +960,7 @@ namespace HoaDonNuocHaDong.Controllers
                         sLTT.tachSoTongHop(hD.HoadonnuocID, 0, khachhang.KhachhangID, sanLuongTieuThu);
                     }
                     //chia lại giá                    
-                }                
+                }
                 //tách lại chỉ số giá khác
                 else
                 {
@@ -962,7 +990,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
             ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
-            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p=>p.LoaiapgiaID!=(int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
+            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
             ViewBag._LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
             ViewBag._PhuongxaID = new SelectList(db.Phuongxas, "PhuongxaID", "Ten", khachhang.PhuongxaID);
             ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens, "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
@@ -1018,7 +1046,7 @@ namespace HoaDonNuocHaDong.Controllers
                     {
                         ViewBag.SX = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT).SanLuong.Value;
                     }
-                     
+
                     //nếu là áp giá tổng hợp
                     if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
                     {
