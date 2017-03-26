@@ -1,4 +1,5 @@
-﻿using HDNHD.Core.Models;
+﻿using HDNHD.Core.Constants;
+using HDNHD.Core.Models;
 using HDNHD.Models.DataContexts;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
 using HoaDonNuocHaDong.Base;
@@ -20,18 +21,70 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         }
 
         /// <summary>
-        /// báo cáo khách hàng đóng tiền dư tính đến tháng hiện tại
+        /// báo cáo dư có theo tháng
         /// </summary>
-        public ActionResult DuCo(DuCoFilterModel filter, Pager pager)
+        public ActionResult DuCo(DuCoFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
         {
-            var duCoRepository = uow.Repository<DuCoRepository>();
-            var toRepository = uow.Repository<ToRepository>();
+            IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
+            IQuanHuyenRepository quanHuyenRepository = uow.Repository<QuanHuyenRepository>();
+            IToRepository toRepository = uow.Repository<ToRepository>();
 
             // default values
             if (filter.Mode == null) // not in filter
             {
-                    filter.Year = DateTime.Now.Year;
-                    filter.Month = DateTime.Now.Month;
+                filter.Year = DateTime.Now.Year;
+                filter.Month = DateTime.Now.Month;
+
+                // set selected to, quan huyen = nhanVien's to, quan huyen
+                if (nhanVien != null)
+                {
+                    filter.NhanVienID = nhanVien.NhanvienID;
+                    filter.ToID = nhanVien.ToQuanHuyenID;
+
+                    var to = toRepository.GetByID(nhanVien.ToQuanHuyenID ?? 0);
+                    if (to != null)
+                    {
+                        filter.QuanHuyenID = to.QuanHuyenID;
+                    }
+                }
+            }
+            var items = duCoRepository.GetAll().Select(m => new DuCoModel()
+            {
+                DuCo = m
+            });
+
+            if (viewMode == ViewMode.Excel)
+                pager.PageSize = Pager.SHOW_ALL;
+
+            filter.ApplyFilter(ref items, ref pager);
+
+            #region view data
+            title = "Báo cáo dư có";
+            ViewBag.Filter = filter;
+            ViewBag.Pager = pager;
+            #endregion
+
+            if (viewMode == ViewMode.Excel)
+                return ExcelResult("DuCoExport", items.ToList());
+            else
+                return View(items.ToList());
+        }
+
+        /// <summary>
+        /// báo cáo dư nợ tính đến tháng hiện tại
+        /// </summary>
+        public ActionResult DuNo(DuNoFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
+        {
+            IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
+            IToRepository toRepository = uow.Repository<ToRepository>();
+
+            // default values
+            if (filter.Mode == null) // not in filter
+            {
+                var date = DateTime.Now.AddMonths(-1);
+
+                filter.Year = date.Year;
+                filter.Month = date.Month;
 
                 // set selected to, quan huyen = nhanVien's to, quan huyen
                 if (nhanVien != null)
@@ -47,32 +100,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                 }
             }
 
-            var items = duCoRepository.GetAll().Select(m => new DuCoModel() { 
-                DuCo = m
-            });
-
-            filter.ApplyFilter(ref items, ref pager);
-
-            #region view data
-            title = "Báo cáo dư có";
-            ViewBag.Filter = filter;
-            ViewBag.Pager = pager;
-            #endregion
-
-            return View(items.ToList());
-        }
-
-        /// <summary>
-        /// báo cáo  nợ theo tháng
-        /// mặc định tháng, năm hiện tại, sao khi chọn tháng từ form, dữ get request dc gửi dến controller
-        /// </summary>
-        public ActionResult DuNo(DuNoFilterModel filter, Pager pager)
-        {
-            IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
             var items = hoaDonRepository.GetAll().Select(m => new DuNoModel()
             {
                 HoaDon = m
             });
+
+            if (viewMode == ViewMode.Excel)
+                pager.PageSize = Pager.SHOW_ALL;
 
             filter.ApplyFilter(ref items, ref pager);
 
@@ -81,8 +115,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             #endregion
-
-            return View(items.ToList());
+            if (viewMode == ViewMode.Excel)
+                return ExcelResult("DuNoExport", items.ToList());
+            else
+                return View(items.ToList());
         }
 
         /// <summary>
@@ -146,7 +182,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             //        DuCoDauKy = Convert.ToInt32(f[3]);
             //    }
             //}
-          
+
             //List<Object> doanhthu = new List<Object>();
             //doanhthu.Add(NoDauKy);
             //doanhthu.Add(DuCoDauKy);
@@ -158,7 +194,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             //doanhthu.Add(year);
             //doanhthu.Add(HoaDonInTrongThang);
             //ViewBag.DoanhThu = doanhthu;
-         
+
             //return View();
             return View();
         }

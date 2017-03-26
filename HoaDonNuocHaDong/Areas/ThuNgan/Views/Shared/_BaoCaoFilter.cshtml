@@ -15,8 +15,16 @@
     <form class="form-horizontal" method="get">
         <center>
             <div class="form-group">
-                Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Filter.Year" />
-                Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Filter.Month" />
+                Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Filter.Year" style="text-align: center" />
+                Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Filter.Month" style="text-align: center" />
+                <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
+                    <option></option>
+                    <option value="0">= Cơ quan, tổ chức =</option>
+                    <option value="1">Hộ gia đình</option>
+                    <option value="2">Hộ kinh doanh dịch vụ</option>
+                    <option value="4">Cơ quan doanh nghiệp</option>
+                    <option value="6">Khu tập thể (hợp đồng tổng)</option>
+                </select>
             </div>
             <br />
             <div class="form-group">
@@ -30,6 +38,8 @@
             <br />
             <div class="center form-group">
                 <input type="hidden" name="Mode" value="search" />
+                <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-primary">Xuất excel</button>
+
                 <button type="submit" class="btn btn-default">Tìm kiếm</button>
             </div>
         </center>
