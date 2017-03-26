@@ -1,10 +1,6 @@
-﻿@model IEnumerable<HoaDonNuocHaDong.Tuyenong>
-
-
-@{
+﻿@{
     ViewBag.Title = "Danh sách tuyến ống";
-
-    String actionName = ViewContext.RouteData.GetRequiredString("action");
+    List<HoaDonNuocHaDong.Models.Tuyenong.ChiSoCap> sanLuongChiSoCapTuyenOng = ViewData["danhsachTuyenOng"] as List<HoaDonNuocHaDong.Models.Tuyenong.ChiSoCap>;
     var quanHuyen = ViewBag.quanHuyen;
     var phuongXa = ViewBag.phuongXa;
 }
@@ -32,12 +28,13 @@
 
                                             @Html.DropDownList("QuanHuyenID", (SelectList)quanHuyen, "", new { @class = "dropdown quan" })
                                             @Html.DropDownList("PhuongXaID", (SelectList)phuongXa, "", new { @class = "dropdown phuong" })
-
+                                            <input type="text" placeholder="Tháng" name="thangcs" /> 
+                                            <input type="text" placeholder="Năm" name="namcs" />
                                             <button type="submit" class="btn btn-default">Tìm kiếm</button>
                                         </div>
                                     }
                                 </div>
-                                <input type="text" placeholder="Tháng @DateTime.Now.Month" name="thangcs"/>  <input type="text" placeholder="Năm @DateTime.Now.Year" name="namcs" />
+                             
                                
                                 <!-- Load tuyến ống dưới dạng tree view-->
                                 <table class="example table table-striped table-bordered">
@@ -50,23 +47,20 @@
                                             </th>
                                             <th>Cấp tuyến ống</th>
                                             <th>Sản lượng tháng</th>
-                                            <th></th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @{int i = 1;}
-                                        @foreach (var item in Model)
+                                        @foreach (var item in sanLuongChiSoCapTuyenOng)
                                         {
                                             <tr>
                                                 <td>@i</td>
-                                                <td>@item.Matuyen</td>
-                                                <td>@item.Tentuyen</td>
-                                                <td>@item.CaptuyenID</td>
-                                                <td><input type="text" name="sanluong" class="@item.TuyenongID" /><button id="@item.TuyenongID" class="chiso" style="margin-bottom:10px">Lưu</button></td>
-                                                <td>
-                                                    @Html.ActionLink("Sửa", "Edit", new { id = item.TuyenongID }) |
-                                                    @Html.ActionLink("Xóa", "Delete", new { id = item.TuyenongID }, new { @onclick = "return confirm('Bạn có muốn xóa tuyến ống này không')" })
-                                                </td>
+                                                <td>@item.MaTuyenOng</td>
+                                                <td>@item.TenTuyenOng</td>
+                                                <td>@item.CapTuyenOng</td>
+                                                <td><input type="text" name="sanLuongTuyenOng" data-tuyenongid="@item.TuyenOngID" value="@item.ChiSoSanLuongTuyenOng"/></td>
+                                                
                                             </tr>
                                             i++;
                                         }

@@ -10,6 +10,8 @@ namespace HoaDonNuocHaDong.Models
     {
         public int ChinhanhID { get { return GetINT(0); } set { SetINT(0, value); } }
         public string Ten { get { return GetSTR(1); } set { SetSTR(1, value); } }
+
+     
         public NhapChiSoCap()
         {
             MaxPosModelField = 1;

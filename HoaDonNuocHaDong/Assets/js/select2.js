@@ -396,8 +396,15 @@ $("input[name='soKhoan']").change(function () {
 
     var chiSoMoiValue = $(this).parent('td').prev('td').prev('td').find('input').val();
     var chiSoCuValue = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+    var sanLuong = 0;
+    var checkboxKiemDinh = $(this).parent('td').next('td').find('input[type="checkbox"]');
 
-    var sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+    if(checkboxKiemDinh.is('checked')){
+        sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+    }
+    else {
+        sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+    }
     var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue);
 
     //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
@@ -633,4 +640,19 @@ $(function () {
     $("body").click(function () {
         $(".cachTinhGia").html("");
     });
+});
+
+/*--- Nhập chỉ số tuyến ống ----- */
+$("input[name='sanLuongTuyenOng']").blur(function () {
+    var selectedTuyenOng = $(this);
+    var tuyenongId = $(this).data('tuyenongid');
+    var chiSoSanLuong = selectedTuyenOng.val();
+    var thangCoChiSo = $("input[name='thangcs']").val();
+    var namCoChiSo = $("input[name='namcs']").val();
+    $.ajax({
+        url: '/tuyenong/nhapsanluong',
+        method: 'POST',
+        data: JSON.stringify({ TuyenOngID: tuyenongId, SanLuong: chiSoSanLuong, thang: thangCoChiSo, nam: namCoChiSo }),
+        contentType:'application/json',
+    })
 });

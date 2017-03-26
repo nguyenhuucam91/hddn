@@ -1407,22 +1407,36 @@ namespace HoaDonNuocHaDong.Controllers
         /// </summary>
         /// <param name="HoaDonID"></param>
         /// <param name="ngayKetThuc"></param>
-        public void capnhatketthuc(String HoaDonID, String KhachHangID, String ngayKetThuc, String thang, String nam)
+        public void capnhatketthuc(String HoaDonID, String KhachHangID, String ngayKetThuc, String thangNay, String thangSau, String namNay, String namSau)
         {
             int hdID = Convert.ToInt32(HoaDonID);
             Lichsuhoadon ls = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == hdID);
-            ls.NgayKetThuc = ngayKetThuc;
-            db.Entry(ls).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (ls != null)
+            {
+                ls.NgayKetThuc = ngayKetThuc;
+                db.Entry(ls).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             //cập nhật ngày bắt đầu sử dụng của tháng sau luôn
             int khID = Convert.ToInt32(KhachHangID);
-            int month = Convert.ToInt16(thang);
-            int year = Convert.ToInt16(nam);
-            Hoadonnuoc hD = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khID && p.ThangHoaDon == month && p.NamHoaDon == year);
+            int thangNayToInt = Convert.ToInt16(thangNay);
+            int namNayToInt = Convert.ToInt16(namNay);
+            int thangSauToInt = Convert.ToInt16(thangSau);
+            int namSauToInt = Convert.ToInt16(namSau);
+
+            Hoadonnuoc hD = db.Hoadonnuocs.FirstOrDefault(p => p.ThangHoaDon == thangNayToInt && p.NamHoaDon == namNayToInt && p.KhachhangID == khID);
             if (hD != null)
             {
-                hD.Ngaybatdausudung = Convert.ToDateTime(ngayKetThuc);
+                hD.Ngayketthucsudung = Convert.ToDateTime(ngayKetThuc);
                 db.Entry(hD).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            //cập nhật tháng sau nếu có
+            Hoadonnuoc hDThangSau = db.Hoadonnuocs.FirstOrDefault(p => p.ThangHoaDon == thangSauToInt && p.NamHoaDon == namSauToInt && p.KhachhangID == khID);
+            if (hDThangSau != null)
+            {
+                hDThangSau.Ngaybatdausudung = Convert.ToDateTime(ngayKetThuc);
+                db.Entry(hDThangSau).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
         }
