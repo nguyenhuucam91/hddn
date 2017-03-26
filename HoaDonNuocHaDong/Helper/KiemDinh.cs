@@ -70,7 +70,7 @@ namespace HoaDonNuocHaDong.Helper
             }
             return false;
         }
-
+        
         /// <summary>
         /// Lấy chỉ số kiểm định của khách hàng ID trong tháng và năm
         /// </summary>

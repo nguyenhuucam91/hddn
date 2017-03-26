@@ -399,8 +399,12 @@ $("input[name='soKhoan']").change(function () {
     var sanLuong = 0;
     var checkboxKiemDinh = $(this).parent('td').next('td').find('input[type="checkbox"]');
 
-    if(checkboxKiemDinh.is('checked')){
-        sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+    if (checkboxKiemDinh.is(':checked')) {
+        var truocKiemDinh = $("input[name='kiemdinh']").data('truockd');
+        var sauKiemDinh = $("input[name='kiemdinh']").data('saukd');
+        var chiSoSau = $(this).parent('td').prev('td').prev('td').find('input').val();
+        var chiSoTruoc = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+        sanLuong = (truocKiemDinh - chiSoTruoc) + (chiSoSau - sauKiemDinh);
     }
     else {
         sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
