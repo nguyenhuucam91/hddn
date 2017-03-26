@@ -9,6 +9,8 @@
     var to = ViewBag._To;
     var selectedTo = ViewBag.selectedTo;
     var phongBan = ViewBag._PhongbanID;
+    int selectedQuanHuyen = ViewBag.selectedQuanHuyen;
+    List<Quanhuyen> quanHuyens = ViewBag.ChinhanhID as List<Quanhuyen>;
 }
 
 @using (Html.BeginForm("Edit", "Nhanvien"))
@@ -63,7 +65,19 @@
                                 <div class="row" style="margin: 1% 0 0 0%">
                                     <div class="col-md-4">
                                         <label for="" class="control-label">Quận huyện:</label>&nbsp;&nbsp;
-                                        @Html.DropDownList("Chinhanh", (SelectList)ViewBag.ChinhanhID, "--Chọn một--", new { @class = "dropdown quan",@required=true })
+                                        <select id="Chinhanh" name="Chinhanh" class="dropdown quan" required>
+                                            @foreach (var item in quanHuyens)
+                                            {
+                                                if (item.QuanhuyenID == selectedQuanHuyen)
+                                                {
+                                                    <option value="@item.QuanhuyenID" selected>@item.Ten</option>
+                                                }
+                                                else
+                                                {
+                                                     <option value="@item.QuanhuyenID">@item.Ten</option>
+                                                }
+                                            }
+                                        </select>
                                         @Html.ActionLink("Thêm mới", "Create", "Quanhuyen")
                                     </div>
                                 </div>

@@ -236,7 +236,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 tuyenKHIDList = tuyenKHIDList.Remove(tuyenKHIDList.Length - 1);
             }
-            ViewBag.ChinhanhID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
+            ViewBag.ChinhanhID = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             ViewBag.selectedTuyenKHID = tuyenKHIDList;
             ViewBag._TuyenKHID = db.Tuyenkhachhangs.ToList();
             int loggedInRole = getLoggedInUserRole();
@@ -258,10 +258,22 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewBag._PhongbanID = new SelectList(db.Phongbans.Where(p=>p.PhongbanID == phongBanId), "PhongbanID", "Ten", nhanvien.PhongbanID);
             }
+
             ViewBag.selectedTo = nhanvien.ToQuanHuyenID;
+            ViewBag.selectedQuanHuyen = getQuanHuyenIDFromToID(nhanvien.ToQuanHuyenID.Value);
             ViewBag._To = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
 
             return View(nhanvien);
+        }
+
+        private int getQuanHuyenIDFromToID(int toID)
+        {
+            ToQuanHuyen toQuanHuyen = db.ToQuanHuyens.Find(toID);
+            if (toQuanHuyen != null)
+            {
+                return toQuanHuyen.QuanHuyenID.Value;
+            }
+            return 0;
         }
 
         // POST: /Nhanvien/Edit/5
@@ -324,12 +336,13 @@ namespace HoaDonNuocHaDong.Controllers
                 tuyenKHIDList = tuyenKHIDList.Remove(tuyenKHIDList.Length - 1);
             }
 
-            ViewBag.ChinhanhID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
+            ViewBag.ChinhanhID = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             ViewBag.selectedTuyenKHID = tuyenKHIDList;
             ViewBag._TuyenKHID = db.Tuyenkhachhangs.ToList();
             ViewBag._ChucvuID = new SelectList(db.Chucvus, "ChucvuID", "Ten", nhanvien.ChucvuID);
             ViewBag._PhongbanID = new SelectList(db.Phongbans, "PhongbanID", "Ten", nhanvien.PhongbanID);
             ViewBag.selectedTo = nhanvien.ToQuanHuyenID;
+            ViewBag.selectedQuanHuyen = getQuanHuyenIDFromToID(nhanvien.ToQuanHuyenID.Value);
             ViewBag._To = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
             return View(nhanvien);
         }
