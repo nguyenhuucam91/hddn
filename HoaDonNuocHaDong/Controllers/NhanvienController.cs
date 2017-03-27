@@ -275,11 +275,11 @@ namespace HoaDonNuocHaDong.Controllers
             int phongbanId = getPhongBanNguoiDung();
             if (phongbanId == 0)
             {
-                ViewBag._To = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
+                ViewBag._To = db.ToQuanHuyens.Where(p => p.IsDelete == false);
             }
             else
             {
-                ViewBag._To = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null && p.PhongbanID == phongbanId);
+                ViewBag._To = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongbanId);
             }
 
             return View(nhanvien);
