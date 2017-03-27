@@ -1,5 +1,11 @@
 ﻿@model HoaDonNuocHaDong.Khachhang
 
+<style type="text/css">
+    input[name='Ten'] {
+        width: 334px !important;
+    }
+</style>
+
 @{
     ViewBag.Title = "Thêm mới khách hàng";
 
@@ -19,6 +25,7 @@
     //thông báo thêm mới khách hàng thành công
     var successfulMessage = ViewBag.successfulMessage;
 }
+
 @using (Html.BeginForm("Create", "Khachhang", FormMethod.Post, new { novalidate = false }))
 {
     @Html.AntiForgeryToken()
@@ -40,12 +47,13 @@
                                     Html.ValidationSummary(false, "", new { @class = "alert alert-danger" });
                                 }
                                 <!-- Box hiển thị thêm mới khách hàng thành công-->
-                                @if(successfulMessage!=null){
+                                @if (successfulMessage != null)
+                                {
                                     <div class="alert alert-success" role="alert">
                                         @successfulMessage
                                     </div>
 
-                                 }   
+                                }
 
                                 <form id="edit-profile" class="form-horizontal">
                                     <input type="hidden" value="false" name="IsDelete" />
@@ -59,7 +67,7 @@
                                         </div>
                                         <div class="col-md-6 pull-right" style="margin-right:20%">
                                             <label for="" class="control-label">Tên khách hàng:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Ten, new { autofocus = true })
+                                            @Html.TextBoxFor(model => model.Ten, new { autofocus = true})
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Ten)
                                         </div>

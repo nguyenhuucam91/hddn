@@ -1,8 +1,13 @@
 ﻿@model HoaDonNuocHaDong.Khachhang
 
+<style type="text/css">
+    input[name='Ten'] {
+        width: 334px !important;
+    }
+</style>
+
 @{
     ViewBag.Title = "Cập nhật thông tin khách hàng";
-
     var maKH = ViewBag.MaKH;
     //Tổng hợp giá
     var hasTongHop = ViewBag.hasTongHop;
