@@ -53,12 +53,22 @@ namespace HoaDonNuocHaDong.Controllers
             String nhanVien = form["nhanvien"];
 
             IEnumerable<Tuyenkhachhang> tuyenkhachhangs = null;
+            int phongBanId = getPhongBanNguoiDung();
+            //nếu trống thì chọn tất cả
+            if (LoggedInUser.Isadmin.Value)
+            {
+                var nhanVienFilter = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+                ViewBag._nhanVien = nhanVienFilter;
+            }
+            else
+            {
+                var nhanVienFilter = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId).ToList();
+                ViewBag._nhanVien = nhanVienFilter;
+            }   
+
             if (String.IsNullOrEmpty(nhanVien))
             {
-                //nếu trống thì chọn tất cả
-                var nhanVienFilter = db.Nhanviens.ToList();
-                tuyenkhachhangs = db.Tuyenkhachhangs.Include(t => t.Cumdancu).Include(t => t.To).OrderByDescending(p => p.TuyenKHID);
-                ViewBag._nhanVien = nhanVienFilter;
+                tuyenkhachhangs = db.Tuyenkhachhangs.Include(t => t.Cumdancu).Include(t => t.To).OrderByDescending(p => p.TuyenKHID);               
                 ViewBag.chiNhanh = db.Chinhanhs;
                 return View(tuyenkhachhangs.ToList());
             }
@@ -75,9 +85,7 @@ namespace HoaDonNuocHaDong.Controllers
                                              TuyenKhachHang = r
                                          });
                 tuyenkhachhangs = tuyenTheoNhanVien.Select(p => p.TuyenKhachHang);
-                //nếu để trống thì chọn tất cả
-                var nhanVienFilter = db.Nhanviens.ToList();
-                ViewBag._nhanVien = nhanVienFilter;
+                //nếu để trống thì chọn tất cả                
                 return View(tuyenkhachhangs.ToList());
             }
         }
