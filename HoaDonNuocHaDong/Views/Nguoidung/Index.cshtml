@@ -4,8 +4,8 @@
     ViewBag.Title = "Danh sách người dùng";
     var phongBan = ViewBag.phongBan as List<Phongban>;
     var chiNhanh = ViewBag.chinhanh;
-    List<ToQuanHuyen> toQuanHuyens = ViewData["toQuanHuyens"] as List<ToQuanHuyen>;
     var loggedInUserIsAdmin = ViewBag.isAdmin;
+    var loggedInUserQuanHuyenId = ViewBag.loggedInUserQuanHuyenId;
 }
 
 <div class="main">
@@ -31,12 +31,21 @@
                                 @using (Html.BeginForm("Index", "Nguoidung", FormMethod.Post))
                                 {
                                     <div class="form-group">
-
                                         <!-- chi nhánh -->
                                         Quận huyện: <select class="dropdown form-control quanAllowClear" name="chinhanh">
                                             @foreach (var item in chiNhanh)
                                             {
-                                                <option value="@item.QuanhuyenID">@item.Ten</option>
+                                                if (loggedInUserIsAdmin != "")
+                                                {
+                                                    if (item.QuanhuyenID == loggedInUserQuanHuyenId)
+                                                    {
+                                                        <option value="@item.QuanhuyenID">@item.Ten</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.QuanhuyenID">@item.Ten</option>
+                                                }
                                             }
                                         </select>
                                         Phòng ban: <select class="dropdown form-control phongbanAllowClear" style="width:220px;margin-right:3%" name="phongban">
@@ -48,9 +57,17 @@
                                         </select>
 
                                         <select class="dropdown form-control admin" style="width:150px;margin-right:3%" name="isAdmin">
-                                            <option disabled="disabled" selected="selected">--Chức vụ--</option>
-                                            <option value="0">Người dùng</option>
-                                            <option value="1">Admin</option>
+                                            @if (loggedInUserIsAdmin != "")
+                                            {
+                                                <option value="0">Người dùng</option>
+                                            }
+                                            else
+                                            {
+                                                <option disabled="disabled" selected="selected">--Chức vụ--</option>
+                                                <option value="0">Người dùng</option>
+                                                <option value="1">Admin</option>
+                                            }
+
                                         </select>
 
                                         <button type="submit" class="btn btn-default">Tìm kiếm</button>

@@ -1,9 +1,4 @@
-﻿$(function () {
-    $('.mainnav a').filter(function () { return this.href == location.href }).parent().addClass('active').siblings().removeClass('active')
-    $('.mainnav a').click(function () {
-        $(this).parent().addClass('active').siblings().removeClass('active')
-    });
-})
+﻿
 //Ẩn hiện cột nhân viên
 $(function () {
     var isAdmin = $("input[name='isAdmin']:checked").val();

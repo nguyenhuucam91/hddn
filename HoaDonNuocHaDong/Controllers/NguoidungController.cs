@@ -20,7 +20,9 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult Index()
         {
+           
             ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+
             int phongbanId = getPhongBanNguoiDung();
             if (phongbanId == 0)
             {
@@ -49,6 +51,8 @@ namespace HoaDonNuocHaDong.Controllers
                 nguoidungs = db.Nguoidungs.ToList();
             }
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
+            int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
+            ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
             return View(nguoidungs.ToList());
         }
 
@@ -120,6 +124,8 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.phongBan = db.Phongbans.Where(p => p.PhongbanID == phongbanId).ToList();
             }
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
+            int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
+            ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
             return View(nguoiDung.OrderByDescending(p => p.NguoidungID).ToList());
         }
 
