@@ -44,7 +44,6 @@ namespace HoaDonNuocHaDong.Controllers
             return View(tuyenongs.ToList());
         }
 
-
         public ActionResult NhapChiSo()
         {
             populateTableChiSoCap(DateTime.Now.Month, DateTime.Now.Year);

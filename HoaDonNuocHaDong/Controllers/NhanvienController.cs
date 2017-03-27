@@ -131,7 +131,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             ViewBag._TuyenKHID = db.Tuyenkhachhangs.ToList();
             ViewBag.ChinhanhID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
-            ViewBag.To = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
+            
 
             int loggedInUserRole = getLoggedInUserRole();
             if (loggedInUserRole == 0 || loggedInUserRole == ChucVuHelper.TRUONGPHONG)
@@ -148,10 +148,12 @@ namespace HoaDonNuocHaDong.Controllers
             if (phongBanId != 0)
             {
                 ViewBag.PhongBanQuanHuyen = new SelectList(db.Phongbans.Where(p => p.PhongbanID == phongBanId), "PhongbanID", "Ten");
+                ViewBag.To = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId);
             }
             else
             {
                 ViewBag.PhongBanQuanHuyen = new SelectList(db.Phongbans, "PhongbanID", "Ten");
+                ViewBag.To = db.ToQuanHuyens.Where(p => p.IsDelete == false);
             }
             return View();
         }

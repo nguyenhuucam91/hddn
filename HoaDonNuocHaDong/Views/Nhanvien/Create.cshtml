@@ -71,7 +71,7 @@
                                             <select name="ToQuanHuyenID" class="dropdown to">
                                                 @foreach (var item in to)
                                                 {
-                                                    <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                                    <option value="@item.ToQuanHuyenID">@item.Ma</option>
                                                 }
                                             </select>
                                             @Html.ActionLink("Thêm mới", "Create", "ToQuanHuyen")
