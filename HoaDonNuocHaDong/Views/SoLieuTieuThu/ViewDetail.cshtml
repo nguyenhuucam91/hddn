@@ -30,8 +30,8 @@
         padding: 10px 10px !important;
     }
 
-    form{
-        display:inline
+    form {
+        display: inline;
     }
 </style>
 
@@ -165,30 +165,37 @@
                                     <tr @{ String _class = ""; if (isDacBiet == true) { _class = "traverse dacbiet " + item.LoaiApGiaID; } else { _class = "traverse " + item.LoaiApGiaID; } } class="@_class">
 
                                         <td><a target="_blank" style="color:blue" href="@Url.Action("ViewDetail", "Khachhang", new { id = khachHangIDRow })">@item.MaKhachHang</a></td>
-                                        <td><a target="_blank" style="color:blue" href="@Url.Action("Edit", "Khachhang", new { id = khachHangIDRow })">@item.TenKhachHang</a></td>
-                                        <td>@item.ThuTuDoc</td>
-                                        <td>@item.SoHo</td>
-                                        <td>@item.SoKhau</td>
-                                        <td>@loaiGiaVietTat</td>
-                                        <td>@item.ChiSoCu</td>
-                                        <td>@item.ChiSoMoi</td>
-                                        <td>@item.SoKhoan</td>
-                                        <!-- Nếu chỉ số sản lượng != chỉ số mới - chỉ số cũ thì hiện chữ màu đỏ-->
                                         <td>
-                                            <input disabled class="sanLuong" data-khachhangid="@item.KHID"
-                                                   style="color:red;width:80%;font-size:15px" value="@item.SanLuong"
-                                                   data-month="@item.Thang"
-                                                   data-year="@item.Nam" />
-                                        </td>
-                                        <td style="color:blue">@item.SH1</td>
-                                        <td style="color:blue">@item.SH2</td>
-                                        <td style="color:blue">@item.SH3</td>
-                                        <td style="color:blue">@item.SH4</td>
-                                        <td style="color:blue">@item.HC</td>
-                                        <td style="color:blue">@item.CC</td>
-                                        <td style="color:blue">@item.SXXD</td>
-                                        <td style="color:blue">@item.KDDV</td>
-                                    </tr>
+                                            <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
+                                                                                toID = Request.QueryString["toID"],
+                                                                                nhanvienIDUrl = Request.QueryString["nvquanly"],
+                                                                                tuyenIDUrl = Request.QueryString["tuyenID"],
+                                                                                thang = Request.QueryString["month"],
+                                                                                nam=Request.QueryString["year"]})">@item.TenKhachHang</a>
+                                                                            </td>
+                                                                            <td>@item.ThuTuDoc</td>
+                                                                            <td>@item.SoHo</td>
+                                                                            <td>@item.SoKhau</td>
+                                                                            <td>@loaiGiaVietTat</td>
+                                                                            <td>@item.ChiSoCu</td>
+                                                                            <td>@item.ChiSoMoi</td>
+                                                                            <td>@item.SoKhoan</td>
+                                                                            <!-- Nếu chỉ số sản lượng != chỉ số mới - chỉ số cũ thì hiện chữ màu đỏ-->
+                                                                            <td>
+                                                                                <input disabled class="sanLuong" data-khachhangid="@item.KHID"
+                                                                                       style="color:red;width:80%;font-size:15px" value="@item.SanLuong"
+                                                                                       data-month="@item.Thang"
+                                                                                       data-year="@item.Nam" />
+                                                                            </td>
+                                                                            <td style="color:blue">@item.SH1</td>
+                                                                            <td style="color:blue">@item.SH2</td>
+                                                                            <td style="color:blue">@item.SH3</td>
+                                                                            <td style="color:blue">@item.SH4</td>
+                                                                            <td style="color:blue">@item.HC</td>
+                                                                            <td style="color:blue">@item.CC</td>
+                                                                            <td style="color:blue">@item.SXXD</td>
+                                                                            <td style="color:blue">@item.KDDV</td>
+                                                                        </tr>
 
                                 }
                             </tbody>
