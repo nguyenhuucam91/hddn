@@ -31,7 +31,8 @@
     nhanvienIDUrl = @Request.QueryString["nhanvienIDUrl"], 
     tuyenIDUrl = @Request.QueryString["tuyenIDUrl"], 
     thang=@Request.QueryString["thang"],
-    nam=@Request.QueryString["nam"]},FormMethod.Post))
+    nam=@Request.QueryString["nam"],
+    referrer = @Request.QueryString["referrer"]},FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(p => p.KhachhangID)

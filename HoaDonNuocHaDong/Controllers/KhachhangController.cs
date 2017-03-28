@@ -984,10 +984,17 @@ namespace HoaDonNuocHaDong.Controllers
                 
                 
                 //chỉnh sửa khách hàng trong trang áp giá
-                if (Request.QueryString["thang"] != null)
+                if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "viewdetail")
                 {                   
-                    return RedirectToAction("index", "Solieutieuthu");
+                    return RedirectToAction("viewdetail", "Solieutieuthu", new{
+                        toID = toID, 
+                        tuyenID = tuyenIDUrl, 
+                        month = Request.QueryString["thang"], 
+                        year = Request.QueryString["nam"], 
+                        nvquanly = nhanVienIDUrl});
                 }
+                
+                
                 TempData["to"] = toID;
                 TempData["tuyen"] = tuyenIDUrl;
                 TempData["nhanvien"] = nhanVienIDUrl;
