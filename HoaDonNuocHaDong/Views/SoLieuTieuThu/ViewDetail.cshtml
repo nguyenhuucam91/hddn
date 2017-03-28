@@ -241,7 +241,7 @@
             bool hasSLKhongBT = false;
             var dsSanLuongKhongBinhThuong = (from hoaDon in db.Hoadonnuocs
                      join s in db.Khachhangs on hoaDon.KhachhangID equals s.KhachhangID
-                     where hoaDon.ThangHoaDon == month && hoaDon.NamHoaDon == year && s.TuyenKHID == selectedTuyen && (hoaDon.Tongsotieuthu<=1)
+                     where hoaDon.ThangHoaDon == month && hoaDon.NamHoaDon == year && s.TuyenKHID == selectedTuyen && (hoaDon.Tongsotieuthu <= 1)
             select new{}).Count();
             if (dsSanLuongKhongBinhThuong > 0)
             {
