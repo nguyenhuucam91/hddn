@@ -16,24 +16,28 @@
     .ten {
         font-size: 25px;
         font-weight: bold;
-        margin-left:18%;
     }
 
     .loc {
         font-size: 13px;
         font-weight: bold;
-        margin: 1% 0 4% 38%;
     }
 
     .tong {
         font-size: 15px;
         margin: 0 0 0 60%;
     }
-    .wtable{width:100%}
+
+    .wtable {
+        width: 100%;
+    }
 </style>
-<div class="ten">Danh sách Khách hàng sử dụng định mức <br /><br />
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; từ @d1 đến @d2 định mức</div>
-<div class="loc">Tháng @d3.Month năm @d3.Year</div>
+
+<div class="ten center">
+    Danh sách Khách hàng sử dụng định mức <br /><br />
+    từ @d1 đến @d2 định mức
+</div>
+<div class="loc center">Tháng @d3.Month năm @d3.Year</div>
 @{
     List<DanhSachKhachHangTheoDinhMuc> lst = (List<DanhSachKhachHangTheoDinhMuc>)ViewData["lst"];
 
@@ -57,20 +61,20 @@
         @{
             int i = 1;
         }
-        @foreach(DanhSachKhachHangTheoDinhMuc obj in lst)
+        @foreach (DanhSachKhachHangTheoDinhMuc obj in lst)
         {
-        <tr>
-            <td>@i</td>
-            <td>@obj.Tuyen</td>
-            <td>@obj.ThuTuDoc</td>
-            <td>@obj.MaKhachHang</td>
-            <td>@obj.Ten</td>
-            <td>@obj.Diachi</td>
-            <td>@obj.SoDinhMuc</td>
-            <td>@String.Format("{0:dd/MM/yyyy}",obj.NgayBatDau)</td>
-            <td>@String.Format("{0:dd/MM/yyyy}",obj.NgayKetThuc)</td>
-            <td>@obj.GhiChu</td>
-        </tr>
+            <tr>
+                <td>@i</td>
+                <td>@obj.Tuyen</td>
+                <td>@obj.ThuTuDoc</td>
+                <td>@obj.MaKhachHang</td>
+                <td>@obj.Ten</td>
+                <td>@obj.Diachi</td>
+                <td>@obj.SoDinhMuc</td>
+                <td>@String.Format("{0:dd/MM/yyyy}", obj.NgayBatDau)</td>
+                <td>@String.Format("{0:dd/MM/yyyy}", obj.NgayKetThuc)</td>
+                <td>@obj.GhiChu</td>
+            </tr>
             i++;
         }
     </tbody>

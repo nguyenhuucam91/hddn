@@ -351,11 +351,12 @@ $(document).ready(function () {
         var dateInput = new Date();
         var chiSoMoiValue = $(this).val();
         var chiSoCuValue = $(this).parent().prev("td").find("input").val();
+        var soKhoan = $(this).parent().next("td").next("td").find("input").val() == "" ? 0 : $(this).parent().next("td").next("td").find("input").val();
         //tháng và năm
         var selectedMonth = $("input[name='thang']").val();
         var selectedYear = $("input[name='nam']").val();
 
-        var hieuSo = chiSoMoiValue - chiSoCuValue;
+        var hieuSo = parseInt(chiSoMoiValue - chiSoCuValue) + parseInt(soKhoan);
         //nếu dòng đó là dòng kiểm định
         var isToggledCheckbox = $(this).closest('tr').last('td').find('input[type="checkbox"]');
         if (isToggledCheckbox.is(":checked")) {
@@ -369,7 +370,7 @@ $(document).ready(function () {
             var sanLuongValue = $(this).parent().next("td").find("input").val(hieuSo);
         }
 
-        var SoKhoan = 0;
+        
         //console.log(JSON.stringify(sanLuongValue.));
         //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
         $.ajax({
@@ -378,7 +379,7 @@ $(document).ready(function () {
             method: "POST",
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({
-                HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: "0", KHID: KHID,
+                HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoan, KHID: KHID,
                 SoHoaDon: _soHoaDon, dateStart: dateStart, dateEnd: dateEnd, dateInput: dateInput, thang: selectedMonth, nam: selectedYear
             }),
         });
