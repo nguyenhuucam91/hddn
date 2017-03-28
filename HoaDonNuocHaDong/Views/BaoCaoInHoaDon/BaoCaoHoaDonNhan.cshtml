@@ -24,7 +24,7 @@
                             <select name="tuyen" class="dropdown tuyen" style="width:80%">
                                 @foreach (var item in ls)
                                 {
-                                    <option value="@item.TuyenKHID">@item.Ten</option>
+                                    <option value="@item.TuyenKHID">@item.Matuyen - @item.Ten</option>
                                 }
                             </select>                        
                         </p>
@@ -32,14 +32,20 @@
                             Loại khách hàng:
                             <select name="customerType">
                                 <option value="0"> Tất cả </option>
+                                <option value="9">= Cơ quan, tổ chức =</option>
                                 @foreach (var item in loaiKH)
                                 {
                                     <option value="@item.LoaiKHID">@item.Ten</option>
                                 }
                             </select>
                         </p>
-                        <p>Từ ngày: <input type="number" name="fromDay" placeholder="@DateTime.Now.Day"/> tháng: <input type="number" name="fromMonth" placeholder="@DateTime.Now.Month" class="negNumber"/> năm <input type="number" name="fromYear" placeholder="@DateTime.Now.Year" class="negNumber" /><br/>
-                        đến ngày: <input type="number" name="toDay" placeholder="@DateTime.Now.Day"/> tháng: <input type="number" name="toMonth" placeholder="@DateTime.Now.Month" class="negNumber" /> năm <input type="number" name="toYear" placeholder="@DateTime.Now.Year" class="negNumber" /></p>
+                        <p>
+                        Từ ngày: <input type="number" name="fromDay" placeholder="@DateTime.Now.Day" min="1" max="31" /> 
+                        tháng: <input type="number" name="fromMonth" placeholder="@DateTime.Now.Month" class="negNumber" min="1" max="12" /> 
+                        năm <input type="number" name="fromYear" placeholder="@DateTime.Now.Year" class="negNumber" min="1970" /><br/>
+                        đến ngày: <input type="number" name="toDay" placeholder="@DateTime.Now.Day" min="1" max="31"/> 
+                        tháng: <input type="number" name="toMonth" placeholder="@DateTime.Now.Month" class="negNumber" min="1" max="12" /> 
+                        năm <input type="number" name="toYear" placeholder="@DateTime.Now.Year" class="negNumber" min="1970" /></p>
                         <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
                     </div>
                 }

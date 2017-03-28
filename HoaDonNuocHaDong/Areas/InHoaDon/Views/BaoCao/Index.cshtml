@@ -1,0 +1,35 @@
+﻿<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row" style="margin-left:4%">
+                <div class="span12">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-bookmark"></i>
+                            <h3>Các báo cáo in hóa đơn</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="shortcuts">
+                                <a href="@Url.Action("DoanhThu", "BaoCao", new { area="InHoaDon"})" class="shortcut">
+                                    <span class="shortcut-label">Báo cáo sản lượng doanh thu</span>
+                                </a>
+                                <a href="@Url.Action("PhiNuocThai","BaoCao", new { area="InHoaDon"})" class="shortcut">
+                                    <span class="shortcut-label">Báo cáo theo phí nước thải</span>
+                                </a>
+                                <a href="@Url.Action("HoaDonNhan", "BaoCao", new { area = "InHoaDon" })" class="shortcut">
+                                <span class="shortcut-label">Báo cáo hóa đơn nhận</span>
+                                </a>
+                                <a href="@Url.Action("DuNo", "BaoCao", new { area = "ThuNgan" })" class="shortcut">
+                                    <span class="shortcut-label">Báo cáo dư nợ</span>
+                                </a>
+                                <a href="@Url.Action("DuCo","BaoCao", new { area="ThuNgan" })" class="shortcut">
+                                    <span class="shortcut-label">Báo cáo dư có</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

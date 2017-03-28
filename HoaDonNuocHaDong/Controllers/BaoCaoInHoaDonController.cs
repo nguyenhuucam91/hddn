@@ -167,7 +167,10 @@ namespace HoaDonNuocHaDong.Controllers
             //nếu chọn loại khách hàng
             if (loaiKH != 0)
             {
-                lsHoaDon = lsHoaDon.Where(p => p.LoaiKH == loaiKH).ToList();
+                if (loaiKH == 9) // Nhóm cơ quan, tổ chức
+                    lsHoaDon = lsHoaDon.Where(p => p.LoaiKH != 1).ToList();
+                else 
+                    lsHoaDon = lsHoaDon.Where(p => p.LoaiKH == loaiKH).ToList();
             }
 
             ViewBag.tenTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == tuyen).Ten;
