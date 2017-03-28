@@ -354,7 +354,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
             int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
-            int year = String.IsNullOrEmpty(form["year"]) ? DateTime.Now.Year : Convert.ToInt32(form["year"]);
+            int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
             int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
             List<Tuyenkhachhang> newLs = new List<Tuyenkhachhang>();
             //nếu tổ ko đc chọn
