@@ -338,7 +338,17 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.beforeFiltered = true;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewData["tuyen"] = new List<Tuyenkhachhang>();
-            ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
+            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+            if (soLuongQuanHuyen > 0)
+            {
+                Quanhuyen quanHuyenDauTien = db.Quanhuyens.FirstOrDefault(p => p.IsDelete == false);
+                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyenDauTien.QuanhuyenID).ToList();
+            }
+            else
+            {
+                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
+            }
             return View();
         }
 
@@ -350,8 +360,19 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult ChiSoTuyen(FormCollection form)
         {
+            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             //lấy danh sách tổ 
-            ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
+            int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+            if (soLuongQuanHuyen > 0)
+            {
+                Quanhuyen quanHuyenDauTien = db.Quanhuyens.FirstOrDefault(p => p.IsDelete == false);
+                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyenDauTien.QuanhuyenID).ToList();
+            }
+            else
+            {
+                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
+            }
+            
             //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
             int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
             int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
