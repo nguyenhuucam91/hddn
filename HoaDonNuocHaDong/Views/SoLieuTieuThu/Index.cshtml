@@ -157,7 +157,12 @@
 
                                                 <tr>
                                                     <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
-                                                    <td><a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow})">@item.TenKhachHang</a></td>
+                                                    <td><a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
+                                                                                toID=@toID,
+                                                                                nhanvienIDUrl=@nhanVienID,
+                                                                                tuyenIDUrl = tuyenID, 
+                                                                                thang=@month, 
+                                                                                nam=@year})">@item.TenKhachHang</a></td>
                                                     <td>@item.ThuTuDoc</td>
                                                     <td style="width:5px">@item.SoHo</td>
                                                     <td>@item.SoKhau</td>

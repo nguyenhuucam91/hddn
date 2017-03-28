@@ -370,7 +370,6 @@ $(document).ready(function () {
             var sanLuongValue = $(this).parent().next("td").find("input").val(hieuSo);
         }
 
-        
         //console.log(JSON.stringify(sanLuongValue.));
         //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
         $.ajax({
