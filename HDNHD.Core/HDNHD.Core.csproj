@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -103,10 +104,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Enums.cs" />
     <Compile Include="Controllers\SecuredController.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Helpers\ApplicationCache.cs" />
     <Compile Include="Helpers\AuthHelpers.cs" />
+    <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Models\AjaxResult.cs" />
     <Compile Include="Models\BaseFilterModel.cs" />
     <Compile Include="Models\Pager.cs" />

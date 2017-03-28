@@ -1,6 +1,6 @@
 ﻿@model HDNHD.Core.Models.Pager
 
-@if (Model.NoPages > 0)
+@if (Model.NoPages > 0 || Model.PageSize == HDNHD.Core.Models.Pager.SHOW_ALL)
 {
     <style>
         .bpager {
@@ -85,12 +85,12 @@
         $("#bpager-pagesize").on("change", function () {
             var url = "@Model.UrlPageSize(Model.PageSize)",
             pagesize = $(this).val();
+            var confirmed = true;
             if (pagesize == @HDNHD.Core.Models.Pager.SHOW_ALL) {
-                var confirm = confirm("Xử lý 'hiển thị tất cả' có thể sẽ mất nhiều thời gian. Xác nhận?");
-
-                if (confirm)
-                    window.location.href = url.replace("PageSize=@Model.PageSize", "PageSize="+pagesize);
+                var confirmed = confirm("Xử lý 'hiển thị tất cả' có thể sẽ mất nhiều thời gian. Xác nhận?");
             }
+            if (confirmed)
+                window.location.href = url.replace("PageSize=@Model.PageSize", "PageSize="+pagesize);
         });
     </script>
 }

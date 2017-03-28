@@ -26,13 +26,13 @@
                                 <a href="@Url.Action("BaoCaoHoaDonNhan","BaoCaoInHoaDon")" class="shortcut">
                                     <span class="shortcut-label">Báo cáo hóa đơn nhận</span>
                                 </a>
-                                <a href="@Url.Action("Baocaocongno","Congno")" class=" shortcut">
-                                    <span class="shortcut-label">Báo cáo dư nợ</span>
+                                <a href="@Url.Action("DuNo", "BaoCao", new { area = "ThuNgan" })" class="shortcut">
+                                <span class="shortcut-label">Báo cáo dư nợ</span>
                                 </a>
-                                <a href="@Url.Action("Baocaoduno","Congno") " class=" shortcut">
+                                <a href="@Url.Action("DuCo","BaoCao", new { area="ThuNgan" })" class="shortcut">
                                     <span class="shortcut-label">Báo cáo dư có</span>
                                 </a>
-                                
+
                             </div>
                             <!-- /shortcuts -->
                         </div>
@@ -44,4 +44,3 @@
         </div>
     </div>
 </div>
-

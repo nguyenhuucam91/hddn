@@ -12,6 +12,7 @@ namespace HDNHD.Core.Models
         private int pageSize;
         private int noItems;
 
+
         public int Page
         {
             get
@@ -35,7 +36,7 @@ namespace HDNHD.Core.Models
             }
             set
             {
-                if (value > 0)
+                if (value >= 0)
                 {
                     pageSize = value;
                 }
@@ -61,7 +62,7 @@ namespace HDNHD.Core.Models
         {
             get
             {
-                return (int)Math.Ceiling((double)noItems / pageSize);
+                return pageSize != SHOW_ALL ? (int)Math.Ceiling((double)noItems / pageSize) : 1;
             }
         }
 

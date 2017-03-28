@@ -52,26 +52,6 @@ function loadQuanHuyen($slQuanHuyen, quanHuyenID) {
     });
 }
 
-function getQuanHuyenByID($slQuanHuyen, quanHuyenID) {
-    BUtils.slRemoveAllOptions($slQuanHuyen);
-
-    $.ajax({
-        url: "/Services/QuanHuyen/GetByID"
-    }).done(function (data) {
-        if (data.IsSuccess) {
-            var items = [];
-            $.each(data.Data, function (index, item) {
-                items.push({ "id": item.QuanhuyenID, "text": item.QuanhuyenID + " - " + item.Ten });
-            });
-
-            $slQuanHuyen.select2({ data: items });
-            //if (quanHuyenID != "")
-            $slQuanHuyen.val(quanHuyenID);
-            $slQuanHuyen.change();
-        }
-    });
-}
-
 /**
  * #see: loadQuanHuyen()
  */
@@ -101,35 +81,6 @@ function loadTo($slTo, quanHuyenID, toID) {
     });
 }
 
-
-/**
- * #see: loadQuanHuyen()
- */
-function queryTo($slTo, quanHuyenID, phongBanId, toID) {
-    BUtils.slRemoveAllOptions($slTo);
-
-    if (quanHuyenID == null) {
-        $slTo.change();
-        return false;
-    }
-
-    $.ajax({
-        url: "/Services/To/Query",
-        data: { quanHuyenID: quanHuyenID, phongBanID: phongBanId }
-    }).done(function (data) {
-        if (data.IsSuccess) {
-            var items = [];
-            $.each(data.Data, function (index, item) {
-                items.push({ "id": item.ToQuanHuyenID, "text": item.ToQuanHuyenID + " - " + item.Ma });
-            });
-
-            $slTo.select2({ data: items });
-            //if (toID != "")
-            $slTo.val(toID);
-            $slTo.change();
-        }
-    });
-}
 /**
  * #see: loadQuanHuyen()
  */
