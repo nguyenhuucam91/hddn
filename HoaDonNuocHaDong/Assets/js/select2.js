@@ -310,18 +310,25 @@ $("table tbody tr td input").click(function () {
 });
 
 //nếu như ngày bắt đầu và ngày kết thúc để trống thì tải lại trang để cập nhật vào ô ngày bắt đầu và ngày kết thúc tương ứng của khách hàng
+$(document).ready(function(){
+    $(".endDateFixedTop").change(function () {
+        var endDateValue = $(this).val();
+        $("input[name='endDateHolder']").val(endDateValue);
+    });
+});
+
 
 //khi thay đổi chỉ số (lose focus) thì cập nhật trường ngày bắt đầu, ngày kết thúc, sản lượng...
 $(document).ready(function () {
     $("input[name='chiSoMoi']").change(function () {
         //nếu hóa đơn đã được nhập từ tháng trước thì không cần nhập lại ngày bắt đầu nữa
-        var endFixedTop = $("#endDateFixedTop").val();
+        var endFixedTop = $("input[name='endDateHolder']").val();
 
         var dateStart = $(this).parent('td').siblings(".startDate").find('input[name="startDate"]').val();
         var endDateValue = $(this).parent('td').siblings(".endDate").find('input[name="endDate"]').val();
         if (endDateValue == "") {
             //đặt endDate cho ngày kết thúc dựa theo ngày kết thúc trên fixed navbar
-            if (endFixedTop != null) {
+            if (endFixedTop != "") {
                 var dateEndInput = $(this).parent('td').siblings(".endDate").find('input');
                 var dateEndFixedTop = endFixedTop;
                 dateEndInput.val(dateEndFixedTop);
@@ -329,11 +336,18 @@ $(document).ready(function () {
             } else {
                 alert("Ngày kết thúc không để trống");
                 $(this).val("");
-                $("#endDateFixedTop").focus();
+                $(".endDateFixedTop").focus();
                 return;
             }
-        } else {
+        }
+            //nếu đã có enddate, nếu fix top != "" thì cập nhật lại fixed top, nếu không thì thôi
+        else {
             var dateEndInput = $(this).parent('td').siblings(".endDate").find('input');
+            //update dateEndInput
+            if (endFixedTop != "") {
+                dateEndInput.val(endFixedTop);
+            }
+           
             var dateEnd = dateEndInput.val();
         }
 
@@ -616,7 +630,7 @@ $(function () {
 
 $("#startDateFixedTop").prop('disabled', true);
 
-$("#endDateFixedTop").datepicker({
+$(".endDateFixedTop").datepicker({
     todayBtn: "linked",
     format: 'dd/mm/yyyy',
 });
