@@ -118,15 +118,22 @@ namespace HoaDonNuocHaDong.Helper
             Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
             Hoadonnuoc hoadon = db.Hoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
             //khu vực SH
-            double SH1 = chiTiet.SH1.Value;
-            double SH2 = chiTiet.SH2.Value;
-            double SH3 = chiTiet.SH3.Value;
-            double SH4 = chiTiet.SH4.Value;
-            double SXXD = chiTiet.SXXD.Value;
-            double HC = chiTiet.HC.Value;
-            double CC = chiTiet.CC.Value;
-            double KDDV = chiTiet.KDDV.Value;
+            double SH1 = 0; double SXXD = 0;
+            double SH2 = 0; double HC = 0;
+            double SH3 = 0; double CC = 0;
+            double SH4 = 0; double KDDV = 0;
 
+            if (chiTiet != null)
+            {
+                 SH1 = chiTiet.SH1.Value;
+                 SH2 = chiTiet.SH2.Value;
+                 SH3 = chiTiet.SH3.Value;
+                 SH4 = chiTiet.SH4.Value;
+                 SXXD = chiTiet.SXXD.Value;
+                 HC = chiTiet.HC.Value;
+                 CC = chiTiet.CC.Value;
+                 KDDV = chiTiet.KDDV.Value;
+            }
             var soTienPhaiNopTheoThang = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
             int thangHoaDon = hoadon.ThangHoaDon.Value;
             int namHoaDon = hoadon.NamHoaDon.Value;

@@ -9,4 +9,3 @@ F:\Project\hddn\HDNHD.Models\bin\HDNHD.Models.dll
 F:\Project\hddn\HDNHD.Models\bin\HDNHD.Models.pdb
 F:\Project\hddn\HDNHD.Models\obj\Debug\HDNHD.Models.dll
 F:\Project\hddn\HDNHD.Models\obj\Debug\HDNHD.Models.pdb
-F:\Project\hddn\HDNHD.Models\obj\Debug\HDNHD.Models.csprojResolveAssemblyReference.cache
