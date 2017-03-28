@@ -967,10 +967,9 @@ namespace HoaDonNuocHaDong.Controllers
                     sLTT.tachChiSoSanLuong(hD.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);
                 }
                 //chỉnh sửa khách hàng trong trang áp giá
-                if (Request.QueryString["thang"] != null)
-                {
-                   
-                    return RedirectToAction("Index", "Solieutieuthu");
+                if (@Request.QueryString["thang"] != null)
+                {                   
+                    return RedirectToAction("index", "solieutieuthu");
                 }
                 TempData["to"] = toID;
                 TempData["tuyen"] = tuyenIDUrl;
