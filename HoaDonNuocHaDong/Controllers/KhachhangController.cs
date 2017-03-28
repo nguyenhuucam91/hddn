@@ -993,6 +993,10 @@ namespace HoaDonNuocHaDong.Controllers
                         year = Request.QueryString["nam"], 
                         nvquanly = nhanVienIDUrl});
                 }
+                else if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "solieutieuthuindex")
+                {
+                    return RedirectToAction("index","solieutieuthu");
+                }
                 
                 
                 TempData["to"] = toID;
