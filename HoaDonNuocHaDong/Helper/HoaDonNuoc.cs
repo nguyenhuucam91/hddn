@@ -42,7 +42,7 @@ namespace HoaDonNuocHaDong.Helper
             {
                 //ngayHoaDon = new DateTime(DateTime.Now.Year + 1, 1,15);
                 month = 1;
-                year = DateTime.Now.Year + 1;
+                year = _year.Value + 1;
             }
             //nếu không thì vẫn chuyển năm như bình thường
             else

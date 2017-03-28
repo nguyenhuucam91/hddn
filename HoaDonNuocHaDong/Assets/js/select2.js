@@ -310,20 +310,12 @@ $("table tbody tr td input").click(function () {
 });
 
 //nếu như ngày bắt đầu và ngày kết thúc để trống thì tải lại trang để cập nhật vào ô ngày bắt đầu và ngày kết thúc tương ứng của khách hàng
-$(document).ready(function () {
-    //xóa localStorage cho ngày bắt đầu và ngày kết thúc nếu có
-    localStorage.removeItem("startDate");
-    localStorage.removeItem("endDate");
-    $("#endDateFixedTop").datepicker().on('changeDate', function (ev) {
-        localStorage.setItem("endDate", $(this).val());
-    });
-});
 
 //khi thay đổi chỉ số (lose focus) thì cập nhật trường ngày bắt đầu, ngày kết thúc, sản lượng...
 $(document).ready(function () {
     $("input[name='chiSoMoi']").change(function () {
         //nếu hóa đơn đã được nhập từ tháng trước thì không cần nhập lại ngày bắt đầu nữa
-        var endFixedTop = localStorage.getItem("endDate");
+        var endFixedTop = $("#endDateFixedTop").val();
 
         var dateStart = $(this).parent('td').siblings(".startDate").find('input[name="startDate"]').val();
         var endDateValue = $(this).parent('td').siblings(".endDate").find('input[name="endDate"]').val();
@@ -657,6 +649,6 @@ $("input[name='sanLuongTuyenOng']").blur(function () {
         url: '/tuyenong/nhapsanluong',
         method: 'POST',
         data: JSON.stringify({ TuyenOngID: tuyenongId, SanLuong: chiSoSanLuong, thang: thangCoChiSo, nam: namCoChiSo }),
-        contentType:'application/json',
+        contentType: 'application/json',
     })
 });

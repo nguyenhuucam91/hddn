@@ -861,6 +861,19 @@ namespace HoaDonNuocHaDong.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "KhachhangID,Makhachhang,QuanhuyenID,PhuongxaID,CumdancuID,TuyenKHID,LoaiKHID,LoaiapgiaID,HinhthucttID,TuyenongkythuatID,Sotaikhoan,Masothue,Ngaykyhopdong,Tilephimoitruong,Soho,Ngayap,Ngayhetap,Sonhankhau,Ten,Diachi,Dienthoai,Ghichu,Sokhuvuc,Sohopdong,Tinhtrang,Diachithutien,IsDelete,TTDoc")] Khachhang khachhang, FormCollection form, int? toID, int nhanVienIDUrl, int tuyenIDUrl)
         {
+            int selectedMonth = 0;
+            int selectedYear = 0;
+            if (Request.QueryString["thang"] != null)
+            {
+                selectedMonth = Convert.ToInt32(Request.QueryString["thang"]);
+                selectedYear = Convert.ToInt32(Request.QueryString["nam"]);
+            }
+            else
+            {
+                selectedMonth = DateTime.Now.Month;
+                selectedYear = DateTime.Now.Year;
+            }
+
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
             var phongBanRepository = uow.Repository<PhongBanRepository>();
@@ -891,7 +904,7 @@ namespace HoaDonNuocHaDong.Controllers
                 //nếu chỉ số đầu để trống thì không cập nhật lại nữa
                 if (chiSoDauEdited != -1)
                 {
-                    Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == DateTime.Now.Month && p.NamHoaDon == DateTime.Now.Year);
+                    Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == selectedMonth && p.NamHoaDon == selectedYear);
                     if (hoaDonNuoc != null)
                     {
                         Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuoc.HoadonnuocID);
@@ -902,7 +915,7 @@ namespace HoaDonNuocHaDong.Controllers
                 }
 
                 //xóa bảng áp giá tổng hơp trước
-                List<Apgiatonghop> apTongHop = db.Apgiatonghops.Where(p => p.KhachhangID == khachhang.KhachhangID && p.ThangTongHop == DateTime.Now.Month && p.NamTongHop == DateTime.Now.Year).ToList();
+                List<Apgiatonghop> apTongHop = db.Apgiatonghops.Where(p => p.KhachhangID == khachhang.KhachhangID && p.ThangTongHop == selectedMonth && p.NamTongHop == selectedYear).ToList();
                 if (apTongHop != null)
                 {
                     db.Apgiatonghops.RemoveRange(apTongHop);
@@ -912,7 +925,7 @@ namespace HoaDonNuocHaDong.Controllers
                 int loaiApGiaID = Convert.ToInt32(form["LoaiapgiaID"]);
                 int sanLuongTieuThu = 0; int chiSoDau = 0; int chiSoCuoi = 0; int soKhoan = 0;
                 //lấy sản lượng đã có trong db
-                Hoadonnuoc hD = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == DateTime.Now.Month && p.NamHoaDon == DateTime.Now.Year);
+                Hoadonnuoc hD = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == selectedMonth && p.NamHoaDon == selectedYear);
                 if (hD != null)
                 {
                     int? isNullTongSoTieuThu = hD.Tongsotieuthu;
@@ -924,52 +937,56 @@ namespace HoaDonNuocHaDong.Controllers
                     {
                         sanLuongTieuThu = 0;
                     }
-                }
-                //chi tiết
-                Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hD.HoadonnuocID);
-                if (cT != null)
-                {
-                    chiSoDau = cT.Chisocu.Value;
-                    //nếu chưa nhập chỉ số cuối 
-                    int? hasChiSoMoi = cT.Chisomoi;
-                    if (hasChiSoMoi != null)
+
+                    //chi tiết
+                    Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hD.HoadonnuocID);
+                    if (cT != null)
                     {
-                        chiSoCuoi = hasChiSoMoi.Value;
+                        chiSoDau = cT.Chisocu.Value;
+                        //nếu chưa nhập chỉ số cuối 
+                        int? hasChiSoMoi = cT.Chisomoi;
+                        if (hasChiSoMoi != null)
+                        {
+                            chiSoCuoi = hasChiSoMoi.Value;
+                        }
                     }
 
-                }
-                //tiến hành áp lại giá tổng hợp và đặc biệt
-                if (loaiApGiaID == KhachHang.TONGHOP)
-                {
-                    String loaiChiSo = form["loaiChiSo"];
-                    double KD = form["KD"] == "" ? -1 : Convert.ToDouble(form["KD"]);
-                    double SH = form["SH"] == "" ? -1 : Convert.ToDouble(form["SH"]);
-                    double SX = form["SX"] == "" ? -1 : Convert.ToDouble(form["SX"]);
-                    double HC = form["HC"] == "" ? -1 : Convert.ToDouble(form["HC"]);
-                    double CC = form["CC"] == "" ? -1 : Convert.ToDouble(form["CC"]);
-                    //trong trường hợp tính giá tổng hợp = 1 => tính theo %
-                    if (form["loaiChiSo"] == "1")
+                    //tách chỉ số tổng hợp
+                    //tiến hành áp lại giá tổng hợp và đặc biệt
+                    if (loaiApGiaID == KhachHang.TONGHOP)
                     {
-                        KhachHang.saveGiaTongHop(khachhang.KhachhangID, 1, SH, KD, HC, CC, SX, DateTime.Now.Month, Convert.ToInt16(DateTime.Now.Year));
-                        sLTT.tachSoTongHop(hD.HoadonnuocID, 1, khachhang.KhachhangID, sanLuongTieuThu);
+                        String loaiChiSo = form["loaiChiSo"];
+                        double KD = form["KD"] == "" ? -1 : Convert.ToDouble(form["KD"]);
+                        double SH = form["SH"] == "" ? -1 : Convert.ToDouble(form["SH"]);
+                        double SX = form["SX"] == "" ? -1 : Convert.ToDouble(form["SX"]);
+                        double HC = form["HC"] == "" ? -1 : Convert.ToDouble(form["HC"]);
+                        double CC = form["CC"] == "" ? -1 : Convert.ToDouble(form["CC"]);
+                        //trong trường hợp tính giá tổng hợp = 1 => tính theo %
+                        if (form["loaiChiSo"] == "1")
+                        {
+                            KhachHang.saveGiaTongHop(khachhang.KhachhangID, 1, SH, KD, HC, CC, SX, selectedMonth, Convert.ToInt16(selectedYear));
+                            sLTT.tachSoTongHop(hD.HoadonnuocID, 1, khachhang.KhachhangID, sanLuongTieuThu);
+                        }
+                        // tính theo chỉ số khoán
+                        else
+                        {
+                            KhachHang.saveGiaTongHop(khachhang.KhachhangID, 0, SH, KD, HC, CC, SX, selectedMonth, Convert.ToInt16(selectedYear));
+                            sLTT.tachSoTongHop(hD.HoadonnuocID, 0, khachhang.KhachhangID, sanLuongTieuThu);
+                        }
+                        //chia lại giá                    
                     }
-                    // tính theo chỉ số khoán
+                    //tách lại chỉ số giá khác
                     else
                     {
-                        KhachHang.saveGiaTongHop(khachhang.KhachhangID, 0, SH, KD, HC, CC, SX, DateTime.Now.Month, Convert.ToInt16(DateTime.Now.Year));
-                        sLTT.tachSoTongHop(hD.HoadonnuocID, 0, khachhang.KhachhangID, sanLuongTieuThu);
+                        sLTT.tachChiSoSanLuong(hD.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);
                     }
-                    //chia lại giá                    
-                }
-                //tách lại chỉ số giá khác
-                else
-                {
-                    sLTT.tachChiSoSanLuong(hD.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);
-                }
+                } //end hD != null
+                
+                
                 //chỉnh sửa khách hàng trong trang áp giá
-                if (@Request.QueryString["thang"] != null)
+                if (Request.QueryString["thang"] != null)
                 {                   
-                    return RedirectToAction("index", "solieutieuthu");
+                    return RedirectToAction("index", "Solieutieuthu");
                 }
                 TempData["to"] = toID;
                 TempData["tuyen"] = tuyenIDUrl;
