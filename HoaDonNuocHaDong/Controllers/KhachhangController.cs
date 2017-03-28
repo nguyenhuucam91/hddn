@@ -969,9 +969,7 @@ namespace HoaDonNuocHaDong.Controllers
                 //chỉnh sửa khách hàng trong trang áp giá
                 if (Request.QueryString["thang"] != null)
                 {
-                    int month = Convert.ToInt32(Request.QueryString["thang"]);
-                    int year = Convert.ToInt32(Request.QueryString["nam"]);
-                    int nhanvienIDUrl = Convert.ToInt32(Request.QueryString["nhanvienIDUrl"]);
+                   
                     return RedirectToAction("Index", "Solieutieuthu");
                 }
                 TempData["to"] = toID;
