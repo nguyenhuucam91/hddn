@@ -351,7 +351,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult ChiSoTuyen(FormCollection form)
         {
             //lấy danh sách tổ 
-            ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
             //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
             int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
             int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
