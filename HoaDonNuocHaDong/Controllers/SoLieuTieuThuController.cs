@@ -295,12 +295,12 @@ namespace HoaDonNuocHaDong.Controllers
             //tongTienHoaDon;
             double dinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value);
             double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
-            double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);            
+            double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);
             double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
             if (tongTienHoaDon <= 0)
             {
                 tongTienHoaDon = 0;
-            }            
+            }
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + SoHoaDon;
             //cộng dồn
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc);
@@ -1313,6 +1313,17 @@ namespace HoaDonNuocHaDong.Controllers
             int previousMonth = getPreviousMonthYear(month, year, true);
             int previousYear = getPreviousMonthYear(month, year, false);
 
+
+            ViewBag.khachHang = loadDanhSachSanLuongBatThuong(previousMonth, previousYear, month, year, tuyenID).Distinct().ToList();
+            ViewBag.currentDate = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month);
+            ViewBag.nextMonth = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month + 1 > 12 ? 1 : DateTime.Now.Month + 1);
+            ViewData["nhanVienObj"] = db.Nhanviens.Find(nhanvienInt);
+            ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenID);
+            return View();
+        }
+
+        public List<Models.SoLieuTieuThu.HoaDonNuoc> loadDanhSachSanLuongBatThuong(int previousMonth, int previousYear, int month, int year, int tuyenID)
+        {
             var danhSachHoaDonBatThuong = new List<Models.SoLieuTieuThu.HoaDonNuoc>();
             var danhSachHoaDon = (from i in db.Hoadonnuocs
                                   join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
@@ -1350,12 +1361,8 @@ namespace HoaDonNuocHaDong.Controllers
                     danhSachHoaDonBatThuong.Add(item);
                 }
             }
-            ViewBag.khachHang = danhSachHoaDonBatThuong.Distinct().ToList();
-            ViewBag.currentDate = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month);
-            ViewBag.nextMonth = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month + 1 > 12 ? 1 : DateTime.Now.Month + 1);
-            ViewData["nhanVienObj"] = db.Nhanviens.Find(nhanvienInt);
-            ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenID);
-            return View();
+
+            return danhSachHoaDonBatThuong;
         }
 
         public int getPreviousMonthYear(int month, int year, bool getMonth)

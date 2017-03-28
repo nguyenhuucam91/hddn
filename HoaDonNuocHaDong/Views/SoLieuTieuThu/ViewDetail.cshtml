@@ -244,14 +244,16 @@
         @{
             int month = Convert.ToInt32(Request.QueryString["month"]);
             int year = Convert.ToInt32(Request.QueryString["year"]);
+
             int selectedTuyen = Convert.ToInt32(Request.QueryString["tuyenID"]);
             int nhanVienQLy = Convert.ToInt32(Request.QueryString["nvquanly"]);
             bool hasSLKhongBT = false;
-            var dsSanLuongKhongBinhThuong = (from hoaDon in db.Hoadonnuocs
-                     join s in db.Khachhangs on hoaDon.KhachhangID equals s.KhachhangID
-                     where hoaDon.ThangHoaDon == month && hoaDon.NamHoaDon == year && s.TuyenKHID == selectedTuyen && (hoaDon.Tongsotieuthu <= 1)
-            select new{}).Count();
-            if (dsSanLuongKhongBinhThuong > 0)
+            HoaDonNuocHaDong.Controllers.SoLieuTieuThuController ctl = new HoaDonNuocHaDong.Controllers.SoLieuTieuThuController();
+             int previousMonth = ctl.getPreviousMonthYear(month, year, true);
+            int previousYear = ctl.getPreviousMonthYear(month, year, false);
+
+            var dsSanLuongKhongBinhThuong = ctl.loadDanhSachSanLuongBatThuong(previousMonth, previousYear,month,year,selectedTuyen);
+            if (dsSanLuongKhongBinhThuong.Count > 0)
             {
                 hasSLKhongBT = true;
             }
