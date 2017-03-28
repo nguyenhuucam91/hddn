@@ -13,9 +13,9 @@ namespace HoaDonNuocHaDong.Models.BaoCaoKinhDoanh
         public double SH2Sum { get { return GetD(2); } set { SetD(2, value); } }
         public double SH3Sum { get { return GetD(3); } set { SetD(3, value); } }
         public double SH4Sum { get { return GetD(4); } set { SetD(4, value); } }
-        public double SXSum { get { return GetD(5); } set { SetD(5, value); } }
+        public double SXSum { get { return GetD(7); } set { SetD(7, value); } }
         public double HCSum { get { return GetD(6); } set { SetD(6, value); } }
-        public double CCSum { get { return GetD(7); } set { SetD(7, value); } }
+        public double CCSum { get { return GetD(5); } set { SetD(5, value); } }
         public double KDSum { get { return GetD(8); } set { SetD(8, value); } }
         public double TongSL { get { return GetD(9); } set { SetD(9, value); } }
         public double SLTruocThue { get { return GetD(10); } set { SetD(10, value); } }
