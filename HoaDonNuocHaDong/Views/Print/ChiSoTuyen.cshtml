@@ -7,6 +7,7 @@
     List<Tuyenkhachhang> ls = ViewData["tuyen"] as List<Tuyenkhachhang>;
     String title = ViewBag.hasNumber as String;
     var to = ViewData["to"] as List<ToQuanHuyen>;
+    var xiNghieps = ViewData["xinghiep"] as List<Quanhuyen>;
 }
 
 <div class="main">
@@ -24,24 +25,32 @@
                             <form action="/Print/ChiSoTuyen" method="post">
                                 <br />
                                 <div class="form-group">
-                                    <div class="span3">
-                                        <select placeholder="Tổ" class="dropdown form-control to" name="to">
-                                            <option></option>
 
-                                            @foreach (var item in to)
-                                            {
-                                                <option value="@item.ToQuanHuyenID">@item.ToQuanHuyenID - @item.Ma</option>
-                                            }
+                                    <select name="quan" class="dropdown quan">
+                                        @foreach (var item in xiNghieps)
+                                        {
+                                            <option value="@item.QuanhuyenID">@item.QuanhuyenID - @item.Ten</option>
+                                        }
+                                    </select>
 
-                                        </select>
+                                    <select class="dropdown form-control to" name="to">
+                                        <option></option>
+
+                                        @foreach (var item in to)
+                                        {
+                                            <option value="@item.ToQuanHuyenID">@item.ToQuanHuyenID - @item.Ma</option>
+                                        }
+
+                                    </select>
+
+
+                                    <input name="thang" placeholder="Tháng @DateTime.Now.Month" type="number" min="1" max="12" class="form-control" style="margin-bottom:0px !important" />
+
+                                    <input name="nam" placeholder="Năm @DateTime.Now.Year" type="number" min="0" class="form-control" style="margin-bottom:0px !important" />
+
+                                    <div class="form-control" style="text-align:center;margin-top:1%">
+                                        <button type="submit" class="btn btn-default" style="text-align:center">Lọc</button>
                                     </div>
-                                    <div class="span3">
-                                        <input name="thang" placeholder="Tháng" type="number" min="1" max="12" class="form-control" />
-                                    </div>
-                                    <div class="span3">
-                                        <input name="nam" placeholder="Năm" type="number" min="0" class="form-control" />
-                                    </div>
-                                    <button type="submit" class="btn btn-default" style="text-align:center;margin-left:12px">Lọc</button>
                                     <!-- Xí nghiệp - Tổ -->
 
                                     <div class="clearfix"></div>
