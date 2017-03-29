@@ -68,6 +68,10 @@
                                         <th>Kiểm định</th>
                                         <th data-toggle="tooltip" data-placement="top" title="Màu đỏ là danh sách những khách hàng có áp giá đặc biệt trong tháng này">Hướng dẫn</th>
                                     </tr>
+                                    <tr>
+                                        <td colspan="10"><b>(@tuyenObj.Matuyen - @tuyenObj.Ten) - (@nhanVienObj.MaNhanVien - @nhanVienObj.Ten) - (@month / @year)</b></td>
+                                        <td colspan="4">Ngày kết thúc: <input type="text" class="endDateFixedTop"></td>
+                                    </tr>
                                 </thead>
 
                                 <tbody>
@@ -195,6 +199,7 @@
                             </table>
                             <!--end table-->
                         </div>
+                        <input type="hidden" name="endDateHolder" />
                     </div>
                 </div>
             </div>

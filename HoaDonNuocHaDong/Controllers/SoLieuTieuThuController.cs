@@ -301,6 +301,21 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 tongTienHoaDon = 0;
             }
+
+            if (dinhMuc <= 0)
+            {
+                dinhMuc = 0;
+            }
+
+            if (VAT <= 0)
+            {
+                VAT = 0;
+            }
+
+            if (thueBVMT <= 0)
+            {
+                thueBVMT = 0;
+            }
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + SoHoaDon;
             //cộng dồn
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc);
@@ -505,8 +520,28 @@ namespace HoaDonNuocHaDong.Controllers
             double dinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value);
             double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
             double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);
-
             double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
+
+            if (tongTienHoaDon <= 0)
+            {
+                tongTienHoaDon = 0;
+            }
+
+            if (dinhMuc <= 0)
+            {
+                dinhMuc = 0;
+            }
+
+            if (VAT <= 0)
+            {
+                VAT = 0;
+            }
+
+            if (thueBVMT <= 0)
+            {
+                thueBVMT = 0;
+            }
+
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + sohoadon;
 
             //tổng cộng dồn
