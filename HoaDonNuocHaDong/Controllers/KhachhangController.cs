@@ -304,6 +304,27 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns>Chuỗi JSON</returns>
         public JsonResult FillToByQuan(int ChiNhanhID)
         {
+            /** congnv - 170403 - trả về list tổ kinh doanh nếu vai trò ng dùng là inhoadon */
+            if (HDNHD.Core.Models.RequestScope.UserRole == EUserRole.InHoaDon)
+            {
+                var phongBanRepository = uow.Repository<PhongBanRepository>();
+                var toRepository = uow.Repository<ToRepository>();
+
+                var phongKD = phongBanRepository.GetSingle(m => m.Ten.ToLower().Contains("kinh"));
+                if (phongKD != null)
+                {
+                    var tos = toRepository.GetAll(m => m.QuanHuyenID == ChiNhanhID && m.IsDelete == false && m.PhongbanID == phongKD.PhongbanID)
+                        .Select(m => new
+                        {
+                            Ten = m.Ma,
+                            ToID = m.ToQuanHuyenID
+                        }).Distinct().ToList();
+
+                    return Json(tos, JsonRequestBehavior.AllowGet);
+                }
+            }
+            /** END congnv - 170403 - trả về list tổ kinh doanh nếu vai trò ng dùng là inhoadon */
+
             int phongBanId = getPhongBanNguoiDung();            
             if (phongBanId == 0)
             {
