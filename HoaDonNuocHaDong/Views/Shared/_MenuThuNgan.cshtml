@@ -11,7 +11,7 @@
         </ul>
     </li>
     <li><a href="@Url.Action("Index", "HoaDon", new { area = "ThuNgan" })"><i class="icon-folder-open"></i><span>DS công nợ trong tháng</span></a></li>
-    <li><a href="@Url.Action("Index", "HoaDon", new { area = "ThuNgan", To=DateTime.Now.ToString("MM-yyyy"), TrangThaiThu = false })"><i class="icon-folder-close"></i><span>DS công nợ đã hết hạn</span></a></li>
+    <li><a href="@Url.Action("Index", "HoaDon", new { area = "ThuNgan", To=DateTime.Now.AddMonths(-1).ToString("MM-yyyy"), TrangThaiThu = false })"><i class="icon-folder-close"></i><span>DS công nợ đã hết hạn</span></a></li>
 
     @*<li><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", LoaiKhachHang=HDNHD.Models.Constants.ELoaiKhachHang.HoGiaDinh })"><i class="icon-group"></i><span>Công nợ hộ gia đình</span> </a></li>
     <li><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", LoaiKhachHang=HDNHD.Models.Constants.ELoaiKhachHang.CoQuanToChuc })"><i class="icon-list-alt"></i><span>Công nợ cơ quan, tổ chức</span> </a></li>

@@ -87,10 +87,16 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             if (TrangThaiThu != null)
             {
                 // nullable
-                items = TrangThaiThu.Value ? items.Where(m => m.HoaDon.Trangthaithu == true) : items.Where(m => m.HoaDon.Trangthaithu != true);
+                if (TrangThaiThu.Value)
+                {
+                    items = items.Where(m => m.HoaDon.Trangthaithu == true);
+                } else
+                {
+                    items = items.Where(m => m.HoaDon.Trangthaithu == false || m.HoaDon.Trangthaithu == null);
+                }
             }
-            
-            
+
+
             if (LoaiKhachHang != null)
             {
                 if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
@@ -105,7 +111,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 
 
             if (HinhThucThanhToan != null)
-                items = items.Where(m => m.KhachHang.HinhthucttID == (int)EHinhThucThanhToan.ChuyenKhoan);
+            {
+                items = items.Where(m => m.KhachHang.HinhthucttID == (int) HinhThucThanhToan.Value);
+            }
 
             //* filter by management info
             // find by NhanVienID
@@ -130,12 +138,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             }
             else if (QuanHuyenID != null) // find by QuanHuyenID
             {
-                items = from hdkh in items
-                        join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
-                        join nv in context.Nhanviens on ttnv.NhanVienID equals nv.NhanvienID
-                        join to in context.ToQuanHuyens on nv.ToQuanHuyenID equals to.ToQuanHuyenID
-                        where to.QuanHuyenID == QuanHuyenID
-                        select hdkh;
+                items = items.Where(m => m.KhachHang.QuanhuyenID == QuanHuyenID);
             }
 
             //* filter by customer info

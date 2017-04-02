@@ -51,7 +51,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             }
 
             // query items
-            var items = hoaDonRepository.GetAllModel();
+            var items = hoaDonRepository.GetAllAsHoaDonModel();
             filter.ApplyFilter(ref items);
 
             // apply actions

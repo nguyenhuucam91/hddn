@@ -1,15 +1,13 @@
 ﻿using HDNHD.Core.Repositories.Interfaces;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces
 {
     public interface IHoaDonRepository : IRepository<HDNHD.Models.DataContexts.Hoadonnuoc>
     {
-        IQueryable<HoaDonModel> GetAllModel();
+        IQueryable<HoaDonModel> GetAllAsHoaDonModel();
+        
+        IQueryable<DuNoModel> GetAllAsDuNoModel();
     }
 }

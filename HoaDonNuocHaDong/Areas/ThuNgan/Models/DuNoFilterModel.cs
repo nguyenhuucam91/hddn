@@ -18,8 +18,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public override void ApplyFilter(ref IQueryable<DuNoModel> items)
         {
             var context = (HDNHDDataContext)GetDataContext(items);
-
-            items = items.Where(m => m.HoaDon.Trangthaithu != true);
+            
             // year
             if (Year != null)
             {
@@ -33,22 +32,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                     items = items.Where(m => m.HoaDon.NamHoaDon <= Year);
                 }
             }
-
-            // join all
-            items = from hdm in items
-                    join kh in context.Khachhangs on hdm.HoaDon.KhachhangID equals kh.KhachhangID
-                    join nv in context.Nhanviens on hdm.HoaDon.NhanvienID equals nv.NhanvienID
-                    join stntt in context.SoTienNopTheoThangs on hdm.HoaDon.HoadonnuocID equals stntt.HoaDonNuocID
-                    join t in context.Tuyenkhachhangs on kh.TuyenKHID equals t.TuyenKHID
-                    select new DuNoModel()
-                    {
-                        HoaDon = hdm.HoaDon,
-                        KhachHang = kh,
-                        NhanVien = nv,
-                        SoTienNopTheoThang = stntt,
-                        TuyenKhachHang = t
-                    };
-
+            
             // nhan vien
             if (NhanVienID != null)
             {

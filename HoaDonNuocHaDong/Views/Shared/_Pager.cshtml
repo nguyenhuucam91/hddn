@@ -49,11 +49,11 @@
             <span>Trang:</span>
             <div class="bpagination">
                 <span>
-                    <a @(Model.Page != 1 ? "href=" + Model.UrlPrev() : "") class="btn btn-prev">❮ Trước</a>
+                    <a @(Model.Page != 1 ? "href=" + Model.UrlPrev() : "disabled") class="btn btn-prev">❮ Trước</a>
                 </span>
                 <input type="text" id="bpager-page" value="@Model.Page" class="form-control" />
                 <span>
-                    <a @(Model.Page != Model.NoPages ? "href=" + Model.UrlNext() : "") class="btn btn-next">Sau ❯</a>
+                    <a @(Model.Page != Model.NoPages ? "href=" + Model.UrlNext() : "disabled") class="btn btn-next">Sau ❯</a>
                 </span>
             </div>
             <span>/ tổng số <strong>@Model.NoPages</strong> trang</span>

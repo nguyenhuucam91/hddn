@@ -2,6 +2,8 @@
 using HDNHD.Core.Models;
 using HDNHD.Models.DataContexts;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
+using HoaDonNuocHaDong.Areas.ThuNgan.Repositories;
+using HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using HoaDonNuocHaDong.Repositories.Interfaces;
@@ -26,7 +28,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         public ActionResult DuCo(DuCoFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
         {
             IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
-            IQuanHuyenRepository quanHuyenRepository = uow.Repository<QuanHuyenRepository>();
             IToRepository toRepository = uow.Repository<ToRepository>();
 
             // default values
@@ -48,15 +49,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                     }
                 }
             }
-            var items = duCoRepository.GetAll().Select(m => new DuCoModel()
-            {
-                DuCo = m
-            });
+            var items = duCoRepository.GetAllAsDuCoModel();
+            filter.ApplyFilter(ref items);
 
             if (viewMode == ViewMode.Excel)
-                pager.PageSize = Pager.SHOW_ALL;
+                return ExcelResult("DuCoExport", items.ToList());
 
-            filter.ApplyFilter(ref items);
             pager.ApplyPager(ref items);
 
             #region view data
@@ -65,10 +63,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.Pager = pager;
             #endregion
 
-            if (viewMode == ViewMode.Excel)
-                return ExcelResult("DuCoExport", items.ToList());
-            else
-                return View(items.ToList());
+            return View(items.ToList());
         }
 
         /// <summary>
@@ -101,15 +96,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                 }
             }
 
-            var items = hoaDonRepository.GetAll().Select(m => new DuNoModel()
-            {
-                HoaDon = m
-            });
+            var items = hoaDonRepository.GetAllAsDuNoModel();
+            filter.ApplyFilter(ref items);
 
             if (viewMode == ViewMode.Excel)
-                pager.PageSize = Pager.SHOW_ALL;
+                return ExcelResult("DuNoExport", items.ToList());
 
-            filter.ApplyFilter(ref items);
             pager.ApplyPager(ref items);
 
             #region view data 
@@ -117,10 +109,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             #endregion
-            if (viewMode == ViewMode.Excel)
-                return ExcelResult("DuNoExport", items.ToList());
-            else
-                return View(items.ToList());
+
+            return View(items.ToList());
         }
 
         /// <summary>

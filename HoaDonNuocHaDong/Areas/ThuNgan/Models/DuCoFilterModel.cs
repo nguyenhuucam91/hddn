@@ -19,22 +19,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public override void ApplyFilter(ref IQueryable<DuCoModel> items)
         {
             HDNHDDataContext context = (HDNHDDataContext)GetDataContext(items);
-
-            items = from item in items
-                    join stntt in context.SoTienNopTheoThangs on item.DuCo.TienNopTheoThangID equals stntt.ID
-                    join hd in context.Hoadonnuocs on stntt.HoaDonNuocID equals hd.HoadonnuocID
-                    join kh in context.Khachhangs on hd.KhachhangID equals kh.KhachhangID
-                    join nv in context.Nhanviens on hd.NhanvienID equals nv.NhanvienID
-                    join t in context.Tuyenkhachhangs on kh.TuyenKHID equals t.TuyenKHID
-                    //where kh.LoaiKHID != (int)EApGia.SinhHoat
-                    select new DuCoModel()
-                    {
-                        DuCo = item.DuCo,
-                        HoaDon = hd,
-                        KhachHang = kh,
-                        NhanVien = nv,
-                        TuyenKH = t
-                    };
+            
             // year
             if (Year != null)
             {
