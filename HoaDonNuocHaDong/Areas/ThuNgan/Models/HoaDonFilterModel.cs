@@ -101,19 +101,20 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
                 {
                     items = items.Where(m => m.KhachHang.LoaiKHID != (int)ELoaiKhachHang.HoGiaDinh);
-                } else
+                }
+                else
                 {
                     items = items.Where(m => m.KhachHang.LoaiKHID == (int)LoaiKhachHang.Value);
                 }
             }
-                
+
 
             if (HinhThucThanhToan != null)
                 items = items.Where(m => m.KhachHang.HinhthucttID == (int)EHinhThucThanhToan.ChuyenKhoan);
 
             //* filter by management info
             // find by NhanVienID
-            if (NhanVienID != null) 
+            if (NhanVienID != null)
             {
                 items = from hdkh in items
                         join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
@@ -122,8 +123,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             }
             else if (TuyenKHID != null) // find by TuyenKHID
             {
-                items = items.Where(m => m.KhachHang.TuyenKHID == TuyenKHID);   
-            } else if (ToID != null) // find by ToID
+                items = items.Where(m => m.KhachHang.TuyenKHID == TuyenKHID);
+            }
+            else if (ToID != null) // find by ToID
             {
                 items = from hdkh in items
                         join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
@@ -167,6 +169,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                         KhachHang = item.KhachHang,
                         SoTienNopTheoThang = stntt
                     };
+
         }
         #endregion
     }

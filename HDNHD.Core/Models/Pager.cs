@@ -12,7 +12,6 @@ namespace HDNHD.Core.Models
         private int pageSize;
         private int noItems;
 
-
         public int Page
         {
             get
@@ -79,7 +78,7 @@ namespace HDNHD.Core.Models
 
         public HtmlString UrlPrev()
         {
-            return UrlPage(Page == 1 ? 1 : Page-1);
+            return UrlPage(Page == 1 ? 1 : Page - 1);
         }
 
         public HtmlString UrlNext()
@@ -94,12 +93,12 @@ namespace HDNHD.Core.Models
 
         public HtmlString UrlPage(int page)
         {
-            return BuildQueryStringUrl(HttpContext.Current.Request.Url.ToString(), new string[] { "Page="+page });
+            return BuildQueryStringUrl(HttpContext.Current.Request.Url.ToString(), new string[] { "Page=" + page });
         }
 
         public HtmlString UrlPageSize(int pageSize)
         {
-            return BuildQueryStringUrl(HttpContext.Current.Request.Url.ToString(), new string[] {"PageSize="+pageSize});
+            return BuildQueryStringUrl(HttpContext.Current.Request.Url.ToString(), new string[] { "PageSize=" + pageSize });
         }
 
         /// <summary>
@@ -108,7 +107,7 @@ namespace HDNHD.Core.Models
         /// <param name="url">URI With/Without QueryString</param>
         /// <param name="newQueryStringArr">New QueryString To Append</param>
         /// <returns>Return Url + Existing QueryString + New/Modified QueryString</returns>
-        public HtmlString BuildQueryStringUrl(string url, string[] newQueryStringArr)
+        public static HtmlString BuildQueryStringUrl(string url, string[] newQueryStringArr)
         {
             string plainUrl;
             var queryString = string.Empty;
@@ -139,6 +138,46 @@ namespace HDNHD.Core.Models
             var queryStringToAppend = "?" + newQueryString + delimiter + queryData;
 
             return new HtmlString(plainUrl + queryStringToAppend);
-        }       
+        }
+
+        #region actions
+        /// <summary>
+        ///     apply this to modify <tt>items</tt> 
+        /// </summary>
+        /// <requires>
+        ///     items != null
+        /// </requires>
+        /// <modifies>
+        ///     this.NoItems /\ items
+        /// </modifies>
+        /// <param name="items">items to be filtered</param>
+        public void ApplyPager<T>(ref IQueryable<T> items) where T : class
+        {
+            items = ApplyPager(items);
+        }
+
+        /// <summary>
+        ///     apply this to <tt>items</tt> then return
+        /// </summary>
+        /// <requires>
+        ///     items != null
+        /// </requires>
+        /// <modifies>
+        ///     this.NoItems
+        /// </modifies>
+        /// <param name="items">items to be filtered</param>
+        public IQueryable<T> ApplyPager<T>(IQueryable<T> items) where T : class
+        {
+            NoItems = items.Count();
+
+            if (PageSize != Pager.SHOW_ALL)
+            {
+                items = items.Skip((Page - 1) * PageSize);
+                items = items.Take(PageSize);
+            }
+
+            return items;
+        }
+        #endregion
     }
 }

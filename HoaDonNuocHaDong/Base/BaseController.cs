@@ -16,8 +16,7 @@ namespace HoaDonNuocHaDong.Base
     public class BaseController : SecuredController
     {
         protected HDNHDUnitOfWork uow;
-        protected INhanVienRepository nhanVienRepository;
-        protected IPhongBanRepository phongBanRepository;
+
         protected HDNHD.Models.DataContexts.Nhanvien nhanVien;
         protected HDNHD.Models.DataContexts.Phongban phongBan;
 
@@ -27,13 +26,14 @@ namespace HoaDonNuocHaDong.Base
         public BaseController()
         {
             uow = new HDNHDUnitOfWork();
-            nhanVienRepository = uow.Repository<NhanVienRepository>();
-            phongBanRepository = uow.Repository<PhongBanRepository>();
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
+
+            INhanVienRepository nhanVienRepository = uow.Repository<NhanVienRepository>();
+            IPhongBanRepository phongBanRepository = uow.Repository<PhongBanRepository>();
 
             var role = EUserRole.Admin;
             // load nhanVien for LoggedInUser
@@ -94,7 +94,7 @@ namespace HoaDonNuocHaDong.Base
             //Response.Buffer = true;
             Response.ContentType = "application/vnd.ms-excel";
             Response.ContentEncoding = System.Text.Encoding.UTF8;
-            Response.Charset="utf-8"; 
+            Response.Charset = "utf-8";
             Response.AddHeader("Content-Disposition",
                 String.Format(@"attachment; filename={0}.xls", HDNHD.Core.Helpers.StringHelpers.GenerateSlug(title)));
 

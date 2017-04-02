@@ -12,8 +12,9 @@
         margin-right: 3%;
     }
 </style>
-<div class="row filter hoa-don-filter">
-    <form class="form-horizontal" method="get">
+
+<form class="form-horizontal" method="get">
+    <div class="row filter hoa-don-filter">
         <center>
             <input type="hidden" name="From" value="@(Model.From != null ? Model.From.Value.ToString("MM-yyyy") : "")" />
             <input type="hidden" name="To" value="@(Model.To != null ? Model.To.Value.ToString("MM-yyyy") : "")" />
@@ -22,30 +23,31 @@
             <input type="hidden" name="TrangThaiThu" value="@Model.TrangThaiThu" />
 
             <div class="form-group">
-                <!-- Chi nhánh -->
-                <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
-
-                <!-- Tổ -->
+                <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="false"></select>
                 <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
-                <!-- Nhân viên -->
                 <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
-
-                <!-- Tuyến -->
                 <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
             </div>
             <br />
-            <div class="center form-group">
+            <div class="form-group">
                 Hoặc tìm kiếm theo:
-                <input type="text" name="MaKH" class="detail" placeholder="Tìm theo mã khách hàng" value="@Model.MaKH" />
-                <input type="text" name="TenKH" class="detail" placeholder="Tìm theo tên khách hàng" value="@Model.TenKH" />
-                <input type="text" name="DiaChiKH" class="detail" placeholder="Tìm theo địa chỉ khách hàng" value="@Model.DiaChiKH" />
+                <input type="text" name="MaKH" class="detail" placeholder="Mã khách hàng" value="@Model.MaKH" />
+                <input type="text" name="TenKH" class="detail" placeholder="Tên khách hàng" value="@Model.TenKH" />
+                <input type="text" name="DiaChiKH" class="detail" placeholder="Địa chỉ khách hàng" value="@Model.DiaChiKH" />
             </div>
             <br />
-            <div class="center form-group">
+            <div class="form-group">
                 <input type="hidden" name="Mode" value="search" />
-                <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
             </div>
         </center>
-    </form>
-</div>
+    </div>
+
+    <div class="form-control">
+        <button type="submit" class="btn btn-warning" name="Action" value="DanhDauTatCa"
+                onclick="return confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?\n\n- Chú ý: ĐIỀU KIỆN LỌC khách hàng hiện tại!');">
+            Đánh dấu tất cả đã nộp
+        </button>
+    </div>
+</form>
 

@@ -56,7 +56,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             if (viewMode == ViewMode.Excel)
                 pager.PageSize = Pager.SHOW_ALL;
 
-            filter.ApplyFilter(ref items, ref pager);
+            filter.ApplyFilter(ref items);
+            pager.ApplyPager(ref items);
 
             #region view data
             title = "Báo cáo dư có";
@@ -108,7 +109,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             if (viewMode == ViewMode.Excel)
                 pager.PageSize = Pager.SHOW_ALL;
 
-            filter.ApplyFilter(ref items, ref pager);
+            filter.ApplyFilter(ref items);
+            pager.ApplyPager(ref items);
 
             #region view data 
             title = "Báo cáo dư nợ";

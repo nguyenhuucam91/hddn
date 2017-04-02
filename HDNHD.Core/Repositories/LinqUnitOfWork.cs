@@ -82,6 +82,11 @@ namespace HDNHD.Core.Repositories
             context.Connection.Close();
         }
 
+        public int ExecuteCommand(String command, params object[] parameters)
+        {
+            return context.ExecuteCommand(command, parameters);
+        }
+
         #region disposable
         private bool disposed;
 

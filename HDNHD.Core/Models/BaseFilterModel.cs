@@ -10,40 +10,30 @@ namespace HDNHD.Core.Models
     public abstract class BaseFilterModel<T> where T : class
     {
         /// <summary>
-        ///     apply this to <code>items</code>
+        ///     apply this to <code>items</code> then return
         /// </summary>
         /// <requires>
         ///     items != null
+        /// </requires>
+        /// <param name="items">items to be filtered</param>
+        public IQueryable<T> ApplyFilter(IQueryable<T> items)
+        {
+            ApplyFilter(ref items);
+
+            return items;
+        }
+
+        /// <summary>
+        ///     apply this to modify <code>items</code>
+        /// </summary>
+        /// <requires>
+        ///     items neq null
         /// </requires>
         /// <modifies>
         ///     items
         /// </modifies>
         /// <param name="items">items to be filtered</param>
         public abstract void ApplyFilter(ref IQueryable<T> items);
-
-        /// <summary>
-        ///     extends {@link #ApplyFilter(IQueryable)} to support pager
-        /// </summary>
-        /// <requires>
-        ///     items != null
-        ///     pager != null
-        /// </requires>
-        /// <modifies>
-        ///     pager.NoItems
-        /// </modifies>
-        /// <param name="items">items to be filtered</param>
-        /// <param name="pager">pager info</param>
-        public void ApplyFilter(ref IQueryable<T> items, ref Pager pager)
-        {
-            ApplyFilter(ref items);
-            pager.NoItems = items.Count();
-
-            if (pager.PageSize != Pager.SHOW_ALL)
-            {
-                items = items.Skip((pager.Page - 1) * pager.PageSize);
-                items = items.Take(pager.PageSize);
-            }
-        }
 
         #region utils
         /// <summary>

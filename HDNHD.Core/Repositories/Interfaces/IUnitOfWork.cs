@@ -28,5 +28,7 @@ namespace HDNHD.Core.Repositories.Interfaces
         void Commit();
 
         void RollBack();
+
+        int ExecuteCommand(String command, params object[] parameters);
     }
 }

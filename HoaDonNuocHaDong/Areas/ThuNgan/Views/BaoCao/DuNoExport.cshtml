@@ -5,11 +5,13 @@
 <table border="1">
     <thead>
         <tr>
+            <th>ID khách hàng</th>
             <th>Mã khách hàng</th>
             <th>Tên khách hàng</th>
             <th>Địa chỉ</th>
             <th>Tuyến</th>
             <th>Tháng</th>
+            <th>Số hóa đơn</th>
             <th>Số tiền</th>
             <th>Nhân viên</th>
         </tr>
@@ -23,11 +25,13 @@
                 tong += item.HoaDon.SoTienNopTheoThang.SoTienPhaiNop ?? 0;
             }
             <tr>
+                <td>@item.KhachHang.KhachhangID</td>
                 <td>@item.KhachHang.MaKhachHang</td>
                 <td>@item.KhachHang.Ten</td>
                 <td>@item.KhachHang.Diachi</td>
                 <td>@item.TuyenKhachHang.Ten</td>
                 <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+                <td>@item.HoaDon.Sohoadon</td>
                 <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop : 0)</td>
                 <td>@item.NhanVien.Ten</td>
             </tr>
@@ -35,7 +39,7 @@
     </tbody>
     <tfoot>
         <tr role="row" style="font-weight:bold">
-            <td colspan="5" style="text-align: right">Tổng</td>
+            <td colspan="7" style="text-align: right">Tổng</td>
             <td colspan="2">@tong</td>
         </tr>
     </tfoot>

@@ -1,10 +1,13 @@
 ﻿@{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/Assets/css/tn_common.css" />
+    @RenderSection("Styles", required: false)
+}
 @RenderBody()
 @section Scripts {
     <script type="text/javascript" src="~/Assets/js/butils.js"></script>
     <script type="text/javascript" src="~/Assets/js/tn_common.js"></script>
     @RenderSection("Scripts", required: false)
 }
-
