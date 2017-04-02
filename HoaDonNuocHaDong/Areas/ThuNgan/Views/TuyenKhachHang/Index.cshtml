@@ -47,7 +47,7 @@
                                     @{ int i = 1; }
                                     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.TuyenKhachHangModel item in Model)
                                     {
-                                        <tr style="@(item.TuyenDuocChot.TrangThaiTinhTien == true ? "background-color: #d6f8ff;" : "")">
+                                        <tr style="@(item.SoHoaDonDaIn == item.SoHoaDon ? "background-color: #d6f8ff;" : "")">
                                             <td>@(i++)</td>
                                             <td>@item.TuyenKhachHang.Ten</td>
                                             <td><a href="@Url.Action("XemChiTiet", "Print", new { area="", tuyen = item.TuyenKhachHang.TuyenKHID,month = ViewBag.Filter.Month,year = ViewBag.Filter.Year})" style="@(item.TuyenDuocChot.TrangThaiTinhTien == true ? "color:green" : "color:red")">Xem chi tiết</a></td>
