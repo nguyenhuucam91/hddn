@@ -1,9 +1,11 @@
 ﻿.text-center {
     text-align: center;
 }
+
 .text-left {
     text-align: left;
 }
+
 .text-right {
     text-align: right;
 }
@@ -19,3 +21,28 @@
     display: inline-block;
 }
 /* END bootstrap fix */
+
+.form-filter {
+    border-bottom: 2px solid #F5F5F5;
+    margin-bottom: 15px;
+}
+
+    .form-filter .form-group {
+        margin-bottom: 15px;
+    }
+
+.hoa-don-filter select {
+    width: 20%;
+    float: left;
+    margin-right: 3%;
+}
+
+.header-title {
+    font-style: italic;
+    color: #05af4f;
+    padding-bottom: 15px;
+}
+
+.big {
+    font-size: 18px;
+}

@@ -85,17 +85,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                     (m.HoaDon.NamHoaDon == To.Value.Year && m.HoaDon.ThangHoaDon <= To.Value.Month));
 
             if (TrangThaiThu != null)
-                items = items.Where(m => m.HoaDon.Trangthaithu == TrangThaiThu.Value);
-
-            // join with KhachHang
-            items = from hdm in items
-                    join kh in context.Khachhangs on hdm.HoaDon.KhachhangID equals kh.KhachhangID
-                    select new HoaDonModel()
-                    {
-                        HoaDon = hdm.HoaDon,
-                        KhachHang = kh
-                    };
-
+            {
+                // nullable
+                items = TrangThaiThu.Value ? items.Where(m => m.HoaDon.Trangthaithu == true) : items.Where(m => m.HoaDon.Trangthaithu != true);
+            }
+            
+            
             if (LoaiKhachHang != null)
             {
                 if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
@@ -158,18 +153,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             {
                 items = items.Where(m => m.KhachHang.Diachi.Contains(DiaChiKH));
             }
-
-            // join SoTienNopTheoThang
-            items = from item in items
-                    join stntt in context.SoTienNopTheoThangs
-                    on item.HoaDon.SoTienNopTheoThangID equals stntt.ID
-                    select new HoaDonModel()
-                    {
-                        HoaDon = item.HoaDon,
-                        KhachHang = item.KhachHang,
-                        SoTienNopTheoThang = stntt
-                    };
-
         }
         #endregion
     }

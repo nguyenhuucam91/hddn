@@ -1,6 +1,8 @@
 ﻿using HDNHD.Core.Controllers;
 using HDNHD.Models.Constants;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
+using HoaDonNuocHaDong.Areas.ThuNgan.Repositories;
+using HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using HoaDonNuocHaDong.Repositories.Interfaces;
@@ -16,13 +18,11 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
     {
         private IHoaDonRepository hoaDonRepository;
         private IToRepository toRepository;
-        private IQuanHuyenRepository quanHuyenRepository;
 
         public HoaDonController()
         {
             hoaDonRepository = uow.Repository<HoaDonRepository>();
             toRepository = uow.Repository<ToRepository>();
-            quanHuyenRepository = uow.Repository<QuanHuyenRepository>();
         }
 
         /// <summary>
@@ -51,11 +51,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             }
 
             // query items
-            IQueryable<HoaDonModel> items =
-                hoaDonRepository.GetAll(m => m.Trangthaiin == true && m.Trangthaixoa == false).Select(m => new HoaDonModel()
-                {
-                    HoaDon = m
-                });
+            var items = hoaDonRepository.GetAllModel();
             filter.ApplyFilter(ref items);
 
             // apply actions
@@ -112,5 +108,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             #endregion
             return View(items.ToList());
         }
+        
     }
 }
