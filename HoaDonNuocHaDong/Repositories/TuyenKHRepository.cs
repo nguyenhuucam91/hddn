@@ -16,7 +16,7 @@ namespace HoaDonNuocHaDong.Repositories
         public IQueryable<HDNHD.Models.DataContexts.Tuyenkhachhang> GetByNhanVienID(int nhanVienID)
         {
             HDNHDDataContext dc = (HDNHDDataContext)context;
-            return GetAll(m => m.IsDelete == false).Join(
+            return GetAll(m => m.IsDelete != true).Join(
                 dc.Tuyentheonhanviens.Where(m => m.NhanVienID == nhanVienID), 
                 tuyenKH => tuyenKH.TuyenKHID,
                 tuyenTheoNV => tuyenTheoNV.TuyenKHID, 
