@@ -2,6 +2,7 @@
     ViewBag.Title = "Danh sách in hóa đơn";
 
     HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
+    HoaDonNuocHaDong.Helper.HoaDonNuoc hoaDonNuoc = new HoaDonNuocHaDong.Helper.HoaDonNuoc();
     
     double SH1Price = cS.getSoTienTheoApGia("SH1").Value;
     double SH2Price = cS.getSoTienTheoApGia("SH2").Value;
@@ -40,15 +41,26 @@
                             </form>
 
                             <form action="/Print/PrintFrom?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
-                                <input type="number" placeholder="Từ số hóa đơn" name="from" class="negNumber"/>
-                                <input type="number" placeholder="đến số hóa đơn" name="to" class="negNumber"/>
+                                <input type="number" placeholder="Từ số hóa đơn" name="from" class="negNumber" />
+                                <input type="number" placeholder="đến số hóa đơn" name="to" class="negNumber" />
                                 <input type="submit" value="In danh sách theo số hóa đơn" />
                             </form>
 
                             <!-- Hướng dẫn -->
                             <div class="huongDan">
-                                <span>Những khách hàng nào đã in chỉ số thì tên khách hàng được hiện màu đỏ</span>
+                                <p>Những khách hàng nào đã in chỉ số thì tên khách hàng được hiện màu đỏ</p>
                             </div>
+
+                            <div>
+                                <div style="float:left">
+                                    <div style="width: 30px; height: 30px; background-color: #2982A2; float: left"></div><span>Hóa đơn bị hủy / chưa cập nhật</span>
+                                </div>
+                                <div style="float:left;margin-left:30px">
+                                    <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
                             <!-- Bảng xem chỉ số -->
                             <table class="unlimited table-bordered table-striped">
                                 <thead>
@@ -71,13 +83,14 @@
                                 <tbody>
                                     @{
                                         int i = 1;
-                                      
+
                                     }
                                     @foreach (var item in dsKH)
-                                    {                   
-                                        int hoaDonNuocID = item.HoaDonNuoc;   
-                                        Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);                  
-                                        <tr>
+                                    {
+                                        int hoaDonNuocID = item.HoaDonNuoc;
+                                        Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);
+                                        String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);
+                                        <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
                                             <td>@i</td>
                                             <td>@item.MaKH</td>
@@ -97,10 +110,11 @@
                                             <td>@item.SanLuong</td>
                                             <td>@String.Format("{0:n0}", item.PhiVAT)</td>
                                             <td>@String.Format("{0:n0}", item.PhiBVMT)</td>
-                                            <td style="color:blue">@String.Format("{0:n0}", String.Format("{0:n0}",item.TongCong ))</td>
+                                            <td style="color:blue">@String.Format("{0:n0}", String.Format("{0:n0}", item.TongCong))</td>
                                         </tr>
-                                        i++;
+                                            i++;
                                     }
+
                                 </tbody>
                             </table>
 

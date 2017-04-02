@@ -518,15 +518,25 @@ namespace HoaDonNuocHaDong.Controllers
             String soHieuHoaDon = String.IsNullOrEmpty(form["soHoaDon"]) ? "" :form["soHoaDon"];
             //thêm mới record hủy hóa đơn
             int ngDungID = Convert.ToInt32(Session["nguoiDungID"]);
-            Hoadonnuocbihuy huyhd = new Hoadonnuocbihuy();
-            huyhd.Ngayhuyhoadon = ngayhuyhoadon;
-            huyhd.Lidohuyhoadon = lidoHuy;
-            huyhd.Nguoiyeucauhuy = ngYeuCauHuy;
-            huyhd.HoadonnuocID = hoadonID;
-            huyhd.Nguoihuyhoadon = ngHelper.getNhanVienIDFromNguoiDungID(ngDungID);
-            huyhd.Sohieuhoadon = soHieuHoaDon;
-            db.Hoadonnuocbihuys.Add(huyhd);
-            db.SaveChanges();
+
+            Hoadonnuocbihuy hoaDonBiHuy = db.Hoadonnuocbihuys.FirstOrDefault(p => p.HoadonnuocID == hoadonID);
+            if (hoaDonBiHuy != null)
+            {
+                hoaDonBiHuy.Trangthaicapnhathuy = false;
+            }
+            else
+            {
+                Hoadonnuocbihuy huyhd = new Hoadonnuocbihuy();
+                huyhd.Ngayhuyhoadon = ngayhuyhoadon;
+                huyhd.Lidohuyhoadon = lidoHuy;
+                huyhd.Nguoiyeucauhuy = ngYeuCauHuy;
+                huyhd.HoadonnuocID = hoadonID;
+                huyhd.Nguoihuyhoadon = ngHelper.getNhanVienIDFromNguoiDungID(ngDungID);
+                huyhd.Sohieuhoadon = soHieuHoaDon;
+                huyhd.Trangthaicapnhathuy = false;
+                db.Hoadonnuocbihuys.Add(huyhd);
+                db.SaveChanges();
+            }
 
             //có hóa đơn ID, lấy hóa đơn tương ứng với bảng HoaDon và tiến hành cập nhật trạng thái chốt = false
             Hoadonnuoc hoaDon = db.Hoadonnuocs.Find(hoadonID);

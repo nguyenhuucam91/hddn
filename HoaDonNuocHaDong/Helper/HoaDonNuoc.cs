@@ -33,7 +33,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="KHID"></param>
         /// <param name="HoaDonID"></param>
         /// <param name="ChiSoCuoi"></param>
-        public static void themMoiHoaDonThangSau(int KHID, int HoaDonID, int ChiSoCuoi, int nhanvienID, int? _month, int? _year,DateTime ngayBatDau)
+        public static void themMoiHoaDonThangSau(int KHID, int HoaDonID, int ChiSoCuoi, int nhanvienID, int? _month, int? _year, DateTime ngayBatDau)
         {
             int month = _month.Value; int year = _year.Value;
             //thêm 1 record vào tháng sau trong trường hợp chưa có
@@ -125,14 +125,14 @@ namespace HoaDonNuocHaDong.Helper
 
             if (chiTiet != null)
             {
-                SH1 = chiTiet.SH1.GetValueOrDefault(); 
-                 SH2 = chiTiet.SH2.GetValueOrDefault();
-                 SH3 = chiTiet.SH3.GetValueOrDefault();
-                 SH4 = chiTiet.SH4.GetValueOrDefault();
-                 SXXD = chiTiet.SXXD.GetValueOrDefault();
-                 HC = chiTiet.HC.GetValueOrDefault();
-                 CC = chiTiet.CC.GetValueOrDefault();
-                 KDDV = chiTiet.KDDV.GetValueOrDefault();
+                SH1 = chiTiet.SH1.GetValueOrDefault();
+                SH2 = chiTiet.SH2.GetValueOrDefault();
+                SH3 = chiTiet.SH3.GetValueOrDefault();
+                SH4 = chiTiet.SH4.GetValueOrDefault();
+                SXXD = chiTiet.SXXD.GetValueOrDefault();
+                HC = chiTiet.HC.GetValueOrDefault();
+                CC = chiTiet.CC.GetValueOrDefault();
+                KDDV = chiTiet.KDDV.GetValueOrDefault();
             }
             var soTienPhaiNopTheoThang = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
             int thangHoaDon = hoadon.ThangHoaDon.Value;
@@ -149,10 +149,10 @@ namespace HoaDonNuocHaDong.Helper
                            }).FirstOrDefault();
             double soBVMT = Convert.ToDouble(phiBVMT.TilePhiMoiTruong.Value);
             double tileBVMT = soBVMT / 100; //ra 0
-            double tongPhiBVMT = Convert.ToInt32(tongTienDinhMuc*tileBVMT);
+            double tongPhiBVMT = Convert.ToInt32(tongTienDinhMuc * tileBVMT);
             if (soTienPhaiNopTheoThang != null)
             {
-                soTienPhaiNopTheoThang.SoTienPhaiNop = tongTienDinhMuc+tongVAT+tongPhiBVMT;
+                soTienPhaiNopTheoThang.SoTienPhaiNop = tongTienDinhMuc + tongVAT + tongPhiBVMT;
                 db.Entry(soTienPhaiNopTheoThang).State = System.Data.Entity.EntityState.Modified;
                 hoadon.SoTienNopTheoThangID = soTienPhaiNopTheoThang.ID;
                 hoadon.SoTienNopTheoThang = soTienPhaiNopTheoThang;
@@ -199,8 +199,27 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public static String formatCurrency(double money)
         {
-            System.Globalization.CultureInfo danishCulture = new System.Globalization.CultureInfo("da");            
+            System.Globalization.CultureInfo danishCulture = new System.Globalization.CultureInfo("da");
             return money.ToString("#,###.##", danishCulture);
+        }
+
+        public String getCssClassTinhTrangHoaDonBiHuy(int hoaDonNuocID)
+        {
+            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
+            Hoadonnuocbihuy hoaDonBiHuy = db.Hoadonnuocbihuys.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuocID);
+            String cssClass = "";
+            if (hoaDonBiHuy != null)
+            {
+                if (hoaDonBiHuy.Trangthaicapnhathuy == false || hoaDonBiHuy.Trangthaicapnhathuy == null)
+                {
+                    cssClass = "hoadonbihuy";
+                }
+                else
+                {
+                    cssClass = "hoadonduoccapnhat";
+                }
+            }
+            return cssClass;
         }
     }
 }

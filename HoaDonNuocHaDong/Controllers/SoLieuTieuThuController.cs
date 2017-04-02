@@ -628,9 +628,11 @@ namespace HoaDonNuocHaDong.Controllers
                                     Thang = _month,
                                     Nam = _year,
                                     KHID = r.KhachhangID,
+                                    TrangThaiChot = i.Trangthaichot == null ? false : i.Trangthaichot.Value
                                 }).OrderBy(p => p.ThuTuDoc).ToList();
             ViewBag.chiSoTieuThu = chiSoTieuThu;
-            ViewBag.trangthaiChotTuyen = db.TuyenDuocChots.Count(p => p.TuyenKHID == tuyenID && p.Thang == _month && p.Nam == _year);
+            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == false);
+            ViewBag.trangthaiChotTuyen = soLuongHoaDonChuaChot;
             ViewBag.soLuongHoaDonCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong > 1);
             ViewBag.soLuongHoaDonKhongCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong <= 1);
             ViewBag.soLuongHoaDon = chiSoTieuThu.Count();
@@ -1284,8 +1286,10 @@ namespace HoaDonNuocHaDong.Controllers
                 db.TuyenDuocChots.Add(tuyenChot);
                 db.SaveChanges();
             }
+            //cap nhat tinh trang ds hóa đơn bị hủy
+            cS.capnhatTrangThaiDanhSachHoaDonBiHuyThuocTuyen(tuyenID, month, year);
             //cập nhật trạng thái chốt cho tất cả hóa đơn của khách hàng thuộc tuyến đó               
-            cS.capNhatTrangThaiChotHoaDon(tuyenID, month, year);
+            cS.capNhatTrangThaiChotHoaDon(tuyenID, month, year);            
             saochepDanhsachKhachHangKhongSanLuong(tuyenID, month, year);
             return RedirectToAction("Index");
         }

@@ -457,5 +457,24 @@ namespace HoaDonHaDong.Helper
                 connection.Close();
             }
         }
+
+        public void capnhatTrangThaiDanhSachHoaDonBiHuyThuocTuyen(int tuyenID, int month, int year)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "UPDATE A SET [Trangthaicapnhathuy] = 1 FROM [dbo].[Hoadonnuocbihuy] A "+
+                "JOIN [dbo].[Hoadonnuoc] B on A.HoadonnuocID = B.HoadonnuocID "+
+                "JOIN [dbo].[Khachhang] C on B.KhachhangID = C.KhachhangID " +
+                "WHERE B.ThangHoaDon=@thang AND B.NamHoaDon = @nam AND C.TuyenKHID=@tuyen";
+                command.Parameters.AddWithValue("@thang", month);
+                command.Parameters.AddWithValue("@nam", year);
+                command.Parameters.AddWithValue("@tuyen", tuyenID);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
     }
 }

@@ -21,5 +21,6 @@ namespace HoaDonNuocHaDong
         public string Lidohuyhoadon { get; set; }
         public string Nguoiyeucauhuy { get; set; }
         public string Sohieuhoadon { get; set; }
+        public Nullable<bool> Trangthaicapnhathuy { get; set; }
     }
 }

@@ -1413,7 +1413,15 @@ table.fc-border-separate {
     margin-top: 12px;
 }
 
-    .huongDan p, .huongDan span{
-        color: red;
-        font-size: 15px;
-    }
+.huongDan p, .huongDan span {
+    color: red;
+    font-size: 15px;
+}
+
+.hoadonbihuy {
+    background-color: #2982A2 !important;
+}
+
+.hoadonduoccapnhat{
+    background-color: #f1c0c0 !important;
+}

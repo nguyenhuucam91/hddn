@@ -19,6 +19,7 @@
     var isChot = ViewBag.isChot;
     //Tạo 1 instance của class Chỉ số để kiểm tra chốt
     HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
+    HoaDonNuocHaDong.Helper.HoaDonNuoc hoaDonNuoc = new HoaDonNuocHaDong.Helper.HoaDonNuoc();
     //kiểm tra xem tuyến có rỗng hay ko
     var isEmptyTuyen = ViewBag.emptyTuyen;
     //danh sách nhập chỉ số tiêu thụ được chọn
@@ -80,6 +81,16 @@
                                     <p>Sau khi chỉnh sửa xong, ấn F5 để cập nhật lại</p>
                                 </div>
                                 <br />
+                                <div>
+                                    <div style="float:left">
+                                        <div style="width: 30px; height: 30px; background-color: #2982A2; float: left"></div><span>Hóa đơn bị hủy / chưa cập nhật</span>
+                                    </div>
+                                    <div style="float:left;margin-left:30px">
+                                        <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
                                 <!-- Submit btn -->
                                 <div class="form-group" style="clear:both;text-align:center">
                                     <button type="submit" class="btn btn-default">Tìm kiếm</button>
@@ -107,9 +118,9 @@
 
                                     <a class="toggle-vis" data-column="0">MãKH</a>
                                     - <a class="toggle-vis" data-column="1">TênKH</a>
-                                    - <a class="toggle-vis" data-column="2">Số hộ</a>
-                                    - <a class="toggle-vis" data-column="3">Số khẩu</a>
-                                    - <a class="toggle-vis" data-column="4">TTDoc</a>
+                                    - <a class="toggle-vis" data-column="2">TTDoc</a>
+                                    - <a class="toggle-vis" data-column="3">Số hộ</a>
+                                    - <a class="toggle-vis" data-column="4">Số khẩu</a>
                                     - <a class="toggle-vis" data-column="5">Bắt đầu</a>
                                     - <a class="toggle-vis" data-column="6">Kết thúc</a>
                                     <button type="button"
@@ -147,172 +158,175 @@
 
                                         <tbody>
                                             @{
-                                            int i = 1;
+                                int i = 1;
+                                HoaDonHaDongEntities db = new HoaDonHaDongEntities();
                                             }
                                             @foreach (var item in kH)
                                             {
                                                 int hoaDonID = item.HoaDonNuocID;
                                                 int khachHangIDRow = item.KhachHangID;
-
-                                                <tr>
+                                                String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonID);                                                
+                                                <tr class=@cssClass>
                                                     <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
-                                                    <td><a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
+                                                    <td>
+                                                        <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
                                                                                 toID = @toID,
                                                                                 nhanvienIDUrl = @nhanVienID,
-                                                                                tuyenIDUrl = tuyenID, 
-                                                                                thang = @month, 
+                                                                                tuyenIDUrl = tuyenID,
+                                                                                thang = @month,
                                                                                 nam = @year,
-                                                                                referrer = "solieutieuthuindex"})">@item.TenKhachHang</a></td>
-                                                    <td>@item.ThuTuDoc</td>
-                                                    <td style="width:5px">@item.SoHo</td>
-                                                    <td>@item.SoKhau</td>
-                                                    <!-- Bắt đầu -->
-                                                    @{
-                                                HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+                                                                                referrer = "solieutieuthuindex"})">@item.TenKhachHang</a>
+                                                                            </td>
+                                                                            <td>@item.ThuTuDoc</td>
+                                                                            <td style="width:5px">@item.SoHo</td>
+                                                                            <td>@item.SoKhau</td>
+                                                                            <!-- Bắt đầu -->
+                                                                            @{
+
                                                 Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
-                                                    }
+                                                                            }
 
-                                                    <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
-                                                    @if (thisMonthReceipt.Ngaybatdausudung != null)
-                                                    {
-                                                        <td class="startDate">
-                                                            <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
-                                                            <input type="text" style="width:90%" name="startDate"
-                                                                   value="@String.Format("{0:dd/MM/yyyy}",thisMonthReceipt.Ngaybatdausudung)"
-                                                                   data-hoadonid="@item.HoaDonNuocID" readonly />
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
+                                                                            <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
+                                                                            @if (thisMonthReceipt.Ngaybatdausudung != null)
+                                                                            {
+                                                                                <td class="startDate">
+                                                                                    <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
+                                                                                    <input type="text" style="width:90%" name="startDate"
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}",thisMonthReceipt.Ngaybatdausudung)"
+                                                                                           data-hoadonid="@item.HoaDonNuocID" readonly />
+                                                                                </td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
 
-                                                        <td class="startDate">
-                                                            <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="0" />
-                                                            <input type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" readonly
-                                                                   value="@String.Format("{0:dd/MM/yyyy}",khachHangData.Ngaykyhopdong)" />
-                                                        </td>
-                                                    }
+                                                                                <td class="startDate">
+                                                                                    <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="0" />
+                                                                                    <input type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" readonly
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}",khachHangData.Ngaykyhopdong)" />
+                                                                                </td>
+                                                                            }
 
-                                                    <td class="endDate">
-                                                        
-                                                            @if (!cS.isChotHoaDon(hoaDonID))
-                                                            {
-                                                                <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                       value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
-                                                                       data-hoadonid="@item.HoaDonNuocID" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                       value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
-                                                                       data-hoadonid="@item.HoaDonNuocID" />
-                                                            }
-                                                       
-                                                    </td>
-                                                    <!-- Chỉ số cũ -->
-                                                    <td><input type="text" style="width:55px" value="@item.ChiSoCu" disabled /></td>
+                                                                            <td class="endDate">
 
-                                                    <!-- Chỉ số mới: nếu là nhân viên, nếu đã chốt thì disabled đối với nhân viên(enable với trưởng phòng), nếu chưa chốt thì mở ô ra cho nhập -->
-                                                    @if (isChot == null || isChot == false)
-                                                    {
-                                                        String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
-                                                        <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@chiSoMoi"></td>
-                                                    }
-                                                    //nếu đã chốt hóa đơn (chốt = true) mà phòng in hóa đơn tiến hành hủy hóa đơn thì vấn edit lại được
-                                                    else
-                                                    {
-                                                        String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
-                                                        if (cS.isChotHoaDon(hoaDonID))
-                                                        {
-                                                            <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" disabled="disabled" value="@chiSoMoi"></td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" value="@chiSoMoi"></td>
-                                                        }
-                                                    }
+                                                                                @if (!cS.isChotHoaDon(hoaDonID))
+                                                                                {
+                                                                                    <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
+                                                                                           data-hoadonid="@item.HoaDonNuocID" />
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
+                                                                                           data-hoadonid="@item.HoaDonNuocID" />
+                                                                                }
 
-                                                    <td><input type="text" style="width:55px" name="sanLuong" disabled value="@item.SanLuong" /></td>
-                                                    <td>
+                                                                            </td>
+                                                                            <!-- Chỉ số cũ -->
+                                                                            <td><input type="text" style="width:55px" value="@item.ChiSoCu" disabled /></td>
 
-                                                        @if (isChot == null || isChot == false)
-                                                        {
-                                                            <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
-                                                        }
-                                                        else
-                                                        {
-                                                            if (cS.isChotHoaDon(hoaDonID))
-                                                            {
-                                                                <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
-                                                            }
-                                                            else
-                                                            {
-                                                                <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
-                                                            }
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        @if (HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
-                                                        {
-                                                            <input type="checkbox" name="kiemdinh" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
-                                                                   data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
-                                                            //thêm arrow nếu có kiểm định
-                                                            <button data-trid="details-@i" type="button" data-khid="@item.KhachHangID" data-month="@month" data-year="@year"
-                                                                    title="Xem chi tiết kiểm định" class="btn btn-default dropdown-toggle xemChiTietKD">
-                                                                <span class="caret"></span> <span class="sr-only"></span>
-                                                            </button>
-                                                        }
-                                                        else
-                                                        {
-                                                            <input type="checkbox" class="toggle" disabled />
-                                                        }
-                                                    </td>
+                                                                            <!-- Chỉ số mới: nếu là nhân viên, nếu đã chốt thì disabled đối với nhân viên(enable với trưởng phòng), nếu chưa chốt thì mở ô ra cho nhập -->
+                                                                            @if (isChot == null || isChot == false)
+                                                                            {
+                                                                                String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
+                                                                                <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@chiSoMoi"></td>
+                                                                            }
+                                                                            //nếu đã chốt hóa đơn (chốt = true) mà phòng in hóa đơn tiến hành hủy hóa đơn thì vấn edit lại được
+                                                                            else
+                                                                            {
+                                                                                String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
+                                                                                if (cS.isChotHoaDon(hoaDonID))
+                                                                                {
+                                                                                    <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" disabled="disabled" value="@chiSoMoi"></td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" value="@chiSoMoi"></td>
+                                                                                }
+                                                                            }
 
-                                                    @if (!cS.isChotHoaDon(hoaDonID))
-                                                    {
+                                                                            <td><input type="text" style="width:55px" name="sanLuong" disabled value="@item.SanLuong" /></td>
+                                                                            <td>
+
+                                                                                @if (isChot == null || isChot == false)
+                                                                                {
+                                                                                    <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if (cS.isChotHoaDon(hoaDonID))
+                                                                                    {
+                                                                                        <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                @if (HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
+                                                                                {
+                                                                                    <input type="checkbox" name="kiemdinh" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
+                                                                                           data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
+                                                                                    //thêm arrow nếu có kiểm định
+                                                                                    <button data-trid="details-@i" type="button" data-khid="@item.KhachHangID" data-month="@month" data-year="@year"
+                                                                                            title="Xem chi tiết kiểm định" class="btn btn-default dropdown-toggle xemChiTietKD">
+                                                                                        <span class="caret"></span> <span class="sr-only"></span>
+                                                                                    </button>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <input type="checkbox" class="toggle" disabled />
+                                                                                }
+                                                                            </td>
+
+                                                                            @if (!cS.isChotHoaDon(hoaDonID))
+                                                                            {
                                                         <!-- Áp giá đặc biệt -->
-                                                        if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
-                                                        {
-                                                            <td style="background-color:#ffcc00">
-                                                                <a target="_blank"
-                                                                   href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year,to=toID,nhanvien=nhanVienID,tuyen=tuyenID, sohoadon = @i})"
-                                                                   style="color:red">Áp</a>
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                <a target="_blank"
-                                                                   href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID, nhanvien = nhanVienID, tuyen = tuyenID, sohoadon = @i })">
-                                                                    Áp
-                                                                </a>
-                                                            </td>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
-                                                        {
-                                                            <td style="background-color:#ffcc00">
-                                                                <a target="_blank"
-                                                                   href="javascript:void(0)"
-                                                                   style="color:red">Áp</a>
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                <a target="_blank"
-                                                                   href="javascript:void(0)">
-                                                                    Áp
-                                                                </a>
-                                                            </td>
-                                                        }
-                                                    }
+                                                                                if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
+                                                                                {
+                                                                                    <td style="background-color:#ffcc00">
+                                                                                        <a target="_blank"
+                                                                                           href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year,to=toID,nhanvien=nhanVienID,tuyen=tuyenID, sohoadon = @i})"
+                                                                                           style="color:red">Áp</a>
+                                                                                    </td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td>
+                                                                                        <a target="_blank"
+                                                                                           href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID, nhanvien = nhanVienID, tuyen = tuyenID, sohoadon = @i })">
+                                                                                            Áp
+                                                                                        </a>
+                                                                                    </td>
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
+                                                                                {
+                                                                                    <td style="background-color:#ffcc00">
+                                                                                        <a target="_blank"
+                                                                                           href="javascript:void(0)"
+                                                                                           style="color:red">Áp</a>
+                                                                                    </td>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <td>
+                                                                                        <a target="_blank"
+                                                                                           href="javascript:void(0)">
+                                                                                            Áp
+                                                                                        </a>
+                                                                                    </td>
+                                                                                }
+                                                                            }
 
-                                                </tr>
+                                                                        </tr>
 
-                                                    i++;
+                                                                            i++;
                                             }
                                         </tbody>
 
@@ -328,7 +342,7 @@
                             }
                         }
 
-                        <input type="hidden" name="endDateHolder"/>
+                        <input type="hidden" name="endDateHolder" />
                     </div> <!-- /widget-content -->
 
                 </div> <!-- /widget -->

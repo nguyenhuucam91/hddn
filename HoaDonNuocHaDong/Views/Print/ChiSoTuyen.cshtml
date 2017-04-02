@@ -21,7 +21,7 @@
                         </div>
                         <!-- /widget-header -->
                         <div class="widget-content">
-                            <form action="/Print/ChiSoTuyen" method="get">
+                            <form action="/Print/ChiSoTuyen" method="post">
                                 <br />
                                 <div class="form-group">
 
@@ -38,7 +38,7 @@
 
                                         @foreach (var item in to)
                                         {
-                                            <option value="@item.ToQuanHuyenID" @(ViewBag.selectedTo == item.ToQuanHuyenID ? "selected": "")>@item.ToQuanHuyenID - @item.Ma</option>
+                                            <option value="@item.ToQuanHuyenID" @(ViewBag.selectedTo == item.ToQuanHuyenID ? "selected" : "")>@item.ToQuanHuyenID - @item.Ma</option>
                                         }
 
                                     </select>
@@ -62,9 +62,9 @@
                             <div class="huongDan">
                                 <p>Những tuyến nào đã tính tiền thì cột "Tính tiền" hiển thị màu đỏ, nếu tuyến đã in hết khách hàng thì hiển thị màu xanh lam.</p>
                                 <p>
-                                    Nếu phần "Chọn tổ" để trống thì lấy danh sách tất cả các tuyến đã chốt trong tháng có trong hệ thống, chọn tổ để lọc tuyến dựa theo tổ đó. Nếu tháng/năm để trống thì lấy tháng
-                                    năm hiện tại trong hệ thống
+                                    Nếu phần "Chọn tổ" để trống thì lấy danh sách tất cả các tuyến đã chốt trong tháng có trong hệ thống, chọn tổ để lọc tuyến dựa theo tổ đó.
                                 </p>
+                                <p> Nếu tháng/năm để trống thì lấy tháng năm hiện tại trong hệ thống</p>
                             </div>
                             <br />
                             @if (!beforeFiltered)
@@ -83,10 +83,10 @@
 
                                     <tbody>
                                         @{
-                                            int i = 1;
+                                int i = 1;
 
-                                            int tongSoKHInHD = 0;
-                                            double tongSoTien = 0;
+                                int tongSoKHInHD = 0;
+                                double tongSoTien = 0;
                                         }
                                         @foreach (var item in ls)
                                         {
@@ -141,7 +141,7 @@
                                                     {
                                                         <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
                                                     }
-                                                @if (soLuongKHInHoaDon.Count() == soLuongKHThuc.Count())
+                                                    @if (soLuongKHInHoaDon.Count() == soLuongKHThuc.Count())
                                                     {
                                                         <td style="color:blue"> In (@soLuongKHInHoaDon.Count() / @soLuongKHThuc.Count()) </td>
                                                     }
@@ -154,7 +154,7 @@
                                                     {
                                                         <td></td>
                                                     }
-                                                @if (tongSoTienTuyen != null)
+                                                    @if (tongSoTienTuyen != null)
                                                     {
                                                         <td>@String.Format("{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
@@ -191,7 +191,7 @@
                                         <tr>
                                             <td colspan="3" style="text-align: right;">Tổng số hóa đơn</td>
                                             <td>@tongSoKHInHD</td>
-                                            <td colspan="2" style="text-align: right;">Tổng số tiền</td>
+                                            <td colspan="1" style="text-align: right;">Tổng số tiền</td>
                                             <td>@tongSoTien</td>
                                         </tr>
                                     </tfoot>

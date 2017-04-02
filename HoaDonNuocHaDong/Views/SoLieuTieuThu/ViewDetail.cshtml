@@ -11,6 +11,7 @@
     HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
     //khởi tạo 1 kết nối tới CSDL
     HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+    HoaDonNuocHaDong.Helper.HoaDonNuoc hoaDonNuoc = new HoaDonNuocHaDong.Helper.HoaDonNuoc();
 }
 
 <script src="~/Assets/js/jquery.dataTables.min.js"></script>
@@ -57,7 +58,7 @@
                         </form>
 
                         <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
-                            @if (tuyenDuocChot == 0)
+                            @if (tuyenDuocChot > 0)
                             {
                                 <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
                             }
@@ -79,6 +80,12 @@
                             <div style="float:left;margin-left:32px">
                                 <div style="width:30px;height:30px;background-color:#e47b0f;float:left"></div><span>Đặc biệt</span>
                             </div>
+                            <div style="float:left;margin-left:30px">
+                                <div style="width: 30px; height: 30px; background-color: #2982A2; float: left"></div><span>Hóa đơn bị hủy / chưa cập nhật</span>
+                            </div>
+                            <div style="float:left;margin-left:30px">
+                                <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
+                            </div>
                             <div class="clearfix"></div>
                         </div>
                         <!--Tắt bật cột-->
@@ -86,15 +93,16 @@
 
                             <div class="pull-left">
                                 Tắt bật cột (Màu đỏ là cột được ẩn):
-                                <a class="toggle-vis" data-column="0">MãKH</a>
+                                  <a class="toggle-vis" data-column="0">MãKH</a>
                                 - <a class="toggle-vis" data-column="1">TênKH</a>
-                                - <a class="toggle-vis" data-column="2">Số hộ</a>
-                                - <a class="toggle-vis" data-column="3">Số khẩu</a>
-                                - <a class="toggle-vis" data-column="4">Loại giá</a>
-                                - <a class="toggle-vis" data-column="5">Chỉ số cũ</a>
-                                - <a class="toggle-vis" data-column="6">Chỉ số mới</a>
-                                - <a class="toggle-vis" data-column="7">Số khoán</a>
-                                - <a class="toggle-vis" data-column="8">Sản lượng</a>
+                                - <a class="toggle-vis" data-column="2">TTDoc</a>
+                                - <a class="toggle-vis" data-column="3">Số hộ</a>
+                                - <a class="toggle-vis" data-column="4">Số khẩu</a>
+                                - <a class="toggle-vis" data-column="5">Loại giá</a>
+                                - <a class="toggle-vis" data-column="6">Chỉ số cũ</a>
+                                - <a class="toggle-vis" data-column="7">Chỉ số mới</a>
+                                - <a class="toggle-vis" data-column="8">Số khoán</a>
+                                - <a class="toggle-vis" data-column="9">Sản lượng</a>
                             </div>
                             <div class="pull-right">
                                 <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
@@ -137,7 +145,7 @@
                             </thead>
 
                             <tbody>
-
+                               
                                 @foreach (var item in chiSoTieuThu)
                                 {
                                     int hoaDonID = item.HoaDonNuocID;
@@ -162,7 +170,9 @@
                                         item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH ? "HC" :
                                     item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP ? "CC" : "TH";
 
-                                    <tr @{ String _class = ""; if (isDacBiet == true) { _class = "traverse dacbiet " + item.LoaiApGiaID; } else { _class = "traverse " + item.LoaiApGiaID; } } class="@_class">
+                                    String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(item.HoaDonNuocID);
+                                          
+                                    <tr @{ String _class = ""; if (isDacBiet == true) { _class = "traverse dacbiet " + item.LoaiApGiaID; } else { _class = "traverse " + item.LoaiApGiaID; } } class="@_class @cssClass">
 
                                         <td><a target="_blank" style="color:blue" href="@Url.Action("ViewDetail", "Khachhang", new { id = khachHangIDRow })">@item.MaKhachHang</a></td>
                                         <td>

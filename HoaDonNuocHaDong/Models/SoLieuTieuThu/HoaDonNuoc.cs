@@ -35,5 +35,6 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
         public String SoHoaDon { get; set; }
 
         public DateTime? NgayKiHopDong { get; set; }
+        public bool TrangThaiChot { get; set; }
     }
 }
