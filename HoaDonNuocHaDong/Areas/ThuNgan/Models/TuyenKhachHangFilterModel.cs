@@ -35,7 +35,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                         TuyenKhachHang = g.Select(m => m.item.TuyenKhachHang).FirstOrDefault(),
                         TuyenDuocChot = g.Select(m => m.tdc).FirstOrDefault(),
                         SoHoaDon = g.Select(m => m.hd).Count(),
-                        SoHoaDonDaIn = g.Select(m => m.hd.Trangthaiin == true).Count()
+                        SoHoaDonDaIn = g.Count(m => m.hd.Trangthaiin == true)
                     };
         }
     }
