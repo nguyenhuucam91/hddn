@@ -1,28 +1,28 @@
-<ul class="mainnav">
+﻿<ul class="mainnav">
     <li class="dropdown">
         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-user"></i>
-            <span>Ng??i d�ng &amp; nh�n vi�n</span>
+            <span>Người dùng &amp; nhân viên</span>
             <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-            <li><a href="/Nguoidung">Ng??i d�ng</a></li>
-            <li><a href="/Nhanvien">Nh�n vi�n</a></li>
+            <li><a href="/Nguoidung">Người dùng</a></li>
+            <li><a href="/Nhanvien">Nhân viên</a></li>
         </ul>
     </li>
-    <li class="active"><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", LoaiKhachHang=HDNHD.Models.Constants.ELoaiKhachHang.HoGiaDinh })"><i class="icon-group"></i><span>C�ng n? h? gia ?�nh</span> </a></li>
-    <li><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", LoaiKhachHang=HDNHD.Models.Constants.ELoaiKhachHang.CoQuanToChuc })"><i class="icon-list-alt"></i><span>C�ng n? c? quan, t? ch?c</span> </a></li>
-    <li><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", HinhThucThanhToan = HDNHD.Models.Constants.EHinhThucThanhToan.ChuyenKhoan })"><i class="icon-user"></i><span>KH chuy?n kho?n</span></a></li>
+    <li class="active"><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", LoaiKhachHang=HDNHD.Models.Constants.ELoaiKhachHang.HoGiaDinh })"><i class="icon-group"></i><span>Công nợ hộ gia đình</span> </a></li>
+    <li><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", LoaiKhachHang=HDNHD.Models.Constants.ELoaiKhachHang.CoQuanToChuc })"><i class="icon-list-alt"></i><span>Công nợ cơ quan, tổ chức</span> </a></li>
+    <li><a href="@Url.Action("Index", "HoaDon", new { area="ThuNgan", HinhThucThanhToan = HDNHD.Models.Constants.EHinhThucThanhToan.ChuyenKhoan })"><i class="icon-user"></i><span>KH chuyển khoản</span></a></li>
     <li class="dropdown">
         <a href="javascript;" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-list-alt"></i>
-            <span>B�o c�o thu ng�n</span> 
+            <span>Báo cáo thu ngân</span> 
             <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-            <li><a href="@Url.Action("DuCo", "BaoCao", new { area = "ThuNgan" })">B�o c�o d? c�</a></li>
-            <li><a href="@Url.Action("DuNo", "BaoCao", new { area = "ThuNgan" })">B�o c�o d? n?</a></li>
+            <li><a href="@Url.Action("DuCo", "BaoCao", new { area = "ThuNgan" })">Báo cáo dư có</a></li>
+            <li><a href="@Url.Action("DuNo", "BaoCao", new { area = "ThuNgan" })">Báo cáo dư nợ</a></li>
         </ul>
     </li>
-    <li><a href="@Url.Action("Index", "TuyenKhachHang", new { area="ThuNgan" })"><i class="icon-list-alt"></i><span>Danh s�ch h�a ??n ?� in</span> </a></li>
+    <li><a href="@Url.Action("Index", "TuyenKhachHang", new { area="ThuNgan" })"><i class="icon-list-alt"></i><span>Danh sách hóa đơn đã in</span> </a></li>
 </ul>
