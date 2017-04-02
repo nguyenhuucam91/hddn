@@ -11,6 +11,7 @@ namespace HoaDonNuocHaDong.Helper
     {
         static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
+        HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
         /// <summary>
         /// Lấy thứ tự đọc của hóa đơn dựa theo hóa đơn ID
         /// </summary>
@@ -204,9 +205,8 @@ namespace HoaDonNuocHaDong.Helper
         }
 
         public String getCssClassTinhTrangHoaDonBiHuy(int hoaDonNuocID)
-        {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
-            Hoadonnuocbihuy hoaDonBiHuy = db.Hoadonnuocbihuys.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuocID);
+        {           
+            Hoadonnuocbihuy hoaDonBiHuy = _db.Hoadonnuocbihuys.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuocID);
             String cssClass = "";
             if (hoaDonBiHuy != null)
             {
