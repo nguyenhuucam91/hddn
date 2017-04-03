@@ -497,13 +497,15 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult DanhSachKhachHangHetHanDinhMuc(FormCollection fc)
         {
             int d1 = int.Parse(fc["d1"]);
-            int d2 = int.Parse(fc["d2"]);
+            int d2 = int.Parse(fc["d2"]);            
+            DateTime ngayHetAp = DateTime.Parse(fc["Ngayhetap"]);
             DateTime d3 = DateTime.Now;
             ControllerBase<DanhSachKhachHangHetHanDinhMuc> cb = new ControllerBase<DanhSachKhachHangHetHanDinhMuc>();
             List<DanhSachKhachHangHetHanDinhMuc> lst = cb.Query(
                 "BC16",
                 new SqlParameter("@d1", d1),
-                new SqlParameter("@d2", d2)
+                new SqlParameter("@d2", d2),
+                new SqlParameter("@hethandinhmuc",ngayHetAp)
                 );
 
             ViewData["lst"] = lst;

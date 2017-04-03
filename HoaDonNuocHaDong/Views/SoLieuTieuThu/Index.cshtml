@@ -165,7 +165,7 @@
                                             {
                                                 int hoaDonID = item.HoaDonNuocID;
                                                 int khachHangIDRow = item.KhachHangID;
-                                                String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonID);                                                
+                                                String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonID);
                                                 <tr class=@cssClass>
                                                     <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
                                                     <td>
@@ -182,7 +182,6 @@
                                                                             <td>@item.SoKhau</td>
                                                                             <!-- Bắt đầu -->
                                                                             @{
-
                                                 Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
                                                                             }
 

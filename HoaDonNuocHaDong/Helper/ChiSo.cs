@@ -115,8 +115,10 @@ namespace HoaDonHaDong.Helper
             var _hoaDonNuoc = (from i in _db.Hoadonnuocs
                                join r in _db.Khachhangs on i.KhachhangID equals r.KhachhangID
                                join m in _db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
-                               where i.ThangHoaDon == month && i.NamHoaDon == year && r.TuyenKHID == tuyenKHID.Value &&
-                               (i.Trangthaixoa == false || i.Trangthaixoa == null)
+                               where i.ThangHoaDon == month && i.NamHoaDon == year && 
+                                     r.TuyenKHID == tuyenKHID.Value &&
+                                     ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
+                                     (i.Trangthaixoa == false || i.Trangthaixoa == null) 
                                orderby r.TTDoc
                                select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                {

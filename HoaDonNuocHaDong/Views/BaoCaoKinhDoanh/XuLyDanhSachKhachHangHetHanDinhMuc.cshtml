@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "XuLyDanhSachKhachHangHetHanDinhMuc";
 
 }
@@ -19,11 +18,19 @@
                     <div class="xulybc">
                         <div class="xulybc">
                             <p>
-                                Mức đầu: <input type="number" class="form-control" id="mucdau" name="d1" required style="width:100px">
-                                Đến mức: <input type="number" class="form-control" id="denmuc" name="d2" required style="width:100px">
+                                Mức đầu: <input type="number" class="form-control" id="mucdau" name="d1" required style="width:100px" />
+                                Đến mức: <input type="number" class="form-control" id="denmuc" name="d2" required style="width:100px" />
                             </p>
-                           
+
+                            <p>                               
+                                Ngày hết hạn định mức: <input class="datepicker hetdinh" data-val="true" id="Ngayhetap" name="Ngayhetap" type="text" value="">
+                            </p>
+
                             <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
+
+                            <div class="huongDan">
+
+                            </div>
                         </div>
                     </div>
                 }
