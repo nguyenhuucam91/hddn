@@ -96,7 +96,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 }
             }
 
-
             if (LoaiKhachHang != null)
             {
                 if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
@@ -109,24 +108,21 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 }
             }
 
-
             if (HinhThucThanhToan != null)
             {
                 items = items.Where(m => m.KhachHang.HinhthucttID == (int) HinhThucThanhToan.Value);
             }
 
             //* filter by management info
-            // find by NhanVienID
-            if (NhanVienID != null)
+            if (TuyenKHID != null) // find by TuyenKHID
+            {
+                items = items.Where(m => m.KhachHang.TuyenKHID == TuyenKHID);
+            } else if (NhanVienID != null) // find by NhanVienID
             {
                 items = from hdkh in items
                         join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
                         where ttnv.NhanVienID == NhanVienID
                         select hdkh;
-            }
-            else if (TuyenKHID != null) // find by TuyenKHID
-            {
-                items = items.Where(m => m.KhachHang.TuyenKHID == TuyenKHID);
             }
             else if (ToID != null) // find by ToID
             {
