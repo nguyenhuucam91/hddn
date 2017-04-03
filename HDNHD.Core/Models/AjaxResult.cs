@@ -40,6 +40,15 @@ namespace HDNHD.Core.Models
             base.ExecuteResult(context);
         }
 
+        public static AjaxResult Fail(string message)
+        {
+            return new AjaxResult()
+            {
+                IsSuccess = false,
+                Message = message
+            };
+        }
+
         public static string ToJson(object data)
         {
             return JsonConvert.SerializeObject(data);

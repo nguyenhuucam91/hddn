@@ -1,10 +1,6 @@
 ﻿using HDNHD.Core.Models;
-using HDNHD.Models.Constants;
 using HDNHD.Models.DataContexts;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {
@@ -34,7 +30,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             // nhan vien
             if (NhanVienID != null)
             {
-                items = items.Where(m => m.HoaDon.NhanvienID == NhanVienID);
+                items = items.Where(m => m.NhanVien.NhanvienID == NhanVienID);
             } // to
             else if (ToID != null)
             {

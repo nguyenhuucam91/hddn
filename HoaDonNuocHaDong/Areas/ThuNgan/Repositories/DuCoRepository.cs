@@ -16,7 +16,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
             dc = (HDNHDDataContext)context;
         }
 
-        IQueryable<DuCoModel> IDuCoRepository.GetAllAsDuCoModel()
+        IQueryable<DuCoModel> IDuCoRepository.GetAllDuCoModel()
         {
             return from d in dc.DuCos
                    join stntt in dc.SoTienNopTheoThangs on d.TienNopTheoThangID equals stntt.ID

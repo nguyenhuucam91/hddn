@@ -6,8 +6,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces
 {
     public interface IHoaDonRepository : IRepository<HDNHD.Models.DataContexts.Hoadonnuoc>
     {
-        IQueryable<HoaDonModel> GetAllAsHoaDonModel();
+        IQueryable<HoaDonModel> GetAllHoaDonModel();
+
+        HoaDonModel GetHoaDonModelByID(int hoaDonID);
         
-        IQueryable<DuNoModel> GetAllAsDuNoModel();
+        IQueryable<DuNoModel> GetAllDuNoModel();
     }
 }

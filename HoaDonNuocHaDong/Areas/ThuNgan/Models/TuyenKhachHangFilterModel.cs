@@ -1,10 +1,7 @@
 ﻿using HDNHD.Core.Models;
-using HDNHD.Models.Constants;
 using HDNHD.Models.DataContexts;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
+﻿namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {
     public class TuyenKhachHangModel
     {

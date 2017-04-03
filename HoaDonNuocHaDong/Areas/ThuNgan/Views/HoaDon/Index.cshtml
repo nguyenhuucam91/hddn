@@ -30,7 +30,7 @@
                                         <th>Địa chỉ</th>
                                         <th>Tháng</th>
                                         <th>Số tiền phải nộp</th>
-                                        <th>Trạng thái thu <input id="checkAll" type="checkbox" /></th>
+                                        <th>Trạng thái thu</th>
                                         <th>Ngày thu</th>
                                         <th>Số tiền đã nộp</th>
                                     </tr>
@@ -41,13 +41,10 @@
                                 }
                                 @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
                                 {
-                                    if (item.SoTienNopTheoThang != null)
-                                    {
-                                        tong += item.SoTienNopTheoThang.SoTienDaThu.Value;
-                                    }
+                                    tong += item.SoTienNopTheoThang.SoTienDaThu.Value;
                                     <tr>
-                                        <td>@(++stt)</td>
-                                        <td>@item.KhachHang.MaKhachHang</td>
+                                        <td style="text-align: right">@(++stt)</td>
+                                        <td class="text-center">@item.KhachHang.MaKhachHang</td>
                                         <td>
                                             <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
                                                data-khachhang="@item.KhachHang.KhachhangID" data-loaikhachhang="@item.KhachHang.LoaiKHID"
@@ -57,56 +54,21 @@
                                         </td>
                                         <td>@item.KhachHang.Diachi</td>
                                         <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-                                        <td>
-                                            @if (item.SoTienNopTheoThang != null)
-                                            {
-                                                @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)
-                                            }
-                                            else
-                                            {
-                                                @Html.Raw("0")
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (item.HoaDon.Trangthaithu == true)
-                                            {
-                                                <input type="checkbox" class="@item.HoaDon.HoadonnuocID" checked value="1" name="TrangThaiThu" />
-                                            }
-                                            else
-                                            {
-                                                <input type="checkbox" value="0" class="@item.HoaDon.HoadonnuocID" name="TrangThaiThu" />
-                                            }
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
+                                        <td style="text-align: center;">
+                                            <input type="checkbox" @(item.HoaDon.Trangthaithu == true ? "checked" : "") class="chk-thanh-toan" value="@item.HoaDon.HoadonnuocID" />
                                         </td>
                                         <td width=10%>
-                                            @if (item.HoaDon.NgayNopTien.Equals(null) || item.HoaDon.Trangthaithu != true)
-                                            {
-                                                <input type="date" name="ngaynop" value="" style="width:70px" id="@item.HoaDon.HoadonnuocID" class="ngaynoptien" />
-
-                                            }
-                                            else
-                                            {
-                                                <input type="date" name="ngaynop" value="@item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy")" style="width:70px" id="@item.HoaDon.HoadonnuocID" class="ngaynoptien" />
-                                            }
-
+                                            <input type="date" class="tbx-ngay-thu" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
                                         </td>
-                                        <td>
-                                            <div style="color:red">
-                                                <span class="@item.HoaDon.HoadonnuocID">
-                                                    @if (item.SoTienNopTheoThang != null && item.SoTienNopTheoThang.SoTienDaThu != null)
-                                                    {
-                                                        @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.Raw("0")
-                                                    }
-                                                </span>
-
-                                                <a class="passGiaoDich" href="#" style="color:black;" data-toggle="modal" data-target="#ThemTien"
-                                                   data-khachhang="@item.KhachHang.KhachhangID" data-tiennoptheothang="@item.HoaDon.SoTienNopTheoThangID" data-hdid="@item.HoaDon.HoadonnuocID">
-                                                    <button style="margin-bottom:8px">+</button>
-                                                </a>
-                                            </div>
+                                        <td style="text-align: right; width: 12%">
+                                            <span class="txt-so-tien-da-nop">
+                                                @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
+                                            </span>
+                                            <a class="passGiaoDich" href="#" style="color:black;" data-toggle="modal" data-target="#ThemTien"
+                                               data-khachhang="@item.KhachHang.KhachhangID" data-tiennoptheothang="@item.HoaDon.SoTienNopTheoThangID" data-hdid="@item.HoaDon.HoadonnuocID">
+                                                <button style="margin-bottom:8px">+</button>
+                                            </a>
                                         </td>
                                     </tr>
                                 }
@@ -209,6 +171,55 @@
 
             // loadTuyen
             loadTuyen($(".sl-tuyen-kh"), nhanVienID, "@ViewBag.Filter.TuyenKHID");
+        });
+
+
+        /***** Thanh Toan HD *****/
+        /**
+         * update HoaDon status against database & get back updated model
+         * update GUI trangThaiThu, ngayThu, soTienDaNop
+         */
+        function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop) {
+            var trangThaiThu = $trangThaiThu.is(":checked"),
+                ngayThu = $ngayThu.val();
+
+            if (!trangThaiThu) {
+                var confirmed = confirm("Bỏ trạng thái thu sẽ XÓA tất cả các giao dịch trong tháng của khách hàng này. Bạn chắc chắn?");
+
+                if (!confirmed) {
+                    // set back checked
+                    $trangThaiThu.prop("checked", true);
+                    return;
+                }
+            }
+
+            $.ajax({
+                url: "/Services/HoaDon/CapNhatThanhToan",
+                data: { hoaDonID: hoaDonID, trangThaiThu: trangThaiThu, ngayThu: ngayThu }
+            }).done(function (data) {
+                $trangThaiThu.prop("checked", data.Data.HoaDon.TrangThaiThu);
+                $ngayThu.val(data.Data.HoaDon.NgayNopTien);
+                $soTienDaNop.html(data.Data.SoTienNopTheoThang.SoTienDaThu);
+
+                if (!data.IsSuccess)
+                    alert ("Lỗi cập nhật trạng thái thu! vui lòng thử lại.");
+            });
+        }
+
+        function capNhatNgayThu(date) {
+
+        }
+
+        /***** END Thanh Toan HD *****/
+
+        $(".chk-thanh-toan").change(function () {
+            var $trangThaiThu = $(this),
+                hoaDonID = $trangThaiThu.val();
+                $tr = $trangThaiThu.closest("tr"),
+                $ngayThu = $tr.find(".tbx-ngay-thu"),
+                $soTienDaNop = $tr.find(".txt-so-tien-da-nop")
+
+                capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop);
         });
     </script>
 }

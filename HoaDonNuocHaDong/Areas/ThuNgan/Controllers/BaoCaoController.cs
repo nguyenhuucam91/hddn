@@ -8,9 +8,7 @@ using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using HoaDonNuocHaDong.Repositories.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
@@ -49,7 +47,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                     }
                 }
             }
-            var items = duCoRepository.GetAllAsDuCoModel();
+            var items = duCoRepository.GetAllDuCoModel();
             filter.ApplyFilter(ref items);
 
             if (viewMode == ViewMode.Excel)
@@ -96,7 +94,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                 }
             }
 
-            var items = hoaDonRepository.GetAllAsDuNoModel();
+            var items = hoaDonRepository.GetAllDuNoModel();
             filter.ApplyFilter(ref items);
 
             if (viewMode == ViewMode.Excel)
