@@ -1375,14 +1375,12 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 int khachHangNgungCapNuocID = Convert.ToInt32(item);
                 //bằng 1 là đã thanh lý hơp đồng
-                var khachHang = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == khachHangNgungCapNuocID);
-                khachHang.Ngayngungcapnuoc = null;
-                khachHang.Lydongungcapnuoc = null;
+                var khachHang = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == khachHangNgungCapNuocID);               
                 khachHang.Ngaycapnuoclai = ngayCapNuocLai;
                 khachHang.Lydocapnuoclai = lyDoCapNuocLai;
                 db.Entry(khachHang).State = EntityState.Modified;
                 db.SaveChanges();
-                //cập nhật lại trạng thái của hóa đơn, từ hiển thị => xóa
+                
                 List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangNgungCapNuocID && p.ThangHoaDon == DateTime.Now.Month && p.NamHoaDon == DateTime.Now.Year).ToList();
                 foreach (var hoadon in hoadons)
                 {

@@ -115,7 +115,6 @@
                                  <!--Tắt bật cột-->
                                 <div class="form-actions">
                                     Tắt bật cột (Màu đỏ là cột được ẩn):
-
                                     <a class="toggle-vis" data-column="0">MãKH</a>
                                     - <a class="toggle-vis" data-column="1">TênKH</a>
                                     - <a class="toggle-vis" data-column="2">TTDoc</a>
@@ -183,26 +182,38 @@
                                                                             <!-- Bắt đầu -->
                                                                             @{
                                                 Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
+                                                var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
                                                                             }
 
                                                                             <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
                                                                             @if (thisMonthReceipt.Ngaybatdausudung != null)
                                                                             {
+                                                                                DateTime ngayBatDauHoaDon = thisMonthReceipt.Ngaybatdausudung.GetValueOrDefault();
+                                                                                if (khachHangData.Ngaycapnuoclai != null)
+                                                                                {
+                                                                                    ngayBatDauHoaDon = hoaDonNuoc.compareNgayCapNuocLaiVoiNgayBatDauHoaDon(khachHangData.Ngaycapnuoclai.Value, ngayBatDauHoaDon);
+                                                                                }
                                                                                 <td class="startDate">
                                                                                     <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
                                                                                     <input type="text" style="width:90%" name="startDate"
-                                                                                           value="@String.Format("{0:dd/MM/yyyy}",thisMonthReceipt.Ngaybatdausudung)"
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}",ngayBatDauHoaDon)"
                                                                                            data-hoadonid="@item.HoaDonNuocID" readonly />
                                                                                 </td>
                                                                             }
+                                                                            
+                                                                            
                                                                             else
                                                                             {
-                                                                                var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
+                                                                                DateTime ngayBatDauHoaDon = khachHangData.Ngaykyhopdong.GetValueOrDefault();
+                                                                                if (khachHangData.Ngaycapnuoclai != null)
+                                                                                {
+                                                                                    ngayBatDauHoaDon = hoaDonNuoc.compareNgayCapNuocLaiVoiNgayBatDauHoaDon(khachHangData.Ngaycapnuoclai.Value, ngayBatDauHoaDon);
+                                                                                }
 
                                                                                 <td class="startDate">
                                                                                     <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="0" />
                                                                                     <input type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" readonly
-                                                                                           value="@String.Format("{0:dd/MM/yyyy}",khachHangData.Ngaykyhopdong)" />
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}",ngayBatDauHoaDon)" />
                                                                                 </td>
                                                                             }
 

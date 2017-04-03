@@ -460,6 +460,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.dt1 = d1;
             return View();
         }
+
         [HttpPost]
         public ActionResult DanhSachKhachHangCoGhiChu(FormCollection fc)
         {
@@ -473,6 +474,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.dt1 = d1;
             return View();
         }
+
         [HttpPost]
         public ActionResult DanhSachKhachHangTheoDinhMuc(FormCollection fc)
         {
@@ -493,6 +495,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.dt3 = d3;
             return View();
         }
+
         [HttpPost]
         public ActionResult DanhSachKhachHangHetHanDinhMuc(FormCollection fc)
         {

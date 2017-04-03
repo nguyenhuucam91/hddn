@@ -93,7 +93,7 @@
 
                             <div class="pull-left">
                                 Tắt bật cột (Màu đỏ là cột được ẩn):
-                                  <a class="toggle-vis" data-column="0">MãKH</a>
+                                <a class="toggle-vis" data-column="0">MãKH</a>
                                 - <a class="toggle-vis" data-column="1">TênKH</a>
                                 - <a class="toggle-vis" data-column="2">TTDoc</a>
                                 - <a class="toggle-vis" data-column="3">Số hộ</a>
@@ -145,7 +145,7 @@
                             </thead>
 
                             <tbody>
-                               
+
                                 @foreach (var item in chiSoTieuThu)
                                 {
                                     int hoaDonID = item.HoaDonNuocID;
@@ -171,7 +171,7 @@
                                     item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP ? "CC" : "TH";
 
                                     String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(item.HoaDonNuocID);
-                                          
+
                                     <tr @{ String _class = ""; if (isDacBiet == true) { _class = "traverse dacbiet " + item.LoaiApGiaID; } else { _class = "traverse " + item.LoaiApGiaID; } } class="@_class @cssClass">
 
                                         <td><a target="_blank" style="color:blue" href="@Url.Action("ViewDetail", "Khachhang", new { id = khachHangIDRow })">@item.MaKhachHang</a></td>

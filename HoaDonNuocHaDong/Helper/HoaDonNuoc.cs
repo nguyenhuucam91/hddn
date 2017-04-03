@@ -221,5 +221,14 @@ namespace HoaDonNuocHaDong.Helper
             }
             return cssClass;
         }
+        
+        public DateTime compareNgayCapNuocLaiVoiNgayBatDauHoaDon(DateTime ngayCapNuocLai, DateTime ngayBatDauHoaDon)
+        {
+            if (DateTime.Compare(ngayCapNuocLai,ngayBatDauHoaDon) > 0)
+            {
+                return ngayCapNuocLai;
+            }
+            return ngayBatDauHoaDon;
+        }
     }
 }
