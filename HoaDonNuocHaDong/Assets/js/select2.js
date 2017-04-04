@@ -323,7 +323,7 @@ $(document).ready(function () {
     $("input[name='chiSoMoi']").change(function () {
         //nếu hóa đơn đã được nhập từ tháng trước thì không cần nhập lại ngày bắt đầu nữa
         var endFixedTop = $("input[name='endDateHolder']").val();
-
+        var trParent = $(this).closest('tr');
         var dateStart = $(this).parent('td').siblings(".startDate").find('input[name="startDate"]').val();
         var endDateValue = $(this).parent('td').siblings(".endDate").find('input[name="endDate"]').val();
         if (endDateValue == "") {
@@ -349,7 +349,7 @@ $(document).ready(function () {
             }
            
             var dateEnd = dateEndInput.val();
-        }
+        }     
 
         var hoaDonID = $(this).data("hoadonid");
         var KHID = $(this).data("khid");
@@ -376,6 +376,8 @@ $(document).ready(function () {
             var sanLuongValue = $(this).parent().next("td").find("input").val(hieuSo);
         }
 
+        removeClassHasSanLuongAmInTr(hieuSo,trParent);
+
         //console.log(JSON.stringify(sanLuongValue.));
         //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
         $.ajax({
@@ -390,6 +392,19 @@ $(document).ready(function () {
         });
     });
 });
+
+function removeClassHasSanLuongAmInTr(sanLuong, trParent) {
+    if (sanLuong >= 0) {
+        if (trParent.hasClass('hasSanLuongAm')) {
+            trParent.removeClass('hasSanLuongAm');
+        }
+      
+    } else {
+        if (!trParent.hasClass('hasSanLuongAm')) {
+            trParent.addClass('hasSanLuongAm');
+        }
+    }
+}
 //khi gán số khoán
 
 $("input[name='soKhoan']").change(function () {

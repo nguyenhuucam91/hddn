@@ -78,19 +78,20 @@
                                     @{
                                         int i = 1;
                                         int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
-                                        int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
+                                        int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;                                        
+                                        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
                                     }
                                     @foreach (var item in kH)
-                                    {
-                                        <tr>
-                                            @{
-                                        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+                                    {                                        
                                         int hoaDonID = Convert.ToInt32(item.HoaDonNuocID);
                                         String[] soHoaDon = item.SoHoaDon.Split('-');
                                         String soHoaDonTrimmed = soHoaDon[1].ToString().Trim();
                                         Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == item.KhachHangID && p.ThangHoaDon == month && p.NamHoaDon == year);
                                         Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == item.KhachHangID && p.ThangHoaDon == nextMonthReceiptNumber && p.NamHoaDon == nextYearReceiptNumber);
-                                            }
+                                        String cssClass = "";                                       
+                                        cssClass = item.SanLuong.GetValueOrDefault() < 0 ? "hasSanLuongAm" : "" ;
+                                        
+                                        <tr class="@cssClass">
                                             <!-- Accessing property of anonymous type of object-->
                                             <td>@i</td>
                                             <td>@item.MaKhachHang</td>
@@ -212,10 +213,16 @@
     $(function () {
         //chốt số liệu khi ấn vào nút chốt số liệu
         $("#chotSoLieu").click(function () {
-            var secondConfirm = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");
-            if (secondConfirm) {
-                this.form.submit();
+            var hasSanLuongAmHtml = $("tr").hasClass('hasSanLuongAm');
+            if (hasSanLuongAmHtml) {
+                alert('Không chốt được sản lượng âm, xin hãy kiểm tra lại');
+            } else {
+                xacnhanChotSoLieu = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");
+                if (xacnhanChotSoLieu) {
+                    this.form.submit();
+                }
             }
+
         }); //chốt số liệu
     });
 </script>

@@ -1235,7 +1235,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Inactive(FormCollection form, int id, int toID, int nhanvienID, int tuyenID)
         {
-            String thanhLy = form["Lydothanhly"];
+            String liDoThanhLy = form["Lydothanhly"];
             string[] hiddenKhachHang = form["thanhLy"].ToString().Split(',');
             foreach (var item in hiddenKhachHang)
             {
@@ -1243,12 +1243,18 @@ namespace HoaDonNuocHaDong.Controllers
                 //bằng 1 là đã thanh lý hơp đồng
                 var khachHang = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == khachHangThanhLyID);
                 khachHang.Tinhtrang = 1;
-                khachHang.Ngaythanhly = Convert.ToDateTime(form["ngayThanhLy"]);
-                khachHang.Lydothanhly = thanhLy;
+                DateTime ngayThanhLy = Convert.ToDateTime(form["ngayThanhLy"]);
+                khachHang.Ngaythanhly = ngayThanhLy; 
+                khachHang.Lydothanhly = liDoThanhLy;
                 db.Entry(khachHang).State = EntityState.Modified;
                 db.SaveChanges();
                 //cập nhật lại trạng thái của hóa đơn, từ hiển thị => xóa
-                List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID && p.ThangHoaDon == DateTime.Now.Month && p.NamHoaDon == DateTime.Now.Year).ToList();
+                List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID && p.ThangHoaDon == ngayThanhLy.Month && p.NamHoaDon == ngayThanhLy.Year).ToList();
+                List<Hoadonnuoc> danhSachHoaDonSauNgayThanhLy = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID && p.Ngaybatdausudung >= ngayThanhLy).ToList();
+                List<Hoadonnuoc> danhSachHoaDonNamGiuaNgayBatDauVaKetThuc = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID 
+                                                                            && p.Ngaybatdausudung <= ngayThanhLy 
+                                                                            && ngayThanhLy <= p.Ngayketthucsudung).ToList();
+                hoadons.AddRange(danhSachHoaDonSauNgayThanhLy);
                 foreach (var hoadon in hoadons)
                 {
                     hoadon.Trangthaixoa = true;
