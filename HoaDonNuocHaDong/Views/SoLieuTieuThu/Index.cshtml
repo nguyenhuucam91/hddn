@@ -81,16 +81,7 @@
                                     <p>Sau khi chỉnh sửa xong, ấn F5 để cập nhật lại</p>
                                 </div>
                                 <br />
-                                <div>
-                                    <div style="float:left">
-                                        <div style="width: 30px; height: 30px; background-color: #2982A2; float: left"></div><span>Hóa đơn bị hủy / chưa cập nhật</span>
-                                    </div>
-                                    <div style="float:left;margin-left:30px">
-                                        <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
-                                    </div>
 
-                                    <div class="clearfix"></div>
-                                </div>
                                 <!-- Submit btn -->
                                 <div class="form-group" style="clear:both;text-align:center">
                                     <button type="submit" class="btn btn-default">Tìm kiếm</button>
@@ -130,6 +121,17 @@
 
                                 </div>
                                 <div class="clearfix"></div>
+
+                                <div>
+                                    <div style="float:left">
+                                        <div style="width: 30px; height: 30px; background-color: #2982A2; float: left"></div><span>Hóa đơn bị hủy / chưa cập nhật</span>
+                                    </div>
+                                    <div style="float:left;margin-left:30px">
+                                        <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
 
                                 <div class="outerTable">
                                     <table class="table table-bordered hoaDonNuoc">
@@ -200,8 +202,8 @@
                                                                                            data-hoadonid="@item.HoaDonNuocID" readonly />
                                                                                 </td>
                                                                             }
-                                                                            
-                                                                            
+
+
                                                                             else
                                                                             {
                                                                                 DateTime ngayBatDauHoaDon = khachHangData.Ngaykyhopdong.GetValueOrDefault();
