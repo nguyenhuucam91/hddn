@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+<h1>Thêm vào dư có</h1>
+<form method="post" action="@Url.Action("ThemVaoDuCo", "HoaDon", new {area="ThuNgan"})" class="form-horizontal" id="frm-them-vao-du-co">
+    <input type="hidden" name="hoaDonID" value="@ViewBag.HoaDonID" />
+
+    <div class="span3">Số tiền khách hàng đóng thêm</div> <input class="form-control" type="text" name="SoTien" required /> <br />
+    <div class="span3">Ngày nộp</div> <input type="date" name="NgayNop" id="ngaynop" />
+    <button type="submit" class="bnt btn-success" style="margin-bottom:10px" id="btn-submit">Nộp tiền</button>
+</form>
+
+<h3>Lịch sử giao dịch của khách hàng</h3>
+<br />
+<table>
+
+</table>
+
+<script>
+$(function () {
+    $('#frm-them-vao-du-co').on('click', '#btn-submit', function (e) {
+        $(this.form).submit();
+        $('#modal_them-vao-du-co').modal('hide');
+    });
+});
+</script>

@@ -1,7 +1,7 @@
 ﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel
 @using HDNHD.Models.Constants;
 <style>
-    
+
 </style>
 
 <form class="form-horizontal" method="get">
@@ -49,12 +49,14 @@
             </div>
         </center>
     </div>
-
-    <div class="form-control">
-        <button type="submit" class="btn btn-warning" name="Action" value="DanhDauTatCa"
-                onclick="return confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?\n\n- Chú ý: ĐIỀU KIỆN LỌC khách hàng hiện tại!');">
-            Đánh dấu tất cả đã nộp
-        </button>
-    </div>
+    @if (Model.TrangThaiThu == false)
+    {
+        <div class="form-control">
+            <button type="submit" class="btn btn-warning" name="ToDo" value="DanhDauTatCa"
+                    onclick="return confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?\n\n- Chú ý: ĐIỀU KIỆN LỌC khách hàng hiện tại!');">
+                Đánh dấu tất cả đã nộp
+            </button>
+        </div>
+    }
 </form>
 

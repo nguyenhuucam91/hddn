@@ -57,45 +57,45 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
             IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
             IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
 
-            uow.BeginTransaction();
-            try
+            //uow.BeginTransaction();
+            //try
+            //{
+            // create GiaoDich
+            HDNHD.Models.DataContexts.GiaoDich giaoDich = new HDNHD.Models.DataContexts.GiaoDich()
             {
-                // create GiaoDich
-                HDNHD.Models.DataContexts.GiaoDich giaoDich = new HDNHD.Models.DataContexts.GiaoDich()
-                {
-                    TienNopTheoThangID = model.SoTienNopTheoThang.ID,
-                    NgayGiaoDich = DateTime.Now,
-                    SoTien = (int?)model.SoTienNopTheoThang.SoTienPhaiNop,
-                    SoDu = 0
-                };
-                giaoDichRepository.Insert(giaoDich);
+                TienNopTheoThangID = model.SoTienNopTheoThang.ID,
+                NgayGiaoDich = DateTime.Now,
+                SoTien = (int?)model.SoTienNopTheoThang.SoTienPhaiNop,
+                SoDu = 0
+            };
+            giaoDichRepository.Insert(giaoDich);
 
-                if (model.DuCo != null && model.DuCo.SoTienDu >= model.SoTienNopTheoThang.SoTienPhaiNop)
-                {
-                    giaoDich.SoDu = -(int?)model.SoTienNopTheoThang.SoTienPhaiNop;
-                    model.DuCo.SoTienDu += giaoDich.SoDu;
+            if (model.DuCo != null && model.DuCo.SoTienDu >= model.SoTienNopTheoThang.SoTienPhaiNop)
+            {
+                giaoDich.SoDu = -(int?)model.SoTienNopTheoThang.SoTienPhaiNop;
+                model.DuCo.SoTienDu += giaoDich.SoDu;
 
-                    // delete DuCo if SoTienDu = 0
-                    if (model.DuCo.SoTienDu == 0)
-                    {
-                        duCoRepository.Delete(model.DuCo);
-                    }
+                // delete DuCo if SoTienDu = 0
+                if (model.DuCo.SoTienDu == 0)
+                {
+                    duCoRepository.Delete(model.DuCo);
                 }
-
-                // update HoaDon
-                model.HoaDon.Trangthaithu = true;
-                model.HoaDon.NgayNopTien = model.HoaDon.NgayNopTien ?? DateTime.Now;
-                // update SoTienNopTheoThang
-                model.SoTienNopTheoThang.SoTienDaThu = (int?)model.SoTienNopTheoThang.SoTienPhaiNop;
-
-                uow.SubmitChanges();
-                uow.Commit();
             }
-            catch (Exception e)
-            {
-                uow.RollBack();
-                return false;
-            }
+
+            // update HoaDon
+            model.HoaDon.Trangthaithu = true;
+            model.HoaDon.NgayNopTien = model.HoaDon.NgayNopTien ?? DateTime.Now;
+            // update SoTienNopTheoThang
+            model.SoTienNopTheoThang.SoTienDaThu = (int?)model.SoTienNopTheoThang.SoTienPhaiNop;
+
+            uow.SubmitChanges();
+            //uow.Commit();
+            //}
+            //catch (Exception e)
+            //{
+            //    uow.RollBack();
+            //    return false;
+            //}
 
             return true;
         }

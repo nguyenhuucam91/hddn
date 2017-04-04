@@ -8,8 +8,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
 {
     public class KhachHangController : Controller
     {
-        // GET: ThuNgan/KhachHang
-        public ActionResult Index()
+        public ActionResult ChiTiet(int id)
         {
             return View();
         }

@@ -41,14 +41,12 @@
                                 }
                                 @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
                                 {
-                                    tong += item.SoTienNopTheoThang.SoTienDaThu.Value;
+                                    tong += item.SoTienNopTheoThang.SoTienDaThu ?? 0;
                                     <tr>
                                         <td style="text-align: right">@(++stt)</td>
                                         <td class="text-center">@item.KhachHang.MaKhachHang</td>
                                         <td>
-                                            <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
-                                               data-khachhang="@item.KhachHang.KhachhangID" data-loaikhachhang="@item.KhachHang.LoaiKHID"
-                                               data-thanhtoan="@item.KhachHang.HinhthucttID" data-hd="@item.HoaDon.Sohoadon">
+                                            <a href="@Url.Action("Edit", "KhachHang", new { area="", id=@item.KhachHang.KhachhangID })" target="_blank">
                                                 @item.KhachHang.Ten
                                             </a>
                                         </td>
@@ -62,12 +60,11 @@
                                             <input type="date" class="tbx-ngay-thu" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
                                         </td>
                                         <td style="text-align: right; width: 12%">
-                                            <span class="txt-so-tien-da-nop">
+                                            <span class="txt-so-tien-da-nop" style="@(item.SoTienNopTheoThang.SoTienDaThu.Value > item.SoTienNopTheoThang.SoTienPhaiNop.Value ? "color:red": "")">
                                                 @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
                                             </span>
-                                            <a class="passGiaoDich" href="#" style="color:black;" data-toggle="modal" data-target="#ThemTien"
-                                               data-khachhang="@item.KhachHang.KhachhangID" data-tiennoptheothang="@item.HoaDon.SoTienNopTheoThangID" data-hdid="@item.HoaDon.HoadonnuocID">
-                                                <button style="margin-bottom:8px">+</button>
+                                            <a href="@Url.Action("ThemVaoDuCo", "HoaDon", new { area="ThuNgan", hoaDonID=@item.HoaDon.HoadonnuocID })" data-toggle="modal" data-target="#modal_them-vao-du-co" data-remote="false" class="btn btn-small" style="margin-bottom: 8px">
+                                                +
                                             </a>
                                         </td>
                                     </tr>
@@ -90,29 +87,8 @@
     </div>
 </div>
 
-<!-- modal box cho chọn tên -->
-<div id="myModal" class="modal fade" role="dialog" style="top:50%;display:none">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title">Chi tiết</h3>
-            </div>
-            <div class="modal-body">
-                <h5><a href="">Xem chi tiết thông tin cá nhân</a></h5>
-
-                <div id="thongtin"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Modal box đóng thêm tiền của khách hàng-->
-<div id="ThemTien" class="modal fade" role="dialog" style="top:50%;display:none">
+<div id="modal_them-vao-du-co" class="modal fade" role="dialog" style="top:50%;display:none">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -120,21 +96,9 @@
                 <h3 class="modal-title">Khách hàng đóng thêm tiền vào dư có</h3>
             </div>
             <div class="modal-body">
-
-                <div class="span3">Số tiền khách hàng đóng thêm</div> <input class="form-control" type="text" name="sotien" required /> <br />
-                <div class="span3">Ngày nộp</div> <input type="date" name="ngaynop" id="ngaynop" />
-                <input id="tiennoptheothangID" type="hidden" name="tiennoptheothangID">
-                <button type="submit" class="bnt btn-success" style="margin-bottom:10px">Nộp tiền</button>
-
-            </div>
-            <div class="modal-body">
-                <h3>Lịch sử giao dịch của khách hàng</h3>
-                <br />
-                <div id="ls" style="display:inline !important">
-                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -146,6 +110,12 @@
         $(document).ready(function () {
             // onInit:
             loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+
+            // Fill modal with content from link href
+            $("#modal_them-vao-du-co").on("show.bs.modal", function (e) {
+                var link = $(e.relatedTarget);
+                $(this).find(".modal-body").load(link.attr("href"));
+            });
         });
 
         // load data onChange
