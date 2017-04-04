@@ -139,3 +139,47 @@ function loadTuyen($slTuyen, nhanVienID, tuyenID) {
         }
     });
 }
+
+/***** Thanh Toan HD *****/
+/**
+ * update HoaDon status against database & get back updated model
+ * update GUI trangThaiThu, ngayThu, soTienDaNop
+ */
+function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop) {
+    var trangThaiThu = $trangThaiThu.is(":checked"),
+        ngayThu = $ngayThu.val();
+
+    if (!trangThaiThu) {
+        var confirmed = confirm("Bỏ trạng thái thu sẽ XÓA tất cả các giao dịch trong tháng của khách hàng này. Bạn chắc chắn?");
+
+        if (!confirmed) {
+            // set back checked
+            $trangThaiThu.prop("checked", true);
+            return;
+        }
+    }
+
+    $.ajax({
+        url: "/Services/HoaDon/CapNhatThanhToan",
+        data: { hoaDonID: hoaDonID, trangThaiThu: trangThaiThu, ngayThu: ngayThu }
+    }).done(function (data) {
+        $trangThaiThu.prop("checked", data.Data.HoaDon.TrangThaiThu);
+        $ngayThu.val(data.Data.HoaDon.NgayNopTien);
+        $soTienDaNop.html(data.Data.SoTienNopTheoThang.SoTienDaThu);
+
+        if (!data.IsSuccess)
+            alert("Lỗi cập nhật trạng thái thu! vui lòng thử lại.");
+    });
+}
+
+function capNhatNgayThu(hoaDonID, ngayThu) {
+    $.ajax({
+        url: "/Services/HoaDon/CapNhatNgayThu",
+        data: { hoaDonID: hoaDonID, ngayThu: ngayThu }
+    }).done(function (data) {
+        if (!data.IsSuccess)
+            alert(data.Message);
+    });
+}
+
+/***** END Thanh Toan HD *****/

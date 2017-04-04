@@ -84,7 +84,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
 
                 // update HoaDon
                 model.HoaDon.Trangthaithu = true;
-                model.HoaDon.NgayNopTien = DateTime.Now;
+                model.HoaDon.NgayNopTien = model.HoaDon.NgayNopTien ?? DateTime.Now;
                 // update SoTienNopTheoThang
                 model.SoTienNopTheoThang.SoTienDaThu = (int?)model.SoTienNopTheoThang.SoTienPhaiNop;
 

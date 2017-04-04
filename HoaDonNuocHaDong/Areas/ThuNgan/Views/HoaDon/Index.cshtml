@@ -173,45 +173,6 @@
             loadTuyen($(".sl-tuyen-kh"), nhanVienID, "@ViewBag.Filter.TuyenKHID");
         });
 
-
-        /***** Thanh Toan HD *****/
-        /**
-         * update HoaDon status against database & get back updated model
-         * update GUI trangThaiThu, ngayThu, soTienDaNop
-         */
-        function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop) {
-            var trangThaiThu = $trangThaiThu.is(":checked"),
-                ngayThu = $ngayThu.val();
-
-            if (!trangThaiThu) {
-                var confirmed = confirm("Bỏ trạng thái thu sẽ XÓA tất cả các giao dịch trong tháng của khách hàng này. Bạn chắc chắn?");
-
-                if (!confirmed) {
-                    // set back checked
-                    $trangThaiThu.prop("checked", true);
-                    return;
-                }
-            }
-
-            $.ajax({
-                url: "/Services/HoaDon/CapNhatThanhToan",
-                data: { hoaDonID: hoaDonID, trangThaiThu: trangThaiThu, ngayThu: ngayThu }
-            }).done(function (data) {
-                $trangThaiThu.prop("checked", data.Data.HoaDon.TrangThaiThu);
-                $ngayThu.val(data.Data.HoaDon.NgayNopTien);
-                $soTienDaNop.html(data.Data.SoTienNopTheoThang.SoTienDaThu);
-
-                if (!data.IsSuccess)
-                    alert ("Lỗi cập nhật trạng thái thu! vui lòng thử lại.");
-            });
-        }
-
-        function capNhatNgayThu(date) {
-
-        }
-
-        /***** END Thanh Toan HD *****/
-
         $(".chk-thanh-toan").change(function () {
             var $trangThaiThu = $(this),
                 hoaDonID = $trangThaiThu.val();
@@ -220,6 +181,20 @@
                 $soTienDaNop = $tr.find(".txt-so-tien-da-nop")
 
                 capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop);
+        });
+
+        $(".tbx-ngay-thu").change(function () {
+            var $ngayThu = $(this),
+                $tr = $ngayThu.closest("tr"),
+                $trangThaiThu = $tr.find(".chk-thanh-toan");
+
+            var ngayThu = $ngayThu.val(),
+                trangThaiThu = $trangThaiThu.is(":checked"),
+                hoaDonID = $trangThaiThu.val();
+
+            if (trangThaiThu) {
+                capNhatNgayThu(hoaDonID, ngayThu);
+            }
         });
     </script>
 }

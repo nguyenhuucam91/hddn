@@ -10,6 +10,13 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
 {
     public class HoaDonController : BaseController
     {
+        private IHoaDonRepository hoaDonRepository;
+
+        public HoaDonController()
+        {
+            hoaDonRepository = uow.Repository<HoaDonRepository>();
+        }
+
         public AjaxResult CapNhatThanhToan(int hoaDonID, bool trangThaiThu = false, string ngayThu = null)
         {
             IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
@@ -17,15 +24,15 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
             var model = hoaDonRepository.GetHoaDonModelByID(hoaDonID);
             if (model != null)
             {
-                //DateTime dt;
-                //if (!DateTime.TryParseExact(ngayThu,
-                //        "dd/MM/yyyy",
-                //        CultureInfo.InvariantCulture,
-                //        DateTimeStyles.None, out dt))
-                //{
-                //    dt = DateTime.Now;
-                //}
-                //model.HoaDon.NgayNopTien = dt;
+                DateTime dt;
+                if (!DateTime.TryParseExact(ngayThu,
+                        "dd/MM/yyyy",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out dt))
+                {
+                    dt = DateTime.Now;
+                }
+                model.HoaDon.NgayNopTien = dt;
 
                 var result = HoaDonHelpers.CapNhatThanhToan(model, trangThaiThu, uow);
 
@@ -55,9 +62,25 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
             return AjaxResult.Fail("Hóa đơn đã bị hủy, vui lòng tải lại trang.");
         }
 
-        public AjaxResult CapNhatNgayThu(int hoaDonID, DateTime? ngayThu = null)
+        public AjaxResult CapNhatNgayThu(int hoaDonID, string ngayThu)
         {
-            return null;
+            var hoaDon = hoaDonRepository.GetByID(hoaDonID);
+            if (hoaDon != null && hoaDon.Trangthaithu == true)
+            {
+                DateTime dt;
+                if (DateTime.TryParseExact(ngayThu,
+                        "dd/MM/yyyy",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out dt))
+                {
+                    hoaDon.NgayNopTien = dt;
+
+                    uow.SubmitChanges();
+                    return AjaxResult.Success("Ngày thu đã được cập nhật.");
+                }
+            }
+
+            return AjaxResult.Fail("Ngày thu chưa đúng định dạng hoặc hóa đơn chưa thanh toán.");
         }
     }
 }
