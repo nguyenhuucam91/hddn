@@ -4,9 +4,11 @@
     var beforeFiltered = ViewBag.beforeFiltered;
     var selectedMonth = ViewBag.selectedMonth;
     var selectedYear = ViewBag.selectedYear;
+    var selectedQuan = ViewBag.selectedQuan;
+    var selectedTo = ViewBag.selectedTo;
     List<Tuyenkhachhang> ls = ViewData["tuyen"] as List<Tuyenkhachhang>;
     String title = ViewBag.hasNumber as String;
-    var to = ViewData["to"] as List<ToQuanHuyen>;
+    var danhSachTo = ViewData["to"] as List<ToQuanHuyen>;
     var xiNghieps = ViewData["xinghiep"] as List<Quanhuyen>;
 }
 <div class="main">
@@ -29,23 +31,37 @@
                                         <option></option>
                                         @foreach (var item in xiNghieps)
                                         {
-                                            <option value="@item.QuanhuyenID">@item.QuanhuyenID - @item.Ten</option>
+                                            if (item.QuanhuyenID.ToString() == selectedQuan)
+                                            {
+                                                <option value="@item.QuanhuyenID" selected>@item.QuanhuyenID - @item.Ten</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.QuanhuyenID">@item.QuanhuyenID - @item.Ten</option>
+                                            }
                                         }
                                     </select>
 
                                     <select class="dropdown form-control to" name="to">
                                         <option></option>
 
-                                        @foreach (var item in to)
+                                        @foreach (var item in danhSachTo)
                                         {
-                                            <option value="@item.ToQuanHuyenID" @(ViewBag.selectedTo == item.ToQuanHuyenID ? "selected" : "")>@item.ToQuanHuyenID - @item.Ma</option>
+                                            if (item.ToQuanHuyenID.ToString() == selectedTo)
+                                            {
+                                                <option value="@item.ToQuanHuyenID" selected>@item.ToQuanHuyenID - @item.Ma</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ToQuanHuyenID">@item.ToQuanHuyenID - @item.Ma</option>
+                                            }
                                         }
 
                                     </select>
 
-                                    <input name="thang" value="@ViewBag.selectedThang" placeholder="Tháng @DateTime.Now.Month" type="number" min="1" max="12" class="form-control" style="margin-bottom:0px !important" />
+                                    <input name="thang" value="@selectedMonth" placeholder="Tháng @DateTime.Now.Month" type="number" min="1" max="12" class="form-control" style="margin-bottom:0px !important" />
 
-                                    <input name="nam" value="@ViewBag.seletedNam" placeholder="Năm @DateTime.Now.Year" type="number" min="0" class="form-control" style="margin-bottom:0px !important" />
+                                    <input name="nam" value="@selectedYear" placeholder="Năm @DateTime.Now.Year" type="number" min="0" class="form-control" style="margin-bottom:0px !important" />
 
                                     <div class="form-control" style="text-align:center;margin-top:1%">
                                         <button type="submit" class="btn btn-default" style="text-align:center">Lọc</button>
@@ -192,7 +208,7 @@
                                             <td colspan="3" style="text-align: right;">Tổng số hóa đơn</td>
                                             <td>@tongSoKHInHD</td>
                                             <td colspan="1" style="text-align: right;">Tổng số tiền</td>
-                                            <td>@tongSoTien</td>
+                                            <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTien)</td>
                                         </tr>
                                     </tfoot>
                                 </table>

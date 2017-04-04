@@ -5,7 +5,7 @@
     var hoaDonObj = ViewData["hoadon"] as Hoadonnuoc;
     var maKH = ViewBag.maKH;
     Khachhang kh = ViewData["khachHang"] as Khachhang;
-    SoTienNopTheoThang soTienObj = ViewData["soTienPhaiNop"] as SoTienNopTheoThang;
+    Lichsuhoadon soTienObj = ViewData["soTienPhaiNop"] as Lichsuhoadon;
 }
 
 <div class="main">
@@ -63,7 +63,7 @@
                                             </tr>   
                                             <tr>
                                                 <td>Số tiền phải nộp</td>
-                                                <td>@String.Format("{0:n0}",soTienObj.SoTienPhaiNop)</td>
+                                                <td>@String.Format("{0:n0}",soTienObj.TongCong)</td>
                                             </tr>                                                                                    
                                             <tr>
                                                 <td>Ngày hủy hóa đơn</td>

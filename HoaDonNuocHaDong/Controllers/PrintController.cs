@@ -56,9 +56,9 @@ namespace HoaDonNuocHaDong.Controllers
             int namIn = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt32(year);
 
             List<Models.InHoaDon.TuyenTinhTien> danhSach = (from i in db.Lichsuhoadons
-                                                            where i.TuyenKHID == _tuyenID && i.ThangHoaDon == thangIn 
+                                                            where i.TuyenKHID == _tuyenID && i.ThangHoaDon == thangIn
                                                                   && i.NamHoaDon == namIn && i.SanLuongTieuThu > 0
-                                                            select new Models.InHoaDon.TuyenTinhTien                                                            
+                                                            select new Models.InHoaDon.TuyenTinhTien
                                                             {
                                                                 HoaDonNuoc = i.HoaDonID,
                                                                 MaKH = i.MaKH,
@@ -201,7 +201,7 @@ namespace HoaDonNuocHaDong.Controllers
             for (int i = from; i <= to; i++)
             {
                 var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTThungan.Contains(" - " + i)                              
+                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTThungan.Contains(" - " + i)
                               select new
                               {
                                   HoaDonID = p.HoaDonID,
@@ -349,6 +349,14 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
             }
+
+            #region ViewBag
+            ViewBag.selectedQuan = "";
+            ViewBag.selectedTo = "";
+            ViewBag.selectedMonth = "";
+            ViewBag.selectedYear = "";
+            #endregion
+
             return View();
         }
 
@@ -360,6 +368,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult ChiSoTuyen(FormCollection form)
         {
+
             ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             //lấy danh sách tổ 
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
@@ -372,7 +381,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
             }
-            
+
             //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
             int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
             int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
@@ -392,10 +401,10 @@ namespace HoaDonNuocHaDong.Controllers
             else
             {
                 //Lấy danh sách tuyến trong hệ thống lọc theo tổ
-                List<int> danhSachTuyenThuocTo = _tuyen.getTuyenByTo(to).Select(p=>p.TuyenCuaKH).Distinct().ToList();
+                List<int> danhSachTuyenThuocTo = _tuyen.getTuyenByTo(to).Select(p => p.TuyenCuaKH).Distinct().ToList();
                 List<int> danhSachTuyenDaChot = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).Select(p => p.TuyenKHID.Value).ToList();
                 foreach (var r in danhSachTuyenThuocTo.Intersect(danhSachTuyenDaChot))
-                {                    
+                {
                     Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(r);
                     newLs.Add(tuyen);
                 }
@@ -403,11 +412,18 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag.beforeFiltered = false;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
+
+            #region ViewBag
+            ViewBag.selectedQuan = form["quan"];
+            ViewBag.selectedTo = form["to"];
             ViewBag.selectedMonth = month;
             ViewBag.selectedYear = year;
+            #endregion
+           
             ViewData["tuyen"] = newLs;
             return View();
         }
+
 
         /// <summary>
         /// Xem chi tiết thông tin tính tiền của tuyến trong tháng và năm
@@ -462,7 +478,7 @@ namespace HoaDonNuocHaDong.Controllers
                 Hoadonnuoc hD = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khHang.KhachhangID && p.ThangHoaDon == ThangHoaDon && p.NamHoaDon == namHoaDon);
                 if (hD != null)
                 {
-                    SoTienNopTheoThang soTienObj = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == hD.HoadonnuocID);
+                    Lichsuhoadon soTienObj = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == hD.HoadonnuocID);
                     if (soTienObj != null)
                     {
                         ViewData["soTienPhaiNop"] = soTienObj;
@@ -515,7 +531,7 @@ namespace HoaDonNuocHaDong.Controllers
             DateTime ngayhuyhoadon = String.IsNullOrEmpty(form["ngayhuyhoadon"]) ? DateTime.Now : Convert.ToDateTime(form["ngayhuyhoadon"]);
             String lidoHuy = String.IsNullOrEmpty(form["lidohuy"]) ? "" : form["lidohuy"];
             String ngYeuCauHuy = String.IsNullOrEmpty(form["ngyeucauhuy"]) ? "" : form["ngyeucauhuy"];
-            String soHieuHoaDon = String.IsNullOrEmpty(form["soHoaDon"]) ? "" :form["soHoaDon"];
+            String soHieuHoaDon = String.IsNullOrEmpty(form["soHoaDon"]) ? "" : form["soHoaDon"];
             //thêm mới record hủy hóa đơn
             int ngDungID = Convert.ToInt32(Session["nguoiDungID"]);
 
