@@ -3,9 +3,12 @@
 
     var hasMaKhachHang = ViewBag.hasMaKhachHang;
     var hoaDonObj = ViewData["hoadon"] as Hoadonnuoc;
-    var maKH = ViewBag.maKH;
+    
     Khachhang kh = ViewData["khachHang"] as Khachhang;
     Lichsuhoadon soTienObj = ViewData["soTienPhaiNop"] as Lichsuhoadon;
+    var maKH = ViewBag.maKhachHang;
+    var selectedMonth = ViewBag.selectedMonth;
+    var selectedYear = ViewBag.selectedYear;
 }
 
 <div class="main">
@@ -23,9 +26,9 @@
                             @using (Html.BeginForm("HuyHoaDon", "Print", FormMethod.Post))
                             {
                                 <div class="form-group">
-                                    Mã khách hàng: <input type="text" name="maKH" class="form-control" placeholder="Nhập mã khách hàng" />
-                                    Tháng: <input type="text" name="month"/>
-                                    Năm: <input type="text" name="year"/>
+                                    Mã khách hàng: <input type="text" name="maKH" class="form-control" placeholder="Nhập mã khách hàng" value="@maKH" />
+                                    Tháng: <input type="text" name="month" value="@selectedMonth"/>
+                                    Năm: <input type="text" name="year" value="@selectedYear"/>
                                   
                                     <p style="text-align:center"><button class="btn btn-default" type="submit" style="margin-left:1%">Lọc danh sách</button></p>
                                 </div>
@@ -70,7 +73,7 @@
                                                 <td><input type="text" class="datepicker" name="ngayhuyhoadon" /></td>
                                             </tr>
                                             <tr>
-                                                <td>Người yêu cầu hủy</td>
+                                                <td>Người yêu cầu / thực hiện hủy</td>
                                                 <td><input type="text" name="ngyeucauhuy" /></td>
                                             </tr>
                                             <tr>
@@ -89,7 +92,7 @@
                             else
                             {
                                         <!--Nếu không có mã khách hàng trong hệ thống-->
-                                <h3 class="center">Không có mã khách hàng trong hệ thống</h3>
+                                <h3 class="center">Không có thông tin hóa đơn trong hệ thống</h3>
                             }
                         </div>
                     </div>

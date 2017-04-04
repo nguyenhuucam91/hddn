@@ -596,7 +596,22 @@ namespace HoaDonNuocHaDong.Controllers
             //load danh sách khách hàng thuộc tuyến mà người dùng (nhân viên) đăng nhập                       
             ViewBag.tenTuyen = UserInfo.getTenTuyen(tuyenID.Value);
             //load chỉ số và thông tin tách số vào đây
+            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);
 
+            ViewBag.chiSoTieuThu = chiSoTieuThu;
+            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == false);
+            ViewBag.trangthaiChotTuyen = soLuongHoaDonChuaChot;
+            ViewBag.soLuongHoaDonCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong > 1);
+            ViewBag.soLuongHoaDonKhongCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong <= 1);
+            ViewBag.soLuongHoaDon = chiSoTieuThu.Count();
+            ViewData["nhanvien"] = db.Nhanviens.Find(nvquanly);
+            ViewData["tuyen"] = db.Tuyenkhachhangs.Find(tuyenID);
+            return View();
+        }
+
+        public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getDanhSachHoaDonTieuThu(int _month, int _year, int tuyenID)
+        {
+            
             var chiSoTieuThu = (from i in db.Hoadonnuocs
                                 join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
                                 join m in db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
@@ -632,17 +647,8 @@ namespace HoaDonNuocHaDong.Controllers
                                     KHID = r.KhachhangID,
                                     TrangThaiChot = i.Trangthaichot == null ? false : i.Trangthaichot.Value
                                 }).OrderBy(p => p.ThuTuDoc).ToList();
-            ViewBag.chiSoTieuThu = chiSoTieuThu;
-            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == false);
-            ViewBag.trangthaiChotTuyen = soLuongHoaDonChuaChot;
-            ViewBag.soLuongHoaDonCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong > 1);
-            ViewBag.soLuongHoaDonKhongCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong <= 1);
-            ViewBag.soLuongHoaDon = chiSoTieuThu.Count();
-            ViewData["nhanvien"] = db.Nhanviens.Find(nvquanly);
-            ViewData["tuyen"] = db.Tuyenkhachhangs.Find(tuyenID);
-            return View();
+            return chiSoTieuThu;
         }
-
 
 
         /// <summary>

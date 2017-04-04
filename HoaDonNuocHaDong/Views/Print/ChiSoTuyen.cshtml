@@ -27,7 +27,7 @@
                                 <br />
                                 <div class="form-group">
 
-                                    <select name="quan" class="dropdown quan">
+                                    <select name="quan" class="dropdown quanAllowClear">
                                         <option></option>
                                         @foreach (var item in xiNghieps)
                                         {
@@ -42,7 +42,7 @@
                                         }
                                     </select>
 
-                                    <select class="dropdown form-control to" name="to">
+                                    <select class="dropdown form-control toAllowClear" name="to">
                                         <option></option>
 
                                         @foreach (var item in danhSachTo)
@@ -99,8 +99,7 @@
 
                                     <tbody>
                                         @{
-                                int i = 1;
-
+                                int STT = 1;
                                 int tongSoKHInHD = 0;
                                 double tongSoTien = 0;
                                         }
@@ -117,15 +116,21 @@
                                             }
 
                                             //số lượng hóa đơn thực của tuyến đó
-                                            var soLuongKHThuc = (from hd in db.Hoadonnuocs
-                                                                 join r in db.Khachhangs on hd.KhachhangID equals r.KhachhangID
-                                                                 where r.TuyenKHID == item.TuyenKHID && hd.ThangHoaDon == monthInt && hd.NamHoaDon == yearInt
-                                                                 select new
-                                                                 {
-                                                                     TTIn = hd.Trangthaiin,
-                                                                     NgayIn = hd.NgayIn
-                                                                 });
-                                            var soLuongKHInHoaDon = soLuongKHThuc.Where(p => p.TTIn == true);
+                                            var soLuongHoaDonThuc = (from i in db.Hoadonnuocs
+                                                                     join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
+                                                                     where i.ThangHoaDon == monthInt && i.NamHoaDon == yearInt &&
+                                                                           r.TuyenKHID == item.TuyenKHID &&
+                                                                           (i.Trangthaixoa == false || i.Trangthaixoa == null) &&
+                                                                           ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) ||
+                                                                           (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
+                                                                           i.Tongsotieuthu > 0
+                                                                     select new
+                                                                     {
+                                                                         TTIn = i.Trangthaiin,
+                                                                         NgayIn = i.NgayIn
+                                                                     });
+                                            var soLuongHoaDonDaIn = soLuongHoaDonThuc.Where(p => p.TTIn == true);
+
                                             //tổng số tiền của tuyến
                                             var tongSoTienTuyen = (from hd in db.Hoadonnuocs
                                                                    join r in db.Lichsuhoadons on hd.HoadonnuocID equals r.HoaDonID
@@ -137,17 +142,17 @@
                                                                    }).FirstOrDefault();
 
                                             //
-                                            tongSoKHInHD += soLuongKHInHoaDon.Count();
+                                            tongSoKHInHD += soLuongHoaDonThuc.Count();
                                             if (tongSoTienTuyen != null)
                                             {
                                                 tongSoTien += tongSoTienTuyen.tongTien;
                                             }
 
                                             //nếu số lượng khách hàng đã in xong hóa đơn bằng số lượng khách hàng thực
-                                            if (soLuongKHInHoaDon.Count() == soLuongKHThuc.Count())
+                                            if (soLuongHoaDonThuc.Count() == soLuongHoaDonDaIn.Count())
                                             {
                                                 <tr style="background-color:#50cac8">
-                                                    <td>@i</td>
+                                                    <td>@STT</td>
                                                     <td>@item.Matuyen - @item.Ten</td>
                                                     @if (isTinhTien)
                                                     {
@@ -157,14 +162,14 @@
                                                     {
                                                         <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
                                                     }
-                                                    @if (soLuongKHInHoaDon.Count() == soLuongKHThuc.Count())
+                                                    @if (soLuongHoaDonThuc.Count() == soLuongHoaDonDaIn.Count())
                                                     {
-                                                        <td style="color:blue"> In (@soLuongKHInHoaDon.Count() / @soLuongKHThuc.Count()) </td>
+                                                        <td style="color:blue"> In (@soLuongHoaDonDaIn.Count() / @soLuongHoaDonThuc.Count()) </td>
                                                     }
                                                     <!-- Ngày in xong hóa đơn -->
-                                                    @if (soLuongKHThuc.Max(p => p.NgayIn) != null)
+                                                    @if (soLuongHoaDonThuc.Max(p => p.NgayIn) != null)
                                                     {
-                                                        <td>@String.Format("{0:dd/MM/yyyy}", soLuongKHThuc.Max(p => p.NgayIn).Value)</td>
+                                                        <td>@String.Format("{0:dd/MM/yyyy}", soLuongHoaDonThuc.Max(p => p.NgayIn).Value)</td>
                                                     }
                                                     else
                                                     {
@@ -175,13 +180,13 @@
                                                         <td>@String.Format("{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
                                                 </tr>
-                                                    i++;
+                                                   
                                             }
                                             //nếu chưa in xong
                                             else
                                             {
                                                 <tr>
-                                                    <td>@i</td>
+                                                    <td>@STT</td>
                                                     <td>@item.Matuyen - @item.Ten</td>
                                                     @if (isTinhTien)
                                                     {
@@ -192,15 +197,16 @@
                                                         <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
                                                     }
 
-                                                    <td>In (@soLuongKHInHoaDon.Count() / @soLuongKHThuc.Count())</td>
+                                                    <td>In (@soLuongHoaDonDaIn.Count() / @soLuongHoaDonThuc.Count())</td>
                                                     <td></td>
                                                     @if (tongSoTienTuyen != null)
                                                     {
                                                         <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
                                                 </tr>
-                                                    i++;
+                                                    
                                             }
+                                            STT++;
                                         }
                                     </tbody>
                                     <tfoot>

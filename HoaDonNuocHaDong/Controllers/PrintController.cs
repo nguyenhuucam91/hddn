@@ -28,13 +28,7 @@ namespace HoaDonNuocHaDong.Controllers
         private ChiSo cS = new ChiSo();
         private NguoidungHelper ngHelper = new NguoidungHelper();
         private HoaDonNuocHaDong.Helper.Tuyen _tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
-        //
-        // GET: /Print/
-        public ActionResult Index()
-        {
-            return RedirectToAction("ChiSoTuyen");
-        }
-
+        
 
         /// <summary>
         /// Tính tiền theo tuyến
@@ -56,8 +50,14 @@ namespace HoaDonNuocHaDong.Controllers
             int namIn = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt32(year);
 
             List<Models.InHoaDon.TuyenTinhTien> danhSach = (from i in db.Lichsuhoadons
-                                                            where i.TuyenKHID == _tuyenID && i.ThangHoaDon == thangIn
-                                                                  && i.NamHoaDon == namIn && i.SanLuongTieuThu > 0
+                                                            join j in db.Hoadonnuocs on i.HoaDonID equals j.HoadonnuocID
+                                                            join r in db.Khachhangs on j.KhachhangID equals r.KhachhangID
+
+                                                            where i.ThangHoaDon == thangIn && i.NamHoaDon == namIn &&
+                                                                   r.TuyenKHID.ToString() == tuyenID &&
+                                                                   (j.Trangthaixoa == false || j.Trangthaixoa == null) &&
+                                                                   ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
+                                                                   j.Tongsotieuthu > 0
                                                             select new Models.InHoaDon.TuyenTinhTien
                                                             {
                                                                 HoaDonNuoc = i.HoaDonID,
@@ -419,7 +419,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedMonth = month;
             ViewBag.selectedYear = year;
             #endregion
-           
+
             ViewData["tuyen"] = newLs;
             return View();
         }
@@ -457,6 +457,9 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult HuyHoaDon()
         {
             ViewBag.hasMaKhachHang = false;
+            ViewBag.maKhachHang = "";
+            ViewBag.selectedMonth = "";
+            ViewBag.selectedYear = "";
             return View();
         }
 
@@ -486,9 +489,11 @@ namespace HoaDonNuocHaDong.Controllers
                     ViewData["hoadon"] = hD;
                     ViewData["khachHang"] = khHang;
                     ViewBag.hasMaKhachHang = true;
-                    ViewBag.maKH = maKH;
                 }
             }
+            ViewBag.maKhachHang = maKH;
+            ViewBag.selectedMonth = ThangHoaDon;
+            ViewBag.selectedYear = namHoaDon;
             return View();
         }
 
