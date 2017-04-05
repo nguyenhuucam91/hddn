@@ -100,7 +100,8 @@
                                     <tbody>
                                         @{
                                 int STT = 1;
-                                int tongSoKHInHD = 0;
+                                int tongSoHoaDonDaIn = 0;
+                                int tongSoHoaDonChuyenIn = 0;
                                 double tongSoTien = 0;
                                         }
                                         @foreach (var item in ls)
@@ -140,9 +141,10 @@
                                                                    {
                                                                        tongTien = r.ChiSoCongDon
                                                                    }).FirstOrDefault();
-
-                                            //
-                                            tongSoKHInHD += soLuongHoaDonThuc.Count();
+                                            
+                                            tongSoHoaDonChuyenIn += soLuongHoaDonThuc.Count();
+                                            tongSoHoaDonDaIn += soLuongHoaDonThuc.Count();
+                                            
                                             if (tongSoTienTuyen != null)
                                             {
                                                 tongSoTien += tongSoTienTuyen.tongTien;
@@ -179,8 +181,7 @@
                                                     {
                                                         <td>@String.Format("{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
-                                                </tr>
-                                                   
+                                                </tr>                                                   
                                             }
                                             //nếu chưa in xong
                                             else
@@ -211,8 +212,8 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="3" style="text-align: right;">Tổng số hóa đơn</td>
-                                            <td>@tongSoKHInHD</td>
+                                            <td colspan="3" style="text-align: right;">Tổng số hóa đơn đã in / tổng số hóa đơn chuyển in</td>
+                                            <td>@tongSoHoaDonDaIn / @tongSoHoaDonChuyenIn</td>
                                             <td colspan="1" style="text-align: right;">Tổng số tiền</td>
                                             <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTien)</td>
                                         </tr>
