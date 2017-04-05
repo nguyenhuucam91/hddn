@@ -93,11 +93,10 @@
 
                                         int hoaDonNuocID = item.HoaDonNuoc;
                                         Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);
-                                        String cssClass = "";
-                                        String ttInCssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";
-                                        String ttHoaDonBiHuyCssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);
+                                        String ttHoaDonBiHuyCssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);  
+                                        String ttInCssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";                                       
 
-                                        cssClass = String.Join(" ", new String[] { ttInCssClass, ttHoaDonBiHuyCssClass });
+                                        String cssClass = String.Join(" ", new String[] { ttHoaDonBiHuyCssClass, ttInCssClass });                                       
                                         <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
                                             <td>@i</td>

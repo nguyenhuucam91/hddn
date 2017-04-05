@@ -564,6 +564,7 @@ namespace HoaDonNuocHaDong.Controllers
             if (hoaDon != null)
             {
                 hoaDon.Trangthaichot = false;
+                hoaDon.Trangthaiin = false;
                 db.Entry(hoaDon).State = EntityState.Modified;
                 db.SaveChanges();
             }
