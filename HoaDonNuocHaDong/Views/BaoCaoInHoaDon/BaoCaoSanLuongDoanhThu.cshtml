@@ -5,8 +5,6 @@
     List<Tuyenkhachhang> tuyens = ViewData["tuyen"] as List<Tuyenkhachhang>;
 }
 
-
-
 <link href="~/Content/Style.css" rel="stylesheet" />
 <div class="row" style="margin-left:4%">
     <!-- /span6 -->
@@ -36,9 +34,10 @@
                     <hr/>
                     <!-- Lọc báo cáo doanh thu theo tuyến -->
                     <form action="/Baocaoinhoadon/Xulibaocaosanluongdoanhthu?type=1" method="post">
+                        @Html.Partial("FormThangNam")
                         <label>Tuyến:</label>
                         <p>
-                            <select class="dropdown tuyen" name="tuyen" style="width:70%">
+                            <select class="dropdown tuyen" name="tuyen" style="width:100%" multiple>
                                 @foreach (var tuyen in tuyens)
                                 {
                                     <option value="@tuyen.TuyenKHID">@tuyen.Ten</option>

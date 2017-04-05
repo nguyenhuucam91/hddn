@@ -71,19 +71,66 @@ namespace HoaDonNuocHaDong.Controllers
             //type = 1 => tuyến
             if (type == 1)
             {
-                //String[] dsTuyen = form["tuyen"];
-                
-                //foreach(var item in dsTuyen){
-                //    int tuyenID = Convert.ToInt32(item);
-                //    BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoTuyen",
-                //      new SqlParameter("@thang", month),
-                //      new SqlParameter("@nam", year),
-                //      new SqlParameter("@tuyen", tuyenID),
-                //      new SqlParameter("@d2", 0.05)).First();
-                //}
-               
-               
-                //ViewData["baoCaoSanLuongDoanhThu"] = bc;
+                String[] dsTuyen = form["tuyen"].Split(',');
+                BaoCaoSanLuongDoanhThu bcsldt = new BaoCaoSanLuongDoanhThu();
+
+                foreach (var item in dsTuyen)
+                {
+                    int tuyenID = Convert.ToInt32(item);
+                    BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoTuyen",
+                      new SqlParameter("@thang", month),
+                      new SqlParameter("@nam", year),
+                      new SqlParameter("@tuyen", tuyenID),
+                      new SqlParameter("@d2", 0.05)).First();
+
+                    bcsldt.SanLuongSH1 += bc.SanLuongSH1;
+                    bcsldt.SanLuongSH2 += bc.SanLuongSH2;
+                    bcsldt.SanLuongSH3 += bc.SanLuongSH3;
+                    bcsldt.SanLuongSH4 += bc.SanLuongSH4;
+                    bcsldt.SanLuongSX += bc.SanLuongSX;                   
+                    bcsldt.SanLuongCC += bc.SanLuongCC;                   
+                    bcsldt.SanLuongHC += bc.SanLuongHC;
+                    bcsldt.SanLuongKD += bc.SanLuongKD;
+
+                    bcsldt.SanLuongSH1TruocThue += bc.SanLuongSH1TruocThue;
+                    bcsldt.SanLuongSH2TruocThue += bc.SanLuongSH2TruocThue;
+                    bcsldt.SanLuongSH3TruocThue += bc.SanLuongSH3TruocThue;
+                    bcsldt.SanLuongSH4TruocThue += bc.SanLuongSH4TruocThue;
+                    bcsldt.SanLuongSXTruocThue += bc.SanLuongSXTruocThue;                  
+                    bcsldt.SanLuongCCTruocThue += bc.SanLuongCCTruocThue;                   
+                    bcsldt.SanLuongHCTruocThue += bc.SanLuongHCTruocThue;
+                    bcsldt.SanLuongKDTruocThue += bc.SanLuongKDTruocThue;
+
+                    bcsldt.SanLuongSH1VAT += bc.SanLuongSH1VAT;
+                    bcsldt.SanLuongSH2VAT += bc.SanLuongSH2VAT;
+                    bcsldt.SanLuongSH3VAT += bc.SanLuongSH3VAT;
+                    bcsldt.SanLuongSH4VAT += bc.SanLuongSH4VAT;
+                    bcsldt.SanLuongSXVAT += bc.SanLuongSXVAT;                   
+                    bcsldt.SanLuongCCVAT += bc.SanLuongCCVAT;                   
+                    bcsldt.SanLuongHCVAT += bc.SanLuongHCVAT;
+                    bcsldt.SanLuongKDVAT += bc.SanLuongKDVAT;
+
+                    bcsldt.PhiNuocThaiSH1 += bc.PhiNuocThaiSH1;
+                    bcsldt.PhiNuocThaiSH2 += bc.PhiNuocThaiSH2;
+                    bcsldt.PhiNuocThaiSH3 += bc.PhiNuocThaiSH3;
+                    bcsldt.PhiNuocThaiSH4 += bc.PhiNuocThaiSH4;
+                    bcsldt.PhiNuocThaiSX += bc.PhiNuocThaiSX;
+                    bcsldt.PhiNuocThaiCC += bc.PhiNuocThaiCC;
+                    bcsldt.PhiNuocThaiHC += bc.PhiNuocThaiHC;
+                    bcsldt.PhiNuocThaiKD += bc.PhiNuocThaiKD;
+
+                    bcsldt.TongCongSH1 += bc.TongCongSH1;
+                    bcsldt.TongCongSH2 += bc.TongCongSH2;
+                    bcsldt.TongCongSH3 += bc.TongCongSH3;
+                    bcsldt.TongCongSH4 += bc.TongCongSH4;
+                    bcsldt.TongCongSX += bc.TongCongSX;
+                    bcsldt.TongCongCC += bc.TongCongCC;
+                    bcsldt.TongCongHC += bc.TongCongHC;
+                    bcsldt.TongCongKD += bc.TongCongKD;
+                }
+
+
+                ViewData["baoCaoSanLuongDoanhThu"] = bcsldt;
             }
 
             ViewBag.selectedMonth = month;
