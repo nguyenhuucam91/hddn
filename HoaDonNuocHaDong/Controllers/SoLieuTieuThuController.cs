@@ -606,6 +606,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.soLuongHoaDon = chiSoTieuThu.Count();
             ViewData["nhanvien"] = db.Nhanviens.Find(nvquanly);
             ViewData["tuyen"] = db.Tuyenkhachhangs.Find(tuyenID);
+            
             return View();
         }
 

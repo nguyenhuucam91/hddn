@@ -71,13 +71,19 @@ namespace HoaDonNuocHaDong.Controllers
             //type = 1 => tuyến
             if (type == 1)
             {
-                int tuyenID = String.IsNullOrEmpty(form["tuyen"]) ? 0 : Convert.ToInt32(form["tuyen"]);
-                BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoTuyen",
-                       new SqlParameter("@thang", month),
-                       new SqlParameter("@nam", year),
-                       new SqlParameter("@tuyen", tuyenID),
-                       new SqlParameter("@d2", 0.05)).First();
-                ViewData["baoCaoSanLuongDoanhThu"] = bc;
+                //String[] dsTuyen = form["tuyen"];
+                
+                //foreach(var item in dsTuyen){
+                //    int tuyenID = Convert.ToInt32(item);
+                //    BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoTuyen",
+                //      new SqlParameter("@thang", month),
+                //      new SqlParameter("@nam", year),
+                //      new SqlParameter("@tuyen", tuyenID),
+                //      new SqlParameter("@d2", 0.05)).First();
+                //}
+               
+               
+                //ViewData["baoCaoSanLuongDoanhThu"] = bc;
             }
 
             ViewBag.selectedMonth = month;
@@ -169,7 +175,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 if (loaiKH == 9) // Nhóm cơ quan, tổ chức
                     lsHoaDon = lsHoaDon.Where(p => p.LoaiKH != 1).ToList();
-                else 
+                else
                     lsHoaDon = lsHoaDon.Where(p => p.LoaiKH == loaiKH).ToList();
             }
 

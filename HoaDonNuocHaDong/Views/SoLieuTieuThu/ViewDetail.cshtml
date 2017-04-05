@@ -12,6 +12,7 @@
     //khởi tạo 1 kết nối tới CSDL
     HoaDonHaDongEntities db = new HoaDonHaDongEntities();
     HoaDonNuocHaDong.Helper.HoaDonNuoc hoaDonNuoc = new HoaDonNuocHaDong.Helper.HoaDonNuoc();
+    HoaDonNuocHaDong.Controllers.NhanvienController nhanVienController = new HoaDonNuocHaDong.Controllers.NhanvienController();
 }
 
 <script src="~/Assets/js/jquery.dataTables.min.js"></script>
@@ -58,7 +59,7 @@
                         </form>
 
                         <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
-                            @if (tuyenDuocChot > 0)
+                            @if (tuyenDuocChot > 0 || nhanVienController.getPhongBanNguoiDung() == 0)
                             {
                                 <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
                             }
