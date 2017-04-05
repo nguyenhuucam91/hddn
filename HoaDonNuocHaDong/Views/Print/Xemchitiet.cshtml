@@ -3,7 +3,7 @@
 
     HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
     HoaDonNuocHaDong.Helper.HoaDonNuoc hoaDonNuoc = new HoaDonNuocHaDong.Helper.HoaDonNuoc();
-    
+
     double SH1Price = cS.getSoTienTheoApGia("SH1").Value;
     double SH2Price = cS.getSoTienTheoApGia("SH2").Value;
     double SH3Price = cS.getSoTienTheoApGia("SH3").Value;
@@ -58,11 +58,14 @@
                                 <div style="float:left;margin-left:30px">
                                     <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
                                 </div>
+                                <div style="float:left;margin-left:30px">
+                                    <div style="width: 30px; height: 30px; background-color: #b8860b; float: left"></div><span>Hóa đơn đã in</span>
+                                </div>
                                 <div class="clearfix"></div>
                             </div>
 
                             <!-- Bảng xem chỉ số -->
-                            <table class="unlimited table-bordered table-striped">
+                            <table class="unlimited table-bordered">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -87,9 +90,14 @@
                                     }
                                     @foreach (var item in dsKH)
                                     {
+
                                         int hoaDonNuocID = item.HoaDonNuoc;
                                         Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);
-                                        String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);
+                                        String cssClass = "";
+                                        String ttInCssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";
+                                        String ttHoaDonBiHuyCssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);
+
+                                        cssClass = String.Join(" ", new String[] { ttInCssClass, ttHoaDonBiHuyCssClass });
                                         <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
                                             <td>@i</td>
@@ -97,7 +105,7 @@
                                             <!-- Những khách hàng nào đã in chỉ số thì hiện màu đỏ -->
                                             @if (hoaDonObj.Trangthaiin == true)
                                             {
-                                                <td style="color:red">@item.TenKH</td>
+                                                <td>@item.TenKH</td>
                                             }
                                             else
                                             {
