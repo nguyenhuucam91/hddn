@@ -1422,27 +1422,11 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult FilterMaKH(FormCollection form)
         {
-            int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-            int phongBanID = Convert.ToInt32(Session["phongBan"]);
-            int nhanVienID = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
-
-            int toForm = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-            String nhanVien = form["nhanvien"];
-            String tuyen = form["tuyen"];
             String maKH = String.IsNullOrEmpty(form["maKH"]) ? "" : form["maKH"];
-            var khachHang = db.Khachhangs.Where(p => p.MaKhachHang == maKH).ToList();
-
-            ViewBag.to = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
-            ViewBag.nhanVien = db.Nhanviens.OrderBy(p => p.Ten).Where(p => p.ToQuanHuyenID == toForm && (p.IsDelete == false || p.IsDelete == null) && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
-            var tuyenTheoNhanVien = from i in db.Tuyentheonhanviens
-                                    join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                                    join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
-                                    join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
-                                    where i.NhanVienID == nhanVienID
-                                    select r;
-            ViewBag.tuyen = tuyenTheoNhanVien.ToList();
-            ViewBag.showKhachHang = true;            
+            var khachHang = db.Khachhangs.Where(p => p.MaKhachHang == maKH && p.IsDelete == false).ToList();
+            #region ViewData
             ViewData["khachhangAfterFiltered"] = khachHang;
+            #endregion
             return View();
         }
     }
