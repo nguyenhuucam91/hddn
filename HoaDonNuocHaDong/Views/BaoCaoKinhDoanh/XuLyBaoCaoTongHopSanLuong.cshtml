@@ -1,7 +1,13 @@
 ﻿@{
     ViewBag.Title = "XuLyBaoCaoTongHopSanLuong";
+    var tuyens = ViewData["tuyens"] as List<Tuyenkhachhang>;
 }
 
+<style>
+    hr {
+        height: 3px;
+    }
+</style>
 <link href="~/Content/Style.css" rel="stylesheet" />
 <div class="row" style="margin-left:4%">
     <!-- /span6 -->
@@ -14,40 +20,52 @@
             <!-- /widget-header -->
             <div class="widget-content">
                 <!-- Theo tuyến ống kĩ thuật-->
-                @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type = 0}))
-                {
-                    <div class="xulybc">      
-                        <label>Tuyến ống:</label>                  
-                        <input type="submit" class="btn btn-success" value="Xuất báo cáo"/>
-                    </div>
-                }
-                <!-- Tuyến khách hàng -->
-                <!-- Theo tuyến ống kĩ thuật type = 1-->
-                @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type = 1}))
+                @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type = 0 }))
                 {
                     <div class="xulybc">
+                        @Html.Partial("FormThangNam")
+                        <label>Tuyến ống:</label>
+                        <input type="submit" class="btn btn-success" value="Xuất báo cáo" />
+                    </div>
+                }
+                <hr />
+                <!-- Tuyến khách hàng -->
+                <!-- Theo tuyến ống kĩ thuật type = 1-->
+                @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type = 1 }))
+                {
+
+                    <div class="xulybc">
+                        @Html.Partial("FormThangNam")
                         <label>Tuyến khách hàng:</label>
-                       
+                        <select name="tuyen" class="dropdown tuyen" style="width:100%" multiple>
+                            @foreach (var tuyen in tuyens)
+                            {
+                                <option value="@tuyen.TuyenKHID">@tuyen.Matuyen - @tuyen.Ten</option>
+                            }
+
+                        </select>
+                        <br/><br/>
                         <input type="submit" class="btn btn-success" value="Xuất báo cáo">
                     </div>
                 }
-
+                <hr />
                 <!-- Theo nhân viên type = 2-->
                 @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type = 2 }))
                 {
                     <div class="xulybc">
+                        @Html.Partial("FormThangNam")
                         <label>Nhân viên:</label>
-                       
                         <input type="submit" class="btn btn-success" value="Xuất báo cáo">
                     </div>
                 }
-
+                <hr />
                 <!-- Theo tổ-->
                 @using (Html.BeginForm("BaoCaoTongHopSanLuong", "BaoCaoKinhDoanh", new { type = 3 }))
                 {
                     <div class="xulybc">
-                        <label>Tổ kĩ thuật:</label>
-                      
+                        @Html.Partial("FormThangNam")
+                        <label>Tổ quản lí:</label>
+
                         <input type="submit" class="btn btn-success" value="Xuất báo cáo">
                     </div>
                 }
@@ -57,7 +75,7 @@
 </div>
 
 <style>
-    .xulybc{
-        min-height:0px !important;
+    .xulybc {
+        min-height: 0px !important;
     }
 </style>
