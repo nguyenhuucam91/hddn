@@ -1198,7 +1198,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
 
-        public ActionResult Inactive(int id, int toID, int nhanvienID, int tuyenID)
+        public ActionResult Inactive(int id, int? toID, int? nhanvienID, int? tuyenID)
         {
             Khachhang kH = db.Khachhangs.Find(id);
             ViewBag.KHID = id;
@@ -1216,7 +1216,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// <param name="tuyenID"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Inactive(FormCollection form, int id, int toID, int nhanvienID, int tuyenID)
+        public ActionResult Inactive(FormCollection form, int id, int? toID, int? nhanvienID, int? tuyenID)
         {
             String liDoThanhLy = form["Lydothanhly"];
             string[] hiddenKhachHang = form["thanhLy"].ToString().Split(',');
@@ -1248,6 +1248,11 @@ namespace HoaDonNuocHaDong.Controllers
                 TempData["nhanvien"] = nhanvienID;
                 TempData["tuyen"] = tuyenID;
                 TempData["to"] = toID;
+            }
+
+            if (nhanvienID == null)
+            {
+                return RedirectToAction("FilterMaKH");
             }
             return RedirectToAction("Index");
         }
@@ -1300,7 +1305,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult CatNuoc(FormCollection form, int toID, int nhanvienID, int tuyenID)
+        public ActionResult CatNuoc(FormCollection form, int? toID, int? nhanvienID, int? tuyenID)
         {
             String lyDoNgungCapNuoc = form["Lydongungcapnuoc"];
             string[] hiddenKhachHang = form["ngungcapnuoc"].ToString().Split(',');
@@ -1329,6 +1334,11 @@ namespace HoaDonNuocHaDong.Controllers
                 TempData["tuyen"] = tuyenID;
                 TempData["to"] = toID;
             }
+
+            if (toID == null)
+            {
+                return RedirectToAction("FilterMaKH");
+            }
             return RedirectToAction("Index");
         }
 
@@ -1355,7 +1365,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult Caplainuoc(FormCollection form, int toID, int nhanvienID, int tuyenID)
+        public ActionResult Caplainuoc(FormCollection form, int? toID, int? nhanvienID, int? tuyenID)
         {
             String lyDoCapNuocLai = form["Lydocapnuoclai"];
             string[] hiddenKhachHang = form["capnuoclai"].ToString().Split(',');
@@ -1381,6 +1391,12 @@ namespace HoaDonNuocHaDong.Controllers
                 TempData["nhanvien"] = nhanvienID;
                 TempData["tuyen"] = tuyenID;
             }
+
+            if (toID == null)
+            {
+                return RedirectToAction("FilterMaKH");
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -1425,9 +1441,9 @@ namespace HoaDonNuocHaDong.Controllers
                                     where i.NhanVienID == nhanVienID
                                     select r;
             ViewBag.tuyen = tuyenTheoNhanVien.ToList();
-            ViewBag.showKhachHang = true;
-            ViewBag.khachHang = khachHang;
-            return View("Index");
+            ViewBag.showKhachHang = true;            
+            ViewData["khachhangAfterFiltered"] = khachHang;
+            return View();
         }
     }
 }
