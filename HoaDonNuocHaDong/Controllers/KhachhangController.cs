@@ -325,30 +325,30 @@ namespace HoaDonNuocHaDong.Controllers
             }
             /** END congnv - 170403 - trả về list tổ kinh doanh nếu vai trò ng dùng là inhoadon */
 
-            int phongBanId = getPhongBanNguoiDung();            
+            int phongBanId = getPhongBanNguoiDung();
             if (phongBanId == 0)
             {
-               var to = (from i in db.ToQuanHuyens
-                      where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false
-                      select new
-                      {
-                          Ten = i.Ma,
-                          ToID = i.ToQuanHuyenID
-                      }).Distinct().ToList();
+                var to = (from i in db.ToQuanHuyens
+                          where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false
+                          select new
+                          {
+                              Ten = i.Ma,
+                              ToID = i.ToQuanHuyenID
+                          }).Distinct().ToList();
                 return Json(to, JsonRequestBehavior.AllowGet);
             }
             else
             {
-               var to = (from i in db.ToQuanHuyens
-                      where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false && i.PhongbanID == phongBanId
-                      select new
-                      {
-                          Ten = i.Ma,
-                          ToID = i.ToQuanHuyenID
-                      }).Distinct().ToList();
+                var to = (from i in db.ToQuanHuyens
+                          where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false && i.PhongbanID == phongBanId
+                          select new
+                          {
+                              Ten = i.Ma,
+                              ToID = i.ToQuanHuyenID
+                          }).Distinct().ToList();
                 return Json(to, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
 
         public int getPhongBanNguoiDung()
@@ -485,30 +485,6 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
-            //Lấy Mã khách hàng lớn nhất trong hệ thống
-            var soLuongKH = db.Khachhangs.Count();
-            //kiểm tra xem nếu trong bảng khách hàng có dữ liệu hay không
-            if (soLuongKH > 0)
-            {
-                //lấy ID primary key của record cuối cùng
-                var lastKhachHangID = db.Khachhangs.Max(p => p.KhachhangID);
-                string maKhachHang = db.Khachhangs.Where(p => p.KhachhangID == lastKhachHangID).FirstOrDefault().MaKhachHang;
-                //nếu mã khách hàng != null thì tự động tăng mã KH lên 1
-                if (maKhachHang != null)
-                {
-                    //load mã khách hàng (tự động tăng 1) vào view
-                    ViewBag.MaKH = int.Parse(maKhachHang) + 1;
-                }
-                else
-                {
-                    ViewBag.MaKH = 1;
-                }
-            }
-            //nếu không có khách hàng trong CSDL
-            else
-            {
-                ViewBag.MaKH = 1;
-            }
 
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
@@ -542,6 +518,28 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
+        public int getMaxMaKhachHang()
+        {
+            //Lấy Mã khách hàng lớn nhất trong hệ thống
+            var soLuongKH = db.Khachhangs.Count();
+            int maKhachHangLonNhatAsInt = 1;
+            //kiểm tra xem nếu trong bảng khách hàng có dữ liệu hay không
+            if (soLuongKH > 0)
+            {
+                //lấy ID primary key của record cuối cùng
+                var lastKhachHangID = db.Khachhangs.Max(p => p.KhachhangID);
+                string maKhachHang = db.Khachhangs.Where(p => p.KhachhangID == lastKhachHangID).FirstOrDefault().MaKhachHang;
+                //nếu mã khách hàng != null thì tự động tăng mã KH lên 1
+                if (maKhachHang != null)
+                {
+                    //load mã khách hàng (tự động tăng 1) vào view
+                    maKhachHangLonNhatAsInt = int.Parse(maKhachHang) + 1;
+                }
+
+            }
+            return maKhachHangLonNhatAsInt;
+        }
+
         // POST: /Khachhang/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -552,7 +550,7 @@ namespace HoaDonNuocHaDong.Controllers
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
             int ChiSoDau = String.IsNullOrEmpty(form["ChiSoDau"]) ? 0 : Convert.ToInt32(form["ChiSoDau"]);
-
+            khachhang.MaKhachHang = "0";
             if (ModelState.IsValid)
             {
                 khachhang.Chisolapdat = ChiSoDau;
@@ -566,6 +564,7 @@ namespace HoaDonNuocHaDong.Controllers
                 }
                 //đặt tình trạng đang sử dụng
                 khachhang.Tinhtrang = 0;
+                khachhang.MaKhachHang = getMaxMaKhachHang().ToString();
                 db.Khachhangs.Add(khachhang);
                 // lưu thay đổi vào DB và bắt ngoại lệ để debug            
                 try
@@ -685,30 +684,12 @@ namespace HoaDonNuocHaDong.Controllers
                 }
 
             }
-
-            //Lấy Mã khách hàng lớn nhất trong hệ thống
-            var soLuongKH = db.Khachhangs.Count();
-            //kiểm tra xem nếu trong bảng khách hàng có dữ liệu hay không
-            if (soLuongKH > 0)
-            {
-                //lấy ID primary key của record cuối cùng
-                var lastKhachHangID = db.Khachhangs.Max(p => p.KhachhangID);
-                string maKhachHang = db.Khachhangs.Where(p => p.KhachhangID == lastKhachHangID).FirstOrDefault().MaKhachHang;
-                //nếu mã khách hàng != null thì tự động tăng mã KH lên 1
-                if (maKhachHang != null)
-                {
-                    //load mã khách hàng (tự động tăng 1) vào view
-                    ViewBag.MaKH = int.Parse(maKhachHang) + 1;
-                }
-                else
-                {
-                    ViewBag.MaKH = 1;
-                }
-            }
-            //nếu không có khách hàng trong CSDL
             else
             {
-                ViewBag.MaKH = 1;
+                var message = string.Join(" | ", ModelState.Values
+        .SelectMany(v => v.Errors)
+        .Select(e => e.ErrorMessage));
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, message);
             }
 
             var phongBanRepository = uow.Repository<PhongBanRepository>();
@@ -1002,24 +983,26 @@ namespace HoaDonNuocHaDong.Controllers
                         sLTT.tachChiSoSanLuong(hD.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);
                     }
                 } //end hD != null
-                
-                
+
+
                 //chỉnh sửa khách hàng trong trang áp giá
                 if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "viewdetail")
-                {                   
-                    return RedirectToAction("viewdetail", "Solieutieuthu", new{
-                        toID = toID, 
-                        tuyenID = tuyenIDUrl, 
-                        month = Request.QueryString["thang"], 
-                        year = Request.QueryString["nam"], 
-                        nvquanly = nhanVienIDUrl});
+                {
+                    return RedirectToAction("viewdetail", "Solieutieuthu", new
+                    {
+                        toID = toID,
+                        tuyenID = tuyenIDUrl,
+                        month = Request.QueryString["thang"],
+                        year = Request.QueryString["nam"],
+                        nvquanly = nhanVienIDUrl
+                    });
                 }
                 else if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "solieutieuthuindex")
                 {
-                    return RedirectToAction("index","solieutieuthu");
+                    return RedirectToAction("index", "solieutieuthu");
                 }
-                
-                
+
+
                 TempData["to"] = toID;
                 TempData["tuyen"] = tuyenIDUrl;
                 TempData["nhanvien"] = nhanVienIDUrl;
@@ -1244,15 +1227,15 @@ namespace HoaDonNuocHaDong.Controllers
                 var khachHang = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == khachHangThanhLyID);
                 khachHang.Tinhtrang = 1;
                 DateTime ngayThanhLy = Convert.ToDateTime(form["ngayThanhLy"]);
-                khachHang.Ngaythanhly = ngayThanhLy; 
+                khachHang.Ngaythanhly = ngayThanhLy;
                 khachHang.Lydothanhly = liDoThanhLy;
                 db.Entry(khachHang).State = EntityState.Modified;
                 db.SaveChanges();
                 //cập nhật lại trạng thái của hóa đơn, từ hiển thị => xóa
                 List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID && p.ThangHoaDon == ngayThanhLy.Month && p.NamHoaDon == ngayThanhLy.Year).ToList();
                 List<Hoadonnuoc> danhSachHoaDonSauNgayThanhLy = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID && p.Ngaybatdausudung >= ngayThanhLy).ToList();
-                List<Hoadonnuoc> danhSachHoaDonNamGiuaNgayBatDauVaKetThuc = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID 
-                                                                            && p.Ngaybatdausudung <= ngayThanhLy 
+                List<Hoadonnuoc> danhSachHoaDonNamGiuaNgayBatDauVaKetThuc = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangThanhLyID
+                                                                            && p.Ngaybatdausudung <= ngayThanhLy
                                                                             && ngayThanhLy <= p.Ngayketthucsudung).ToList();
                 hoadons.AddRange(danhSachHoaDonSauNgayThanhLy);
                 foreach (var hoadon in hoadons)
@@ -1381,12 +1364,12 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 int khachHangNgungCapNuocID = Convert.ToInt32(item);
                 //bằng 1 là đã thanh lý hơp đồng
-                var khachHang = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == khachHangNgungCapNuocID);               
+                var khachHang = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == khachHangNgungCapNuocID);
                 khachHang.Ngaycapnuoclai = ngayCapNuocLai;
                 khachHang.Lydocapnuoclai = lyDoCapNuocLai;
                 db.Entry(khachHang).State = EntityState.Modified;
                 db.SaveChanges();
-                
+
                 List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangNgungCapNuocID && p.ThangHoaDon == DateTime.Now.Month && p.NamHoaDon == DateTime.Now.Year).ToList();
                 foreach (var hoadon in hoadons)
                 {

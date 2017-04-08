@@ -59,13 +59,13 @@
                                     <input type="hidden" value="false" name="IsDelete" />
                                     <!-- Tên khách hàng -->
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-6 pull-left">
+                                        <div class="col-md-6 pull-left hidden">
                                             <label for="" class="control-label">Mã khách hàng:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.MaKhachHang, new { @Value = maKH, @readonly = "readonly" })
+                                            @Html.TextBoxFor(model => model.MaKhachHang, new { @Value = "0", @readonly = "readonly" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.MaKhachHang)
                                         </div>
-                                        <div class="col-md-6 pull-right" style="margin-right:20%">
+                                        <div class="col-md-6" style="margin-right:20%">
                                             <label for="" class="control-label">Tên khách hàng:</label>&nbsp;&nbsp;
                                             @Html.TextBoxFor(model => model.Ten, new { autofocus = true})
                                             <br />

@@ -87,8 +87,8 @@ namespace HoaDonNuocHaDong.Controllers
                     bcsldt.SanLuongSH2 += bc.SanLuongSH2;
                     bcsldt.SanLuongSH3 += bc.SanLuongSH3;
                     bcsldt.SanLuongSH4 += bc.SanLuongSH4;
-                    bcsldt.SanLuongSX += bc.SanLuongSX;                   
-                    bcsldt.SanLuongCC += bc.SanLuongCC;                   
+                    bcsldt.SanLuongSX += bc.SanLuongSX;
+                    bcsldt.SanLuongCC += bc.SanLuongCC;
                     bcsldt.SanLuongHC += bc.SanLuongHC;
                     bcsldt.SanLuongKD += bc.SanLuongKD;
 
@@ -96,8 +96,8 @@ namespace HoaDonNuocHaDong.Controllers
                     bcsldt.SanLuongSH2TruocThue += bc.SanLuongSH2TruocThue;
                     bcsldt.SanLuongSH3TruocThue += bc.SanLuongSH3TruocThue;
                     bcsldt.SanLuongSH4TruocThue += bc.SanLuongSH4TruocThue;
-                    bcsldt.SanLuongSXTruocThue += bc.SanLuongSXTruocThue;                  
-                    bcsldt.SanLuongCCTruocThue += bc.SanLuongCCTruocThue;                   
+                    bcsldt.SanLuongSXTruocThue += bc.SanLuongSXTruocThue;
+                    bcsldt.SanLuongCCTruocThue += bc.SanLuongCCTruocThue;
                     bcsldt.SanLuongHCTruocThue += bc.SanLuongHCTruocThue;
                     bcsldt.SanLuongKDTruocThue += bc.SanLuongKDTruocThue;
 
@@ -105,8 +105,8 @@ namespace HoaDonNuocHaDong.Controllers
                     bcsldt.SanLuongSH2VAT += bc.SanLuongSH2VAT;
                     bcsldt.SanLuongSH3VAT += bc.SanLuongSH3VAT;
                     bcsldt.SanLuongSH4VAT += bc.SanLuongSH4VAT;
-                    bcsldt.SanLuongSXVAT += bc.SanLuongSXVAT;                   
-                    bcsldt.SanLuongCCVAT += bc.SanLuongCCVAT;                   
+                    bcsldt.SanLuongSXVAT += bc.SanLuongSXVAT;
+                    bcsldt.SanLuongCCVAT += bc.SanLuongCCVAT;
                     bcsldt.SanLuongHCVAT += bc.SanLuongHCVAT;
                     bcsldt.SanLuongKDVAT += bc.SanLuongKDVAT;
 
@@ -305,6 +305,18 @@ namespace HoaDonNuocHaDong.Controllers
                 Duco = db.DuCoes.Where(h => h.SoTienNopTheoThang.Hoadonnuoc.ThangHoaDon == month && h.SoTienNopTheoThang.Hoadonnuoc.NamHoaDon == year && h.SoTienNopTheoThang.Hoadonnuoc.NhanvienID == nhanvien);
             }
             return View(Duco.ToList());
+        }
+
+        public ActionResult BaoCaoSanLuongDoanhThuTheoQuy()
+        {
+            #region data
+            ViewBag.selectedMonth = DateTime.Now.Month;
+            ViewBag.selectedYear = DateTime.Now.Year;
+            ViewData["quan"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            ViewData["tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
+            #endregion
+
+            return View();
         }
     }
 }
