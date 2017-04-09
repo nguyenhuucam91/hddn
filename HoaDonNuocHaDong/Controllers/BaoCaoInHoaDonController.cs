@@ -274,6 +274,7 @@ namespace HoaDonNuocHaDong.Controllers
             int quy = !String.IsNullOrEmpty(form["q1"]) ? Convert.ToInt32(form["q1"]) : 0;
             int nam = !String.IsNullOrEmpty(form["y1"]) ? Convert.ToInt32(form["y1"]) : 0;
             int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
+            String thangTrongQuy = getThangTrongQuy(quy);
             ControllerBase<BaoCaoSanLuongDoanhThu> cB = new ControllerBase<BaoCaoSanLuongDoanhThu>();
             if (type == 0)
             {
@@ -281,7 +282,7 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@nam", nam),
                            new SqlParameter("@quan", quanHuyenID),
                            new SqlParameter("@d2", 0.05),
-                           new SqlParameter("@list",getThangTrongQuy(quy))).First();
+                           new SqlParameter("@list", thangTrongQuy)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
             }
             else
@@ -290,7 +291,7 @@ namespace HoaDonNuocHaDong.Controllers
                 BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoTuyenTheoQuy",
                            new SqlParameter("@nam", nam),
                            new SqlParameter("@d2", 0.05),
-                           new SqlParameter("@list", getThangTrongQuy(quy)),
+                           new SqlParameter("@list", thangTrongQuy),
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
             }
