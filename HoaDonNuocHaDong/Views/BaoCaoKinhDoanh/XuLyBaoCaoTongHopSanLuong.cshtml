@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "XuLyBaoCaoTongHopSanLuong";
     var tuyens = ViewData["tuyens"] as List<Tuyenkhachhang>;
+    var xiNghieps = ViewData["xinghieps"] as List<Quanhuyen>;
 }
 
 <style>
@@ -64,8 +65,14 @@
                 {
                     <div class="xulybc">
                         @Html.Partial("FormThangNam")
-                        <label>Tổ quản lí:</label>
-
+                        <label>Xí nghiệp quản lí:</label>
+                        <select name="xinghiep" class="dropdown quan" multiple style="width:100%">
+                            @foreach (var xinghiep in xiNghieps)
+                            {
+                             <option value="@xinghiep.QuanhuyenID">@xinghiep.Ten</option>   
+                            }                               
+                        </select>
+                        <br/><br/>
                         <input type="submit" class="btn btn-success" value="Xuất báo cáo">
                     </div>
                 }

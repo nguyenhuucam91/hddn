@@ -159,14 +159,14 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         public List<DanhSachKhachHangApGiaChung> filterDanhSachKhachHangLoaiGiaDacBiet()
-        {     
+        {
             var khachHang = (from i in db.Khachhangs
                              join r in db.Hoadonnuocs on i.KhachhangID equals r.KhachhangID
                              join s in db.ApGiaDacBiets on r.HoadonnuocID equals s.HoaDonNuocID
                              join t in db.Tuyenkhachhangs on i.TuyenKHID equals t.TuyenKHID
                              where r.ThangHoaDon == DateTime.Now.Month && r.NamHoaDon == DateTime.Now.Year
                              select new DanhSachKhachHangApGiaChung
-                             {                                       
+                             {
                                  MaKH = i.MaKhachHang,
                                  HoTen = i.Ten,
                                  DiaChi = i.Diachi,
@@ -237,7 +237,8 @@ namespace HoaDonNuocHaDong.Controllers
         }
         public ActionResult XuLyBaoCaoTongHopSanLuong()
         {
-          
+            ViewData["xinghieps"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            ViewData["tuyens"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
             return View();
         }
         public ActionResult XuLyBaoCaoTongHopKhachHangQuanLy()
@@ -500,7 +501,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult DanhSachKhachHangHetHanDinhMuc(FormCollection fc)
         {
             int d1 = int.Parse(fc["d1"]);
-            int d2 = int.Parse(fc["d2"]);            
+            int d2 = int.Parse(fc["d2"]);
             DateTime ngayHetAp = DateTime.Parse(fc["Ngayhetap"]);
             DateTime d3 = DateTime.Now;
             ControllerBase<DanhSachKhachHangHetHanDinhMuc> cb = new ControllerBase<DanhSachKhachHangHetHanDinhMuc>();
@@ -508,7 +509,7 @@ namespace HoaDonNuocHaDong.Controllers
                 "BC16",
                 new SqlParameter("@d1", d1),
                 new SqlParameter("@d2", d2),
-                new SqlParameter("@hethandinhmuc",ngayHetAp)
+                new SqlParameter("@hethandinhmuc", ngayHetAp)
                 );
 
             ViewData["lst"] = lst;
@@ -550,47 +551,52 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult BaoCaoTongHopSanLuong(FormCollection fc, int type)
         {
-            DateTime d1 = DateTime.Now;
+
+            int monthReceipt = !String.IsNullOrEmpty(fc["m1"]) ? Convert.ToInt32(fc["m1"]) : DateTime.Now.Month;
+            int yearReceipt = !String.IsNullOrEmpty(fc["y1"]) ? Convert.ToInt32(fc["y1"]) : DateTime.Now.Year;
+
             //tuyến ống
             if (type == 0)
             {
-                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenOng();
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenOng(monthReceipt, yearReceipt);
                 ViewBag.columnTitle = "Tuyến ống";
                 ViewBag.tong = ls;
             }
             //tuyến
             else if (type == 1)
             {
-                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenKH();
+                String tuyens = !String.IsNullOrEmpty(fc["tuyen"]) ? fc["tuyen"] : "";
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoTuyenKH(monthReceipt, yearReceipt, tuyens);
                 ViewBag.columnTitle = "Tuyến khách hàng";
                 ViewBag.tong = ls;
             }
             //nhân viên
             else if (type == 2)
             {
-                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien();
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien(monthReceipt, yearReceipt);
                 ViewBag.columnTitle = "Nhân viên";
                 ViewBag.tong = ls;
             }
             //tổ kĩ thuật
             else if (type == 3)
             {
-                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoToQuanHuyen();
-                ViewBag.columnTitle = "Tổ kĩ thuật";
+                String xinghieps = !String.IsNullOrEmpty(fc["xinghiep"]) ? fc["xinghiep"] : "";
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoToQuanHuyen(monthReceipt, yearReceipt, xinghieps);
+                ViewBag.columnTitle = "Tổ quản lí";
                 ViewBag.tong = ls;
             }
 
-            ViewBag.dt1 = d1;
+            ViewBag.monthReceipt = monthReceipt;
+            ViewBag.yearReceipt = yearReceipt;
             return View();
         }
 
-        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoTuyenOng()
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoTuyenOng(int month, int year)
         {
-            DateTime currentDate = DateTime.Now;
             ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
-            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoTuyenOng", 
-                new SqlParameter("@d1", currentDate.Month),
-                new SqlParameter("@d2", currentDate.Year),
+            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoTuyenOng",
+                new SqlParameter("@d1", month),
+                new SqlParameter("@d2", year),
                 new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
                 new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
                 new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
@@ -603,13 +609,12 @@ namespace HoaDonNuocHaDong.Controllers
             return lst;
         }
 
-        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoTuyenKH()
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoTuyenKH(int month, int year, String tuyens)
         {
-            DateTime currentDate = DateTime.Now;
             ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
             List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoTuyenKhachHang",
-                new SqlParameter("@d1", currentDate.Month),
-                new SqlParameter("@d2", currentDate.Year),
+                new SqlParameter("@d1", month),
+                new SqlParameter("@d2", year),
                 new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
                 new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
                 new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
@@ -617,18 +622,18 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@CCPrice", chiSo.getSoTienTheoApGia("CC")),
                 new SqlParameter("@HCPrice", chiSo.getSoTienTheoApGia("HC")),
                 new SqlParameter("@SXXDPrice", chiSo.getSoTienTheoApGia("SXXD")),
-                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV"))
+                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV")),
+                new SqlParameter("@list", tuyens)
                 );
             return lst;
         }
 
-        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoNhanvien()
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoNhanvien(int month, int year)
         {
-            DateTime currentDate = DateTime.Now;
             ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
             List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoNhanvien",
-                new SqlParameter("@d1", currentDate.Month),
-                new SqlParameter("@d2", currentDate.Year),
+                new SqlParameter("@d1", month),
+                new SqlParameter("@d2", year),
                 new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
                 new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
                 new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
@@ -641,13 +646,12 @@ namespace HoaDonNuocHaDong.Controllers
             return lst;
         }
 
-        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoToQuanHuyen()
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoToQuanHuyen(int month, int year, String xinghieps)
         {
-            DateTime currentDate = DateTime.Now;
             ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
-            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoToQuanHuyen",
-                new SqlParameter("@d1", currentDate.Month),
-                new SqlParameter("@d2", currentDate.Year),
+            List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoToQuanLi",
+                new SqlParameter("@d1", month),
+                new SqlParameter("@d2", year),
                 new SqlParameter("@SH1Price", chiSo.getSoTienTheoApGia("SH1")),
                 new SqlParameter("@SH2Price", chiSo.getSoTienTheoApGia("SH2")),
                 new SqlParameter("@SH3Price", chiSo.getSoTienTheoApGia("SH3")),
@@ -655,7 +659,8 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@CCPrice", chiSo.getSoTienTheoApGia("CC")),
                 new SqlParameter("@HCPrice", chiSo.getSoTienTheoApGia("HC")),
                 new SqlParameter("@SXXDPrice", chiSo.getSoTienTheoApGia("SXXD")),
-                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV"))
+                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV")),
+                new SqlParameter("@list", xinghieps)
                 );
             return lst;
         }
