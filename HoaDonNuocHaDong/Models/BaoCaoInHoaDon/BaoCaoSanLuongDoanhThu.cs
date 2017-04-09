@@ -66,7 +66,6 @@ namespace HoaDonNuocHaDong.Models.BaoCaoInHoaDon
         public int tuyenOngID { get { return GetINT(45); } set { SetINT(45, value); } }
         public int tuyenKHID { get { return GetINT(46); } set { SetINT(46, value); } }
         public int nhanvienID { get { return GetINT(47); } set { SetINT(47, value); } }
-
        
         protected override Type TransferType()
         {
