@@ -4,8 +4,8 @@
     Nhanvien nhanVien = ViewData["nhanVien"] as Nhanvien;
     Nguoidung nguoiDung = ViewData["nguoiDung"] as Nguoidung;
     var identicalPassword = ViewBag.identicalPassword;
-
     HoaDonNuocHaDong.Helper.NhanVienHelper helper = new HoaDonNuocHaDong.Helper.NhanVienHelper();
+    var successfulMessage = TempData["success"];
 }
 
 <div class="main">
@@ -17,7 +17,14 @@
                     <div class="widget">
 
                         <div class="widget-content">
+                            <!-- Box hiển thị thêm mới khách hàng thành công-->
+                            @if (successfulMessage != null)
+                            {
+                                <div class="alert alert-success" role="alert">
+                                    @successfulMessage
+                                </div>
 
+                            }
                             <h1>Thông tin tài khoản</h1>
                             <form action="/Home/EditProfile" method="post">
                                 <br />
@@ -71,35 +78,35 @@
                             <div class="control-group">
                                 <label class="control-label" for="firstname">Tên nhân viên</label>
                                 <div class="controls">
-                                    <input type="text" class="span6" value="@nhanVien.Ten" style="width:97%" />
+                                    <input type="text" class="span6" readonly value="@nhanVien.Ten" style="width:97%" />
                                 </div> <!-- /controls -->
                             </div>
 
                             <div class="control-group">
                                 <label class="control-label" for="firstname">Mã nhân viên</label>
                                 <div class="controls">
-                                    <input type="text" class="span6" value="@nhanVien.MaNhanVien" style="width:97%" />
+                                    <input type="text" class="span6" readonly value="@nhanVien.MaNhanVien" style="width:97%" />
                                 </div> <!-- /controls -->
                             </div>
 
                             <div class="control-group">
                                 <label class="control-label" for="firstname">Số điện thoại</label>
                                 <div class="controls">
-                                    <input type="text" class="span6" value="@nhanVien.SDT" style="width:97%" />
+                                    <input type="text" class="span6" readonly value="@nhanVien.SDT" style="width:97%" />
                                 </div> <!-- /controls -->
                             </div>
 
                             <div class="control-group">
                                 <label class="control-label" for="firstname">Quận huyện trực thuộc</label>
                                 <div class="controls">
-                                    <input type="text" class="span6" value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getQuanHuyen(nhanVien.NhanvienID)" style="width:97%" />
+                                    <input type="text" class="span6" readonly value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getQuanHuyen(nhanVien.NhanvienID)" style="width:97%" />
                                 </div> <!-- /controls -->
                             </div>
 
                             <div class="control-group">
                                 <label class="control-label" for="firstname">Tổ trực thuộc</label>
                                 <div class="controls">
-                                    <input type="text" class="span6" value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getToQuanHuyen(nhanVien.NhanvienID)" style="width:97%" />
+                                    <input type="text" class="span6" readonly value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getToQuanHuyen(nhanVien.NhanvienID)" style="width:97%" />
                                 </div> <!-- /controls -->
                             </div>
 
@@ -110,7 +117,7 @@
                                     @{
                                         String tenPhongBan = helper.getPhongBan(nhanVien.NhanvienID);
                                     }
-                                    <input type="text" class="span6" value="@tenPhongBan" style="width:97%" />
+                                    <input type="text" class="span6" readonly value="@tenPhongBan" style="width:97%" />
                                 </div> <!-- /controls -->
                             </div>
 
@@ -118,11 +125,9 @@
                             <div class="control-group">
                                 <label class="control-label" for="firstname">Chức vụ</label>
                                 <div class="controls">
-                                    <input type="text" class="span6" value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getChucVu(nhanVien.NhanvienID)" style="width:97%" />
+                                    <input type="text" class="span6" readonly value="@HoaDonNuocHaDong.Helper.NhanVienHelper.getChucVu(nhanVien.NhanvienID)" style="width:97%" />
                                 </div> <!-- /controls -->
                             </div>
-
-
 
                         </div> <!-- /widget-content -->
 

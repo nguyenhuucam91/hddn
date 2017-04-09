@@ -9,10 +9,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Web.Routing;
+using HoaDonNuocHaDong.Base;
 
 namespace HoaDonNuocHaDong.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         UserInfo info = new UserInfo();
@@ -257,11 +258,11 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult EditProfile()
         {
             //nếu không đăng nhập hệ thống thì tự động bắn về trang Login
-            if (Session["tenDangNhap"] == null)
+            if (LoggedInUser.NguoidungID == 0)
             {
                 return RedirectToAction("Index");
             }
-            int nguoiDungID = Convert.ToInt32(Session["nguoiDungID"]);
+            int nguoiDungID = LoggedInUser.NguoidungID;
             var nguoiDung = db.Nguoidungs.FirstOrDefault(p => p.NguoidungID == nguoiDungID);
             //kiểm tra xem có assoc được không
             int? nhanVienID = nguoiDung.NhanvienID;
@@ -285,7 +286,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult EditProfile(FormCollection form)
         {
             //nếu không đăng nhập hệ thống thì tự động bắn về trang Login
-            if (Session["tenDangNhap"] == null)
+            if (LoggedInUser.NguoidungID == 0)
             {
                 return RedirectToAction("Index");
             }
@@ -294,8 +295,8 @@ namespace HoaDonNuocHaDong.Controllers
             String reEnterPassword = form["reenterPassword"];
             if (password.CompareTo(reEnterPassword) == 0)
             {
-           
-                int nguoiDungID = Convert.ToInt32(Session["nguoiDungID"]);
+
+                int nguoiDungID = LoggedInUser.NguoidungID;
                 var nguoiDung = db.Nguoidungs.FirstOrDefault(p => p.NguoidungID == nguoiDungID);
                 if (nguoiDung != null)
                 {
@@ -304,7 +305,8 @@ namespace HoaDonNuocHaDong.Controllers
                     nguoiDung.Matkhau = md5MatKhau.ToLower();
                     db.Entry(nguoiDung).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index", "Quanhuyen");
+                    TempData["success"] = "Cập nhật profile thành công";
+                    return RedirectToAction("editprofile", "home");
                 }
             }
 
