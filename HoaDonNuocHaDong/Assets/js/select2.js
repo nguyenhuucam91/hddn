@@ -294,7 +294,13 @@ function ajaxApGiaDacBietTongHopFn(khachHangID, month, year, item) {
             var str = "";
             $.each(result, function (index, value) {
                 var appendedTr = "<span>"
-                  + (value.LoaiApGia == 1 ? "Sinh hoạt" : value.LoaiApGia == 2 ? "Hành chính" : value.LoaiApGia == 3 ? "Sự nghiệp" : value.LoaiApGia == 4 ? "Kinh doanh" : value.LoaiApGia == 5 ? "Sản xuất" : value.LoaiApGia == 9 ? "SH1" : value.LoaiApGia == 10 ? "SH2" : value.LoaiApGia == 11 ? "SH3" : "SH4")
+                  + (value.LoaiApGia == 1 ? "Sinh hoạt" : value.LoaiApGia == 2 ?
+                  "Hành chính" : value.LoaiApGia == 3 ?
+                  "Sự nghiệp" : value.LoaiApGia == 4 ?
+                  "Kinh doanh" : value.LoaiApGia == 5 ?
+                  "Sản xuất" : value.LoaiApGia == 9 ?
+                  "SH1" : value.LoaiApGia == 10 ?
+                  "SH2" : value.LoaiApGia == 11 ? "SH3" : "SH4")
                   + "  - " + value.SanLuong
                   + (value.CachTinh == 0 ? "" : value.CachTinh == 1 ? "%" : "")
                   + "</span> || ";
@@ -412,38 +418,43 @@ function removeClassHasSanLuongAmInTr(sanLuong, trParent) {
 }
 //khi gán số khoán
 
-$("input[name='soKhoan']").change(function () {
-    var dateStart = $(this).parent('td').siblings(".startDate").find('input').val();
-    var dateEnd = $(this).parent('td').siblings(".endDate").find('input').val();
-    var soKhoanInputValue = $(this).val();
-    var hoaDonID = $(this).data("hoadonid");
-    var KHID = $(this).data("khid");
-    var soHoaDon = $(this).data("sohoadon");
+$(document).ready(function () {
+    $("input[name='soKhoan']").change(function () {
+        var dateStart = $(this).parent('td').siblings(".startDate").find('input[name="startDate"]').val();
+        var dateEnd = $(this).parent('td').siblings(".endDate").find('input[name="endDate"]').val();
+        var soKhoanInputValue = $(this).val();
+        var hoaDonID = $(this).data("hoadonid");
+        var KHID = $(this).data("khid");
+        var soHoaDon = $(this).data("sohoadon");
 
-    var chiSoMoiValue = $(this).parent('td').prev('td').prev('td').find('input').val();
-    var chiSoCuValue = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
-    var sanLuong = 0;
-    var checkboxKiemDinh = $(this).parent('td').next('td').find('input[type="checkbox"]');
+        var chiSoMoiValue = $(this).parent('td').prev('td').prev('td').find('input').val();
+        var chiSoCuValue = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+        var sanLuong = 0;
+        var checkboxKiemDinh = $(this).parent('td').next('td').find('input[type="checkbox"]');
 
-    if (checkboxKiemDinh.is(':checked')) {
-        var truocKiemDinh = $("input[name='kiemdinh']").data('truockd');
-        var sauKiemDinh = $("input[name='kiemdinh']").data('saukd');
-        var chiSoSau = $(this).parent('td').prev('td').prev('td').find('input').val();
-        var chiSoTruoc = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
-        sanLuong = (truocKiemDinh - chiSoTruoc) + (chiSoSau - sauKiemDinh);
-    }
-    else {
-        sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
-    }
-    var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue);
+        if (checkboxKiemDinh.is(':checked')) {
+            var truocKiemDinh = $("input[name='kiemdinh']").data('truockd');
+            var sauKiemDinh = $("input[name='kiemdinh']").data('saukd');
+            var chiSoSau = $(this).parent('td').prev('td').prev('td').find('input').val();
+            var chiSoTruoc = $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+            sanLuong = (truocKiemDinh - chiSoTruoc) + (chiSoSau - sauKiemDinh);
+        }
+        else {
+            sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
+        }
+        var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue);
 
-    //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
-    $.ajax({
-        url: "/SoLieuTieuThu/ChinhSuaSoKhoan",
-        datatype: "json",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoanInputValue, KHID: KHID, dateStart: dateStart, dateEnd: dateEnd, sohoadon: soHoaDon }),
+        //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
+        $.ajax({
+            url: "/SoLieuTieuThu/ChinhSuaSoKhoan",
+            datatype: "json",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue,
+                TongSoTieuThu: hieuSo, SoKhoan: soKhoanInputValue, KHID: KHID, dateStart: dateStart, dateEnd: dateEnd, sohoadon: soHoaDon
+            }),
+        });
     });
 });
 
