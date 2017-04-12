@@ -77,7 +77,7 @@ namespace HoaDonNuocHaDong.Controllers
                                                                 PhiVAT = i.ThueSuatPrice,
                                                                 PhiBVMT = i.PhiBVMT,
                                                                 TTDoc = i.TTDoc.Value,
-                                                                SanLuong = i.ChiSoMoi - i.ChiSoCu,
+                                                                SanLuong = i.SanLuongTieuThu,
                                                                 TongCong = i.TongCong
                                                             }).ToList();
 

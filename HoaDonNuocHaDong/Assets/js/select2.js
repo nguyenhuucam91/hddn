@@ -13,6 +13,11 @@ $(".dropdown.quan").select2({
     placeholder: "Chọn quận",
 });
 
+$('.allowClear').select2({
+    placeholder: "Chọn một",
+    allowClear: true,
+});
+
 $(".dropdown.quanAllowClear").select2({
     placeholder: "Chọn quận",
     allowClear: true,

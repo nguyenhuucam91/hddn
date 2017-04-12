@@ -2,10 +2,11 @@
     ViewBag.Title = "Xem chi tiết chỉ số của khách hàng";
     var tuyen = ViewBag.tenTuyen;
     var chiSoTieuThu = ViewBag.chiSoTieuThu as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
-    int tuyenDuocChot = ViewBag.trangthaiChotTuyen;
+    int soLuongHoaDonChuaChot = ViewBag.trangthaiChotTuyen;
     int tongSoLuongHoaDon = ViewBag.soLuongHoaDon;
     int soHoaDonCoSanLuong = ViewBag.soLuongHoaDonCoSanLuong;
     int soHoaDonKhongCoSanLuong = ViewBag.soLuongHoaDonKhongCoSanLuong;
+    int adminVaTruongPhong = ViewBag.isAdminHoacTruongPhong;
     Tuyenkhachhang tuyenKH = ViewData["tuyen"] as Tuyenkhachhang;
     Nhanvien nV = ViewData["nhanvien"] as Nhanvien;
     HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
@@ -59,7 +60,8 @@
                         </form>
 
                         <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
-                            @if (tuyenDuocChot > 0 || nhanVienController.getPhongBanNguoiDung() == 0)
+                            <!-- Nếu là admin hoặc số lượng chưa chốt > 0-->
+                            @if (adminVaTruongPhong == 0 || adminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG || soLuongHoaDonChuaChot > 0)
                             {
                                 <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
                             }

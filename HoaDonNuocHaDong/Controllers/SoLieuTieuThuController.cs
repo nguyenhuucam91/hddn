@@ -592,22 +592,38 @@ namespace HoaDonNuocHaDong.Controllers
                 _year = Convert.ToInt16(year);
             }
 
-
             //load danh sách khách hàng thuộc tuyến mà người dùng (nhân viên) đăng nhập                       
             ViewBag.tenTuyen = UserInfo.getTenTuyen(tuyenID.Value);
             //load chỉ số và thông tin tách số vào đây
             List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);
+            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == false);           
+            int loggedInRole = getLoggedInUserRole();
 
-            ViewBag.chiSoTieuThu = chiSoTieuThu;
-            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == false);
+            #region ViewBag
             ViewBag.trangthaiChotTuyen = soLuongHoaDonChuaChot;
+            ViewBag.chiSoTieuThu = chiSoTieuThu;
+            ViewBag.isAdminHoacTruongPhong = loggedInRole;
             ViewBag.soLuongHoaDonCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong > 1);
             ViewBag.soLuongHoaDonKhongCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong <= 1);
             ViewBag.soLuongHoaDon = chiSoTieuThu.Count();
             ViewData["nhanvien"] = db.Nhanviens.Find(nvquanly);
             ViewData["tuyen"] = db.Tuyenkhachhangs.Find(tuyenID);
-            
+            #endregion
             return View();
+        }
+
+        private int getLoggedInUserRole()
+        {
+            if (LoggedInUser.NhanvienID != null)
+            {
+                int nhanvienLoggedInId = LoggedInUser.NhanvienID.Value;
+                Nhanvien loggedInUserRoleRecord = db.Nhanviens.Find(nhanvienLoggedInId);
+                if (loggedInUserRoleRecord != null)
+                {
+                    return loggedInUserRoleRecord.ChucvuID.Value;
+                }
+            }
+            return 0;
         }
 
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getDanhSachHoaDonTieuThu(int _month, int _year, int tuyenID)
@@ -1361,7 +1377,6 @@ namespace HoaDonNuocHaDong.Controllers
             int previousMonth = getPreviousMonthYear(month, year, true);
             int previousYear = getPreviousMonthYear(month, year, false);
 
-
             ViewBag.khachHang = loadDanhSachSanLuongBatThuong(previousMonth, previousYear, month, year, tuyenID).Distinct().ToList();
             ViewBag.currentDate = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month);
             ViewBag.nextMonth = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month + 1 > 12 ? 1 : DateTime.Now.Month + 1);
@@ -1379,6 +1394,7 @@ namespace HoaDonNuocHaDong.Controllers
                                   join t in db.Lichsuhoadons on i.HoadonnuocID equals t.HoaDonID
                                   where i.ThangHoaDon == month && i.NamHoaDon == year && r.TuyenKHID == tuyenID
                                   && (r.Tinhtrang == 0 || r.Tinhtrang == null) && (r.IsDelete == false)
+                                  && (i.Trangthaichot == false)
                                   orderby r.TTDoc
                                   select new Models.SoLieuTieuThu.HoaDonNuoc
                                   {

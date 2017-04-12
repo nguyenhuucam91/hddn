@@ -24,23 +24,23 @@
                             <label>Tỉ lệ phí nước thải:</label>
                             <input type="number" name="phinuocthai" placeholder="0" class="negNumber form-control" />%
                             <label>Loại khách hàng:</label>
-                            <select name="customerType">
+                            <select name="customerType" class="dropdown allowClear">
                                 @foreach (var item in loaiKH)
                                 {
                                     <option value="@item.LoaiKHID">@item.Ten</option>
                                 }
                             </select>
                             <label>Loại áp giá:</label>
-                            <select name="apgiaType">
+                            <select name="apgiaType" class="dropdown allowClear">
                                 @foreach (var item in loaiApGia)
                                 {
                                     <option value="@item.LoaiapgiaID">@item.Ten</option>
                                 }
                             </select>
                             <label>Tháng:</label>
-                            <input class="form-control" name="month"/>
+                            <input class="form-control" name="month" value="@ViewBag.selectedMonth"/>
                             <label>Năm:</label>
-                            <input class="form-control" name="year"/>
+                            <input class="form-control" name="year" value="@ViewBag.selectedYear"/>
                         </div>
                         <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
                     </div>

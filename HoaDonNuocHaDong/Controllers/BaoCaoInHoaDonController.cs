@@ -95,6 +95,8 @@ namespace HoaDonNuocHaDong.Controllers
         {
             ViewData["loaiKhachHang"] = db.LoaiKHs.ToList();
             ViewData["loaiApGia"] = db.Loaiapgias.Where(p => p.LoaiapgiaID != KhachHang.DACBIET).ToList();
+            ViewBag.selectedMonth = DateTime.Now.Month;
+            ViewBag.selectedYear = DateTime.Now.Year;
             return View();
         }
 
@@ -109,8 +111,8 @@ namespace HoaDonNuocHaDong.Controllers
             int phiNuocThai = String.IsNullOrEmpty(form["phinuocthai"]) ? 0 : Convert.ToInt32(form["phinuocthai"]);
             int month = String.IsNullOrEmpty(form["month"]) ? DateTime.Now.Month : Convert.ToInt16(form["month"]);
             int year = String.IsNullOrEmpty(form["year"]) ? DateTime.Now.Year : Convert.ToInt16(form["year"]);
-            int loaiKH = Convert.ToInt32(form["customerType"]);
-            int loaiApGia = Convert.ToInt32(form["apgiaType"]);
+            int loaiKH = String.IsNullOrEmpty(form["customerType"]) ? 0 : Convert.ToInt32(form["customerType"]);
+            int loaiApGia = String.IsNullOrEmpty(form["apgiaType"]) ? 0 : Convert.ToInt32(form["apgiaType"]);
 
             ControllerBase<BaoCaoPhiNuocThai> cB = new ControllerBase<BaoCaoPhiNuocThai>();
             List<BaoCaoPhiNuocThai> bc = cB.Query("BaoCaoNuocThai",
@@ -120,7 +122,9 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@customerType", loaiKH),
                 new SqlParameter("@apgia", loaiApGia)
                 ).ToList();
+
             ViewData["bc"] = bc;
+            
             return View();
         }
 
@@ -140,7 +144,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult XuliBaoCaoHoaDonNhan(FormCollection form)
         {
-            int tuyen = form["tuyen"] == "" ? 0 : Convert.ToInt32(form["tuyen"]);
+            int tuyen = String.IsNullOrEmpty(form["tuyen"]) ? 0 : Convert.ToInt32(form["tuyen"]);
             int dayStart = form["fromDay"] == "" ? DateTime.Now.Day : Convert.ToInt32(form["fromDay"]);
             int dayEnd = form["toDay"] == "" ? DateTime.Now.Day : Convert.ToInt32(form["toDay"]);
             int monthStart = form["fromMonth"] == "" ? DateTime.Now.Month : Convert.ToInt32(form["fromMonth"]);
@@ -151,11 +155,11 @@ namespace HoaDonNuocHaDong.Controllers
 
             DateTime createdDate = new DateTime(yearStart, monthStart, dayStart);
             DateTime endDate = new DateTime(yearEnd, monthEnd, dayEnd);
-
+                      
             var lsHoaDon = (from i in db.Hoadonnuocs
                             join r in db.Lichsuhoadons on i.HoadonnuocID equals r.HoaDonID
                             join t in db.Khachhangs on i.KhachhangID equals t.KhachhangID
-                            where i.Ngayhoadon >= createdDate && i.Ngayhoadon <= endDate && t.TuyenKHID == tuyen
+                            where i.Ngayhoadon >= createdDate && i.Ngayhoadon <= endDate 
                             select new BaoCaoHoaDonNhan
                             {
                                 ID = i.HoadonnuocID,
@@ -163,9 +167,15 @@ namespace HoaDonNuocHaDong.Controllers
                                 LoaiKH = t.LoaiKHID,
                                 NgayHoaDon = i.Ngayhoadon,
                                 TenKH = r.TenKH,
-                                TongTien = r.TongCong
+                                TongTien = r.TongCong,
+                                TuyenKHID = t.TuyenKHID
                             }).ToList();
 
+            if (tuyen != 0)
+            {
+                lsHoaDon = lsHoaDon.Where(p => p.TuyenKHID == tuyen).ToList();
+                ViewBag.tenTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == tuyen).Ten;
+            }
             //nếu chọn loại khách hàng
             if (loaiKH != 0)
             {
@@ -174,8 +184,7 @@ namespace HoaDonNuocHaDong.Controllers
                 else
                     lsHoaDon = lsHoaDon.Where(p => p.LoaiKH == loaiKH).ToList();
             }
-
-            ViewBag.tenTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == tuyen).Ten;
+           
             ViewBag.monthStart = monthStart;
             ViewBag.monthEnd = monthEnd;
             ViewBag.yearStart = yearStart;

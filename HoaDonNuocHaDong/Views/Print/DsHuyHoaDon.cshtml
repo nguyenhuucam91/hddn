@@ -31,8 +31,7 @@
                                         <th>Mã tuyến</th>
                                         <th>Số tiền hủy</th>
                                         <th>Ngày hủy hóa đơn</th>
-                                        <th>Người yêu cầu hủy</th>
-                                        <th>Người thực hiện hủy</th>                                                                               
+                                        <th>Người yêu cầu/thực hiện hủy</th>                                                                                                                      
                                         <th>Lí do hủy</th>                                        
                                     </tr>
                                 </thead>
@@ -47,8 +46,7 @@
                                             <td>@item.Tuyen</td>
                                             <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTien.Value)</td>
                                             <td>@String.Format("{0:dd/MM/yyyy}",item.ngayHuy)</td>                                            
-                                            <td>@item.NguoiYeuCauHuy</td>
-                                            <td>@HoaDonNuocHaDong.Helper.NguoidungHelper.getTenNhanVien(item.nguoiHuy)</td>
+                                            <td>@item.NguoiYeuCauHuy</td>                                           
                                             <td>@item.lidohuy</td>                                            
                                         </tr>
                                     }
