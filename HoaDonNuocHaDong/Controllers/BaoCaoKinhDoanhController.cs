@@ -239,6 +239,8 @@ namespace HoaDonNuocHaDong.Controllers
         {
             ViewData["xinghieps"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             ViewData["tuyens"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
+            ViewBag.selectedMonth = DateTime.Now.Month;
+            ViewBag.selectedYear = DateTime.Now.Year;
             return View();
         }
         public ActionResult XuLyBaoCaoTongHopKhachHangQuanLy()

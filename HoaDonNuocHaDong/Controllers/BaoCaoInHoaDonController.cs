@@ -82,8 +82,8 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
             }
 
-            ViewBag.selectedMonth = month;
-            ViewBag.selectedYear = year;
+            ViewBag.selectedMonth = month.ToString();
+            ViewBag.selectedYear = year.ToString();
             return View();
         }
 
@@ -124,7 +124,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ).ToList();
 
             ViewData["bc"] = bc;
-            
+
             return View();
         }
 
@@ -155,11 +155,11 @@ namespace HoaDonNuocHaDong.Controllers
 
             DateTime createdDate = new DateTime(yearStart, monthStart, dayStart);
             DateTime endDate = new DateTime(yearEnd, monthEnd, dayEnd);
-                      
+
             var lsHoaDon = (from i in db.Hoadonnuocs
                             join r in db.Lichsuhoadons on i.HoadonnuocID equals r.HoaDonID
                             join t in db.Khachhangs on i.KhachhangID equals t.KhachhangID
-                            where i.Ngayhoadon >= createdDate && i.Ngayhoadon <= endDate 
+                            where i.Ngayhoadon >= createdDate && i.Ngayhoadon <= endDate
                             select new BaoCaoHoaDonNhan
                             {
                                 ID = i.HoadonnuocID,
@@ -184,7 +184,7 @@ namespace HoaDonNuocHaDong.Controllers
                 else
                     lsHoaDon = lsHoaDon.Where(p => p.LoaiKH == loaiKH).ToList();
             }
-           
+
             ViewBag.monthStart = monthStart;
             ViewBag.monthEnd = monthEnd;
             ViewBag.yearStart = yearStart;
@@ -267,8 +267,9 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult BaoCaoSanLuongDoanhThuTheoQuy()
         {
+            int quyHienTai = getQuyHienTai(DateTime.Now.Month);
             #region data
-            ViewBag.selectedMonth = DateTime.Now.Month;
+            ViewBag.selectedQuy = quyHienTai;
             ViewBag.selectedYear = DateTime.Now.Year;
             ViewData["quan"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             ViewData["tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
@@ -287,12 +288,13 @@ namespace HoaDonNuocHaDong.Controllers
             ControllerBase<BaoCaoSanLuongDoanhThu> cB = new ControllerBase<BaoCaoSanLuongDoanhThu>();
             if (type == 0)
             {
-                BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoQuanTheoQuy",                           
+                BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoQuanTheoQuy",
                            new SqlParameter("@nam", nam),
                            new SqlParameter("@quan", quanHuyenID),
                            new SqlParameter("@d2", 0.05),
                            new SqlParameter("@list", thangTrongQuy)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
+
             }
             else
             {
@@ -304,8 +306,52 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
             }
+
+            ViewBag.selectedMonth = thangTrongQuy;
+            ViewBag.selectedYear = DateTime.Now.Year.ToString();
+            return View("XuliBaoCaoSanLuongDoanhThu");
+        }
+
+        public ActionResult BaoCaoSanLuongDoanhThuTheoNam()
+        {
+            #region data
             ViewBag.selectedMonth = DateTime.Now.Month;
             ViewBag.selectedYear = DateTime.Now.Year;
+            ViewData["quan"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            ViewData["tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
+            #endregion
+
+            return View("BaoCaoSanLuongDoanhThuTheoNam");
+        }
+
+        [HttpPost]
+        public ActionResult XuLiBaoCaoSanLuongDoanhThuTheoNam(FormCollection form, int type)
+        {           
+            int nam = !String.IsNullOrEmpty(form["y1"]) ? Convert.ToInt32(form["y1"]) : 0;
+            int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);            
+            ControllerBase<BaoCaoSanLuongDoanhThu> cB = new ControllerBase<BaoCaoSanLuongDoanhThu>();
+
+            if (type == 0)
+            {
+                BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoQuanTheoNam",
+                           new SqlParameter("@nam", nam),
+                           new SqlParameter("@quan", quanHuyenID),
+                           new SqlParameter("@d2", 0.05)).First();
+                ViewData["baoCaoSanLuongDoanhThu"] = bc;
+
+            }
+            else
+            {
+                String tuyens = !String.IsNullOrEmpty(form["tuyen"]) ? form["tuyen"] : "";
+                BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoTuyenTheoNam",
+                           new SqlParameter("@nam", nam),
+                           new SqlParameter("@d2", 0.05),                           
+                           new SqlParameter("@listTuyen", tuyens)).First();
+                ViewData["baoCaoSanLuongDoanhThu"] = bc;
+            }
+
+            ViewBag.selectedMonth = "";
+            ViewBag.selectedYear = DateTime.Now.Year.ToString();
             return View("XuliBaoCaoSanLuongDoanhThu");
         }
 
@@ -326,6 +372,30 @@ namespace HoaDonNuocHaDong.Controllers
                     default: return "0";
                 }
             }
+        }
+
+        public int getQuyHienTai(int thang)
+        {
+            switch (thang)
+            {
+                case 1:
+                case 2:
+                case 3:
+                    return 1;
+                case 4:
+                case 5:
+                case 6:
+                    return 2;
+                case 7:
+                case 8:
+                case 9:
+                    return 3;
+                case 10:
+                case 11:
+                case 12:
+                    return 4;
+            }
+            return 0;
         }
     }
 }

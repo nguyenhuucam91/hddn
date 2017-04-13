@@ -18,8 +18,9 @@
             <!-- /widget-header -->
             <div class="widget-content">
                 <ul class="nav nav-tabs">
-                    <li class="index active"><a href="@Url.Action("baocaosanluongdoanhthu","baocaoinhoadon")">Báo cáo doanh thu theo tháng</a>
-                    <li class="filter"><a href="@Url.Action("baocaosanluongdoanhthutheoquy","baocaoinhoadon")">Báo cáo doanh thu theo quý</a></li>
+                    <li class="index active"><a href="@Url.Action("baocaosanluongdoanhthu","baocaoinhoadon")">Báo cáo doanh thu theo tháng</a></li>
+                    <li class="index"><a href="@Url.Action("baocaosanluongdoanhthutheoquy","baocaoinhoadon")">Báo cáo doanh thu theo quý</a></li>
+                    <li class="index"><a href="@Url.Action("baocaosanluongdoanhthutheonam","baocaoinhoadon")">Báo cáo doanh thu theo năm</a></li>
                 </ul>
                 <div class="xulybc">
                     @using (Html.BeginForm("XuliBaoCaoSanLuongDoanhThu", "BaocaoInHoaDon", new { type = 0 }))

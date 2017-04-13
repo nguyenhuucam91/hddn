@@ -861,7 +861,8 @@ namespace HoaDonNuocHaDong.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "KhachhangID,Makhachhang,QuanhuyenID,PhuongxaID,CumdancuID,TuyenKHID,LoaiKHID,LoaiapgiaID,HinhthucttID,TuyenongkythuatID,Sotaikhoan,Masothue,Ngaykyhopdong,Tilephimoitruong,Soho,Ngayap,Ngayhetap,Sonhankhau,Ten,Diachi,Dienthoai,Ghichu,Sokhuvuc,Sohopdong,Tinhtrang,Diachithutien,IsDelete,TTDoc")] Khachhang khachhang, FormCollection form, int? toID, int nhanVienIDUrl, int tuyenIDUrl)
+        public ActionResult Edit([Bind(Include = "KhachhangID,Makhachhang,QuanhuyenID,PhuongxaID,CumdancuID,TuyenKHID,LoaiKHID,LoaiapgiaID,HinhthucttID,TuyenongkythuatID,Sotaikhoan,Masothue,Ngaykyhopdong,Tilephimoitruong,Soho,Ngayap,Ngayhetap,Sonhankhau,Ten,Diachi,Dienthoai,Ghichu,Sokhuvuc,Sohopdong,Tinhtrang,Diachithutien,IsDelete,TTDoc")] Khachhang khachhang, 
+            FormCollection form, int? toID, int? nhanVienIDUrl, int? tuyenIDUrl)
         {
             int selectedMonth = 0;
             int selectedYear = 0;

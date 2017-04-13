@@ -1,6 +1,5 @@
 ﻿@{
     ViewBag.Title = "Báo cáo sản lượng doanh thu";
-
     List<Quanhuyen> ls = ViewData["quan"] as List<Quanhuyen>;
     List<Tuyenkhachhang> tuyens = ViewData["tuyen"] as List<Tuyenkhachhang>;
 }
@@ -19,14 +18,13 @@
             <div class="widget-content">
                 <ul class="nav nav-tabs">
                     <li class="index"><a href="@Url.Action("baocaosanluongdoanhthu","baocaoinhoadon")">Báo cáo doanh thu theo tháng</a></li>
-                    <li class="index active"><a href="@Url.Action("baocaosanluongdoanhthutheoquy","baocaoinhoadon")">Báo cáo doanh thu theo quý</a></li>
-                    <li class="index"><a href="@Url.Action("baocaosanluongdoanhthutheonam","baocaoinhoadon")">Báo cáo doanh thu theo năm</a></li>
+                    <li class="index"><a href="@Url.Action("baocaosanluongdoanhthutheoquy","baocaoinhoadon")">Báo cáo doanh thu theo quý</a></li>
+                    <li class="index active"><a href="@Url.Action("baocaosanluongdoanhthutheonam","baocaoinhoadon")">Báo cáo doanh thu theo năm</a></li>
                 </ul>
                 <div class="xulybc">
-                    <form action="/baocaoinhoadon/xulibaocaosanluongdoanhthutheoquy?type=0" method="post">
-                        <p>
-                            Quý : <input type="number" class="form-control inputd" name="q1" id="m1" min="1" max="4" required value="@ViewBag.selectedQuy">
-                            năm: <input type="number" class="form-control inputd" name="y1" id="y1" min="2000" required value="@ViewBag.selectedYear">
+                    <form action="/baocaoinhoadon/xulibaocaosanluongdoanhthutheonam?type=0" method="post">
+                        <p>                           
+                           Năm: <input type="number" class="form-control inputd" name="y1" id="y1" min="2000" required value="@ViewBag.selectedYear">
                         </p>
 
                         <label>Quận huyện:</label>
@@ -42,10 +40,9 @@
                     </form>
                     <hr />
                     <!-- Lọc báo cáo doanh thu theo tuyến -->
-                    <form action="/baocaoinhoadon/xulibaocaosanluongdoanhthutheoquy?type=1" method="post">
-                        <p>
-                            Quý : <input type="number" class="form-control inputd" name="q1" id="m1" min="1" max="4" required value="@ViewBag.selectedQuy">
-                            năm: <input type="number" class="form-control inputd" name="y1" id="y1" min="2000" required value="@ViewBag.selectedYear">
+                    <form action="/baocaoinhoadon/xulibaocaosanluongdoanhthutheonam?type=1" method="post">
+                        <p>                           
+                            Năm: <input type="number" class="form-control inputd" name="y1" id="y1" min="2000" required value="@ViewBag.selectedYear">
                         </p>
 
                         <label>Tuyến:</label>
