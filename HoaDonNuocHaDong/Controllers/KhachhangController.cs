@@ -434,7 +434,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             var tuyen = (from i in db.Tuyentheonhanviens
                          join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                         where i.NhanVienID == NhanVienID
+                         where i.NhanVienID == NhanVienID && r.IsDelete == false 
                          select new
                          {
                              TuyenID = r.TuyenKHID,

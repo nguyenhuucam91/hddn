@@ -5,6 +5,7 @@
 
     var nhanVien = (List<Nhanvien>)ViewBag._nhanVien;
     var selectedNhanVien = ViewBag.selectedNhanVien;
+    var hasTuyen = ViewBag.hasTuyen;
 }
 
 <div class="main">
@@ -31,6 +32,10 @@
                                         @Html.TextBoxFor(p => p.Matuyen, new { @class = "form-control width" })
                                         <br />
                                         @Html.ValidationMessageFor(p => p.Matuyen)
+                                        @if (hasTuyen != null)
+                                        {
+                                            <span class="red">Tuyến với mã và tên đã tồn tại trong cơ sở dữ liệu. Xin đổi tên khác</span>
+                                        }
                                     </div>
                                 </div>
                                 <div class="form-group" style="margin:2%">

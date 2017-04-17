@@ -78,7 +78,6 @@
                                                 }
                                             }
                                         </select>
-                                        @Html.ActionLink("Thêm mới", "Create", "Quanhuyen")
                                     </div>
                                 </div>
 
@@ -100,7 +99,6 @@
                                             }
                                         </select>
 
-                                        @Html.ActionLink("Thêm mới", "Create", "ToQuanHuyen")
                                         @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
                                     </div>
                                 </div>                                
@@ -109,7 +107,6 @@
                                     <div class="col-md-4">
                                         <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
                                         @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown phongban" })
-                                        @Html.ActionLink("Thêm mới", "Create", "Phongban")
                                         <br />
                                         @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
                                     </div>
@@ -119,7 +116,6 @@
                                     <div class="col-md-4 pull-left">
                                         <label for="" class="control-label">Chức vụ:</label>&nbsp;&nbsp;
                                         @Html.DropDownListFor(model => model.ChucvuID, (SelectList)ViewBag._ChucvuID)
-                                        @Html.ActionLink("Thêm mới", "Create", "Chucvu")
                                         <br />
                                         @Html.ValidationMessageFor(model => model.ChucvuID)
                                     </div>
@@ -138,7 +134,6 @@
 
 
                                         </select>
-                                        @Html.ActionLink("Thêm mới", "Create", "Tuyen")
                                         <br />
                                         @Html.ValidationMessageFor(model => model.NhanvienID, null, new { @style = "margin-left:17%" })
 

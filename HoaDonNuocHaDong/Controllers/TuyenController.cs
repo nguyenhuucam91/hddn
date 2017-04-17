@@ -18,19 +18,18 @@ namespace HoaDonNuocHaDong.Controllers
     {
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
-
-
         // GET: /Tuyen/
         public ActionResult Index()
         {
             var nhanVien = db.Nhanviens.ToList();
-            if(!LoggedInUser.Isadmin.Value){
+            if (!LoggedInUser.Isadmin.Value)
+            {
                 int phongBanId = getPhongBanNguoiDung();
-                nhanVien = db.Nhanviens.Where(p=>p.PhongbanID == phongBanId).ToList();
+                nhanVien = db.Nhanviens.Where(p => p.PhongbanID == phongBanId).ToList();
             }
             var tuyenkhachhangs = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).Include(t => t.Cumdancu).Include(t => t.To);
             ViewBag._nhanVien = nhanVien;
-            return View(tuyenkhachhangs.OrderByDescending(p=>p.TuyenKHID).ToList());
+            return View(tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID).ToList());
         }
 
 
@@ -64,11 +63,11 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 var nhanVienFilter = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId).ToList();
                 ViewBag._nhanVien = nhanVienFilter;
-            }   
+            }
 
             if (String.IsNullOrEmpty(nhanVien))
             {
-                tuyenkhachhangs = db.Tuyenkhachhangs.Include(t => t.Cumdancu).Include(t => t.To).OrderByDescending(p => p.TuyenKHID);               
+                tuyenkhachhangs = db.Tuyenkhachhangs.Include(t => t.Cumdancu).Include(t => t.To).OrderByDescending(p => p.TuyenKHID);
                 ViewBag.chiNhanh = db.Chinhanhs;
                 return View(tuyenkhachhangs.ToList());
             }
@@ -139,18 +138,11 @@ namespace HoaDonNuocHaDong.Controllers
             if (ModelState.IsValid)
             {
                 //kiểm tra trong tuyến trước
-                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.Ten == tuyenkhachhang.Ten);
+                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.Ten == tuyenkhachhang.Ten && p.IsDelete == false);
                 if (existingTuyen == null)
                 {
                     db.Tuyenkhachhangs.Add(tuyenkhachhang);
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (DbEntityValidationException e)
-                    {
-                        Response.Write(e.ToString());
-                    }
+                    db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 else
@@ -203,11 +195,17 @@ namespace HoaDonNuocHaDong.Controllers
 
             if (ModelState.IsValid)
             {
-
-                db.Entry(tuyenkhachhang).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-
+                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.Ten == tuyenkhachhang.Ten && p.IsDelete == false);
+                if (existingTuyen == null)
+                {
+                    db.Entry(tuyenkhachhang).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.hasTuyen = true;
+                }               
             }
             ViewBag.nhanVien = new SelectList(db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null), "NhanvienID", "Ten");
             ViewBag.CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false || p.IsDelete == null), "CumdancuID", "Ten", tuyenkhachhang.CumdancuID);
@@ -229,7 +227,7 @@ namespace HoaDonNuocHaDong.Controllers
             String selectedTuyen = form["selectedTuyen"];
             String _selectedNhanVien = form["nhanvien"];
 
-            if (_selectedNhanVien != null)
+            if (!String.IsNullOrEmpty(_selectedNhanVien))
             {
                 int selectedNhanVien = Convert.ToInt32(_selectedNhanVien);
                 string[] selectedTuyenArray = selectedTuyen.Split(',');

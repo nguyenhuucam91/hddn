@@ -289,7 +289,15 @@
             {
                 <text>
             //xác nhận lần 2
-            var secondConfirm = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");
+            var secondConfirm = "";
+            @if (adminVaTruongPhong == 0 ||  adminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
+            {
+                <text>secondConfirm = confirm("Bạn có thực sự muốn chốt số liệu không?");</text>
+            }
+            else
+            {
+                <text>secondConfirm = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");</text>
+            }
             if (secondConfirm) {
                 this.form.submit();
             }

@@ -76,6 +76,7 @@ namespace HoaDonNuocHaDong.Controllers
             int toQH = String.IsNullOrEmpty(form["toQuanHuyen"]) ? 0 : Convert.ToInt32(form["toQuanHuyen"]);
             String isAdmin = form["isAdmin"];
             IEnumerable<Nguoidung> nguoiDung = db.Nguoidungs;
+            int phongBanNguoiDung = getPhongBanNguoiDung();
             if (!String.IsNullOrEmpty(chiNhanh))
             {
                 int chiNhanhID = Convert.ToInt32(chiNhanh);
@@ -86,10 +87,17 @@ namespace HoaDonNuocHaDong.Controllers
                                          where t.QuanhuyenID == chiNhanhID
                                          select new
                                          {
-                                             nguoiDung = i
+                                             nguoiDung = i,
+                                             phongBanID = r.PhongbanID
                                          });
-                nguoiDung = nguoiDungChiNhanh.Select(p => p.nguoiDung).Distinct().ToList();
-
+                if (phongBanNguoiDung == 0)
+                {
+                    nguoiDung = nguoiDungChiNhanh.Select(p => p.nguoiDung).Distinct().ToList();
+                }
+                else
+                {
+                    nguoiDung = nguoiDungChiNhanh.Where(p=>p.phongBanID == phongBanNguoiDung).Select(p => p.nguoiDung).Distinct().ToList();
+                }               
             }
             //nếu phòng ban không để trông thì lọc theo phòng ban của ng dùng
             if (!String.IsNullOrEmpty(phongBan))
@@ -148,7 +156,15 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Create()
         {
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
-            ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            int phongBanID = getPhongBanNguoiDung();
+            if (phongBanID == 0)
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            }
+            else
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanID).ToList();
+            }
             return View();
         }
 
@@ -213,7 +229,15 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.passwordMesg = "Mật khẩu cũ và mật khẩu mới phải trùng nhau";
             }
 
-            ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            int phongBanID = getPhongBanNguoiDung();
+            if (phongBanID == 0)
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            }
+            else
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanID).ToList();
+            }
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
             return View(nguoidung);
         }
@@ -231,7 +255,15 @@ namespace HoaDonNuocHaDong.Controllers
                 return HttpNotFound();
             }
             ViewBag.selectedNhanVien = nguoidung.NhanvienID;
-            ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            int phongBanID = getPhongBanNguoiDung();
+            if (phongBanID == 0)
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            }
+            else
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanID).ToList();
+            }
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
 
             return View(nguoidung);
@@ -279,7 +311,15 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.selectedNhanVien = nguoidung.NhanvienID;
-            ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            int phongBanID = getPhongBanNguoiDung();
+            if (phongBanID == 0)
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+            }
+            else
+            {
+                ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanID).ToList();
+            }
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
             return View(currentlyEditedNguoiDung);
         }

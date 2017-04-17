@@ -213,7 +213,7 @@
 
                                                             <td>
                                                                 @Html.ActionLink("Sửa", "Edit", new { id = item.KhachhangID, toID = selectedTo, nhanvienIDUrl = selectedNhanVien, tuyenIDUrl = selectedTuyen }) |
-                                                                @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen }, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" }) |
+                                                              
                                                                 @if (item.Tinhtrang == 0 || item.Tinhtrang == null)
                                                                 {
                                                                     @Html.ActionLink("Thanh lý HD", "Inactive", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
@@ -231,6 +231,8 @@
                                                                 else
                                                                 {
                                                                     <a href="@Url.Action("Inactive", new { @id = item.KhachhangID, toID = selectedTo,nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })" target="_blank">Xem thanh lý</a>
+                                                                    @Html.Raw(" | ")
+                                                                    @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen }, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" }) 
                                                                 }
 
                                                             </td>
