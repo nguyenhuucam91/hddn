@@ -119,7 +119,7 @@ $(".dropdown.phongBan").select2({
 });
 
 
-$(".quan,.quanAllowClear").change(function () {
+$(".quan").change(function () {
     //clear result trước khi thay đổi
     $(".phuong,.phuongAllowClear").find("option").remove().end();
     var selectedVal = $(this).val();
@@ -136,9 +136,11 @@ $(".quan,.quanAllowClear").change(function () {
     });
 });
 
+
+
 //khi chi nhánh thay đổi thì Tổ cũng thay đổi theo
 $(".quan").change(function () {
-    //clear result trước khi thay đổi
+    //clear result trước khi thay đổi    
     $(".to").find("option").remove().end();
     var selectedVal = $(this).val();
     $.ajax({
@@ -147,12 +149,28 @@ $(".quan").change(function () {
         data: { ChiNhanhID: selectedVal },
         success: function (result) {
             $.each(result, function (key, value) {
-
                 $(".to").append("<option value=" + value.ToID + ">" + (value.ToID + " - " + value.Ten) + "</option>");
             });
         }
     });
 });
+
+$(".quanAllowClear").change(function () {
+    //clear result trước khi thay đổi    
+    $(".toAllowClear").find("option").remove().end();
+    var selectedVal = $(this).val();
+    $.ajax({
+        url: '/khachhang/filltobyquan',
+        method: "GET",
+        data: { ChiNhanhID: selectedVal },
+        success: function (result) {
+            $.each(result, function (key, value) {
+                $(".toAllowClear").append("<option value=" + value.ToID + ">" + (value.ToID + " - " + value.Ten) + "</option>");
+            });
+        }
+    });
+});
+
 
 //khi chi nhánh thay đổi thì Tổ cũng thay đổi theo
 $(".quan").change(function () {
