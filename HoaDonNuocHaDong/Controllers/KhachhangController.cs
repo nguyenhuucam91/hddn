@@ -169,39 +169,52 @@ namespace HoaDonNuocHaDong.Controllers
                 _tinhTrangCatNuoc = 1;
             }
             // tiến hành lọc khách hàng dựa trên các tiêu chí trên
-            if (nhanVienID == 0 && tuyen == 0)
-            {
-                ControllerBase<HoaDonNuocHaDong.Models.KhachHang.KhachHangModel> cb = new ControllerBase<Models.KhachHang.KhachHangModel>();
-                List<HoaDonNuocHaDong.Models.KhachHang.KhachHangModel> ls = cb.Query("DSKH",
-                    new SqlParameter("@d1", _tinhTrangSuDung)
-                    ).Distinct().ToList();
-
-                DateTime defaultDate = Convert.ToDateTime("0001/01/01");
-                //cắt nước rồi
-                if (TinhTrang != "1")
-                {
-                    if (catNuoc == "1")
-                    {
-                        ls = ls.Where(p => p.Ngayngungcapnuoc <= DateTime.Now && p.Ngayngungcapnuoc > defaultDate
-                            && p.Ngaycapnuoclai == defaultDate).ToList();
-                    }
-                    //chưa cắt nước
-                    else
-                    {
-                        ls = ls.Where(p => p.Ngayngungcapnuoc == defaultDate || p.Ngayngungcapnuoc == null || p.Ngaycapnuoclai <= DateTime.Now).ToList();
-                    }
-                }
-                ViewData["khachHang"] = ls;
-
-                return View("TongDanhSach");
-            }
-            //nếu nhân viên và tuyến được chọn
-            else
+            if (tuyen > 0)
             {
                 IEnumerable<Khachhang> khachHangIQueryable = retrieveKhachHangFromFilter("" + tuyen, TinhTrang, catNuoc);
                 ViewBag.khachHang = khachHangIQueryable.OrderBy(p => p.TTDoc).ToList();
             }
+            else
+            {
+                if (nhanVienID > 0)
+                {
+                    IEnumerable<Khachhang> khachHangIQueryable = nonTuyenCustomers(nhanVienID, TinhTrang, catNuoc);
+                    ViewBag.khachHang = khachHangIQueryable.OrderBy(p => p.TTDoc).ToList();
+                }
+                else
+                {
+                    IEnumerable<Khachhang> khachHangIQueryable = nonNhanvienCustomers(toForm, TinhTrang, catNuoc);
+                    ViewBag.khachHang = khachHangIQueryable.OrderBy(p => p.TTDoc).ToList();
+                }
+            }
             return View();
+        }
+
+        private IEnumerable<Khachhang> nonNhanvienCustomers(int toForm, string TinhTrang, string catNuoc)
+        {
+            var nhanviens = db.Nhanviens.Where(p => p.IsDelete == false && p.ToQuanHuyenID == toForm);
+            List<Khachhang> khachHangs = new List<Khachhang>();
+            foreach (var nhanvien in nhanviens)
+            {
+                khachHangs.AddRange(nonTuyenCustomers(nhanvien.NhanvienID, TinhTrang, catNuoc));
+            }
+            return khachHangs;
+        }
+
+        private IEnumerable<Khachhang> nonTuyenCustomers(int nhanVienID, string TinhTrang, string catNuoc)
+        {
+            var tuyenTheoNhanVien = from i in db.Tuyentheonhanviens
+                                    join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
+                                    join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
+                                    join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
+                                    where i.NhanVienID == nhanVienID
+                                    select r;
+            List<Khachhang> khachHangs = new List<Khachhang>();
+            foreach (var item in tuyenTheoNhanVien)
+            {
+                khachHangs.AddRange(retrieveKhachHangFromFilter(item.TuyenKHID.ToString(), TinhTrang, catNuoc).ToList());
+            }
+            return khachHangs;
         }
 
         /// <summary>
@@ -213,8 +226,8 @@ namespace HoaDonNuocHaDong.Controllers
         public IEnumerable<Khachhang> retrieveKhachHangFromFilter(string tuyen, string TinhTrang = null, string catNuoc = null)
         {
 
-            var khachhangs = (from i in db.Khachhangs                              
-                              join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID                              
+            var khachhangs = (from i in db.Khachhangs
+                              join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
                               where i.IsDelete == false && i.TuyenKHID.ToString() == tuyen
                               select new
                               {
@@ -225,11 +238,10 @@ namespace HoaDonNuocHaDong.Controllers
                                   NgayCatNuoc = i.Ngayngungcapnuoc,
                                   NgayCapNuocLai = i.Ngaycapnuoclai,
                               });
-            
+
             //set giá trị mặc định khi ko chọn một tiêu chí lọc cụ thể
             IQueryable<Khachhang> khachHangIQueryable = khachhangs.Select(p => p.KhachHang);
-            
-            int count = khachHangIQueryable.Count();
+
             if (String.IsNullOrEmpty(TinhTrang) || TinhTrang == "0" || String.IsNullOrEmpty(Request.QueryString["TinhTrang"]))
             {
                 khachhangs = khachhangs.Where(p => p.Tinhtrang == 0 || p.Tinhtrang == null);
@@ -255,6 +267,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             return khachHangIQueryable;
+
         }
 
         /// <summary>
@@ -669,7 +682,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.selectedQuanHuyen = selectedQuanHuyenID;
-            ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);           
+            ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
             ViewBag.selectedCumDanCu = khachhang.CumdancuID;
             ViewBag.HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
             ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
