@@ -159,7 +159,7 @@ namespace HoaDonNuocHaDong.Controllers
             var lsHoaDon = (from i in db.Hoadonnuocs
                             join r in db.Lichsuhoadons on i.HoadonnuocID equals r.HoaDonID
                             join t in db.Khachhangs on i.KhachhangID equals t.KhachhangID
-                            where i.Ngayhoadon >= createdDate && i.Ngayhoadon <= endDate
+                            where i.Ngayhoadon >= createdDate && i.Ngayhoadon <= endDate && i.Tongsotieuthu > 0
                             select new BaoCaoHoaDonNhan
                             {
                                 ID = i.HoadonnuocID,
@@ -351,7 +351,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.selectedMonth = "";
-            ViewBag.selectedYear = DateTime.Now.Year.ToString();
+            ViewBag.selectedYear = nam.ToString();
             return View("XuliBaoCaoSanLuongDoanhThu");
         }
 

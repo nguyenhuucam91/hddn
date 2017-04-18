@@ -33,6 +33,9 @@
     <thead>
         <tr>
             <th>
+                STT
+            </th>
+            <th>
                 Mã khách hàng
             </th>
             <th>
@@ -87,6 +90,9 @@
                 }
                 <tr>
                     <td>
+                        @i
+                    </td>
+                    <td>
 
                         @Html.HiddenFor(x => Model[i].KhachhangID)
                         @Model[i].Khachhang.MaKhachHang
@@ -127,11 +133,11 @@
             }
         }
     </tbody>
-    <thead>
+    <tfoot>
         <tr>
             <td colspan="5">Tổng</td>
             <td class="tong">@Html.Raw(no) </td>
             <td></td>
         </tr>
-    </thead>
+    </tfoot>
 </table>
