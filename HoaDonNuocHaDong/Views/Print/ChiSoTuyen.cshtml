@@ -158,11 +158,11 @@
                                                     <td>@item.Matuyen - @item.Ten</td>
                                                     @if (isTinhTien)
                                                     {
-                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
+                                                        <td><a href="@Url.Action("XemChiTiet", new {quan = selectedQuan, to = selectedTo, @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
                                                     }
                                                     else
                                                     {
-                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
+                                                        <td><a href="@Url.Action("XemChiTiet", new {quan = selectedQuan, to = selectedTo, @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
                                                     }
                                                     @if (soLuongHoaDonThuc.Count() == soLuongHoaDonDaIn.Count())
                                                     {
@@ -191,11 +191,11 @@
                                                     <td>@item.Matuyen - @item.Ten</td>
                                                     @if (isTinhTien)
                                                     {
-                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})" style="color:red">Tính tiền</a></td>
+                                                        <td><a href="@Url.Action("XemChiTiet", new { quan = selectedQuan, to = selectedTo, @tuyen = @item.TuyenKHID, @month = selectedMonth, @year = selectedYear })" style="color:red">Tính tiền</a></td>
                                                     }
                                                     else
                                                     {
-                                                        <td><a href="@Url.Action("XemChiTiet", new { @tuyen = @item.TuyenKHID,@month = selectedMonth,@year = selectedYear})">Tính tiền</a></td>
+                                                        <td><a href="@Url.Action("XemChiTiet", new { quan = selectedQuan, to = selectedTo, @tuyen = @item.TuyenKHID, @month = selectedMonth, @year = selectedYear })">Tính tiền</a></td>
                                                     }
 
                                                     <td>In (@soLuongHoaDonDaIn.Count() / @soLuongHoaDonThuc.Count())</td>
