@@ -261,7 +261,7 @@
             int nhanVienQLy = Convert.ToInt32(Request.QueryString["nvquanly"]);
             bool hasSLKhongBT = false;
             HoaDonNuocHaDong.Controllers.SoLieuTieuThuController ctl = new HoaDonNuocHaDong.Controllers.SoLieuTieuThuController();
-             int previousMonth = ctl.getPreviousMonthYear(month, year, true);
+            int previousMonth = ctl.getPreviousMonthYear(month, year, true);
             int previousYear = ctl.getPreviousMonthYear(month, year, false);
 
             var dsSanLuongKhongBinhThuong = ctl.loadDanhSachSanLuongBatThuong(previousMonth, previousYear,month,year,selectedTuyen);

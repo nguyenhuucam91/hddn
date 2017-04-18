@@ -1393,8 +1393,9 @@ namespace HoaDonNuocHaDong.Controllers
                                   join m in db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
                                   join t in db.Lichsuhoadons on i.HoadonnuocID equals t.HoaDonID
                                   where i.ThangHoaDon == month && i.NamHoaDon == year && r.TuyenKHID == tuyenID
-                                  && (r.Tinhtrang == 0 || r.Tinhtrang == null) && (r.IsDelete == false)
-                                  && (i.Trangthaichot == false)
+                                  && (r.Tinhtrang == 0) && (r.IsDelete == false)
+                                  && (i.Trangthaichot == false || i.Trangthaichot == null)
+                                  && ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai <= DateTime.Now))
                                   orderby r.TTDoc
                                   select new Models.SoLieuTieuThu.HoaDonNuoc
                                   {

@@ -434,7 +434,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             var tuyen = (from i in db.Tuyentheonhanviens
                          join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                         where i.NhanVienID == NhanVienID && r.IsDelete == false 
+                         where i.NhanVienID == NhanVienID && r.IsDelete == false
                          select new
                          {
                              TuyenID = r.TuyenKHID,
@@ -545,12 +545,15 @@ namespace HoaDonNuocHaDong.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "KhachhangID,Makhachhang,QuanhuyenID,PhuongxaID,CumdancuID,TuyenKHID,LoaiKHID,LoaiapgiaID,HinhthucttID,TuyenongkythuatID,Sotaikhoan,Masothue,Ngaykyhopdong,Tilephimoitruong,Soho,Ngayap,Ngayhetap,Sonhankhau,Ten,Diachi,Dienthoai,Ghichu,Sokhuvuc,Sohopdong,Tinhtrang,Diachithutien,IsDelete,TTDoc")] Khachhang khachhang, FormCollection form)
+        public ActionResult Create([Bind(Include = "KhachhangID,Makhachhang,QuanhuyenID,PhuongxaID,CumdancuID,TuyenKHID,LoaiKHID,LoaiapgiaID,HinhthucttID,TuyenongkythuatID,Sotaikhoan,Masothue,Ngaykyhopdong,Tilephimoitruong,Soho,Ngayap,Ngayhetap,Sonhankhau,Ten,Diachi,Dienthoai,Ghichu,Sokhuvuc,Sohopdong,Tinhtrang,Diachithutien,IsDelete,TTDoc")] Khachhang khachhang,
+            FormCollection form)
         {
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
             int ChiSoDau = String.IsNullOrEmpty(form["ChiSoDau"]) ? 0 : Convert.ToInt32(form["ChiSoDau"]);
             khachhang.MaKhachHang = "0";
+            int thangKiHopDong = 0;
+            int namKiHopDong = 0;
             if (ModelState.IsValid)
             {
                 khachhang.Chisolapdat = ChiSoDau;
@@ -558,6 +561,8 @@ namespace HoaDonNuocHaDong.Controllers
                 int ttDoc = khachhang.TTDoc.Value;
                 int tuyenID = khachhang.TuyenKHID.Value;
                 int countCustomer = db.Khachhangs.Count(p => p.TTDoc == ttDoc && (p.IsDelete == false || p.IsDelete == null) && p.TuyenKHID == khachhang.TuyenKHID);
+                thangKiHopDong = khachhang.Ngaykyhopdong.Value.Month;
+                namKiHopDong = khachhang.Ngaykyhopdong.Value.Year;
                 if (countCustomer > 0)
                 {
                     khachHangHelper.pushKhachHangXuong(ttDoc, tuyenID);
@@ -566,22 +571,8 @@ namespace HoaDonNuocHaDong.Controllers
                 khachhang.Tinhtrang = 0;
                 khachhang.MaKhachHang = getMaxMaKhachHang().ToString();
                 db.Khachhangs.Add(khachhang);
-                // lưu thay đổi vào DB và bắt ngoại lệ để debug            
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbEntityValidationException dbEx)
-                {
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            Response.Write(validationError.PropertyName + "--" + validationError.ErrorMessage);
-                            Response.End();
-                        }
-                    }
-                }
+                // lưu thay đổi vào DB và bắt ngoại lệ để debug                            
+                db.SaveChanges();
                 //nếu là áp giá tổng hợp
                 if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
                 {
@@ -618,60 +609,20 @@ namespace HoaDonNuocHaDong.Controllers
                     hoaDonNuoc.NhanvienID = 0;
                 }
 
-                //số hóa đơn, kí hiệu
-                //khi tạo mới thì tổng số tiêu thụ = 0
                 hoaDonNuoc.Tongsotieuthu = 0;
-                //trạng thái in & trạng thái thu = false (chưa in và chưa thu)
                 hoaDonNuoc.Trangthaiin = false;
                 hoaDonNuoc.Trangthaithu = false;
-                hoaDonNuoc.NamHoaDon = DateTime.Now.Year;
-                hoaDonNuoc.ThangHoaDon = DateTime.Now.Month;
+                hoaDonNuoc.Trangthaichot = false;
+                hoaDonNuoc.Trangthaixoa = false;
+                hoaDonNuoc.NamHoaDon = namKiHopDong;
+                hoaDonNuoc.ThangHoaDon = thangKiHopDong;
                 db.Hoadonnuocs.Add(hoaDonNuoc);
-                //Bắt lỗi validation khi lưu
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbEntityValidationException dbEx)
-                {
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            Response.Write(validationError.PropertyName + "--" + validationError.ErrorMessage);
-                            Response.End();
-                        }
-                    }
-                }
+                db.SaveChanges();
+
                 /*------------------CHI TIẾT HÓA ĐƠN NƯƠC tại tháng hiện tại------------*/
-                Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
-                chiTiet.HoadonnuocID = db.Hoadonnuocs.Max(p => p.HoadonnuocID);
-                chiTiet.Chisocu = ChiSoDau;
-                chiTiet.Chisomoi = 0;
-                chiTiet.SH1 = 0;
-                chiTiet.SH2 = 0;
-                chiTiet.SH3 = 0;
-                chiTiet.SH4 = 0;
-                chiTiet.HC = 0;
-                chiTiet.CC = 0;
-                chiTiet.SXXD = 0;
-                chiTiet.KDDV = 0;
-                db.Chitiethoadonnuocs.Add(chiTiet);
-                try
-                {
-                    db.SaveChanges();
-                    ViewBag.successfulMessage = "Thêm mới khách hàng thành công";
-                }
-                catch (DbEntityValidationException dbEx)
-                {
-                    foreach (var validationErrors in dbEx.EntityValidationErrors)
-                    {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            Response.Write(validationError.PropertyName + "--" + validationError.ErrorMessage);
-                        }
-                    }
-                }
+                themMoiChiTietHoaDonNuoc(ChiSoDau);
+                ViewBag.successfulMessage = "Thêm mới khách hàng thành công";
+
 
                 //nếu ấn nút quay lại thì mới chuyển về trang index, nếu không vẫn tiếp tục nhập
                 String isBack = form["back"];
@@ -682,14 +633,6 @@ namespace HoaDonNuocHaDong.Controllers
                     TempData["nhanvien"] = nhanVienIDTuTuyen;
                     return RedirectToAction("Index");
                 }
-
-            }
-            else
-            {
-                var message = string.Join(" | ", ModelState.Values
-        .SelectMany(v => v.Errors)
-        .Select(e => e.ErrorMessage));
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, message);
             }
 
             var phongBanRepository = uow.Repository<PhongBanRepository>();
@@ -840,9 +783,6 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag.selectedQuanHuyen = selectedQuanHuyenID;
             ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-            //ViewBag.Ngaykyhopdong = String.Format("{0:dd/mm/yyyy}", khachhang.Ngaykyhopdong);
-            //ViewBag.NgayApDinh = String.Format("{0:dd/mm/yyyy}", khachhang.Ngayap);
-            //ViewBag.NgayHetDinh = String.Format("{0:dd/mm/yyyy}", khachhang.Ngayhetap);
             ViewBag.KHID = khachhang.KhachhangID;
             //thông tin dropdown
             ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
@@ -861,9 +801,10 @@ namespace HoaDonNuocHaDong.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "KhachhangID,Makhachhang,QuanhuyenID,PhuongxaID,CumdancuID,TuyenKHID,LoaiKHID,LoaiapgiaID,HinhthucttID,TuyenongkythuatID,Sotaikhoan,Masothue,Ngaykyhopdong,Tilephimoitruong,Soho,Ngayap,Ngayhetap,Sonhankhau,Ten,Diachi,Dienthoai,Ghichu,Sokhuvuc,Sohopdong,Tinhtrang,Diachithutien,IsDelete,TTDoc")] Khachhang khachhang, 
+        public ActionResult Edit([Bind(Include = "KhachhangID,Makhachhang,QuanhuyenID,PhuongxaID,CumdancuID,TuyenKHID,LoaiKHID,LoaiapgiaID,HinhthucttID,TuyenongkythuatID,Sotaikhoan,Masothue,Ngaykyhopdong,Tilephimoitruong,Soho,Ngayap,Ngayhetap,Sonhankhau,Ten,Diachi,Dienthoai,Ghichu,Sokhuvuc,Sohopdong,Tinhtrang,Diachithutien,IsDelete,TTDoc")] Khachhang khachhang,
             FormCollection form, int? toID, int? nhanVienIDUrl, int? tuyenIDUrl)
         {
+
             int selectedMonth = 0;
             int selectedYear = 0;
             if (Request.QueryString["thang"] != null)
@@ -873,8 +814,8 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                selectedMonth = DateTime.Now.Month;
-                selectedYear = DateTime.Now.Year;
+                selectedMonth = khachhang.Ngaykyhopdong.Value.Month;
+                selectedYear = khachhang.Ngaykyhopdong.Value.Year;
             }
 
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
@@ -905,16 +846,47 @@ namespace HoaDonNuocHaDong.Controllers
                 //cập nhật lại chỉ số đầu cho khách hàng trong trường hợp nhập sai
                 int chiSoDauEdited = String.IsNullOrEmpty(form["ChiSoDau"]) ? -1 : Convert.ToInt32(form["ChiSoDau"]);
                 //nếu chỉ số đầu để trống thì không cập nhật lại nữa
-                if (chiSoDauEdited != -1)
+                Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == selectedMonth && p.NamHoaDon == selectedYear);
+                if (hoaDonNuoc != null)
                 {
-                    Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == selectedMonth && p.NamHoaDon == selectedYear);
-                    if (hoaDonNuoc != null)
+                    if (chiSoDauEdited != -1)
                     {
-                        Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuoc.HoadonnuocID);
-                        chiTiet.Chisocu = chiSoDauEdited;
-                        db.Entry(chiTiet).State = EntityState.Modified;
-                        db.SaveChanges();
+                        if (hoaDonNuoc != null)
+                        {
+                            Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuoc.HoadonnuocID);
+                            chiTiet.Chisocu = chiSoDauEdited;
+                            db.Entry(chiTiet).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
                     }
+                }
+                else
+                {
+                    Hoadonnuoc hoaDonThangNamKiHopDong = new Hoadonnuoc();
+                    //lấy last inserted id của khách hàng
+                    hoaDonThangNamKiHopDong.KhachhangID = db.Khachhangs.Max(p => p.KhachhangID);
+                    //lấy nhân viên ID đang đăng nhập hệ thống
+                    if (LoggedInUser.NhanvienID != null)
+                    {
+                        int nhanvienID = LoggedInUser.NhanvienID.Value;
+                        hoaDonThangNamKiHopDong.NhanvienID = nhanvienID;
+                    }
+                    else
+                    {
+                        hoaDonThangNamKiHopDong.NhanvienID = 0;
+                    }
+
+                    hoaDonThangNamKiHopDong.Tongsotieuthu = 0;
+                    //trạng thái in & trạng thái thu = false (chưa in và chưa thu)
+                    hoaDonThangNamKiHopDong.Trangthaiin = false;
+                    hoaDonThangNamKiHopDong.Trangthaithu = false;
+                    hoaDonThangNamKiHopDong.NamHoaDon = selectedYear;
+                    hoaDonThangNamKiHopDong.ThangHoaDon = selectedMonth;
+                    hoaDonThangNamKiHopDong.Ngaybatdausudung = khachhang.Ngaykyhopdong;
+                    db.Hoadonnuocs.Add(hoaDonThangNamKiHopDong);
+                    db.SaveChanges();
+                    int chiSoDauChiTietHoaDon = 0;
+                    themMoiChiTietHoaDonNuoc(chiSoDauChiTietHoaDon);
                 }
 
                 //xóa bảng áp giá tổng hơp trước
@@ -1153,6 +1125,24 @@ namespace HoaDonNuocHaDong.Controllers
             return View(khachhang);
         }
 
+        public void themMoiChiTietHoaDonNuoc(int ChiSoDau)
+        {
+            Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
+            chiTiet.HoadonnuocID = db.Hoadonnuocs.Max(p => p.HoadonnuocID);
+            chiTiet.Chisocu = ChiSoDau;
+            chiTiet.Chisomoi = 0;
+            chiTiet.SH1 = 0;
+            chiTiet.SH2 = 0;
+            chiTiet.SH3 = 0;
+            chiTiet.SH4 = 0;
+            chiTiet.HC = 0;
+            chiTiet.CC = 0;
+            chiTiet.SXXD = 0;
+            chiTiet.KDDV = 0;
+            db.Chitiethoadonnuocs.Add(chiTiet);
+            db.SaveChanges();
+        }
+
         // GET: /Khachhang/Delete/5
         /// <summary>
         /// Chuyển khách hàng về trạng thái chấm dứt sử dụng hơp đồng
@@ -1217,7 +1207,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// <param name="tuyenID"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Inactive(FormCollection form, int id, int? toID, int? nhanvienID, int? tuyenID)
+        public ActionResult Inactive(FormCollection form, int? id, int? toID, int? nhanvienID, int? tuyenID)
         {
             String liDoThanhLy = form["Lydothanhly"];
             string[] hiddenKhachHang = form["thanhLy"].ToString().Split(',');
@@ -1251,9 +1241,16 @@ namespace HoaDonNuocHaDong.Controllers
                 TempData["to"] = toID;
             }
 
-            if (nhanvienID == null)
+            if (id == null)
             {
-                return RedirectToAction("FilterMaKH");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                if (nhanvienID == null)
+                {
+                    return RedirectToAction("FilterMaKH");
+                }
             }
             return RedirectToAction("Index");
         }
@@ -1425,6 +1422,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             String maKH = String.IsNullOrEmpty(form["maKH"]) ? "" : form["maKH"];
             var khachHang = db.Khachhangs.Where(p => p.MaKhachHang == maKH && p.IsDelete == false).ToList();
+
             #region ViewData
             ViewData["khachhangAfterFiltered"] = khachHang;
             #endregion

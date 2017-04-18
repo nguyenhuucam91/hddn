@@ -78,7 +78,7 @@
 
                                                 <td>
                                                     @Html.ActionLink("Sửa", "Edit", new { id = item.KhachhangID }) |
-                                                    @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"] }, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" }) |
+
                                                     @if (item.Tinhtrang == 0 || item.Tinhtrang == null)
                                                     {
                                                         @Html.ActionLink("Thanh lý HD", "Inactive", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"] })
@@ -90,16 +90,14 @@
                                                         }
                                                         else
                                                         {
-                                                            @Html.ActionLink("Cấp lại nước", "Caplainuoc", new { id = item.KhachhangID, TinhTrang = 0})
+                                                            @Html.ActionLink("Cấp lại nước", "Caplainuoc", new { id = item.KhachhangID, TinhTrang = 0 })
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        <a href="@Url.Action("Inactive", new { @id = item.KhachhangID})" target="_blank">Xem thanh lý</a>
+                                                        @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"] }, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" })
+                                                        <a href="@Url.Action("Inactive", new { @id = item.KhachhangID})" target="_blank"> | Xem thanh lý</a>
                                                     }
-
-
-
 
                                                 </td>
                                             </tr>
