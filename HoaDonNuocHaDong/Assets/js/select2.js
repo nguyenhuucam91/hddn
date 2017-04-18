@@ -299,6 +299,21 @@ $(".tuyen").change(function () {
     });
 });
 
+$("select[name='PhuongxaID']").change(function () {
+    $("select[name='CumdancuID']").find('option').remove().end();
+    var selectedVal = $(this).val();
+    $.ajax({
+        url: '/khachhang/FillCumDanCu',
+        method: "GET",
+        data: { PhuongID: selectedVal },
+        success: function (result) {
+            $.each(result, function (key, value) {
+                $("select[name='CumdancuID']").append("<option value=" + value.CumdancuID + ">" + (value.CumdancuID + " - " + value.Ten) + "</option>");
+            });
+        }
+    });
+});
+
 /*------------------- Function ajax để sử dụng để append dòng-------*/
 function ajaxApGiaDacBietTongHopFn(khachHangID, month, year, item) {
 

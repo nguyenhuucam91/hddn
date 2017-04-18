@@ -213,11 +213,9 @@ namespace HoaDonNuocHaDong.Controllers
         public IEnumerable<Khachhang> retrieveKhachHangFromFilter(string tuyen, string TinhTrang = null, string catNuoc = null)
         {
 
-            var khachhangs = (from i in db.Khachhangs
-                              //join bảng tuyến khách hàng (*)
-                              join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                              join t in db.ToQuanHuyens on i.QuanhuyenID equals t.ToQuanHuyenID
-                              where i.IsDelete == false || i.IsDelete == null
+            var khachhangs = (from i in db.Khachhangs                              
+                              join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID                              
+                              where i.IsDelete == false && i.TuyenKHID.ToString() == tuyen
                               select new
                               {
                                   KhachHang = i,
@@ -227,8 +225,11 @@ namespace HoaDonNuocHaDong.Controllers
                                   NgayCatNuoc = i.Ngayngungcapnuoc,
                                   NgayCapNuocLai = i.Ngaycapnuoclai,
                               });
-
-
+            
+            //set giá trị mặc định khi ko chọn một tiêu chí lọc cụ thể
+            IQueryable<Khachhang> khachHangIQueryable = khachhangs.Select(p => p.KhachHang);
+            
+            int count = khachHangIQueryable.Count();
             if (String.IsNullOrEmpty(TinhTrang) || TinhTrang == "0" || String.IsNullOrEmpty(Request.QueryString["TinhTrang"]))
             {
                 khachhangs = khachhangs.Where(p => p.Tinhtrang == 0 || p.Tinhtrang == null);
@@ -252,14 +253,7 @@ namespace HoaDonNuocHaDong.Controllers
                     khachhangs = khachhangs.Where(p => p.NgayCatNuoc == null || p.NgayCapNuocLai <= DateTime.Now);
                 }
             }
-            //set giá trị mặc định khi ko chọn một tiêu chí lọc cụ thể
-            IQueryable<Khachhang> khachHangIQueryable = khachhangs.Select(p => p.KhachHang);
-            //nếu tuyến không rỗng (được chọn)
-            if (tuyen != null)
-            {
-                int selectedTuyenID = Convert.ToInt32(tuyen);
-                khachHangIQueryable = khachhangs.Select(p => p.KhachHang).Where(p => p.TuyenKHID == selectedTuyenID).Distinct();
-            }
+
             return khachHangIQueryable;
         }
 
@@ -406,6 +400,17 @@ namespace HoaDonNuocHaDong.Controllers
             return Json(_nhanVien, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult FillCumDanCu(int PhuongID)
+        {
+            var _nhanVien = (from i in db.Cumdancus
+                             where i.PhuongxaID == PhuongID && i.IsDelete == false
+                             select new
+                             {
+                                 Ten = i.Ten,
+                                 CumdancuID = i.CumdancuID,
+                             }).Distinct().ToList();
+            return Json(_nhanVien, JsonRequestBehavior.AllowGet);
+        }
 
         /// <summary>
         /// Load danh sách khách hàng theo tổ, loại bỏ KH bị xóa, bị thanh lý hợp đồng 
@@ -507,11 +512,20 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag.selectedQuanHuyen = selectedQuanHuyenID;
             ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-            ViewBag.CumdancuID = db.Cumdancus.Where(p => p.IsDelete == false).ToList();
+            List<Phuongxa> phuongXas = db.Phuongxas.Where(p => p.QuanhuyenID == selectedQuanHuyenID && p.IsDelete == false).ToList();
+            if (phuongXas.Count > 0)
+            {
+                int idPhuongXaDauTien = phuongXas.First().PhuongxaID;
+                ViewBag.CumdancuID = db.Cumdancus.Where(p => p.IsDelete == false && p.PhuongxaID == idPhuongXaDauTien).ToList();
+            }
+            else
+            {
+                ViewBag.CumdancuID = new List<Phuongxa>();
+            }
             ViewBag.HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten");
             ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten");
             ViewBag.LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten");
-            ViewBag.PhuongxaID = db.Phuongxas.Where(p => p.QuanhuyenID == selectedQuanHuyenID && p.IsDelete == false).ToList();
+            ViewBag.PhuongxaID = phuongXas;
             ViewBag.QuanhuyenID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList(), "QuanhuyenID", "Ten");
             ViewBag.TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
 
@@ -655,14 +669,24 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.selectedQuanHuyen = selectedQuanHuyenID;
-            ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-
-            ViewBag.CumdancuID = db.Cumdancus.Where(p => p.IsDelete == false).ToList();
+            ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);           
             ViewBag.selectedCumDanCu = khachhang.CumdancuID;
             ViewBag.HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
             ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
             ViewBag.LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
-            ViewBag.PhuongxaID = db.Phuongxas.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+
+            List<Phuongxa> phuongXas = db.Phuongxas.Where(p => p.QuanhuyenID == selectedQuanHuyenID && p.IsDelete == false).ToList();
+            if (phuongXas.Count > 0)
+            {
+                int idPhuongXaDauTien = phuongXas.First().PhuongxaID;
+                ViewBag.CumdancuID = db.Cumdancus.Where(p => p.IsDelete == false && p.PhuongxaID == idPhuongXaDauTien).ToList();
+            }
+            else
+            {
+                ViewBag.CumdancuID = new List<Phuongxa>();
+            }
+
+            ViewBag.PhuongxaID = phuongXas;
             ViewBag.selectedPhuongXa = khachhang.PhuongxaID;
             ViewBag.QuanhuyenID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false), "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
             ViewBag.TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
