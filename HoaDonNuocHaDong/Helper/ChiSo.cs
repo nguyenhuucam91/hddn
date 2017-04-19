@@ -116,7 +116,8 @@ namespace HoaDonHaDong.Helper
                                join r in _db.Khachhangs on i.KhachhangID equals r.KhachhangID
                                join m in _db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
                                where i.ThangHoaDon == month && i.NamHoaDon == year && 
-                                     r.TuyenKHID == tuyenKHID.Value &&
+                                     r.TuyenKHID == tuyenKHID.Value && 
+                                      (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != month && r.Ngaythanhly.Value.Year != year))&&
                                      ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
                                      (i.Trangthaixoa == false || i.Trangthaixoa == null) 
                                orderby r.TTDoc
