@@ -244,27 +244,22 @@ namespace HoaDonNuocHaDong.Controllers
 
             if (String.IsNullOrEmpty(TinhTrang) || TinhTrang == "0" || String.IsNullOrEmpty(Request.QueryString["TinhTrang"]))
             {
-                khachhangs = khachhangs.Where(p => p.Tinhtrang == 0 || p.Tinhtrang == null);
-            }
-            else
-            {
-                int tinhTrang = int.Parse(TinhTrang);
-                khachhangs = khachhangs.Where(p => p.Tinhtrang == tinhTrang);
-            }
-
-            if (TinhTrang != "1")
-            {
+                khachHangIQueryable = khachHangIQueryable.Where(p => p.Tinhtrang == 0);
                 //KH bị cắt nước khi và chỉ khi ngày cắt nước <= ngày hiện tại
                 if (!String.IsNullOrEmpty(catNuoc) && catNuoc == "1")
                 {
-                    khachhangs = khachhangs.Where(p => p.NgayCatNuoc <= DateTime.Now && p.NgayCapNuocLai == null);
+                    khachHangIQueryable = khachHangIQueryable.Where(p => p.Ngayngungcapnuoc <= DateTime.Now && p.Ngaycapnuoclai == null);
                 }
                 //đang sử dụng nước <==> ngày cắt nước = null hoặc ngày cấp nước trở lại <= ngày hiện tại
                 else
                 {
-                    khachhangs = khachhangs.Where(p => p.NgayCatNuoc == null || p.NgayCapNuocLai <= DateTime.Now);
+                    khachHangIQueryable = khachHangIQueryable.Where(p => p.Ngayngungcapnuoc == null || p.Ngaycapnuoclai <= DateTime.Now);
                 }
             }
+            else
+            {
+                khachHangIQueryable = khachHangIQueryable.Where(p => p.Tinhtrang.ToString() == "1");
+            }            
 
             return khachHangIQueryable;
 
