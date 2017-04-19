@@ -143,8 +143,8 @@
                                             @using (Html.BeginForm("Index", "KhachHang", FormMethod.Get))
                                             {
                                                 <p>
-                                                    Tình trạng hợp đồng: @Html.DropDownList("Tinhtrang", list, new { @onchange = "this.form.submit()" })
-                                                    <span class="catnuoc">Tình trạng cắt nước: @Html.DropDownList("Catnuoc", catNuoc, new { @onchange = "this.form.submit()" }) </span>
+                                                    Tình trạng hợp đồng: @Html.DropDownList("Tinhtrang", list, new { onchange = "this.form.submit()" })
+                                                    <span class="catnuoc">Tình trạng cắt nước: @Html.DropDownList("Catnuoc", catNuoc, new { onchange = "this.form.submit()" }) </span>
                                                 </p>
                                             }
 
@@ -213,14 +213,14 @@
 
                                                             <td>
                                                                 @Html.ActionLink("Sửa", "Edit", new { id = item.KhachhangID, toID = selectedTo, nhanvienIDUrl = selectedNhanVien, tuyenIDUrl = selectedTuyen }) |
-                                                              
+
                                                                 @if (item.Tinhtrang == 0 || item.Tinhtrang == null)
                                                                 {
                                                                     @Html.ActionLink("Thanh lý HD", "Inactive", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
                                                                     @Html.Raw("|")
-                                                                    if ((item.Ngayngungcapnuoc == null && item.Ngaycapnuoclai == null) ||item.Ngaycapnuoclai <= DateTime.Now)
+                                                                    if ((item.Ngayngungcapnuoc == null && item.Ngaycapnuoclai == null) || item.Ngaycapnuoclai <= DateTime.Now)
                                                                     {
-                                                                        
+
                                                                         @Html.ActionLink("Cắt nước", "Catnuoc", new { id = item.KhachhangID, TinhTrang = 0, toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })
                                                                     }
                                                                     else
@@ -232,7 +232,7 @@
                                                                 {
                                                                     <a href="@Url.Action("Inactive", new { @id = item.KhachhangID, toID = selectedTo,nhanvienID = selectedNhanVien, tuyenID = selectedTuyen })" target="_blank">Xem thanh lý</a>
                                                                     @Html.Raw(" | ")
-                                                                    @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen }, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" }) 
+                                                                    @Html.ActionLink("Xóa", "Delete", new { id = item.KhachhangID, TinhTrang = @Request.QueryString["TinhTrang"], toID = selectedTo, nhanvienID = selectedNhanVien, tuyenID = selectedTuyen }, new { onclick = "return confirm('Bạn có muốn xóa khách hàng này không')" })
                                                                 }
 
                                                             </td>
@@ -258,7 +258,7 @@
     $(function () {
         $("#Tinhtrang").change(function () {
             if ($(this).val() == 1) {
-                window.location.href = "/KhachHang?TinhTrang=1&Catnuoc=1";
+                window.location.href = "/KhachHang?TinhTrang=1&Catnuoc=0";
             }
         });
 
