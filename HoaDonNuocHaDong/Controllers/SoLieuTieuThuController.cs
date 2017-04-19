@@ -634,7 +634,8 @@ namespace HoaDonNuocHaDong.Controllers
                                 join m in db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
                                 join l in db.Loaiapgias on r.LoaiapgiaID equals l.LoaiapgiaID
                                 where i.ThangHoaDon == _month && i.NamHoaDon == _year &&
-                                      r.TuyenKHID == tuyenID && 
+                                      r.TuyenKHID == tuyenID &&
+                                      (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != _month && r.Ngaythanhly.Value.Year != _year)) &&
                                       (i.Trangthaixoa == false || i.Trangthaixoa == null) &&
                                       ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now))
                                 select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc

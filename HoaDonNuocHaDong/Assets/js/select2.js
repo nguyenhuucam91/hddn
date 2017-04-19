@@ -627,12 +627,7 @@ $(document).ready(function () {
             method: "GET",
             contentType: "application/json",
             data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thangNay: month, thangSau: nextMonth, namNay: year, namSau: nextYear },
-            success: function (result) {
-                console.log('123');
-            },
-            error: function (result) {
-                console.log('222');
-            }
+            
         });
     });
 });
@@ -677,7 +672,7 @@ $("button.xemChiTietKD").click(function () {
 
 });
 
-/*-----------Datepicker class --------------*/
+/*----------- hiển thị datepicker bắt đầu từ ngày đã xác định trước --------------*/
 
 $(function () {
     $(".datepicker").datepicker({
@@ -688,6 +683,8 @@ $(function () {
     $(".apdinh").change(function () {
         $(".hetdinh").datepicker('setStartDate', $(".apdinh").val());
     });
+
+    $("input[name='Ngaycapnuoclai']").datepicker('setStartDate', $(".ngaycatnuoc").val());
 
 });
 /*----------------------Hiển thị datepicker cho ngày bắt đầu và ngày kết thúc (bên cạnh thông tin tuyên-người dùng) trong phần nhập số liệu tiêu thụ----------------*/

@@ -197,12 +197,11 @@
                                                                                 }
                                                                                 <td class="startDate">
                                                                                     <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
-                                                                                    <input type="text" style="width:90%" name="startDate"
+                                                                                    <input type="text" style="width:90%" name="startDate" class="startDate[@i]"
                                                                                            value="@String.Format("{0:dd/MM/yyyy}",ngayBatDauHoaDon)"
                                                                                            data-hoadonid="@item.HoaDonNuocID" readonly />
                                                                                 </td>
                                                                             }
-
 
                                                                             else
                                                                             {
@@ -214,7 +213,7 @@
 
                                                                                 <td class="startDate">
                                                                                     <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="0" />
-                                                                                    <input type="text" style="width:90%" name="startDate" data-hoadonid="@item.HoaDonNuocID" readonly
+                                                                                    <input type="text" style="width:90%" name="startDate" class="startDate[@i]" data-hoadonid="@item.HoaDonNuocID" readonly
                                                                                            value="@String.Format("{0:dd/MM/yyyy}",ngayBatDauHoaDon)" />
                                                                                 </td>
                                                                             }
@@ -225,13 +224,15 @@
                                                                                 {
                                                                                     <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
                                                                                            value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
-                                                                                           data-hoadonid="@item.HoaDonNuocID" />
+                                                                                           data-hoadonid="@item.HoaDonNuocID" class="endDate[@i]"
+                                                                                           />
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
                                                                                            value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
-                                                                                           data-hoadonid="@item.HoaDonNuocID" />
+                                                                                           data-hoadonid="@item.HoaDonNuocID" 
+                                                                                           />
                                                                                 }
 
                                                                             </td>
@@ -296,7 +297,6 @@
 
                                                                             @if (!cS.isChotHoaDon(hoaDonID))
                                                                             {
-                                                        <!-- Áp giá đặc biệt -->
                                                                                 if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
                                                                                 {
                                                                                     <td style="background-color:#ffcc00">
