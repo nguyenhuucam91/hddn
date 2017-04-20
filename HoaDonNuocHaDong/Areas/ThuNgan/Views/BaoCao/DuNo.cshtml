@@ -10,11 +10,9 @@
                             <h3>Báo cáo dư nợ</h3>
                         </div>
                         <div class="widget-content">
-                            <h4>Danh sách khách hàng chưa thanh toán: </h4>
                             <div class="tabable">
-                                @Html.Partial("_BaoCaoFilter")
+                                @Html.Partial("_DuNoFilter", (object)ViewBag.Filter)
                                 <div class="tab-content">
-                                    <!-- Danh sachs bao gồm khách hàng không thanh toán công nợ từ tháng trước -->
                                     <div class="tab-pane active" id="tab-nhanvien">
                                         <div>
                                             <table class="table table-striped table-bordered data-table">
@@ -31,33 +29,23 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @{ double tong = 0; int i = 1;}
+                                                    @{ double tong = 0; int stt = 1; }
                                                     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuNoModel item in Model)
                                                     {
-
-                                                        if (item.HoaDon.SoTienNopTheoThang != null)
+                                                        if (item.SoTienNopTheoThang != null)
                                                         {
-                                                            tong += item.HoaDon.SoTienNopTheoThang.SoTienPhaiNop ?? 0;
+                                                            tong += item.SoTienNopTheoThang.SoTienPhaiNop ?? 0;
                                                         }
                                                         <tr>
-                                                            <td>@i</td>
+                                                            <td>@(stt++)</td>
                                                             <td>@item.KhachHang.MaKhachHang</td>
-                                                            <td>
-                                                                <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
-                                                                   data-khachhang="@item.KhachHang.KhachhangID" data-loaikhachhang="@item.KhachHang.LoaiKHID"
-                                                                   data-thanhtoan="@item.KhachHang.HinhthucttID" data-hd="@item.HoaDon.Sohoadon">
-                                                                    @item.KhachHang.Ten
-                                                                </a>
-                                                            </td>
+                                                            <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=item.KhachHang.KhachhangID})" target="_blank">@item.KhachHang.Ten</a></td>
                                                             <td>@item.KhachHang.Diachi</td>
                                                             <td>@item.TuyenKhachHang.Ten</td>
                                                             <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
                                                             <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop : 0)</td>
                                                             <td>@item.NhanVien.Ten</td>
                                                         </tr>
-                                                        {
-                                                            i++;
-                                                        }
                                                     }
                                                 </tbody>
                                                 <tfoot>
@@ -79,27 +67,6 @@
         </div>
     </div>
 </div>
-@*<!-- modal box cho chọn tên -->
-    <div id="myModal" class="modal fade" role="dialog" style="top:50%">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Chi tiết</h3>
-                </div>
-                <div class="modal-body">
-                    <h5><a href="profile.html">Xem chi tiết thông tin cá nhân</a></h5>
-                    <div id="thongtin"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!-- end modal -->*@
 
 @section Scripts {
     <script type="text/javascript">
