@@ -33,8 +33,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                     join t in context.Tuyenkhachhangs on kh.TuyenKHID equals t.TuyenKHID
                     join qh in context.Quanhuyens on kh.QuanhuyenID equals qh.QuanhuyenID
                     join px in context.Phuongxas on kh.PhuongxaID equals px.PhuongxaID
-                    join cdc in context.Cumdancus on kh.CumdancuID equals cdc.CumdancuID
-                    join to in context.Tuyenongs on kh.TuyenongkythuatID equals to.TuyenongID
+                    join _cdc in context.Cumdancus on kh.CumdancuID equals _cdc.CumdancuID into gcdc
+                    from cdc in gcdc.DefaultIfEmpty()
+                    join _to in context.Tuyenongs on kh.TuyenongkythuatID equals _to.TuyenongID into gto
+                    from to in gto.DefaultIfEmpty()
                     select new KhachHangDetailsModel()
                     {
                         KhachHang = kh,
