@@ -25,6 +25,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                    join stntt in dc.SoTienNopTheoThangs on hd.SoTienNopTheoThangID equals stntt.ID
                    join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
                    from dco in gj.DefaultIfEmpty()
+                   orderby kh.TuyenKHID
+                   orderby kh.TTDoc
                    select new HoaDonModel()
                    {
                        HoaDon = hd,
@@ -32,9 +34,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                        SoTienNopTheoThang = stntt,
                        DuCo = dco
                    };
-
         }
-        
+
         public IQueryable<DuNoModel> GetAllDuNoModel()
         {
             return from hd in dc.Hoadonnuocs
@@ -56,6 +57,11 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         public HoaDonModel GetHoaDonModelByID(int hoaDonID)
         {
             return GetAllHoaDonModel().FirstOrDefault(m => m.HoaDon.HoadonnuocID == hoaDonID);
+        }
+
+        public IQueryable<HoaDonModel> GetAllHoaDonModelByKHID(int khachHangID)
+        {
+            return GetAllHoaDonModel().Where(m => m.KhachHang.KhachhangID == khachHangID);
         }
     }
 }

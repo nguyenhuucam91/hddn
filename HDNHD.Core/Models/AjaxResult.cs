@@ -40,6 +40,15 @@ namespace HDNHD.Core.Models
             base.ExecuteResult(context);
         }
 
+        public static AjaxResult Success(string message)
+        {
+            return new AjaxResult()
+            {
+                IsSuccess = true,
+                Message = message
+            };
+        }
+
         public static AjaxResult Fail(string message)
         {
             return new AjaxResult()

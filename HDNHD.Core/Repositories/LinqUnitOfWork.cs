@@ -66,7 +66,10 @@ namespace HDNHD.Core.Repositories
 
         public void BeginTransaction()
         {
-            context.Connection.Open();
+            if (context.Connection.State != System.Data.ConnectionState.Open)
+            {
+                context.Connection.Open();
+            }
             context.Transaction = context.Connection.BeginTransaction();
         }
 

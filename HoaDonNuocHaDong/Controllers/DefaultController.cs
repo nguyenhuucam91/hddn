@@ -11,6 +11,7 @@ namespace HoaDonNuocHaDong.Controllers
     {
         public ActionResult Index()
         {
+            title = "Công ty TNHH một thành viên nước sạch Hà Đông";
             return View();
         }
 	}

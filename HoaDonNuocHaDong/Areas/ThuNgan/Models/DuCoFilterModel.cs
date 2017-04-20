@@ -1,4 +1,5 @@
 ﻿using HDNHD.Core.Models;
+using HDNHD.Models.Constants;
 using HDNHD.Models.DataContexts;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public int? NhanVienID { get; set; }
         public int? Month { get; set; }
         public int? Year { get; set; }
+        public ELoaiKhachHang? LoaiKhachHang { get; set; }
 
         public override void ApplyFilter(ref IQueryable<DuCoModel> items)
         {
@@ -42,6 +44,19 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             else if (QuanHuyenID != null)
             {
                 items = items.Where(m => m.KhachHang.QuanhuyenID == QuanHuyenID);
+            }
+
+            // loai kh
+            if (LoaiKhachHang != null)
+            {
+                if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
+                {
+                    items = items.Where(m => m.KhachHang.LoaiKHID != (int)ELoaiKhachHang.HoGiaDinh);
+                }
+                else
+                {
+                    items = items.Where(m => m.KhachHang.LoaiKHID == (int)LoaiKhachHang.Value);
+                }
             }
         }
     }

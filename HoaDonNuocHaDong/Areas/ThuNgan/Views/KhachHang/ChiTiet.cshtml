@@ -1,0 +1,247 @@
+﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangDetailsModel
+@using HDNHD.Core.Extensions;
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Xem thông tin chi tiết của khách hàng</h3>
+                        </div>
+                        <div class="widget-content">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="@Url.Action("ChiTiet", new { id = Model.KhachHang.KhachhangID})">Thông tin khách hàng</a></li>
+                                <li><a href="@Url.Action("CapNhat", new { id = Model.KhachHang.KhachhangID})">Cập nhật</a></li>
+                                <li><a href="@Url.Action("LichSuDungNuoc", new { id = Model.KhachHang.KhachhangID})">Lịch sử dùng nước</a></li>
+                                <li><a href="@Url.Action("LichSuGiaoDich", new { id = Model.KhachHang.KhachhangID})">Lịch sử giao dịch</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="form-horizontal form-details">
+                                    <div class="row">
+                                        <div class="span4">
+                                            <div class="control-group">
+                                                <label class="control-label">Mã khách hàng</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.MaKhachHang" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Tuyến khách hàng</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                    @if (Model.TuyenKH != null)
+                                                    {
+                                                        <option value="@Model.TuyenKH.TuyenKHID">@Model.TuyenKH.Ten</option>
+                                                    }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Điện thoại</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.Dienthoai" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span4 offset3">
+                                            <div class="control-group">
+                                                <label class="control-label">Tên khách hàng</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.Ten" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Số hợp đồng</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.Sohopdong" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Thứ tự đọc</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.TTDoc" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label">Quận</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                    @if (Model.QuanHuyen != null)
+                                                    {
+                                                        <option value="@Model.QuanHuyen.QuanhuyenID">@Model.QuanHuyen.Ten</option>
+                                                    }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label class="control-label">Phường</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                        @if (Model.PhuongXa != null)
+                                                        {
+                                                            <option value="@Model.PhuongXa.PhuongxaID">@Model.PhuongXa.Ten</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span3 offset1">
+                                            <div class="control-group">
+                                                <label class="control-label">Phố</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                        @if (Model.CumDanCu != null)
+                                                        {
+                                                            <option value="@Model.CumDanCu.CumdancuID">@Model.CumDanCu.Ten</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="span11">
+                                            <div class="control-group">
+                                                <label class="control-label">Địa chỉ đọc đồng hồ</label>
+                                                <div class="controls">
+                                                    <input type="text" class="span9" value="@Model.KhachHang.Diachi" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span11">
+                                            <div class="control-group">
+                                                <label class="control-label">Địa chỉ đọc thu tiền</label>
+                                                <div class="controls">
+                                                    <input type="text" class="span9" value="@Model.KhachHang.Diachithutien" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="span4">
+                                            <div class="control-group">
+                                                <label class="control-label">Khu vực</label>
+                                                <div class="controls">
+                                                    <select class="select2">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">2NT</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                    <div class="row">
+                                        <div class="span4">
+                                            <div class="control-group">
+                                                <label class="control-label">Số tài khoản</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.Sotaikhoan" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Ngày ký hợp đồng</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@String.Format("{0:dd/MM/yyyy}", Model.KhachHang.Ngaykyhopdong)" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Ngày áp định</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@String.Format("{0:dd/MM/yyyy}", Model.KhachHang.Ngayap)" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Số hộ</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.Soho" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Loại khách hàng</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                        <option>@(((HDNHD.Models.Constants.ELoaiKhachHang)Model.KhachHang.LoaiKHID).GetDescription())</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Giá áp</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                        <option>@(((HDNHD.Models.Constants.EApGia)Model.KhachHang.LoaiapgiaID).GetDescription())</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span4 offset3">
+                                            <div class="control-group">
+                                                <label class="control-label">Mã số thuế</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.Masothue" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Phí môi trường</label>
+                                                <div class="controls">
+                                                    <input type="text" class="span2" value="@Model.KhachHang.Tilephimoitruong" disabled> %
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Ngày hết định</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@String.Format("{0:dd/MM/yyyy}", Model.KhachHang.Ngayhetap)" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Số nhân khẩu</label>
+                                                <div class="controls">
+                                                    <input type="text" value="@Model.KhachHang.Masothue" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Hình thức thanh toán</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                    <option>@(((HDNHD.Models.Constants.EHinhThucThanhToan)Model.KhachHang.HinhthucttID).GetDescription())</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">Tuyến ống kỹ thuật</label>
+                                                <div class="controls">
+                                                    <select class="select2" disabled>
+                                                    @if (Model.TuyenOng != null)
+                                                    {
+                                                        <option value="@Model.TuyenOng.TuyenongID">@Model.TuyenOng.Tentuyen</option>
+                                                    }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="span11">
+                                            <div class="control-group">
+                                                <label class="control-label">Ghi chú</label>
+                                                <div class="controls">
+                                                    <input type="text" class="span9" value="@Model.KhachHang.Ghichu" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
 {
     public class HoaDonHelpers
     {
+
+
         /// <summary>
         ///     entry for the two other methods, namely ThanhToan() & HuyThanhToan()
         ///     returns if success
@@ -109,6 +111,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
         /// <effects>
         ///     if HoaDon is NOT paid
         ///         do nothing
+        ///     else if HoaDon is paid by NganHang or DuCo 
+        ///         message to cannot update
         ///     else 
         ///         update HoaDon (TrangThaiThu, NgayNopTien)
         ///         // roll back all GiaoDich for this HoaDon

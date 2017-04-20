@@ -112,8 +112,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         }
 
         /// <summary>
-        /// Báo cáo doanh thu theo tháng
+        ///     Revenue report for month m / year y
+        ///         DuCoDauKy = sum DuCo of prev month
+        ///         DuNoDauKy = sum HoaDon of prev month with TrangThaiThu = false ???
         /// </summary>
+        /// <effects>
+        ///     
+        /// </effects>
         public ActionResult DoanhThu(int? Year, int? Month)
         {
             //var month = DateTime.Now.Month;

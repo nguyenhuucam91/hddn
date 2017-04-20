@@ -27,16 +27,20 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// <summary>
         /// view list of HoaDon with filter
         /// </summary>
-        public ActionResult Index(HoaDonFilterModel filter, HDNHD.Core.Models.Pager pager, String todo)
+        public ActionResult Index(HoaDonFilterModel filter, Pager pager, String todo)
         {
             // default values
-            if (filter.Mode == null) // not in filter
+            if (filter.Mode == HoaDonFilterModel.FilterByManagementInfo) // not in filter
             {
-                if (filter.From == null && filter.To == null)
-                    filter.From = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                if (filter.Month == null && filter.Year == null)
+                {
+                    var prev = DateTime.Now.AddMonths(-1);
+                    filter.Month = prev.Month;
+                    filter.Year = prev.Year;
+                }
 
                 // set selected to, quan huyen = nhanVien's to, quan huyen
-                if (nhanVien != null)
+                if (nhanVien != null && filter.QuanHuyenID == null)
                 {
                     filter.NhanVienID = nhanVien.NhanvienID;
                     filter.ToID = nhanVien.ToQuanHuyenID;
@@ -73,61 +77,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             return View(items.ToList());
         }
 
-        public ActionResult ThemVaoDuCo(int hoaDonID)
+        public ActionResult GiaoDich(int hoaDonID)
         {
-
-
             ViewBag.HoaDonID = hoaDonID;
             return View();
-        }
-
-        [HttpPost]
-        public AjaxResult ThemVaoDuCo(int hoaDonID, int soTien, string ngayNop)
-        {
-            IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
-            IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
-
-            DateTime dt;
-            if (!DateTime.TryParseExact(ngayNop,
-                    "dd/MM/yyyy",
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.None, out dt))
-            {
-                dt = DateTime.Now;
-            }
-
-            var model = hoaDonRepository.GetHoaDonModelByID(hoaDonID);
-            
-            HDNHD.Models.DataContexts.GiaoDich giaoDich = new HDNHD.Models.DataContexts.GiaoDich()
-            {
-                TienNopTheoThangID = model.SoTienNopTheoThang.ID,
-                NgayGiaoDich = dt,
-                SoTien = soTien,
-                SoDu = soTien
-            };
-
-            model.DuCo = model.DuCo ?? new HDNHD.Models.DataContexts.DuCo()
-            {
-                KhachhangID = model.KhachHang.KhachhangID,
-                TienNopTheoThangID = model.SoTienNopTheoThang.ID,
-                SoTienDu = 0
-            };
-
-            if (soTien > 0)
-            {
-                model.DuCo.SoTienDu += soTien;
-            }
-
-            model.SoTienNopTheoThang.SoTienDaThu += giaoDich.SoTien;
-            model.DuCo.SoTienDu += giaoDich.SoDu;
-
-            if (model.DuCo.SoTienDu > 0)
-                duCoRepository.Insert(model.DuCo);
-            giaoDichRepository.Insert(giaoDich);
-
-            uow.SubmitChanges();
-
-            return AjaxResult.Success("");
         }
     }
 }

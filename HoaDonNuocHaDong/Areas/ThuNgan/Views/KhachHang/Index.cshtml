@@ -1,0 +1,87 @@
+﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangModel>
+@using HDNHD.Core.Extensions;
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget-header">
+                        <i class="icon-th-list"></i>
+                        <h3>Quản lý khách hàng</h3>
+                    </div>
+                    <div class="widget-content">
+                        @Html.Partial("_KhachHangFilter", (object)ViewBag.Filter)
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Mã khách hàng</th>
+                                        <th>Tên khách hàng</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Hình thức thanh toán</th>
+                                        <th>Thứ tự đọc</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                @{ var i = 0; }
+                                @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangModel item in Model)
+                                {
+                                    <tr>
+                                        <td>@(++i)</td>
+                                        <td>@item.KhachHang.MaKhachHang</td>
+                                        <td><a href="@Url.Action("ChiTiet", new { id=@item.KhachHang.KhachhangID })">@item.KhachHang.Ten</a></td>
+                                        <td>@item.KhachHang.Diachi</td>
+                                        <td>@item.KhachHang.Dienthoai</td>
+                                        <td width="8%" style="text-align: center;">@(((HDNHD.Models.Constants.EHinhThucThanhToan)@item.KhachHang.HinhthucttID).GetDescription())</td>
+                                        <td width="5%" style="text-align: right;">@item.KhachHang.TTDoc</td>
+                                        <td>
+                                            <a href="@Url.Action("CapNhat", new { id=@item.KhachHang.KhachhangID })">Sửa</a> |
+                                            <a href="@Url.Action("LichSuDungNuoc", new { id=@item.KhachHang.KhachhangID })">LS dùng nước</a> |
+                                            <a href="@Url.Action("LichSuGiaoDich", new { id=@item.KhachHang.KhachhangID })">LS giao dịch</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                            @Html.Partial("_Pager", (object)ViewBag.Pager)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // onInit:
+            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+        });
+
+        // load data onChange
+        $(".sl-quan-huyen").on("change", function () {
+            // get selected quanHuyenID
+            var quanHuyenID = $(this).val();
+
+            // loadTo
+            loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID");
+        });
+
+        $(".sl-to").on("change", function () {
+            // get selected toID
+            var toID = $(this).val();
+
+            // loadNhanVien
+            loadNhanVien($(".sl-nhan-vien"), toID, "@ViewBag.Filter.NhanVienID");
+        });
+
+        $(".sl-nhan-vien").on("change", function () {
+            // get selected nhanVien
+            var nhanVienID = $(this).val();
+
+            // loadTuyen
+            loadTuyen($(".sl-tuyen-kh"), nhanVienID, "@ViewBag.Filter.TuyenKHID");
+        });
+    </script>
+}

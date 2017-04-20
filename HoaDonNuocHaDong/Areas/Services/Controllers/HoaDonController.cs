@@ -5,6 +5,7 @@ using HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces;
 using HoaDonNuocHaDong.Base;
 using System;
 using System.Globalization;
+using System.Web.Mvc;
 
 namespace HoaDonNuocHaDong.Areas.Services.Controllers
 {
@@ -15,6 +16,85 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
         public HoaDonController()
         {
             hoaDonRepository = uow.Repository<HoaDonRepository>();
+        }
+
+        [HttpPost]
+        public AjaxResult GiaoDich(int hoaDonID, int soTien, string ngayNop)
+        {
+            uow.BeginTransaction();
+
+            try
+            {
+                // số tiền không hợp lệ
+                if (soTien <= 0)
+                    return AjaxResult.Fail("Số tiền không hợp lệ.");
+
+                DateTime dt;
+                if (!DateTime.TryParseExact(ngayNop,
+                        "dd/MM/yyyy",
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None, out dt))
+                {
+                    dt = DateTime.Now;
+                }
+
+                IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
+                IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
+                var model = hoaDonRepository.GetHoaDonModelByID(hoaDonID);
+
+                // id không tồn tại
+                if (model == null)
+                    return AjaxResult.Fail("ID hóa đơn không tồn tại.");
+
+                // tạo giao dịch
+                HDNHD.Models.DataContexts.GiaoDich giaoDich = new HDNHD.Models.DataContexts.GiaoDich()
+                {
+                    TienNopTheoThangID = model.SoTienNopTheoThang.ID,
+                    NgayGiaoDich = dt,
+                    SoTien = soTien,
+                    SoDu = 0
+                };
+                giaoDichRepository.Insert(giaoDich);
+
+                // cập nhật SoTienNopTheoThang
+                model.SoTienNopTheoThang.SoTienDaThu += soTien;
+                if (model.SoTienNopTheoThang.SoTienDaThu >= model.SoTienNopTheoThang.SoTienPhaiNop)
+                {
+                    // cập nhật trạng thái thu
+                    if (model.HoaDon.Trangthaithu == null || model.HoaDon.Trangthaithu == false)
+                    {
+                        model.HoaDon.Trangthaithu = true;
+                        model.HoaDon.NgayNopTien = dt;
+                    }
+                }
+
+                // thêm vào DuCo
+                if (model.SoTienNopTheoThang.SoTienDaThu > model.SoTienNopTheoThang.SoTienPhaiNop)
+                {
+                    if (model.DuCo == null)
+                    {
+                        model.DuCo = new HDNHD.Models.DataContexts.DuCo()
+                        {
+                            KhachhangID = model.KhachHang.KhachhangID,
+                            TienNopTheoThangID = model.SoTienNopTheoThang.ID,
+                            SoTienDu = 0
+                        };
+                        duCoRepository.Insert(model.DuCo);
+                    }
+
+                    model.DuCo.SoTienDu = (int)(model.SoTienNopTheoThang.SoTienDaThu - model.SoTienNopTheoThang.SoTienPhaiNop);
+                }
+
+                uow.SubmitChanges();
+                uow.Commit();
+                return AjaxResult.Success("Thành công.");
+            }
+            catch (Exception)
+            {
+                uow.RollBack();
+
+                return AjaxResult.Success("Lỗi, vui lòng thử lại.");
+            }
         }
 
         public AjaxResult CapNhatThanhToan(int hoaDonID, bool trangThaiThu = false, string ngayThu = null)

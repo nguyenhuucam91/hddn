@@ -46,3 +46,7 @@
 .big {
     font-size: 18px;
 }
+
+.form-details .control-label {
+    margin-right: 15px;
+}

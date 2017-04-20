@@ -10,8 +10,7 @@
                         <h3>Báo cáo dư có</h3>
                     </div>
                     <div class="widget-content">
-                        <h4>Danh sách dư có theo tháng: </h4>
-                        @Html.Partial("_BaoCaoFilter")
+                        @Html.Partial("_DuCoFilter", (object) ViewBag.Filter)
                         <div class="col-md-12">
                             <table class="table table-striped table-bordered data-table">
                                 <thead>
@@ -32,13 +31,7 @@
                                     <tr>
                                         <td>@i</td>
                                         <td>@item.DuCo.KhachhangID</td>
-                                        <td>
-                                            <a class="passmodal" href="#" style="color:black;" data-toggle="modal" data-target="#myModal"
-                                               data-khachhang="@item.KhachHang.KhachhangID" data-loaikhachhang="@item.KhachHang.LoaiKHID"
-                                               data-thanhtoan="@item.KhachHang.HinhthucttID" data-hd="@item.DuCo.SoTienNopTheoThang.Hoadonnuoc.Sohoadon">
-                                                @item.KhachHang.Ten
-                                            </a>
-                                        </td>
+                                        <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" target="_blank">@item.KhachHang.Ten</a></td>
                                         <td>@item.KhachHang.Diachi</td>
                                         <td>@item.TuyenKH.Ten</td>
                                         <td>@(item.DuCo.SoTienDu ?? 0)</td>
@@ -62,27 +55,6 @@
         </div>
     </div>
 </div>
-@*<!-- modal box cho chọn tên -->
-    <div id="myModal" class="modal fade" role="dialog" style="top:50%">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title">Chi tiết</h3>
-                </div>
-                <div class="modal-body">
-                    <h5><a href="profile.html">Xem chi tiết thông tin cá nhân</a></h5>
-                    <div id="thongtin"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
-        </div>
-    </div>*@
-<!-- end modal -->
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {

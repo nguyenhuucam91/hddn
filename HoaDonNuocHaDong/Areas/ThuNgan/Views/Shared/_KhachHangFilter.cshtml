@@ -1,0 +1,39 @@
+﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel
+<div class="form-horizontal form-filter text-center">
+    <ul class="nav nav-tabs">
+        <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByManagementInfo ? "active": "")"><a data-toggle="tab" href="#tab1">Lọc theo thông tin quản lý</a></li>
+        <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByUserInfo ? "active": "")"><a data-toggle="tab" href="#tab2">Lọc theo thông tin khách hàng</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="tab1" class="tab-pane fade in @(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByManagementInfo ? "active": "")">
+            <form method="get" action="">
+                <div class="form-group">
+                    <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="false"></select>
+                    <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
+                    <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
+                    <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="Mode" value="@HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByManagementInfo" />
+                    <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+        <div id="tab2" class="tab-pane fade in @(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByUserInfo ? "active": "")">
+            <form method="get" action="">
+                <div class="form-group">
+                    <input type="text" name="MaKH" class="form-control" placeholder="Mã khách hàng" value="@Model.MaKH" />
+                    <input type="text" name="TenKH" class="form-control" placeholder="Tên khách hàng" value="@Model.TenKH" />
+                    <input type="text" name="DiaChiKH" class="form-control" placeholder="Địa chỉ khách hàng" @Model.DiaChiKH />
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="Mode" value="@HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByUserInfo" />
+                    <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

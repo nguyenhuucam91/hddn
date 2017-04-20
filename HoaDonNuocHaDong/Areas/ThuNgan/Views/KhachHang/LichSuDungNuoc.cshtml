@@ -1,0 +1,65 @@
+﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel>
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget-header">
+                        <i class="icon-th-list"></i>
+                        <h3>Chi tiết lịch sử dùng nước</h3>
+                    </div>
+                    <div class="widget-content">
+                        <ul class="nav nav-tabs">
+                            <li><a href="@Url.Action("ChiTiet", new { id = ViewBag.KhachHang.KhachhangID})">Thông tin khách hàng</a></li>
+                            <li><a href="@Url.Action("CapNhat", new { id = ViewBag.KhachHang.KhachhangID})">Cập nhật</a></li>
+                            <li class="active"><a href="@Url.Action("LichSuDungNuoc", new { id = ViewBag.KhachHang.KhachhangID})">Lịch sử dùng nước</a></li>
+                            <li><a href="@Url.Action("LichSuGiaoDich", new { id = ViewBag.KhachHang.KhachhangID})">Lịch sử giao dịch</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="col-md-12">
+                                <h4 class="header-title">Khách hàng: <span class="big">@ViewBag.KhachHang.MaKhachHang - @ViewBag.KhachHang.Ten</span></h4>
+
+                                <table class="table table-striped table-bordered data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>TT</th>
+                                            <th>Tháng</th>
+                                            <th>Số tiền phải nộp</th>
+                                            <th>Trạng thái thu</th>
+                                            <th>Ngày thu</th>
+                                            <th>Số tiền đã nộp</th>
+                                        </tr>
+                                    </thead>
+                                    @{ var stt = 0; }
+                                    @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
+                                    {
+                                        <tr>
+                                            <td style="text-align: right">@(++stt)</td>
+                                            <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+                                            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
+                                            <td style="text-align: center;">
+                                                <input type="checkbox" @(item.HoaDon.Trangthaithu == true ? "checked" : "") class="chk-thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                            </td>
+                                            <td width=10%>
+                                                <input type="date" class="tbx-ngay-thu" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
+                                            </td>
+                                            <td style="text-align: right; width: 12%">
+                                                <span class="txt-so-tien-da-nop" style="@(item.SoTienNopTheoThang.SoTienDaThu.Value > item.SoTienNopTheoThang.SoTienPhaiNop.Value ? "color:red": "")">
+                                                    @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
+                                                </span>
+                                                <a href="@Url.Action("ThemVaoDuCo", "HoaDon", new { area="ThuNgan", hoaDonID=@item.HoaDon.HoadonnuocID })" data-toggle="modal" data-target="#modal_them-vao-du-co" data-remote="false" class="btn btn-small" style="margin-bottom: 8px">
+                                                    +
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                                @Html.Partial("_Pager", (object)ViewBag.Pager)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
