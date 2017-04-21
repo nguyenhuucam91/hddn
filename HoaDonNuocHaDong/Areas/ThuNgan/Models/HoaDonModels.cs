@@ -7,6 +7,7 @@
         public HDNHD.Models.DataContexts.SoTienNopTheoThang SoTienNopTheoThang { get; set; } // not nullable
 
         public HDNHD.Models.DataContexts.DuCo DuCo { get; set; } // nullable
+        public HDNHD.Models.DataContexts.Chitiethoadonnuoc ChiTietHoaDon { get; set; } // nullable
     }
 
     public class DuCoModel

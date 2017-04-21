@@ -24,6 +24,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                    join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
                    join stntt in dc.SoTienNopTheoThangs on hd.SoTienNopTheoThangID equals stntt.ID
                    join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
+                   join chitietHd in dc.Chitiethoadonnuocs on hd.HoadonnuocID equals chitietHd.HoadonnuocID
                    from dco in gj.DefaultIfEmpty()
                    orderby kh.TuyenKHID
                    orderby kh.TTDoc
@@ -32,7 +33,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                        HoaDon = hd,
                        KhachHang = kh,
                        SoTienNopTheoThang = stntt,
-                       DuCo = dco
+                       DuCo = dco,
+                       ChiTietHoaDon = chitietHd
                    };
         }
 

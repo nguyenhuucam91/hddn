@@ -24,18 +24,41 @@
                                         <tr>
                                             <th>TT</th>
                                             <th>Tháng</th>
+                                            <th>CS cũ</th>
+                                            <th>CS mới</th>
+                                            <th>SH1</th>
+                                            <th>SH2</th>
+                                            <th>SH3</th>
+                                            <th>SH4</th>
+                                            <th>HCCC</th>
+                                            <th>SXVC</th>
+                                            <th>KD</th>
+                                            <th>Tổng SL</th>
                                             <th>Số tiền phải nộp</th>
                                             <th>Trạng thái thu</th>
                                             <th>Ngày thu</th>
                                             <th>Số tiền đã nộp</th>
+                                            <th>Dư nợ</th>
+                                            <th>Dư có</th>
                                         </tr>
                                     </thead>
-                                    @{ var stt = 0; }
+                                    @{ var stt = 0; 
+                                       double DuNo = 0;}
                                     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
                                     {
                                         <tr>
                                             <td style="text-align: right">@(++stt)</td>
                                             <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+                                            <td>@item.ChiTietHoaDon.Chisocu</td>
+                                            <td>@item.ChiTietHoaDon.Chisomoi</td>
+                                            <td>@item.ChiTietHoaDon.SH1</td>
+                                            <td>@item.ChiTietHoaDon.SH2</td>
+                                            <td>@item.ChiTietHoaDon.SH3</td>
+                                            <td>@item.ChiTietHoaDon.SH4</td>
+                                            <td>@item.ChiTietHoaDon.HC</td>
+                                            <td>@item.ChiTietHoaDon.SXXD</td>
+                                            <td>@item.ChiTietHoaDon.KDDV</td>
+                                            <td>@(item.ChiTietHoaDon.Chisomoi - item.ChiTietHoaDon.Chisocu)</td>
                                             <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
                                             <td style="text-align: center;">
                                                 <input type="checkbox" @(item.HoaDon.Trangthaithu == true ? "checked" : "") class="chk-thanh-toan" value="@item.HoaDon.HoadonnuocID" />
@@ -51,8 +74,22 @@
                                                     +
                                                 </a>
                                             </td>
+                                            <td>@{
+                                                    var tienThu = item.SoTienNopTheoThang.SoTienDaThu == null ? 0 : item.SoTienNopTheoThang.SoTienDaThu.Value;
+                                                    var dn = item.SoTienNopTheoThang.SoTienPhaiNop.Value - tienThu;
+                                                      if(dn>0){
+                                                         @dn
+                                                           DuNo = DuNo + dn;   
+                                                      }
+                                                }
+                                            </td>
+                                            <td>@if(item.DuCo != null){@item.DuCo.SoTienDu}</td>
                                         </tr>
                                     }
+                                    <thead>
+                                        <th colspan="8">Tổng dư nợ</th>
+                                        <th colspan="10" style="text-align: right">@DuNo</th>
+                                    </thead>
                                 </table>
                                 @Html.Partial("_Pager", (object)ViewBag.Pager)
                             </div>
