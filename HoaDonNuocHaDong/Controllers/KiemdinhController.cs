@@ -30,27 +30,41 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Create(FormCollection form)
         {
+            #region FormRequest            
+            String maKhachHang = String.IsNullOrEmpty(form["maKhachHang"]) ? "0" : form["maKhachHang"];
+            String thangKiemDinh = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month.ToString() : form["thang"];
+            String namKiemDinh = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year.ToString() : form["nam"];
             int quanHuyenID = Convert.ToInt32(form["quan"]);
-            Kiemdinh kD = new Kiemdinh();
-            List<Khachhang> kH = new List<Khachhang>();
-            String maKhachHang = "";
-            String IDKH = String.IsNullOrEmpty(form["maKhachHang"]) ? "0" : form["maKhachHang"];
-            var khachHang = db.Khachhangs.FirstOrDefault(p => p.MaKhachHang == IDKH);
+            int hoaDonNuocID = 0;
+            #endregion
+
+            Kiemdinh kD = new Kiemdinh();                       
+            var khachHang = db.Khachhangs.FirstOrDefault(p => p.MaKhachHang == maKhachHang);           
+
             if (khachHang != null)
             {
                 maKhachHang = khachHang.MaKhachHang;
+                var hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHang.KhachhangID && p.ThangHoaDon.ToString() == thangKiemDinh && p.NamHoaDon.ToString() == namKiemDinh);
+
+                if (hoaDonNuoc != null)
+                {
+                    hoaDonNuocID = hoaDonNuoc.HoadonnuocID;
+                }
             }
             //nếu tìm thấy mã khách hàng trong hệ thống
             if (khachHang != null)
             {
+                #region ViewBag
                 ViewBag.message = null;
                 ViewBag.khachHang = khachHang;
                 ViewBag.maKH = maKhachHang;
                 ViewBag.khachHangID = khachHang.KhachhangID;
-                ViewBag.chiSoThangTruoc = ChiSo.getChiSoMoiThangTruoc(khachHang.KhachhangID);
-                //set status trả về
-                ViewBag.result = true;
-                ViewBag.dsKhachHang = kH;
+                ViewBag.chiSoThangTruoc = ChiSo.getChiSoThang(thangKiemDinh, namKiemDinh, khachHang.KhachhangID);                
+                ViewBag.result = true;                
+                ViewBag.Thang = thangKiemDinh;
+                ViewBag.Nam = namKiemDinh;
+                ViewBag.HoaDonID = hoaDonNuocID;
+                #endregion
                 return View(kD);
             }
             else
@@ -69,7 +83,9 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            ViewBag.kiemDinh = new List<Kiemdinh>();
+            ViewBag.month = DateTime.Now.Month;
+            ViewBag.year = DateTime.Now.Year;
+            ViewData["kiemDinh"] = new List<HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel>();
             return View();
         }
 
@@ -84,8 +100,12 @@ namespace HoaDonNuocHaDong.Controllers
             int month = String.IsNullOrEmpty(form["month"].ToString()) ? DateTime.Now.Month : Convert.ToInt32(form["month"]);
             int year = String.IsNullOrEmpty(form["year"].ToString()) ? DateTime.Now.Year : Convert.ToInt32(form["year"]);
             int tuyen = String.IsNullOrEmpty(form["tuyen"]) ? 0 : Convert.ToInt32(form["tuyen"]);
-            IEnumerable<object> kiemDinh = kiemDinhHelper.getDanhSachKiemDinh(month, year, tuyen);
-            ViewBag.kiemDinh = kiemDinh;
+            List<HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel> kiemDinh = kiemDinhHelper.getDanhSachKiemDinh(month, year, tuyen);
+            #region ViewData - ViewBag
+            ViewBag.month = month;
+            ViewBag.year = year;
+            #endregion
+            ViewData["kiemDinh"] = kiemDinh;
             return View();
         }
 
@@ -98,11 +118,11 @@ namespace HoaDonNuocHaDong.Controllers
         {
             Kiemdinh kiemDinh = db.Kiemdinhs.FirstOrDefault(p => p.KiemdinhID == id);
             int kiemDinhKHID = kiemDinh.KhachhangID.Value;
-            int chiSoThangTruoc = ChiSo.getChiSoMoiThangTruoc(kiemDinhKHID);
+            //int chiSoThangTruoc = ChiSo.getChiSoThang(kiemDinhKHID);
 
             ViewData["kiemDinh"] = kiemDinh;
             ViewData["khachHang"] = db.Khachhangs.Find(kiemDinh.KhachhangID);
-            ViewBag.chiSoThangTruoc = chiSoThangTruoc;
+            ViewBag.chiSoThangTruoc = 0;
             ViewBag.id = id;
             return View(kiemDinh);
         }
@@ -145,15 +165,16 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns></returns>
         public ActionResult AddKiemDinh([Bind()] Kiemdinh kD, FormCollection form)
         {
-            DateTime ngayKiemDinh = Convert.ToDateTime(form["ngayKiemDinh"]);
-            if (ngayKiemDinh != null)
-            {
-                //lấy danh sách attributes của khách hàng
-                int khachHangID = int.Parse(form["khachHangID"].ToString());
-
+            #region formRequest
+                DateTime ngayKiemDinh = Convert.ToDateTime(form["ngayKiemDinh"]);
                 String ghiChu = form["ghiChu"];
                 int chiSoLucKiemDinh = Convert.ToInt32(form["chiSoTruocKiemDinh"]);
                 int chiSoSauKhiKiemDinh = Convert.ToInt32(form["chiSoSauKhiKiemDinh"]);
+                int khachHangID = int.Parse(form["khachHangID"].ToString());
+                int hoaDonID = int.Parse(form["hoaDonID"]);
+            #endregion
+            if (ngayKiemDinh != null)
+            {                
                 //thêm object kiểm định mới
                 kD = new Kiemdinh();
                 kD.KhachhangID = khachHangID;
@@ -161,6 +182,7 @@ namespace HoaDonNuocHaDong.Controllers
                 kD.Ghichu = ghiChu;
                 kD.Chisoluckiemdinh = chiSoLucKiemDinh;
                 kD.Chisosaukiemdinh = chiSoSauKhiKiemDinh;
+                kD.HoaDonId = hoaDonID;
                 db.Kiemdinhs.Add(kD);
                 //lưu vào db
                 db.SaveChanges();

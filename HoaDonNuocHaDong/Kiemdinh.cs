@@ -20,5 +20,6 @@ namespace HoaDonNuocHaDong
         public string Ghichu { get; set; }
         public Nullable<int> Chisoluckiemdinh { get; set; }
         public Nullable<int> Chisosaukiemdinh { get; set; }
+        public Nullable<int> HoaDonId { get; set; }
     }
 }

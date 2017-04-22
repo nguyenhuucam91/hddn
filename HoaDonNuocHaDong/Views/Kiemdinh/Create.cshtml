@@ -9,8 +9,10 @@
     var khachHang = ViewBag.khachHang;
     var chiSoMoiThangTruoc = ViewBag.chiSoThangTruoc;
     var khachHangID = ViewBag.khachHangID;
-    var dsKhachHang = ViewBag.dsKhachHang;
     HoaDonNuocHaDong.Helper.KhachHang kHHelper = new HoaDonNuocHaDong.Helper.KhachHang();
+    var thang = ViewBag.Thang;
+    var nam = ViewBag.Nam;
+    var hoaDonID = ViewBag.HoaDonID;
 }
 
 <script>
@@ -35,8 +37,16 @@
                                 <div id="search" style="margin-left:2%">
                                     @using (Html.BeginForm("Create", "KiemDinh"))
                                     {
-                                        <span>Nhập mã khách hàng: </span><input type="text" name="maKhachHang" />
-                                        <button type="submit" class="btn btn-default" id="btn_search">Tìm kiếm</button>
+                                        <div style="text-align:center">
+                                            <div class="center">
+                                                <span>Nhập mã khách hàng: </span><input type="text" name="maKhachHang" value="@maKH"/>
+                                                <span>Tháng kiểm định: <input type="number" min="1" max="12" name="thang" placeholder="@thang" /></span>
+                                                <span>Năm kiểm định: <input type="number" name="nam" value="@nam" /></span>
+                                            </div>
+                                            <p class="center">
+                                                <button type="submit" class="btn btn-default" id="btn_search">Tìm kiếm</button>
+                                            </p>
+                                        </div>
                                     }
                                 </div>
                             </div>
@@ -50,6 +60,7 @@
                                         <h3 style="text-align:center">Thêm mới kiểm định của khách hàng có mã: @maKH </h3>
                                         <br />
                                         <input type="hidden" value="@khachHangID" name="khachHangID" />
+                                        <input type="hidden" name="hoaDonID" value="@hoaDonID"/>
                                         <table class="table table-hover table-bordered" style="width:60%;margin-left:auto;margin-right:auto">
                                             <tbody>
                                                 <tr>
@@ -142,4 +153,3 @@
         <!-- /main-inner -->
     </div>
 </div>
-

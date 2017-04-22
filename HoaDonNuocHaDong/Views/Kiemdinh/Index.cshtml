@@ -1,7 +1,8 @@
 ﻿@{
     ViewBag.Title = "Danh sách kiểm định";
-
-    var kiemDinh = ViewBag.kiemDinh;
+    var kiemdinhs = ViewData["kiemDinh"] as List<HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel>;
+    var month = ViewBag.month;
+    var year = ViewBag.year;
 }
 
 <div class="main">
@@ -39,10 +40,10 @@
                                                     </label>
 
                                                     <label for="" class="" style="float:left;margin: 0.5% 1% 0 1%"><strong>Tháng:</strong></label>
-                                                    <input type="number" name="month" min="1" max="12" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Month" />
+                                                    <input type="number" name="month" min="1" max="12" class="form-control" style="width:100px;float:left" value="@month" placeholder="@DateTime.Now.Month" />
 
                                                     <label for="" class="" style="float:left;margin: 0.5% 1% 0 2%"><strong>Năm:</strong></label>
-                                                    <input list="number" name="year" class="form-control" style="width:100px;float:left" placeholder="@DateTime.Now.Year" />
+                                                    <input list="number" name="year" class="form-control" style="width:100px;float:left" value="@year" placeholder="@DateTime.Now.Year" />
 
                                                     <button type="submit" class="btn btn-default" style="margin-left:1%">Lọc</button>
                                                 </div>
@@ -68,32 +69,32 @@
                                             int i = 1;
                                         }
                                         <tbody>
-                                            @foreach (var item in kiemDinh)
+                                            @foreach (var item in kiemdinhs)
                                             {
                                                 <tr>
                                                     <td>
-                                                        @i
+                                                       @i
                                                     </td>
                                                     <td>
-                                                        @item.GetType().GetProperty("MaKhachHang").GetValue(item, null)
+                                                       @item.MaKhachHang
                                                     </td>
                                                     <td>
-                                                        @item.GetType().GetProperty("TenKhachHang").GetValue(item, null)
+                                                        @item.TenKhachHang
                                                     </td>
                                                     <td>
-                                                        @item.GetType().GetProperty("NgayKiemDinh").GetValue(item, null).ToString("dd-MM-yyyy")
+                                                        @item.NgayKiemDinh.ToString("dd-MM-yyyy")
                                                     </td>
                                                     <td>
-                                                        @HoaDonHaDong.Helper.ChiSo.getChiSoMoiThangTruoc(item.GetType().GetProperty("KhachHangID").GetValue(item, null))
+                                                        @item.ChiSoCu
                                                     </td>
                                                     <td>
-                                                        @item.GetType().GetProperty("ChiSoLucKiemDinh").GetValue(item, null)
+                                                        @item.ChiSoLucKiemDinh
                                                     </td>
                                                     <td>
-                                                        @item.GetType().GetProperty("ChiSoSauKiemDinh").GetValue(item, null)
+                                                        @item.ChiSoSauKiemDinh
                                                     </td>
                                                     <td>
-                                                        @item.GetType().GetProperty("GhiChu").GetValue(item, null)
+                                                        @item.GhiChu
                                                     </td>
                                                     <td>
                                                         @Html.ActionLink("Sửa", "Edit", new { id = item.GetType().GetProperty("KiemDinhID").GetValue(item, null) }) |

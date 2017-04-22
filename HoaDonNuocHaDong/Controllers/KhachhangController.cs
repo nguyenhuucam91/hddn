@@ -1296,7 +1296,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag._TuyenongkythuatID = new SelectList(db.Tuyenongs, "TuyenongID", "Tentuyen", khachhang.TuyenongkythuatID);
 
                 //thông tin kiểm định
-                ViewBag.kiemDinh = kiemDinhHelper.getDanhSachKiemDinh(null, null, 0);
+                ViewBag.kiemDinh = kiemDinhHelper.getDanhSachKiemDinhCuaKhachHang(id.Value);
                 //thông tin chỉ số
                 ViewBag.ttChiSo = (from i in db.Hoadonnuocs
                                    join r in db.Chitiethoadonnuocs on i.HoadonnuocID equals r.HoadonnuocID

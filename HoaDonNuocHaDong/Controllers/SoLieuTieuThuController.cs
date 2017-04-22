@@ -682,7 +682,8 @@ namespace HoaDonNuocHaDong.Controllers
         public JsonResult showDetail(int KhachHangID, int month, int year)
         {
             var kiemDinh = from i in db.Kiemdinhs
-                           where i.KhachhangID == KhachHangID && i.Ngaykiemdinh.Value.Month == month && i.Ngaykiemdinh.Value.Year == year
+                           join h in db.Hoadonnuocs on i.HoaDonId equals h.HoadonnuocID
+                           where i.KhachhangID == KhachHangID && h.ThangHoaDon == month && h.NamHoaDon == year
                            select new
                            {
                                NgayKiemDinh = i.Ngaykiemdinh.Value.Day,

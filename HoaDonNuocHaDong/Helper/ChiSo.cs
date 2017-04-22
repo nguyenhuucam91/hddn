@@ -90,12 +90,9 @@ namespace HoaDonHaDong.Helper
         /// </summary>
         /// <param name="khachHangID"></param>
         /// <returns></returns>
-        public static int getChiSoMoiThangTruoc(int khachHangID)
-        {
-            int month, year;
-            month = DateTime.Now.Month;
-            year = DateTime.Now.Year;
-            var hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangID && p.ThangHoaDon == month && p.NamHoaDon == year);
+        public static int getChiSoThang(String month, String year, int khachHangID)
+        {            
+            var hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangID && p.ThangHoaDon.ToString() == month && p.NamHoaDon.ToString() == year);
             if (hoaDonNuoc != null)
             {
                 return hoaDonNuoc.Chitiethoadonnuocs.FirstOrDefault().Chisocu.Value;
