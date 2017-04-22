@@ -26,6 +26,7 @@
     var toID = ViewBag.selectedTo;
     var nhanVienID = ViewBag.selectedNhanVien;
     var tuyenID = ViewBag.selectedTuyen;
+    var isAdminVaTruongPhong = ViewBag.isAdminVaTruongPhong;
 }
 <script src="~/Assets/js/jquery.dataTables.min.js"></script>
 <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
@@ -295,7 +296,7 @@
                                                                                 }
                                                                             </td>
 
-                                                                            @if (!cS.isChotHoaDon(hoaDonID))
+                                                                            @if (!cS.isChotHoaDon(hoaDonID) || isAdminVaTruongPhong == 0 || isAdminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
                                                                             {
                                                                                 if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
                                                                                 {

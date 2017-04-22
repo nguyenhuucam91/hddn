@@ -15,7 +15,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="month">Tháng kiểm định</param>
         /// <param name="year">Năm kiểm định </param>
         /// <returns></returns>
-        public IEnumerable<object> getDanhSachKiemDinh(int month, int year, int? tuyenID)
+        public IEnumerable<object> getDanhSachKiemDinh(int? month, int? year, int? tuyenID)
         {
             HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             if (tuyenID == 0)

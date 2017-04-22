@@ -17,7 +17,6 @@
     var to = Request.QueryString["to"];
     var nhanVien = Request.QueryString["nhanvien"];
     var tuyen = Request.QueryString["tuyen"];
-
 }
 
 <div class="main">
@@ -67,19 +66,19 @@
                                     <div class="form-control">
                                         <label for="SH1">Sản lượng SH1</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="SH1" name="SH1" value="@giaDacBiet.SH1" />
+                                        <input type="number" id="SH1" name="SH1" value="@giaDacBiet.SH1" tabindex="1"/>
 
                                         <label for="SH2">Sản lượng SH2</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="SH2" name="SH2" value="@giaDacBiet.SH2" />
+                                        <input type="number" id="SH2" name="SH2" value="@giaDacBiet.SH2" tabindex="2"/>
 
                                         <label for="SH3">Sản lượng SH3</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="SH3" name="SH3" value="@giaDacBiet.SH3" />
+                                        <input type="number" id="SH3" name="SH3" value="@giaDacBiet.SH3" tabindex="3"/>
 
                                         <label for="SH4">Sản lượng SH4</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="SH4" name="SH4" value="@giaDacBiet.SH4" />
+                                        <input type="number" id="SH4" name="SH4" value="@giaDacBiet.SH4" tabindex="4"/>
                                     </div>
                                 </div>
 
@@ -87,19 +86,19 @@
                                     <div class="form-control">
                                         <label for="HC">Sản lượng Cơ quan hành chính sự nghiêp</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="HC" name="HC" value="@giaDacBiet.HC" />
+                                        <input type="number" id="HC" name="HC" value="@giaDacBiet.HC" tabindex="5"/>
 
                                         <label for="CC">Sản lượng Đơn vị sự nghiệp, dịch vụ công cộng	</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="CC" name="CC" value="@giaDacBiet.CC" />
+                                        <input type="number" id="CC" name="CC" value="@giaDacBiet.CC" tabindex="6"/>
 
                                         <label for="SX">Sản lượng Sản xuất vật chất	</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="SX" name="SX" value="@giaDacBiet.SXSD" />
+                                        <input type="number" id="SX" name="SX" value="@giaDacBiet.SXSD" tabindex="7"/>
 
                                         <label for="KD">Sản lượng Kinh doanh dịch vụ</label>
                                         <input type="checkbox" />
-                                        <input type="number" id="KD" name="KD" value="@giaDacBiet.KDDV" />
+                                        <input type="number" id="KD" name="KD" value="@giaDacBiet.KDDV" tabindex="8"/>
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>
@@ -119,16 +118,7 @@
 <script type="text/javascript">
     //giáng chỉ số còn lại sau khi trừ sản lượng vào dấu tích
     $("input[type='checkbox']").change(function () {
-        var SH1Val = parseFloat($("#SH1").val()) || 0;
-        var SH2Val = parseFloat($("#SH2").val()) || 0;
-        var SH3Val = parseFloat($("#SH3").val()) || 0;
-        var SH4Val = parseFloat($("#SH4").val()) || 0;
-        var CCVal = parseFloat($("#CC").val()) || 0;
-        var HCVal = parseFloat($("#HC").val()) || 0;
-        var SXVal = parseFloat($("#SX").val()) || 0;
-        var KDVal = parseFloat($("#KD").val()) || 0;
-        var Sum = SH1Val + SH2Val + SH3Val + SH4Val + CCVal + HCVal + SXVal + KDVal;
-        //nếu tick
+        var Sum = tinhTongApGiaDacBiet();
         if ($(this).is(":checked")) {
             var sanLuongAsInt = parseFloat($("span.sanLuong").text());
             var remainer = sanLuongAsInt - Sum;
@@ -138,8 +128,40 @@
         }
     });
 
+    var compareApGiaDacBietVoiSanLuong = function () {
+        var tongApGiaDacBiet = tinhTongApGiaDacBiet();
+        var sanLuong = parseFloat($("span.sanLuong").text());
+        if (tongApGiaDacBiet == sanLuong) {
+            return true;
+        }
+        return false;
+    }
+
+    var tinhTongApGiaDacBiet = function () {
+        var SH1Val = parseFloat($("#SH1").val()) || 0;
+        var SH2Val = parseFloat($("#SH2").val()) || 0;
+        var SH3Val = parseFloat($("#SH3").val()) || 0;
+        var SH4Val = parseFloat($("#SH4").val()) || 0;
+        var CCVal =  parseFloat($("#CC").val()) || 0;
+        var HCVal =  parseFloat($("#HC").val()) || 0;
+        var SXVal =  parseFloat($("#SX").val()) || 0;
+        var KDVal =  parseFloat($("#KD").val()) || 0;
+        var Sum = SH1Val + SH2Val + SH3Val + SH4Val + CCVal + HCVal + SXVal + KDVal;
+        return Sum;
+    }
+
     //khi ấn nút gửi thì mới tiến hành gửi form
-    $(".special").click(function () {
-        $("#dacBietForm").submit();
+    $(".special").click(function (event) {
+        var isTongApGiaDacBietEqualSanLuong = compareApGiaDacBietVoiSanLuong();
+        var sanLuong = parseFloat($("span.sanLuong").text());
+        if (isTongApGiaDacBietEqualSanLuong == true || sanLuong == 0) {
+            $("#dacBietForm").submit();
+        }
+
+        else {
+            event.preventDefault();
+            alert('Tổng sản lượng và áp giá đặc biệt khác nhau, xin hãy kiểm tra lại');
+            return true;
+        }
     });
 </script>

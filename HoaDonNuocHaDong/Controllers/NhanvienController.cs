@@ -36,6 +36,11 @@ namespace HoaDonNuocHaDong.Controllers
             ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
 
             IQueryable<Nhanvien> nhanviens = filterEmployeesByDepartment();
+            var userLoggedInRole = getLoggedInUserRole();
+
+            #region ViewBag
+            ViewBag.userLoggedInRole = userLoggedInRole;
+            #endregion
             return View(nhanviens.ToList());
         }
 

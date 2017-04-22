@@ -192,17 +192,7 @@ namespace HoaDonNuocHaDong.Controllers
 
 
             int _selectedTuyen = String.IsNullOrEmpty(selectedTuyen) ? 0 : Convert.ToInt32(selectedTuyen);
-            //lấy danh sách quận huyện để đẩy vào phần lọc chỉ số KH
-            ViewBag.selectedChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
-            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-            //dành cho người dùng
-            ViewBag.showHoaDon = true;
-            ViewBag.month = _month;
-            ViewBag.year = _year;
-
-            ViewBag.nextMonth = "";
-
-            ViewData["errorList"] = errorList;
+          
 
             //kiểm tra xem nhân viên đó là trưởng phòng hay nhân viên, nếu là trưởng phòng thì cho chỉnh sửa thoải mái
             int nhanVienIDLoggedIn = LoggedInUser.NhanvienID.Value;
@@ -229,6 +219,19 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewBag.isChot = false;
             }
+            #region ViewBag
+            int loggedInRole = getLoggedInUserRole();
+            //lấy danh sách quận huyện để đẩy vào phần lọc chỉ số KH
+            ViewBag.selectedChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
+            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
+            //dành cho người dùng
+            ViewBag.showHoaDon = true;
+            ViewBag.month = _month;
+            ViewBag.year = _year;
+            ViewBag.isAdminVaTruongPhong = loggedInRole;
+            ViewBag.nextMonth = "";
+            ViewData["errorList"] = errorList;
+            #endregion
 
             return View();
         }
@@ -751,6 +754,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Nhapgiadacbiet(int? id, FormCollection form, int to, int nhanvien, int tuyen, int thang, int nam)
         {
+            #region chiSoGiaDacBietChiTiet
             double SH1 = ChiSo.checkChiSoNull(form["SH1"]);
             double SH2 = ChiSo.checkChiSoNull(form["SH2"]);
             double SH3 = ChiSo.checkChiSoNull(form["SH3"]);
@@ -764,6 +768,7 @@ namespace HoaDonNuocHaDong.Controllers
             String soHoaDon = form["soHoaDon"];
 
             int Sum = Convert.ToInt32(SH1 + SH2 + SH3 + SH4 + HC + CC + SX + KD);
+            #endregion
             ApGiaDacBiet apGiaDacBiet = db.ApGiaDacBiets.FirstOrDefault(p => p.HoaDonNuocID == id);
             if (apGiaDacBiet == null)
             {
@@ -799,8 +804,7 @@ namespace HoaDonNuocHaDong.Controllers
             Hoadonnuoc hoaDonDacBiet = db.Hoadonnuocs.Find(id);
             hoaDonDacBiet.Tongsotieuthu = Sum;
             db.Entry(hoaDonDacBiet).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            //reset chỉ số của tháng đó trước, cho về 0, nếu có ấn nhập giá đặc biệt
+            db.SaveChanges();         
 
             //rồi cập nhật lại chỉ số của tháng đó
             Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == id);

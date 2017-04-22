@@ -8,6 +8,7 @@
     var chucVu = ViewBag.chucVu;
     List<Tuyenkhachhang> tuyenKH = ViewData["Tuyen"] as List<Tuyenkhachhang>;
     HoaDonNuocHaDong.Helper.NhanVienHelper helper = new HoaDonNuocHaDong.Helper.NhanVienHelper();
+    var userLoggedInRole = ViewBag.userLoggedInRole;
 }
 
 <div class="main">
@@ -87,7 +88,7 @@
                                                     <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
                                                 }
                                             </select>
-                                            <!-- Chức vụ-->                                           
+                                            <!-- Chức vụ-->
 
                                             <button class="btn btn-default">Tìm kiếm</button>
 
@@ -104,7 +105,10 @@
                                                 <th>Phòng ban</th>
                                                 <th>Tổ</th>
                                                 <th>Chức vụ</th>
-                                                <th></th>
+                                                @if (userLoggedInRole == 0 || userLoggedInRole == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
+                                                {
+                                                    <th></th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -124,7 +128,7 @@
                                                     <td>
                                                         @{int nhanVienID = item.NhanvienID;}
                                                         @{
-                                                            String tenPhongBan = helper.getPhongBan(nhanVienID);
+                                                String tenPhongBan = helper.getPhongBan(nhanVienID);
                                                         }
                                                         @tenPhongBan
                                                     </td>
@@ -136,12 +140,16 @@
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.Chucvu.Ten)
                                                     </td>
-                                                    <td>
-                                                        @Html.ActionLink("Sửa", "Edit", new { id = item.NhanvienID }) |
-                                                        @Html.ActionLink("Xóa", "Delete", new { id = item.NhanvienID }, new { onclick = "return confirm('Bạn có muốn xóa nhân viên này không')" })
-                                                    </td>
+                                                    @if (userLoggedInRole == 0 || userLoggedInRole == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
+                                                    {
+                                                        <td>
+                                                            @Html.ActionLink("Sửa", "Edit", new { id = item.NhanvienID })
+                                                            @Html.Raw(" | ")
+                                                            @Html.ActionLink("Xóa", "Delete", new { id = item.NhanvienID }, new { onclick = "return confirm('Bạn có muốn xóa nhân viên này không')" })
+                                                        </td>
+                                                    }
                                                 </tr>
-                                                i++;
+                                                    i++;
                                             }
                                         </tbody>
                                     </table>

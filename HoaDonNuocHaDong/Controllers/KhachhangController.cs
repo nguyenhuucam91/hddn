@@ -29,10 +29,8 @@ namespace HoaDonNuocHaDong.Controllers
         KhachHang khachHangHelper = new KhachHang();
         SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
         NguoidungHelper ngDungHelper = new NguoidungHelper();
-        /// <summary>
-        /// Hàm kiểm tra session trước khi đăng nhập
-        /// </summary>
-        /// <param name="filterContext"></param>       
+        KiemDinh kiemDinhHelper = new KiemDinh();
+
         public static int makh { get; private set; }
         public ActionResult Index(string TinhTrang = null, string catNuoc = null)
         {
@@ -160,14 +158,6 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedTuyen = tuyen;
             ViewBag.selectedTo = toForm;
 
-
-            int _tinhTrangSuDung = String.IsNullOrEmpty(TinhTrang) ? 0 : Convert.ToInt32(TinhTrang);
-            int _tinhTrangCatNuoc = String.IsNullOrEmpty(catNuoc) ? 0 : Convert.ToInt32(catNuoc);
-            //nếu tình trạng sử dụng == 1 (thanh lý) thì đặt tình trạng cắt nước =  cắt nước
-            if (_tinhTrangSuDung == 1)
-            {
-                _tinhTrangCatNuoc = 1;
-            }
             // tiến hành lọc khách hàng dựa trên các tiêu chí trên
             if (tuyen > 0)
             {
@@ -259,7 +249,7 @@ namespace HoaDonNuocHaDong.Controllers
             else
             {
                 khachHangIQueryable = khachHangIQueryable.Where(p => p.Tinhtrang.ToString() == "1");
-            }            
+            }
 
             return khachHangIQueryable;
 
@@ -1306,7 +1296,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag._TuyenongkythuatID = new SelectList(db.Tuyenongs, "TuyenongID", "Tentuyen", khachhang.TuyenongkythuatID);
 
                 //thông tin kiểm định
-                ViewBag.kiemDinh = db.Kiemdinhs.Where(p => p.KhachhangID == id).OrderByDescending(p => p.Ngaykiemdinh).ToList();
+                ViewBag.kiemDinh = kiemDinhHelper.getDanhSachKiemDinh(null, null, 0);
                 //thông tin chỉ số
                 ViewBag.ttChiSo = (from i in db.Hoadonnuocs
                                    join r in db.Chitiethoadonnuocs on i.HoadonnuocID equals r.HoadonnuocID
@@ -1319,7 +1309,6 @@ namespace HoaDonNuocHaDong.Controllers
                                        ChiSoMoi = r.Chisomoi,
                                        SanLuong = i.Tongsotieuthu,
                                        GhiChu = i.Ghichu,
-                                       //tách số
                                        SH1 = r.SH1,
                                        SH2 = r.SH2,
                                        SH3 = r.SH3,

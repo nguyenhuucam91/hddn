@@ -67,7 +67,7 @@
                                         </div>
                                         <div class="col-md-6" style="margin-right:20%">
                                             <label for="" class="control-label">Tên khách hàng:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Ten, new { autofocus = true})
+                                            @Html.TextBoxFor(model => model.Ten, new { autofocus = true, Value=""})
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Ten)
                                         </div>
@@ -105,7 +105,7 @@
                                         </div>
                                         <div class="col-md-3 pull-right" style="margin-right:20%">
                                             <label for="" class="control-label">Số hợp đồng:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Sohopdong)
+                                            @Html.TextBoxFor(model => model.Sohopdong, new { Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Sohopdong)
                                         </div>
@@ -115,7 +115,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-3 pull-left" style="margin-right:20%">
                                             <label for="" class="control-label">Số điện thoại:</label>&nbsp;&nbsp;
-                                            @Html.EditorFor(model => model.Dienthoai)
+                                            @Html.TextBoxFor(model => model.Dienthoai, new { Value = ""})
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Dienthoai)
                                         </div>
@@ -174,9 +174,9 @@
                                     </div>
                                     <!-- Địa chỉ -->
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-12">
+                                        <div class="span12">
                                             <label for="" class="control-label">Địa chỉ đọc đồng hồ:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Diachi, new { style = "width:78.5%" })
+                                            @Html.TextBoxFor(model => model.Diachi, new { style = "width:78.5%"})
                                             <br />
 
                                             @Html.ValidationMessageFor(model => model.Diachi)
@@ -186,7 +186,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-12">
                                             <label for="" class="control-label">Địa chỉ thu tiền:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Diachithutien, new { style = "width:78.5%" })
+                                            @Html.TextBoxFor(model => model.Diachithutien, new { style = "width:78.5%"})
                                             <br />
 
                                             @Html.ValidationMessageFor(model => model.Diachithutien)
@@ -197,7 +197,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-6 pull-left">
                                             <label for="" class="control-label">Số tài khoản:</label>&nbsp;&nbsp;
-                                            @Html.EditorFor(model => model.Sotaikhoan)
+                                            @Html.TextBoxFor(model => model.Sotaikhoan, new { Value = ""})
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Sotaikhoan)
                                         </div>
@@ -205,7 +205,7 @@
 
                                         <div class="col-md-6 pull-right" style="margin-right:20%">
                                             <label for="" class="control-label">Mã số thuế:</label>&nbsp;&nbsp;
-                                            @Html.EditorFor(model => model.Masothue)
+                                            @Html.TextBoxFor(model => model.Masothue, new { Value = ""})
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Masothue)
                                         </div>
@@ -216,21 +216,22 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-3 pull-left">
                                             <label for="" class="control-label">Ngày ký hợp đồng:</label>&nbsp; &nbsp;
-                                            @Html.TextBoxFor(model => model.Ngaykyhopdong, "{0:dd/mm/yyyy}", new { @class = "datepicker kihopdong", @required = "required" })
+                                            @Html.TextBoxFor(model => model.Ngaykyhopdong, "{0:dd/mm/yyyy}", 
+                                            new { @class = "datepicker kihopdong", @required = "required", Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Ngaykyhopdong)
                                         </div>
 
                                         <div class="col-md-3 pull-left">
                                             <label for="" class="control-label">Ngày áp định:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Ngayap, "{0:dd/mm/yyyy}", new { @class = "datepicker apdinh" })
+                                            @Html.TextBoxFor(model => model.Ngayap, "{0:dd/mm/yyyy}", new { @class = "datepicker apdinh", Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Ngayap)
                                         </div>
 
                                         <div class="col-md-3 pull-left">
                                             <label for="" class="control-label">Ngày hết định:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Ngayhetap, "{0:dd/mm/yyyy}", new { @class = "datepicker hetdinh" })
+                                            @Html.TextBoxFor(model => model.Ngayhetap, "{0:dd/mm/yyyy}", new { @class = "datepicker hetdinh", Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Ngayhetap)
                                         </div>
@@ -307,7 +308,7 @@
                                         <!-- Thứ tự đọc-->
                                         <div class="col-md-3 pull-left">
                                             <label for="" class="control-label">Thứ tự đọc:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(p => p.TTDoc, new { @required = true, @style = "width:30%" })
+                                            @Html.TextBoxFor(p => p.TTDoc, new { @required = true, @style = "width:30%", Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.TTDoc)
                                         </div>
@@ -412,7 +413,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-12">
                                             <label for="" class="control-label">Ghi chú:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Ghichu, new { @style = "width:78.5%" })
+                                            @Html.TextBoxFor(model => model.Ghichu, new { @style = "width:78.5%", Value = "" })
                                             @Html.ValidationMessageFor(model => model.Ghichu)
                                         </div>
                                     </div>
@@ -437,7 +438,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var tongHop = @HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
+        var tongHop = @HoaDonNuocHaDong.Helper.KhachHang.TONGHOP
         //nếu loại áp giá được chọn là áp giá tổng hợp
         $("#LoaiapgiaID").change(function () {
             if ($(this).val() == tongHop) {
