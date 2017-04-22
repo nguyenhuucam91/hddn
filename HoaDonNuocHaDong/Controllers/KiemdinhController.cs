@@ -117,12 +117,12 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Edit(int? id)
         {
             Kiemdinh kiemDinh = db.Kiemdinhs.FirstOrDefault(p => p.KiemdinhID == id);
-            int kiemDinhKHID = kiemDinh.KhachhangID.Value;
-            //int chiSoThangTruoc = ChiSo.getChiSoThang(kiemDinhKHID);
+            Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.Find(kiemDinh.HoaDonId);
+            int kiemDinhKHID = kiemDinh.KhachhangID.Value;         
 
             ViewData["kiemDinh"] = kiemDinh;
             ViewData["khachHang"] = db.Khachhangs.Find(kiemDinh.KhachhangID);
-            ViewBag.chiSoThangTruoc = 0;
+            ViewBag.chiSoThangTruoc = ChiSo.getChiSoThang(hoaDonNuoc.ThangHoaDon.Value.ToString(), hoaDonNuoc.NamHoaDon.Value.ToString(), hoaDonNuoc.KhachhangID.Value);
             ViewBag.id = id;
             return View(kiemDinh);
         }
