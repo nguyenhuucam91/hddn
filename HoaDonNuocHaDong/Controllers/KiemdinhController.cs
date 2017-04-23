@@ -1,6 +1,7 @@
 ﻿using HoaDonHaDong.Helper;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Helper;
+using HoaDonNuocHaDong.Models.KhachHang;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,40 +37,49 @@ namespace HoaDonNuocHaDong.Controllers
             String namKiemDinh = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year.ToString() : form["nam"];
             int quanHuyenID = Convert.ToInt32(form["quan"]);
             int hoaDonNuocID = 0;
+
+            ViewBag.Thang = thangKiemDinh;
+            ViewBag.Nam = namKiemDinh;
             #endregion
 
-            Kiemdinh kD = new Kiemdinh();                       
-            var khachHang = db.Khachhangs.FirstOrDefault(p => p.MaKhachHang == maKhachHang);           
-
+            Kiemdinh kD = new Kiemdinh();
+            var khachHang = (from i in db.Khachhangs
+                             join r in db.Hoadonnuocs on i.KhachhangID equals r.KhachhangID
+                             where i.MaKhachHang == maKhachHang && r.ThangHoaDon.ToString() == thangKiemDinh && r.NamHoaDon.ToString() == namKiemDinh
+                             select new KhachHangModel
+                             {
+                                 MaKH = i.MaKhachHang,
+                                 KHID = i.KhachhangID,
+                                 tenKhachHang = i.Ten,
+                                 QuanhuyenID = i.QuanhuyenID.Value,
+                                 PhuongxaID = i.PhuongxaID.Value,
+                                 CumdancuID = i.CumdancuID.Value,
+                                 TuyenKHID = i.TuyenKHID.Value,
+                             }).FirstOrDefault();            
             if (khachHang != null)
             {
-                maKhachHang = khachHang.MaKhachHang;
-                var hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHang.KhachhangID && p.ThangHoaDon.ToString() == thangKiemDinh && p.NamHoaDon.ToString() == namKiemDinh);
+                maKhachHang = khachHang.MaKH;
+                var hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHang.KHID && p.ThangHoaDon.ToString() == thangKiemDinh && p.NamHoaDon.ToString() == namKiemDinh);
 
                 if (hoaDonNuoc != null)
                 {
                     hoaDonNuocID = hoaDonNuoc.HoadonnuocID;
                 }
-            }
-            //nếu tìm thấy mã khách hàng trong hệ thống
-            if (khachHang != null)
-            {
+
                 #region ViewBag
                 ViewBag.message = null;
                 ViewBag.khachHang = khachHang;
                 ViewBag.maKH = maKhachHang;
-                ViewBag.khachHangID = khachHang.KhachhangID;
-                ViewBag.chiSoThangTruoc = ChiSo.getChiSoThang(thangKiemDinh, namKiemDinh, khachHang.KhachhangID);                
-                ViewBag.result = true;                
-                ViewBag.Thang = thangKiemDinh;
-                ViewBag.Nam = namKiemDinh;
+                ViewBag.khachHangID = khachHang.KHID;
+                ViewBag.chiSoThangTruoc = ChiSo.getChiSoThang(thangKiemDinh, namKiemDinh, khachHang.KHID);                
+                ViewBag.result = true;                                
                 ViewBag.HoaDonID = hoaDonNuocID;
                 #endregion
                 return View(kD);
             }
             else
             {
-                ViewBag.message = "Không tìm thấy khách hàng trong hệ thống";
+                ViewBag.message = "Không tìm thấy hóa đơn có mã khách hàng ";
                 ViewBag.result = false;
                 ViewBag.maKH = maKhachHang;
             }

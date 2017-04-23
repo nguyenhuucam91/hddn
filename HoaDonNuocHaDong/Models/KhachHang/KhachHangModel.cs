@@ -19,6 +19,11 @@ namespace HoaDonNuocHaDong.Models.KhachHang
         public int Tinhtrang { get { return GetINT(8); } set { SetINT(8, value); } }
         public DateTime Ngayngungcapnuoc { get { return GetDT(9); } set { SetDT(9, value); } }
         public DateTime Ngaycapnuoclai { get { return GetDT(10); } set { SetDT(10, value); } }
+
+        public int QuanhuyenID { get; set; }
+        public int PhuongxaID { get; set; }
+        public int CumdancuID { get; set; }
+        public int TuyenKHID { get; set; }
         protected override Type TransferType()
         {
             return this.GetType();

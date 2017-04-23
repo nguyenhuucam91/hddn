@@ -6,7 +6,7 @@
     var maKH = ViewBag.maKH;
     var statusResult = ViewBag.result;
     var message = ViewBag.message;
-    var khachHang = ViewBag.khachHang;
+    var khachHang = ViewBag.khachHang as HoaDonNuocHaDong.Models.KhachHang.KhachHangModel;
     var chiSoMoiThangTruoc = ViewBag.chiSoThangTruoc;
     var khachHangID = ViewBag.khachHangID;
     HoaDonNuocHaDong.Helper.KhachHang kHHelper = new HoaDonNuocHaDong.Helper.KhachHang();
@@ -69,7 +69,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Tên khách hàng</td>
-                                                    <td>@khachHang.Ten</td>
+                                                    <td>@khachHang.tenKhachHang</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Quận / Huyện</td>
@@ -139,7 +139,7 @@
                             <!-- Nếu không tìm thấy record trong db thì hiển thị ra lỗi (không tìm thấy khách hàng trong hệ thống)-->
                             @if (message != null)
                             {
-                                <h3 style="margin:20px">Không tìm thấy khách hàng có mã <span style="color:red">@maKH</span> trong hệ thống</h3>
+                                <h3 style="margin:20px">@message <span class="red">@maKH</span> tháng <span class="red">@thang</span> năm <span class="red">@nam</span> </h3>
                             }
                         </div>
                         <!-- /widget -->
