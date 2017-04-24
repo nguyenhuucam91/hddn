@@ -479,7 +479,6 @@ namespace HoaDonNuocHaDong.Controllers
 
         private void xoaThongTinThuNgan(string tuyen, string month, string year)
         {
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand("", connection))
             {

@@ -18,6 +18,7 @@ using HoaDonNuocHaDong.Models.KhachHang;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using HDNHD.Models.Constants;
+using System.Configuration;
 
 
 namespace HoaDonNuocHaDong.Controllers
@@ -30,6 +31,7 @@ namespace HoaDonNuocHaDong.Controllers
         SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
         NguoidungHelper ngDungHelper = new NguoidungHelper();
         KiemDinh kiemDinhHelper = new KiemDinh();
+        public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
 
         public static int makh { get; private set; }
         public ActionResult Index(string TinhTrang = null, string catNuoc = null)
@@ -532,24 +534,54 @@ namespace HoaDonNuocHaDong.Controllers
 
         public int getMaxMaKhachHang()
         {
-            //Lấy Mã khách hàng lớn nhất trong hệ thống
-            var soLuongKH = db.Khachhangs.Count();
-            int maKhachHangLonNhatAsInt = 1;
-            //kiểm tra xem nếu trong bảng khách hàng có dữ liệu hay không
-            if (soLuongKH > 0)
+            SqlDataReader reader;
+            int maKhachHangLonNhat = 0;
+            int maKhachHangLonNhatTiepTheo = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("", connection))
             {
-                //lấy ID primary key của record cuối cùng
-                var lastKhachHangID = db.Khachhangs.Max(p => p.KhachhangID);
-                string maKhachHang = db.Khachhangs.Where(p => p.KhachhangID == lastKhachHangID).FirstOrDefault().MaKhachHang;
-                //nếu mã khách hàng != null thì tự động tăng mã KH lên 1
-                if (maKhachHang != null)
+                connection.Open();
+                command.CommandText = "SELECT TOP 1 MaKhachHang FROM dbo.Khachhang ORDER BY KhachhangID DESC";             
+                reader = command.ExecuteReader();
+                
+                if (reader.Read())
                 {
-                    //load mã khách hàng (tự động tăng 1) vào view
-                    maKhachHangLonNhatAsInt = int.Parse(maKhachHang) + 1;
+                    maKhachHangLonNhat = Convert.ToInt32(reader["MaKhachHang"]);
                 }
-
+                int incrementStep = 1;
+                while (incrementStep >= 1)
+                {
+                    maKhachHangLonNhatTiepTheo = maKhachHangLonNhat + incrementStep;
+                    if (!isMaKhachHangExistedInDB(maKhachHangLonNhatTiepTheo))
+                    {
+                        return maKhachHangLonNhatTiepTheo;
+                    }
+                    incrementStep++;
+                }
+                connection.Close();
             }
-            return maKhachHangLonNhatAsInt;
+
+            return 0;
+        }
+
+        public bool isMaKhachHangExistedInDB(int maKhachHang){
+            int numberOfRowExisted = 0;
+             using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "SELECT MaKhachHang FROM dbo.Khachhang WHERE MaKhachHang = @maKH";
+                command.Parameters.AddWithValue("@maKH",maKhachHang);
+                numberOfRowExisted = command.ExecuteNonQuery();
+                connection.Close();
+            }
+
+             if (numberOfRowExisted > 0)
+             {
+                 return true;
+             }
+
+             return false;
         }
 
         // POST: /Khachhang/Create
@@ -581,7 +613,8 @@ namespace HoaDonNuocHaDong.Controllers
                 }
                 //đặt tình trạng đang sử dụng
                 khachhang.Tinhtrang = 0;
-                khachhang.MaKhachHang = getMaxMaKhachHang().ToString();
+                int maxMaKhachHang = getMaxMaKhachHang();
+                khachhang.MaKhachHang = maxMaKhachHang.ToString();
                 db.Khachhangs.Add(khachhang);
                 // lưu thay đổi vào DB và bắt ngoại lệ để debug                            
                 db.SaveChanges();
