@@ -70,7 +70,7 @@ namespace HoaDonNuocHaDong.Helper
         {
             var isKiemDinh = (from i in db.Kiemdinhs
                               join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID
-                              where r.ThangHoaDon == month && r.NamHoaDon == year
+                              where r.KhachhangID == khachHangID && r.ThangHoaDon == month && r.NamHoaDon == year
                               select new { 
                               
                               }).Count();
