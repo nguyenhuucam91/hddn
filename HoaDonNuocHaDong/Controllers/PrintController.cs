@@ -484,7 +484,7 @@ namespace HoaDonNuocHaDong.Controllers
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "Update Lichsuhoadon set TTThungan = 1 WHERE TuyenKHID = @tuyen AND ThangHoaDon = @month AND NamHoaDon = @year";
+                command.CommandText = "Update Lichsuhoadon set TTThungan = '' WHERE TuyenKHID = @tuyen AND ThangHoaDon = @month AND NamHoaDon = @year";
                 command.Parameters.AddWithValue("@tuyen", tuyen);
                 command.Parameters.AddWithValue("@month", month);
                 command.Parameters.AddWithValue("@year", year);
