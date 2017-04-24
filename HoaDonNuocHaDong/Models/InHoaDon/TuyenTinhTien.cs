@@ -26,5 +26,7 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public int TTDoc { get; set; }
         public int SanLuong { get; set; }
         public double TongCong { get; set; }
+        public String TTThuNgan { get; set; }
+        public int TuyenKHID { get; set; }
     }
 }

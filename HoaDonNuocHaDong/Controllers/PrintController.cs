@@ -19,6 +19,7 @@ using HoaDonHaDong.Helper;
 using HoaDonNuocHaDong.Reports;
 using HoaDonNuocHaDong.Helper;
 using HoaDonNuocHaDong.Base;
+using System.Configuration;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -28,7 +29,8 @@ namespace HoaDonNuocHaDong.Controllers
         private ChiSo cS = new ChiSo();
         private NguoidungHelper ngHelper = new NguoidungHelper();
         private HoaDonNuocHaDong.Helper.Tuyen _tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
-        
+        public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+
 
         /// <summary>
         /// Tính tiền theo tuyến
@@ -49,39 +51,8 @@ namespace HoaDonNuocHaDong.Controllers
             int thangIn = String.IsNullOrEmpty(month) ? DateTime.Now.Month : Convert.ToInt32(month);
             int namIn = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt32(year);
 
-            List<Models.InHoaDon.TuyenTinhTien> danhSach = (from i in db.Lichsuhoadons
-                                                            join j in db.Hoadonnuocs on i.HoaDonID equals j.HoadonnuocID
-                                                            join r in db.Khachhangs on j.KhachhangID equals r.KhachhangID
-
-                                                            where i.ThangHoaDon == thangIn && i.NamHoaDon == namIn &&
-                                                                   r.TuyenKHID.ToString() == tuyenID &&
-                                                                   (j.Trangthaixoa == false || j.Trangthaixoa == null) &&
-                                                                   ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
-                                                                   j.Tongsotieuthu > 0
-                                                            select new Models.InHoaDon.TuyenTinhTien
-                                                            {
-                                                                HoaDonNuoc = i.HoaDonID,
-                                                                MaKH = i.MaKH,
-                                                                TenKH = i.TenKH,
-                                                                DiaChi = i.Diachi,
-                                                                NgayBatDau = i.NgayBatDau,
-                                                                NgayKetThuc = i.NgayKetThuc,
-                                                                SH1 = i.SH1,
-                                                                SH2 = i.SH2,
-                                                                SH3 = i.SH3,
-                                                                SH4 = i.SH4,
-                                                                HC = i.HC,
-                                                                CC = i.CC,
-                                                                SX = i.SX,
-                                                                KD = i.KD,
-                                                                PhiVAT = i.ThueSuatPrice,
-                                                                PhiBVMT = i.PhiBVMT,
-                                                                TTDoc = i.TTDoc.Value,
-                                                                SanLuong = i.SanLuongTieuThu,
-                                                                TongCong = i.TongCong
-                                                            }).ToList();
-
             ViewBag.beforeFilter = false;
+            var danhSach = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
             ViewBag.dsachKH = danhSach.OrderBy(p => p.TTDoc).ToList();
             ViewBag.chiNhanh = db.Quanhuyens.ToList();
             ViewBag.to = db.ToQuanHuyens.ToList();
@@ -95,6 +66,61 @@ namespace HoaDonNuocHaDong.Controllers
 
             ViewBag.selectedMonth = thangIn;
             ViewBag.selectedYear = namIn;
+        }
+
+        public List<Models.InHoaDon.TuyenTinhTien> getDanhSachHoaDonDuocIn(String tuyenID, int thangIn, int namIn)
+        {
+            List<Models.InHoaDon.TuyenTinhTien> hoadons = (from i in db.Lichsuhoadons
+                                                           join j in db.Hoadonnuocs on i.HoaDonID equals j.HoadonnuocID
+                                                           join r in db.Khachhangs on j.KhachhangID equals r.KhachhangID
+                                                           where i.ThangHoaDon == thangIn && i.NamHoaDon == namIn &&
+                                                                  r.TuyenKHID.ToString() == tuyenID &&
+                                                                  (j.Trangthaixoa == false || j.Trangthaixoa == null) &&
+                                                                  ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
+                                                                  j.Tongsotieuthu > 0
+                                                           orderby i.TTDoc
+                                                           select new Models.InHoaDon.TuyenTinhTien
+                                                           {
+                                                               HoaDonNuoc = i.HoaDonID,
+                                                               MaKH = i.MaKH,
+                                                               TenKH = i.TenKH,
+                                                               DiaChi = i.Diachi,
+                                                               NgayBatDau = i.NgayBatDau,
+                                                               NgayKetThuc = i.NgayKetThuc,
+                                                               SH1 = i.SH1,
+                                                               SH2 = i.SH2,
+                                                               SH3 = i.SH3,
+                                                               SH4 = i.SH4,
+                                                               HC = i.HC,
+                                                               CC = i.CC,
+                                                               SX = i.SX,
+                                                               KD = i.KD,
+                                                               PhiVAT = i.ThueSuatPrice,
+                                                               PhiBVMT = i.PhiBVMT,
+                                                               TTDoc = i.TTDoc.Value,
+                                                               SanLuong = i.SanLuongTieuThu,
+                                                               TongCong = i.TongCong,
+                                                               TTThuNgan = i.TTThungan,
+                                                               TuyenKHID = i.TuyenKHID,
+                                                           }).ToList();
+            int soHoaDon = 1;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+
+                foreach (var hoadon in hoadons)
+                {
+                    var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
+                    using (SqlCommand command = new SqlCommand("", connection))
+                    {
+                        connection.Open();
+                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan WHERE HoaDonID = @HoaDonID";
+                        command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
+                        command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    soHoaDon++;
+                }
+            return hoadons;
         }
 
         [HttpPost]
@@ -446,8 +472,25 @@ namespace HoaDonNuocHaDong.Controllers
                 db.SaveChanges();
             }
             String tuyenID = Request.QueryString["tuyen"];
+            xoaThongTinThuNgan(tuyen, month, year);
             tinhTienTheoTuyen(tuyenID, month, year);
             return View();
+        }
+
+        private void xoaThongTinThuNgan(string tuyen, string month, string year)
+        {
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("", connection))
+            {
+                connection.Open();
+                command.CommandText = "Update Lichsuhoadon set TTThungan = 1 WHERE TuyenKHID = @tuyen AND ThangHoaDon = @month AND NamHoaDon = @year";
+                command.Parameters.AddWithValue("@tuyen", tuyen);
+                command.Parameters.AddWithValue("@month", month);
+                command.Parameters.AddWithValue("@year", year);
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
         }
 
         /// <summary>

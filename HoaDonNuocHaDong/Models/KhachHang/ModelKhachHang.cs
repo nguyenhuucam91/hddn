@@ -18,8 +18,7 @@ namespace HoaDonNuocHaDong.Models.KhachHang
         /// Cập nhật danh sách khách hàng hết hạn áp giá
         /// </summary>
         public void updateKHHetHanApGia(DateTime currDate)
-        {
-            
+        {            
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand("", connection))
             {
