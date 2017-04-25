@@ -103,17 +103,19 @@ namespace HoaDonNuocHaDong.Controllers
                                                                TTThuNgan = i.TTThungan,
                                                                TuyenKHID = i.TuyenKHID,
                                                            }).ToList();
-            int soHoaDon = 1;
+            int soHoaDon = 1; double tongTienCongDon = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
 
                 foreach (var hoadon in hoadons)
                 {
+                    tongTienCongDon += hoadon.TongCong;
                     var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                     using (SqlCommand command = new SqlCommand("", connection))
                     {
                         connection.Open();
-                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan WHERE HoaDonID = @HoaDonID";
+                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan,ChiSoCongDon=@chiSo WHERE HoaDonID = @HoaDonID";
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
+                        command.Parameters.AddWithValue("@chiSo",tongTienCongDon);
                         command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
                         command.ExecuteNonQuery();
                         connection.Close();
@@ -474,18 +476,18 @@ namespace HoaDonNuocHaDong.Controllers
                 db.SaveChanges();
             }
             String tuyenID = Request.QueryString["tuyen"];
-            xoaThongTinThuNgan(tuyen, month, year);
+            xoaThongTinThuNganVaCongDon(tuyen, month, year);
             tinhTienTheoTuyen(tuyenID, month, year);
             return View();
         }
 
-        private void xoaThongTinThuNgan(string tuyen, string month, string year)
+        private void xoaThongTinThuNganVaCongDon(string tuyen, string month, string year)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "Update Lichsuhoadon set TTThungan = '' WHERE TuyenKHID = @tuyen AND ThangHoaDon = @month AND NamHoaDon = @year";
+                command.CommandText = "Update Lichsuhoadon set TTThungan = '',ChiSoCongDon = 0 WHERE TuyenKHID = @tuyen AND ThangHoaDon = @month AND NamHoaDon = @year";
                 command.Parameters.AddWithValue("@tuyen", tuyen);
                 command.Parameters.AddWithValue("@month", month);
                 command.Parameters.AddWithValue("@year", year);
