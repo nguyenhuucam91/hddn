@@ -221,14 +221,15 @@ namespace HoaDonNuocHaDong.Controllers
         {
             Report report = new Report();
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
+            Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
             int from = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
             int to = String.IsNullOrEmpty(form["to"]) ? count : Convert.ToInt16(form["to"]);
             List<dynamic> ls = new List<dynamic>();
             for (int i = from; i <= to; i++)
-            {
+            {                
                 var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTThungan != ""
-                                  && p.TTThungan.Contains(p.TTDoc+'/'+TuyenID+" - " + i)
+                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year 
+                                  && p.TTThungan == (p.TTDoc+"/"+tuyenKH.Matuyen+" - " + i)
                               select new
                               {
                                   HoaDonID = p.HoaDonID,
