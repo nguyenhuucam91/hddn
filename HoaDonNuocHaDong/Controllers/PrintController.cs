@@ -227,7 +227,8 @@ namespace HoaDonNuocHaDong.Controllers
             for (int i = from; i <= to; i++)
             {
                 var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTThungan.Contains(" - " + i)
+                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTThungan != ""
+                                  && p.TTThungan.Contains(p.TTDoc+'/'+TuyenID+" - " + i)
                               select new
                               {
                                   HoaDonID = p.HoaDonID,

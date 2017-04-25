@@ -308,7 +308,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.selectedMonth = thangTrongQuy;
-            ViewBag.selectedYear = DateTime.Now.Year.ToString();
+            ViewBag.selectedYear = nam.ToString();
             return View("XuliBaoCaoSanLuongDoanhThu");
         }
 
