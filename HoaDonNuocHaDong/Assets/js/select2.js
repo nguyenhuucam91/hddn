@@ -562,6 +562,12 @@ $(document).on('keyup', function (e) {
     }
 });
 
+$("input[name='chiSoMoi']").on('click', function () {
+    var backButton = $("input[name='isBack']");
+    if (backButton.val() == 1) {
+        $(this).val("");
+    }
+});
 //chọn 1 ô và cho class focus vào đó
 $(".sanLuong").on('click', function () {
     var cachTinhGia = $(".cachTinhGia");

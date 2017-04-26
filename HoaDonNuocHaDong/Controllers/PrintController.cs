@@ -20,6 +20,7 @@ using HoaDonNuocHaDong.Reports;
 using HoaDonNuocHaDong.Helper;
 using HoaDonNuocHaDong.Base;
 using System.Configuration;
+using HoaDonNuocHaDong.Models.InHoaDon;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -115,7 +116,7 @@ namespace HoaDonNuocHaDong.Controllers
                         connection.Open();
                         command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan,ChiSoCongDon=@chiSo WHERE HoaDonID = @HoaDonID";
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
-                        command.Parameters.AddWithValue("@chiSo",tongTienCongDon);
+                        command.Parameters.AddWithValue("@chiSo", tongTienCongDon);
                         command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
                         command.ExecuteNonQuery();
                         connection.Close();
@@ -211,6 +212,53 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
+        public List<LichSuHoaDon> DanhSachHoaDons(int TuyenID, int month, int year)
+        {
+            var lichsuhoadons = (from p in db.Lichsuhoadons
+                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.SanLuongTieuThu > 0
+                                 orderby p.TTDoc
+                                 select new HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon
+                                 {
+                                     HoaDonID = p.HoaDonID,
+                                     ThangHoaDon = p.ThangHoaDon,
+                                     NamHoaDon = p.NamHoaDon,
+                                     TenKH = p.TenKH,
+                                     DiaChi = p.Diachi,
+                                     MST = p.MST,
+                                     MaKH = p.MaKH,
+                                     SoHopDong = p.SoHopDong,
+                                     SanLuongTieuThu = p.SanLuongTieuThu,
+                                     ChiSoCu = p.ChiSoCu,
+                                     ChiSoMoi = p.ChiSoMoi,
+                                     SH1 = p.SH1,
+                                     SH2 = p.SH2,
+                                     SH3 = p.SH3,
+                                     SH4 = p.SH4,
+                                     SH1Price = p.SH1Price,
+                                     SH2Price = p.SH2Price,
+                                     SH3Price = p.SH3Price,
+                                     SH4Price = p.SH4Price,
+                                     HC = p.HC,
+                                     CC = p.CC,
+                                     SX = p.SX,
+                                     KD = p.KD,
+                                     HCPrice = p.HCPrice,
+                                     CCPrice = p.CCPrice,
+                                     SXPrice = p.SXPrice,
+                                     KDPrice = p.KDPrice,
+                                     TileBVMT = p.TileBVMT,
+                                     PhiBVMT = p.PhiBVMT,
+                                     TongCong = p.TongCong,
+                                     BangChu = p.BangChu,
+                                     TTVoOng = p.TTVoOng,
+                                     TTThungan = p.TTThungan,
+                                     NgayBatDau = p.NgayBatDau,
+                                     NgayKetThuc = p.NgayKetThuc,
+                                     ChiSoCongDon = p.ChiSoCongDon,
+                                 });
+            return lichsuhoadons.ToList();
+        }
+
         /// <summary>
         /// In tất cả danh sách
         /// </summary>
@@ -224,14 +272,21 @@ namespace HoaDonNuocHaDong.Controllers
             Report report = new Report();
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
-            int from = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
-            int to = String.IsNullOrEmpty(form["to"]) ? count : Convert.ToInt16(form["to"]);
+            int fromSoHoaDon = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
+            int toSoHoaDon = String.IsNullOrEmpty(form["to"]) ? count : Convert.ToInt16(form["to"]);
+
+            List<LichSuHoaDon> danhSachHoaDons = DanhSachHoaDons(TuyenID, month, year);
+
+            if (toSoHoaDon >= danhSachHoaDons.Count)
+            {
+                toSoHoaDon = danhSachHoaDons.Count();
+            }
             List<dynamic> ls = new List<dynamic>();
-            for (int i = from; i <= to; i++)
-            {                
+            for (int i = fromSoHoaDon; i <= toSoHoaDon; i++)
+            {
                 var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year 
-                                  && p.TTThungan == (p.TTDoc+"/"+tuyenKH.Matuyen+" - " + i)
+                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year
+                                  && p.TTThungan == (p.TTDoc + "/" + tuyenKH.Matuyen + " - " + i)
                               select new
                               {
                                   HoaDonID = p.HoaDonID,
@@ -297,48 +352,8 @@ namespace HoaDonNuocHaDong.Controllers
         {
             Report report = new Report();
             report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
-            var source = (from p in db.Lichsuhoadons
-                          where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.SanLuongTieuThu > 0
-                          orderby p.TTDoc
-                          select new
-                          {
-                              HoaDonID = p.HoaDonID,
-                              ThangHoaDon = p.ThangHoaDon,
-                              NamHoaDon = p.NamHoaDon,
-                              TenKH = p.TenKH,
-                              DiaChi = p.Diachi,
-                              MST = p.MST,
-                              MaKH = p.MaKH,
-                              SoHopDong = p.SoHopDong,
-                              SanLuongTieuThu = p.SanLuongTieuThu,
-                              ChiSoCu = p.ChiSoCu,
-                              ChiSoMoi = p.ChiSoMoi,
-                              SH1 = p.SH1,
-                              SH2 = p.SH2,
-                              SH3 = p.SH3,
-                              SH4 = p.SH4,
-                              SH1Price = p.SH1Price,
-                              SH2Price = p.SH2Price,
-                              SH3Price = p.SH3Price,
-                              SH4Price = p.SH4Price,
-                              HC = p.HC,
-                              CC = p.CC,
-                              SX = p.SX,
-                              KD = p.KD,
-                              HCPrice = p.HCPrice,
-                              CCPrice = p.CCPrice,
-                              SXPrice = p.SXPrice,
-                              KDPrice = p.KDPrice,
-                              TileBVMT = p.TileBVMT,
-                              PhiBVMT = p.PhiBVMT,
-                              TongCong = p.TongCong,
-                              BangChu = p.BangChu,
-                              TTVoOng = p.TTVoOng,
-                              TTThungan = p.TTThungan,
-                              NgayBatDau = p.NgayBatDau,
-                              NgayKetThuc = p.NgayKetThuc,
-                              ChiSoCongDon = p.ChiSoCongDon,
-                          }).ToList();
+            var danhSachHoaDons = DanhSachHoaDons(TuyenID, month, year);
+            var source = danhSachHoaDons.ToList();
             //cập nhật trạng thái in cho tất cả các hóa đơn
             foreach (var item in source)
             {
@@ -398,25 +413,26 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult ChiSoTuyen(FormCollection form)
         {
-
+            int quanHuyen = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
             ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             //lấy danh sách tổ 
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+
             if (soLuongQuanHuyen > 0)
             {
-                Quanhuyen quanHuyenDauTien = db.Quanhuyens.FirstOrDefault(p => p.IsDelete == false);
-                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyenDauTien.QuanhuyenID).ToList();
+                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyen).ToList();
             }
             else
             {
                 ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
             }
 
+            int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
             //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
             int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
             int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
-            int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-            List<Tuyenkhachhang> newLs = new List<Tuyenkhachhang>();
+
+            List<Tuyenkhachhang> tuyensKhachHang = new List<Tuyenkhachhang>();
             //nếu tổ ko đc chọn
             if (to == 0)
             {
@@ -425,7 +441,7 @@ namespace HoaDonNuocHaDong.Controllers
                 foreach (var item in tuyen)
                 {
                     Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
-                    newLs.Add(tuyenKH);
+                    tuyensKhachHang.Add(tuyenKH);
                 }
             }
             else
@@ -436,7 +452,7 @@ namespace HoaDonNuocHaDong.Controllers
                 foreach (var r in danhSachTuyenThuocTo.Intersect(danhSachTuyenDaChot))
                 {
                     Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(r);
-                    newLs.Add(tuyen);
+                    tuyensKhachHang.Add(tuyen);
                 }
             }
 
@@ -444,13 +460,13 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
 
             #region ViewBag
-            ViewBag.selectedQuan = form["quan"];
-            ViewBag.selectedTo = form["to"];
+            ViewBag.selectedQuan = quanHuyen.ToString();
+            ViewBag.selectedTo = to.ToString();
             ViewBag.selectedMonth = month;
             ViewBag.selectedYear = year;
             #endregion
 
-            ViewData["tuyen"] = newLs;
+            ViewData["tuyen"] = tuyensKhachHang;
             return View();
         }
 
