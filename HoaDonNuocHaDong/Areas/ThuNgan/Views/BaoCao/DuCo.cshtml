@@ -29,7 +29,7 @@
                                 {
                                     tong += (item.DuCo.SoTienDu ?? 0);
                                     <tr>
-                                        <td>@i</td>
+                                        <td>@(i++)</td>
                                         <td>@item.DuCo.KhachhangID</td>
                                         <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" target="_blank">@item.KhachHang.Ten</a></td>
                                         <td>@item.KhachHang.Diachi</td>
@@ -37,7 +37,6 @@
                                         <td>@(item.DuCo.SoTienDu ?? 0)</td>
                                         
                                     </tr>
-                                    i++;
                                 }
                                 <tfoot>
                                     <tr>
