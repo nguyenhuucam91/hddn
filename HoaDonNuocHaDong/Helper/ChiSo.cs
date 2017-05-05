@@ -379,7 +379,7 @@ namespace HoaDonHaDong.Helper
             SXTotal = SX * SXPrice;
 
             Sum = SH1Total + SH2Total + SH3Total + SH4Total + HCTotal + CCTotal + KDTotal + SXTotal;
-            return Math.Round(Sum, MidpointRounding.AwayFromZero);
+            return Math.Floor(Sum);
         }
 
         /// <summary>

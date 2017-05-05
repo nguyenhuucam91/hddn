@@ -239,6 +239,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             ViewData["xinghieps"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             ViewData["tuyens"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
+            ViewData["nhanviens"] = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
             ViewBag.selectedMonth = DateTime.Now.Month;
             ViewBag.selectedYear = DateTime.Now.Year;
             return View();
@@ -575,7 +576,8 @@ namespace HoaDonNuocHaDong.Controllers
             //nhân viên
             else if (type == 2)
             {
-                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien(monthReceipt, yearReceipt);
+                String nhanviens = !String.IsNullOrEmpty(fc["nhanvien"]) ? fc["nhanvien"] : "";
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien(monthReceipt, yearReceipt,nhanviens);
                 ViewBag.columnTitle = "Nhân viên";
                 ViewBag.tong = ls;
             }
@@ -630,7 +632,7 @@ namespace HoaDonNuocHaDong.Controllers
             return lst;
         }
 
-        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoNhanvien(int month, int year)
+        public List<BaoCaoTongHopSanLuong> xemBaoCaoSanLuongTheoNhanvien(int month, int year, String nhanviens)
         {
             ControllerBase<BaoCaoTongHopSanLuong> cb = new ControllerBase<BaoCaoTongHopSanLuong>();
             List<BaoCaoTongHopSanLuong> lst = cb.Query("BaoCaoTongHopSanLuongTheoNhanvien",
@@ -643,7 +645,8 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@CCPrice", chiSo.getSoTienTheoApGia("CC")),
                 new SqlParameter("@HCPrice", chiSo.getSoTienTheoApGia("HC")),
                 new SqlParameter("@SXXDPrice", chiSo.getSoTienTheoApGia("SXXD")),
-                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV"))
+                new SqlParameter("@KDDVPrice", chiSo.getSoTienTheoApGia("KDDV")),
+                new SqlParameter("@list", nhanviens)
                 );
             return lst;
         }

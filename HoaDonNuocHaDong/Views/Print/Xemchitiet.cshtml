@@ -27,7 +27,7 @@
                     <div class="widget">
                         <div class="widget-header">
                             <i class="icon-th-list"></i>
-                            <h3>Xem danh sách hóa đơn</h3>
+                            <h3>Xem danh sách hóa đơn (Tổng cộng: @dsKH.Count hóa đơn)</h3>
                         </div>
                         <!-- /widget-header -->
                         <div class="widget-content">
@@ -87,6 +87,7 @@
                                         <th>Ngày kết thúc</th>
                                         <th>Thứ tự đọc</th>
                                         <th>Sản lượng</th>
+                                        <th>Trước thuế</th>
                                         <th>VAT</th>
                                         <th>MT</th>
                                         <th>Tổng cộng</th>
@@ -125,14 +126,21 @@
                                             <td>@item.NgayKetThuc</td>
                                             <td>@item.TTDoc</td>
                                             <td>@item.SanLuong</td>
-                                            <td>@String.Format("{0:n0}", item.PhiVAT)</td>
-                                            <td>@String.Format("{0:n0}", item.PhiBVMT)</td>
-                                            <td style="color:blue">@String.Format("{0:n0}", String.Format("{0:n0}", item.TongCong))</td>
+                                            @{
+                                                double Sum = item.SH1Price * item.SH1 + item.SH2Price * item.SH2 + item.SH3Price * item.SH3 + item.SH4Price * item.SH4 + 
+                                                    item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
+                                            }
+                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", Sum)</td>
+                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.PhiVAT)</td>
+                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.PhiBVMT)</td>
+                                            <td style="color:blue">@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.TongCong)</td>
                                         </tr>
                                             i++;
                                     }
 
                                 </tbody>
+
+                                
                             </table>
 
                         </div>

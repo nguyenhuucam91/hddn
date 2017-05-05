@@ -200,7 +200,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public static String formatCurrency(double money)
         {
-            System.Globalization.CultureInfo danishCulture = new System.Globalization.CultureInfo("da");
+            System.Globalization.CultureInfo danishCulture = new System.Globalization.CultureInfo("vi-VN");
             return money.ToString("#,###.##", danishCulture);
         }
 

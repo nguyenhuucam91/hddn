@@ -14,13 +14,21 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public String NgayBatDau { get; set; }
         public String NgayKetThuc { get; set; }
         public double SH1 { get; set; }
+        public double SH1Price { get; set; }
         public double SH2 { get; set; }
+        public double SH2Price { get; set; }
         public double SH3 { get; set; }
+        public double SH3Price { get; set; }
         public double SH4 { get; set; }
+        public double SH4Price { get; set; }
         public double HC { get; set; }
+        public double HCPrice { get; set; }
         public double CC { get; set; }
+        public double CCPrice { get; set; }
         public double SX { get; set; }
+        public double SXPrice { get; set; }
         public double KD { get; set; }
+        public double KDPrice { get; set; }
         public double PhiVAT { get; set; }
         public double PhiBVMT { get; set; }
         public int TTDoc { get; set; }

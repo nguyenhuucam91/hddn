@@ -185,7 +185,7 @@
                                                     }
                                                     @if (tongSoTienTuyen != null)
                                                     {
-                                                        <td>@String.Format("{0:n0}", tongSoTienTuyen.tongTien)</td>
+                                                        <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
                                                 </tr>                                                   
                                             }
@@ -208,7 +208,7 @@
                                                     <td></td>
                                                     @if (tongSoTienTuyen != null)
                                                     {
-                                                        <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
+                                                        <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
                                                 </tr>
                                                     
@@ -221,7 +221,7 @@
                                             <td colspan="3" style="text-align: right;">Tổng số hóa đơn đã in / tổng số hóa đơn chuyển in</td>
                                             <td>@tongSoHoaDonDaIn / @tongSoHoaDonChuyenIn</td>
                                             <td colspan="1" style="text-align: right;">Tổng số tiền</td>
-                                            <td>@String.Format(new System.Globalization.CultureInfo("en-GB"), "{0:n0}", tongSoTien)</td>
+                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", tongSoTien)</td>
                                         </tr>
                                     </tfoot>
                                 </table>

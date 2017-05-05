@@ -52,7 +52,7 @@
     </thead>
 
     <tbody>
-        @{int i = 1;}
+        @{int i = 1; double TongSoTienHoaDon = 0;}
         @foreach (var item in ls)
         {
             <tr>
@@ -69,8 +69,16 @@
                 <td style="font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.TongTien)</td>
             </tr>
             i++;
+            TongSoTienHoaDon += item.TongTien;
         }
     </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="6">Tổng cộng</td>
+            <td style="font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(TongSoTienHoaDon)</td>
+        </tr>
+    </tfoot>
 </table>
 
 
