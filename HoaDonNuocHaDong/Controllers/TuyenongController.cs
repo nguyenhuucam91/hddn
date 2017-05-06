@@ -46,10 +46,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult NhapChiSo()
         {
-            populateTableChiSoCap(DateTime.Now.Month, DateTime.Now.Year);
-
-            ViewBag.quanHuyen = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
-            ViewBag.phuongXa = new SelectList(db.Phuongxas.Where(p => p.IsDelete == false || p.IsDelete == null), "PhuongxaID", "Ten");
+            populateTableChiSoCap(DateTime.Now.Month, DateTime.Now.Year);          
             var tuyenongs = (from i in db.Tuyenongs
                              join r in db.Chisocaps on i.TuyenongID equals r.TuyenongID                             
                              where (i.IsDelete == false || i.IsDelete == null) && (r.Thang.Value == DateTime.Now.Month) && (r.Nam.Value == DateTime.Now.Year)
@@ -61,7 +58,14 @@ namespace HoaDonNuocHaDong.Controllers
                                  CapTuyenOng = i.CaptuyenID == null ? 0 : i.CaptuyenID.Value ,
                                  ChiSoSanLuongTuyenOng = r.Chiso.Value,
                              }).ToList();
+
+            ViewData["quanHuyens"] = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewData["phuongXas"] = db.Phuongxas.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             ViewData["danhsachTuyenOng"] = tuyenongs;
+            ViewBag.selectedMonth = "";
+            ViewBag.selectedYear = "";
+            ViewBag.selectedQuanHuyen = 0;
+            ViewBag.selectedPhuongXa = 0;
             return View();
         }
 
@@ -89,14 +93,13 @@ namespace HoaDonNuocHaDong.Controllers
             int quanHuyenID = String.IsNullOrEmpty(form["QuanHuyenID"]) ? 0 : Convert.ToInt32(form["QuanHuyenID"]);
             int phuongXaID = String.IsNullOrEmpty(form["PhuongXaID"]) ? 0 : Convert.ToInt32(form["PhuongXaID"]);
             int thangCoChiSo = String.IsNullOrEmpty(form["thangcs"]) ? DateTime.Now.Month : Convert.ToInt32(form["thangcs"]);
-            int namCoChiSo = String.IsNullOrEmpty(form["namcs"]) ? DateTime.Now.Month : Convert.ToInt32(form["namcs"]);
+            int namCoChiSo = String.IsNullOrEmpty(form["namcs"]) ? DateTime.Now.Month : Convert.ToInt32(form["namcs"]);            
             populateTableChiSoCap(thangCoChiSo, namCoChiSo);
 
-            ViewBag.quanHuyen = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
-            ViewBag.phuongXa = new SelectList(db.Phuongxas.Where(p => p.IsDelete == false || p.IsDelete == null), "PhuongxaID", "Ten");
+            #region getAllTuyenOngs
             var tuyenongs = (from i in db.Tuyenongs
                              join r in db.Chisocaps on i.TuyenongID equals r.TuyenongID
-                             where (i.IsDelete == false || i.IsDelete == null) && (r.Thang == thangCoChiSo) && (r.Nam == namCoChiSo) && (i.QuanHuyenID == quanHuyenID && i.PhuongxaID == phuongXaID)
+                             where (i.IsDelete == false || i.IsDelete == null) && (r.Thang == thangCoChiSo) && (r.Nam == namCoChiSo)
                              select new HoaDonNuocHaDong.Models.Tuyenong.ChiSoCap
                              {
                                  TuyenOngID = i.TuyenongID,
@@ -104,9 +107,36 @@ namespace HoaDonNuocHaDong.Controllers
                                  TenTuyenOng = i.Tentuyen,
                                  CapTuyenOng = i.CaptuyenID == null ? 0 : i.CaptuyenID.Value,
                                  ChiSoSanLuongTuyenOng = r.Chiso == null ? 0 : r.Chiso.Value,
-                             });
+                             }).ToList();
+            #endregion
 
-            ViewData["danhsachTuyenOng"] = tuyenongs.ToList();
+            #region !quanHuyenID && !phuongXaID
+            if (quanHuyenID != 0 && phuongXaID != 0)
+            {
+                tuyenongs = (from i in db.Tuyenongs
+                                 join r in db.Chisocaps on i.TuyenongID equals r.TuyenongID
+                                 where (i.IsDelete == false || i.IsDelete == null) && (r.Thang == thangCoChiSo) && (r.Nam == namCoChiSo) && (i.QuanHuyenID == quanHuyenID && i.PhuongxaID == phuongXaID)
+                                 select new HoaDonNuocHaDong.Models.Tuyenong.ChiSoCap
+                                 {
+                                     TuyenOngID = i.TuyenongID,
+                                     MaTuyenOng = i.Matuyen,
+                                     TenTuyenOng = i.Tentuyen,
+                                     CapTuyenOng = i.CaptuyenID == null ? 0 : i.CaptuyenID.Value,
+                                     ChiSoSanLuongTuyenOng = r.Chiso == null ? 0 : r.Chiso.Value,
+                                 }).ToList();
+            }
+            #endregion
+
+            #region ViewBag-ViewData
+            ViewData["quanHuyens"] = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewData["phuongXas"] = db.Phuongxas.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewBag.selectedQuanHuyen = quanHuyenID;
+            ViewBag.selectedPhuongXa = phuongXaID;
+            ViewBag.selectedMonth = thangCoChiSo;
+            ViewBag.selectedYear = namCoChiSo;
+            ViewData["danhsachTuyenOng"] = tuyenongs;
+            #endregion
+
             return View();
         }
 
