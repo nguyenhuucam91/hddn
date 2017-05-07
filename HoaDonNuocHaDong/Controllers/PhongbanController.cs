@@ -16,6 +16,12 @@ namespace HoaDonNuocHaDong.Controllers
     {
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            throw new HttpException(403, "Bạn không được quyền truy cập vào module này");
+        }
+
         // GET: /Phongban/
         public ActionResult Index()
         {
