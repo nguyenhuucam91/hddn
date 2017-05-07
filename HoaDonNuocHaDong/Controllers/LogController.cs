@@ -22,9 +22,12 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Index()
         {
             saveControllerList();
+            
             List<Lichsusudungct> ls = db.Lichsusudungcts.ToList();
             ViewBag.nhomChucNang = db.Nhomchucnangs.ToList();
             ViewBag.lichSu = ls;
+            ViewBag.startTime = "";
+            ViewBag.endTime = "";
             return View();
         }
 
@@ -82,7 +85,13 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns></returns>
         public ActionResult Listfunctionmodule(int id, String controllerName)
         {
+            insertChucNangChuongTrinhIfNotExist(id, controllerName);
+            ViewBag.actionList = db.Chucnangchuongtrinhs.Where(p => p.NhomchucnangID == id).ToList();
+            return View();
+        }
 
+        private void insertChucNangChuongTrinhIfNotExist(int id, String controllerName)
+        {
             List<String> actionName = getActionNames(controllerName);
             foreach (var item in actionName)
             {
@@ -98,9 +107,6 @@ namespace HoaDonNuocHaDong.Controllers
                     db.SaveChanges();
                 }
             }
-
-            ViewBag.actionList = db.Chucnangchuongtrinhs.Where(p => p.NhomchucnangID == id).ToList();
-            return View();
         }
 
 
@@ -119,14 +125,17 @@ namespace HoaDonNuocHaDong.Controllers
             foreach (var item in danhSachController)
             {
                 Nhomchucnang _controller = db.Nhomchucnangs.FirstOrDefault(p => p.TenController == item);
+                int nhomChucNangID = _controller.NhomchucnangID;
                 if (_controller == null)
                 {
                     Nhomchucnang _chucNang = new Nhomchucnang();
                     _chucNang.TenController = item;
                     _chucNang.Ten = "";
-                    db.Nhomchucnangs.Add(_chucNang);
+                    db.Nhomchucnangs.Add(_chucNang);                    
                     db.SaveChanges();
+                    nhomChucNangID = _chucNang.NhomchucnangID;
                 }
+                insertChucNangChuongTrinhIfNotExist(nhomChucNangID, item);
             }
         }
 

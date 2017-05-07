@@ -16,7 +16,7 @@ namespace HoaDonNuocHaDong.Base
     public class BaseController : SecuredController
     {
         protected HDNHDUnitOfWork uow;
-
+        protected HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         protected HDNHD.Models.DataContexts.Nhanvien nhanVien;
         protected HDNHD.Models.DataContexts.Phongban phongBan;
 
@@ -72,9 +72,55 @@ namespace HoaDonNuocHaDong.Base
         protected override void OnResultExecuting(ResultExecutingContext filterContext)
         {
             base.OnResultExecuting(filterContext);
-
             // view data
             ViewBag.Title = title;
+        }
+
+        protected override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            base.OnResultExecuted(filterContext);
+            string actionName = this.ControllerContext.RouteData.Values["action"].ToString();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+            int chucNangID = getChucNangIDFromUrl(controllerName, actionName);
+            appendToLogTable(chucNangID);
+        }
+
+        private void appendToLogTable(int chucNangID)
+        {
+            Lichsusudungct lichSu = new Lichsusudungct();
+            lichSu.ChucnangID = chucNangID;
+            lichSu.NguoidungID = LoggedInUser.NguoidungID;
+            lichSu.Thoigian = DateTime.Now;
+            db.Lichsusudungcts.Add(lichSu);
+            db.SaveChanges();
+        }
+
+        private int getChucNangIDFromUrl(string controllerName, string actionName)
+        {
+            if (String.IsNullOrEmpty(actionName))
+            {
+                actionName = "Index";
+            }
+
+            int nhomChucNangID = getNhomChucNangIDFromUrl(controllerName);
+
+            Chucnangchuongtrinh chucNang = db.Chucnangchuongtrinhs.FirstOrDefault(p => p.NhomchucnangID == nhomChucNangID && p.TenAction == actionName);
+            if (chucNang != null)
+            {
+                return chucNang.ChucnangID;
+            }
+            return 0;
+        }
+
+        private int getNhomChucNangIDFromUrl(string controllerName)
+        {
+            String controllerNameToLower = controllerName + "Controller".ToLower();
+            Nhomchucnang nhomChucNang = db.Nhomchucnangs.FirstOrDefault(p => p.TenController.ToLower() == controllerNameToLower);
+            if (nhomChucNang != null)
+            {
+                return nhomChucNang.NhomchucnangID;
+            }
+            return 0;
         }
 
         protected override ActionResult RedirectToLoginPage(string prevUrl)

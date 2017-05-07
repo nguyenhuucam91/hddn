@@ -136,6 +136,21 @@ $(".quan").change(function () {
     });
 });
 
+$(".quanAllowClear").change(function () {
+    //clear result trước khi thay đổi
+    $(".phuongAllowClear").find("option").remove().end();
+    var selectedVal = $(this).val();
+    $.ajax({
+        url: '/khachhang/FillPhuong',
+        method: "GET",
+        data: { QuanhuyenID: selectedVal },
+        success: function (result) {
+            $.each(result, function (key, value) {
+                $(".phuongAllowClear").append("<option value=" + value.PhuongXaID + ">" + (value.PhuongXaID + " - " + value.Ten) + "</option>");
+            });
+        }
+    });
+});
 
 
 //khi chi nhánh thay đổi thì Tổ cũng thay đổi theo
