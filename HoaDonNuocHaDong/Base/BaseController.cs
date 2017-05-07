@@ -51,7 +51,7 @@ namespace HoaDonNuocHaDong.Base
                     {
                         role = EUserRole.KinhDoanh;
                     }
-                    else if (tenPhongBan.Contains("in"))
+                    else if (tenPhongBan.ToLower().Contains("in") || tenPhongBan.ToLower().Contains("kế toán"))
                     {
                         role = EUserRole.InHoaDon;
                     }
