@@ -18,7 +18,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 
         public EHinhThucThanhToan? HinhThucThanhToan { get; set; }
 
-        public bool? TrangThaiThu { get; set; }
+        public ETrangThaiThu? TrangThaiThu { get; set; }
 
         // filter by management info
         public int? QuanHuyenID { get; set; }
@@ -48,25 +48,32 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             {
                 HDNHDDataContext context = (HDNHDDataContext)GetDataContext(items);
 
-                if (Year != null)
+                if (TrangThaiThu == ETrangThaiThu.DaQuaHan)
                 {
-                    items = items.Where(m => m.HoaDon.NamHoaDon == Year);
+                    items = items.Where(m => m.HoaDon.NamHoaDon < Year || (m.HoaDon.NamHoaDon == Year && m.HoaDon.ThangHoaDon < Month));
+                    items = items.Where(m => m.HoaDon.Trangthaithu == false || m.HoaDon.Trangthaithu == null);
                 }
-                if (Month != null)
+                else
                 {
-                    items = items.Where(m => m.HoaDon.ThangHoaDon == Month);
-                }
-
-                if (TrangThaiThu != null)
-                {
-                    // nullable
-                    if (TrangThaiThu.Value)
+                    if (Year != null)
                     {
-                        items = items.Where(m => m.HoaDon.Trangthaithu == true);
+                        items = items.Where(m => m.HoaDon.NamHoaDon == Year);
                     }
-                    else
+                    if (Month != null)
                     {
-                        items = items.Where(m => m.HoaDon.Trangthaithu == false || m.HoaDon.Trangthaithu == null);
+                        items = items.Where(m => m.HoaDon.ThangHoaDon == Month);
+                    }
+
+                    if (TrangThaiThu != null)
+                    {
+                        if (TrangThaiThu == ETrangThaiThu.DaNopTien)
+                        {
+                            items = items.Where(m => m.HoaDon.Trangthaithu == true);
+                        }
+                        if (TrangThaiThu == ETrangThaiThu.ChuaNopTien)
+                        {
+                            items = items.Where(m => m.HoaDon.Trangthaithu == false || m.HoaDon.Trangthaithu == null);
+                        }
                     }
                 }
 

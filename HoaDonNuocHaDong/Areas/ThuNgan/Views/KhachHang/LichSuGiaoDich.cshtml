@@ -1,4 +1,4 @@
-﻿@model List<HDNHD.Models.DataContexts.GiaoDich>
+﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.GiaoDichModel>
 
 <div class="main-inner">
     <div class="container">
@@ -10,27 +10,41 @@
                 </div>
                 <div class="widget-content">
                     <ul class="nav nav-tabs">
-                        <li><a href="@Url.Action("ChiTiet", new { id = ViewBag.KhachHang.KhachhangID})">Thông tin khách hàng</a></li>
-                        <li><a href="@Url.Action("CapNhat", new { id = ViewBag.KhachHang.KhachhangID})">Cập nhật</a></li>
-                        <li><a href="@Url.Action("LichSuDungNuoc", new { id = ViewBag.KhachHang.KhachhangID})">Lịch sử dùng nước</a></li>
-                        <li class="active"><a href="@Url.Action("LichSuGiaoDich", new { id = ViewBag.KhachHang.KhachhangID})">Lịch sử giao dịch</a></li>
+                        <li><a href="@Url.Action("ChiTiet", new { id = ViewBag.KhachHang.KhachhangID })">Thông tin khách hàng</a></li>
+                        <li><a href="@Url.Action("CapNhat", new { id = ViewBag.KhachHang.KhachhangID })">Cập nhật</a></li>
+                        <li><a href="@Url.Action("LichSuDungNuoc", new { id = ViewBag.KhachHang.KhachhangID })">Lịch sử dùng nước</a></li>
+                        <li class="active"><a href="@Url.Action("LichSuGiaoDich", new { id = ViewBag.KhachHang.KhachhangID })">Lịch sử giao dịch</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="col-md-12">
-                            <h4 class="header-title">Khách hàng: <span class="big">@ViewBag.KhachHang.MaKhachHang - @ViewBag.KhachHang.Ten</span></h4>
-
                             <table class="table table-striped table-bordered data-table">
                                 <thead>
                                     <tr>
                                         <th>TT</th>
                                         <th>Tháng</th>
-                                        <th>Số tiền phải nộp</th>
-                                        <th>Trạng thái thu</th>
-                                        <th>Ngày thu</th>
-                                        <th>Số tiền đã nộp</th>
+                                        <th>Số tiền trên hóa đơn</th>
+                                        <th>Số tiền giao dịch</th>
+                                        <th>Ngày giao dịch</th>
+                                        <th width="89px"></th>
                                     </tr>
                                 </thead>
-
+                                @{ var i = 1; }
+                                @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.GiaoDichModel item in Model)
+                                {
+                                    <tr>
+                                        <td style="text-align:center;">@(i++)</td>
+                                        <td style="text-align:center;">@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+                                        <td style="text-align:right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
+                                        <td style="text-align:right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.GiaoDich.SoTien.Value)</td>
+                                        <td style="text-align:center;">@item.GiaoDich.NgayGiaoDich.Value.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            @if (i == 2) // first
+                                            {
+                                                <a href="#" data-confirm="Bạn chắc chắn muốn hủy giao dịch này?" data-gd-id="@item.GiaoDich.GiaoDichID" id="lnk-huy-giao-dich">Hủy giao dịch</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
                             </table>
                             @Html.Partial("_Pager", (object)ViewBag.Pager)
                         </div>
@@ -40,3 +54,25 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        var khachHangID = '@ViewBag.KhachHang.KhachhangID';
+
+        /* hủy giao dịch */
+        $("#lnk-huy-giao-dich").click(function () {
+            var $lnkHuyGiaoDich = $(this),
+                message = $lnkHuyGiaoDich.attr('data-confirm');
+
+            if (message !== undefined) {
+                if (!confirm(message)) {
+                    return;
+                }
+            }
+
+            var giaoDichID = $lnkHuyGiaoDich.attr('data-gd-id');
+
+            huyGiaoDich($lnkHuyGiaoDich, khachHangID, giaoDichID);
+        });
+    </script>
+}

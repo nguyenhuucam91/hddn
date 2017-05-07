@@ -68,7 +68,7 @@ namespace HDNHD.Core.Models
         public Pager()
         {
             page = 1;
-            pageSize = 20;
+            pageSize = 25;
         }
 
         public HtmlString UrlFirst()

@@ -111,6 +111,7 @@
     <Compile Include="Helpers\ApplicationCache.cs" />
     <Compile Include="Helpers\AuthHelpers.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Models\AjaxResult.cs" />
     <Compile Include="Models\BaseFilterModel.cs" />
     <Compile Include="Models\Pager.cs" />

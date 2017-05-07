@@ -9,14 +9,6 @@
       <Column Name="SoDu" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.DuCo" Member="DuCos">
-    <Type Name="DuCo">
-      <Column Name="DuCoID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="TienNopTheoThangID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="KhachhangID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SoTienDu" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.Hoadonnuoc" Member="Hoadonnuocs">
     <Type Name="Hoadonnuoc">
       <Column Name="HoadonnuocID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -38,14 +30,6 @@
       <Column Name="NgayNopTien" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="NgayIn" Type="System.DateTime" DbType="Date" CanBeNull="true" />
       <Column Name="Ngaybatdausudung" Type="System.DateTime" DbType="Date" CanBeNull="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.SoTienNopTheoThang" Member="SoTienNopTheoThangs">
-    <Type Name="SoTienNopTheoThang">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="HoaDonNuocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SoTienPhaiNop" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="SoTienDaThu" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.ToQuanHuyen" Member="ToQuanHuyens">
@@ -186,6 +170,40 @@
       <Column Name="PhuongxaID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="IsDelete" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="ChinhanhID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Chitiethoadonnuoc" Member="Chitiethoadonnuocs">
+    <Type Name="Chitiethoadonnuoc">
+      <Column Name="ChitiethoadonnuocID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HoadonnuocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Chisocu" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Chisomoi" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SH1" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SH2" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SH3" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SH4" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="HC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CC" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SXXD" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="KDDV" Type="System.Double" DbType="Float" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SoTienNopTheoThang" Member="SoTienNopTheoThangs">
+    <Type Name="SoTienNopTheoThang">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HoaDonNuocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoTienPhaiNop" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SoTienDaThu" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DuCo" Member="DuCos">
+    <Type Name="DuCo">
+      <Column Name="DuCoID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TienNopTheoThangID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="KhachhangID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoTienDu" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TrangThaiTruHet" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="NgayTruHet" Type="System.DateTime" DbType="Date" CanBeNull="true" />
     </Type>
   </Table>
 </Database>

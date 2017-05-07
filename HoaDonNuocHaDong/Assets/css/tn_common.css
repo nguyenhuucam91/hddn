@@ -50,3 +50,21 @@
 .form-details .control-label {
     margin-right: 15px;
 }
+
+/* message icons */
+.text {
+    color:#626262;
+}
+.text-info {
+    color: #5bc0de;
+}
+.text-success {
+    color: #5cb85c;
+}
+.text-warning {
+    color: #f0ad4e;
+}
+.text-error {
+    color: #d9534f;
+}
+/* END message icons */

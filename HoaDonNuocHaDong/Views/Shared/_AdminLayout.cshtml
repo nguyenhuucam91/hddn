@@ -275,7 +275,6 @@
 
     </script>
 
-    @RenderSection("Scripts", required: false)
     <!-- Le javascript
      ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -297,5 +296,7 @@
     @Scripts.Render("~/Assets/BaoCaoJs/dataTables.buttons.min.js")
     @Scripts.Render("~/Assets/BaoCaoJs/buttons.html5.min.js")
     @Scripts.Render("~/Assets/BaoCaoJs/jszip.min.js")
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

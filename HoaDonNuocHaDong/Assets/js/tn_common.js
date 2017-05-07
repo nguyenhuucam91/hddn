@@ -1,6 +1,12 @@
 ﻿$(document).ready(function () {
     // select2 items
     $(".select2").select2();
+    $(".datepicker").datepicker({
+        format: 'mm/dd/yyyy',
+        onSelect: function () {
+            $(this).change();
+        }
+    });
 
     $(".data-table").dataTable({
         fixedHeader: {
@@ -18,6 +24,9 @@
         "bFilter": false,
         "bInfo": false,
         "bAutoWidth": false
+    });
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]'
     });
 });
 
@@ -126,7 +135,6 @@ function loadTuyen($slTuyen, nhanVienID, tuyenID) {
         data: { nhanVienID: nhanVienID }
     }).done(function (data) {
         if (data.IsSuccess) {
-            console.log(items);
             var items = [];
             $.each(data.Data, function (index, item) {
                 items.push({ "id": item.TuyenKHID, "text": item.MaTuyen + " - " + item.Ten });
@@ -145,41 +153,97 @@ function loadTuyen($slTuyen, nhanVienID, tuyenID) {
  * update HoaDon status against database & get back updated model
  * update GUI trangThaiThu, ngayThu, soTienDaNop
  */
-function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop) {
+function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTienConThieu) {
     var trangThaiThu = $trangThaiThu.is(":checked"),
         ngayThu = $ngayThu.val();
 
-    if (!trangThaiThu) {
-        var confirmed = confirm("Bỏ trạng thái thu sẽ XÓA tất cả các giao dịch trong tháng của khách hàng này. Bạn chắc chắn?");
+    // waiting
+    $trangThaiThu.attr("disabled", true);
+    $trangThaiThu.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
 
-        if (!confirmed) {
-            // set back checked
-            $trangThaiThu.prop("checked", true);
-            return;
-        }
+    // processing
+    if (trangThaiThu == true) {
+        var url = "/Services/HoaDon/ThanhToan",
+            data = { hoaDonID: hoaDonID, ngayThu: ngayThu };
+    } else {
+        var url = "/Services/HoaDon/HuyThanhToan",
+            data = { hoaDonID: hoaDonID };
     }
 
-    $.ajax({
-        url: "/Services/HoaDon/CapNhatThanhToan",
-        data: { hoaDonID: hoaDonID, trangThaiThu: trangThaiThu, ngayThu: ngayThu }
-    }).done(function (data) {
-        $trangThaiThu.prop("checked", data.Data.HoaDon.TrangThaiThu);
-        $ngayThu.val(data.Data.HoaDon.NgayNopTien);
-        $soTienDaNop.html(data.Data.SoTienNopTheoThang.SoTienDaThu);
+    BUtils.ajax(url, data,
+        function (data) { // success
+            var model = data.Data;
+            $trangThaiThu.prop("checked", model.HoaDon.TrangThaiThu);
+            $ngayThu.val(model.HoaDon.NgayNopTien);
+            $soTienDaNop.html(model.SoTienNopTheoThang.SoTienDaThu);
+            $soTienConThieu.html(model.SoTienNopTheoThang.DuNo);
+            // set màu cho duNo/ duCo
+            if (!model.HoaDon.TrangThaiThu) {
+                $soTienConThieu.removeClass("text-success");
+                $soTienConThieu.addClass("text-error");
+                $soTienDaNop.removeClass("text-success");
+            } else {
+                $soTienConThieu.removeClass("text-error");
+                $soTienConThieu.addClass("text-success");
+                $soTienDaNop.addClass("text-success");
+            }
 
-        if (!data.IsSuccess)
-            alert("Lỗi cập nhật trạng thái thu! vui lòng thử lại.");
-    });
+            $trangThaiThu.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
+        },
+        function (data) { // error
+            $trangThaiThu.prop("checked", !trangThaiThu); // back state
+            $trangThaiThu.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
+        });
+
+    // done
+    $trangThaiThu.attr("disabled", false);
+    $trangThaiThu.siblings(".progress-striped").remove();
 }
 
-function capNhatNgayThu(hoaDonID, ngayThu) {
-    $.ajax({
-        url: "/Services/HoaDon/CapNhatNgayThu",
-        data: { hoaDonID: hoaDonID, ngayThu: ngayThu }
-    }).done(function (data) {
-        if (!data.IsSuccess)
-            alert(data.Message);
-    });
+function capNhatNgayThu($ngayThu, hoaDonID, ngayThu) {
+    // waiting
+    $ngayThu.attr("disabled", true);
+    $ngayThu.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
+
+    // processing
+    var url = "/Services/HoaDon/CapNhatNgayThu",
+        data = { hoaDonID: hoaDonID, ngayThu: ngayThu};
+
+    BUtils.ajax(url, data,
+        function (data) { // success
+            $ngayThu.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
+        },
+        function (data) { // error
+            var model = data.Data;
+            $ngayThu.val(model.HoaDon.NgayNopTien); // back state
+            $ngayThu.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
+        });
+
+    // done
+    $ngayThu.attr("disabled", false);
+    $ngayThu.siblings(".progress-striped").remove();
 }
 
+function huyGiaoDich($lnkHuyGiaoDich, khachHangID, giaoDichID) {
+    // waiting
+    $lnkHuyGiaoDich.hide();
+    $lnkHuyGiaoDich.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
+
+    // processing
+    var url = "/Services/GiaoDich/HuyGiaoDich",
+        data = { khachHangID: khachHangID, giaoDichID: giaoDichID};
+
+    BUtils.ajax(url, data,
+        function (data) { // success
+            $lnkHuyGiaoDich.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
+        },
+        function (data) { // error
+            var model = data.Data;
+            $lnkHuyGiaoDich.show(); // back state
+            $lnkHuyGiaoDich.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
+        });
+
+    // done
+    $lnkHuyGiaoDich.siblings(".progress-striped").remove();
+}
 /***** END Thanh Toan HD *****/

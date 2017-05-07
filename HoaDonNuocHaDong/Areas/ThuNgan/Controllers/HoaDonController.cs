@@ -29,14 +29,21 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult Index(HoaDonFilterModel filter, Pager pager, String todo)
         {
+            var current = DateTime.Now.AddMonths(-1);
+
             // default values
             if (filter.Mode == HoaDonFilterModel.FilterByManagementInfo) // not in filter
             {
-                if (filter.Month == null && filter.Year == null)
+                if ((filter.Month == null && filter.Year == null) ||
+                    filter.TrangThaiThu == HDNHD.Models.Constants.ETrangThaiThu.DaQuaHan)
                 {
-                    var prev = DateTime.Now.AddMonths(-1);
-                    filter.Month = prev.Month;
-                    filter.Year = prev.Year;
+                    filter.Month = current.Month;
+                    filter.Year = current.Year;
+
+                    if (filter.TrangThaiThu == null)
+                        filter.TrangThaiThu = HDNHD.Models.Constants.ETrangThaiThu.ChuaNopTien;
+                    if (filter.HinhThucThanhToan == null)
+                        filter.HinhThucThanhToan = HDNHD.Models.Constants.EHinhThucThanhToan.TienMat;
                 }
 
                 // set selected to, quan huyen = nhanVien's to, quan huyen
@@ -55,32 +62,44 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
 
             // query items
             var items = hoaDonRepository.GetAllHoaDonModel();
-            filter.ApplyFilter(ref items);
+            items = filter.ApplyFilter(items);
 
             // apply actions
-            if (todo == "DanhDauTatCa")
-            {
-                foreach (var item in items)
-                {
-                    HoaDonHelpers.ThanhToan(item, uow);
-                }
-            }
+            //if (todo == "DanhDauTatCa")
+            //{
+            //    foreach (var item in items)
+            //    {
+            //        HoaDonHelpers.ThanhToan(item, DateTime.Now, uow);
+            //    }
+            //}
 
-            pager.ApplyPager(ref items);
+            items = pager.ApplyPager(items);
 
             #region view data
             title = "Quản lý công nợ khách hàng";
 
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
+            ViewBag.Current = current;
             #endregion
             return View(items.ToList());
         }
-
-        public ActionResult GiaoDich(int hoaDonID)
+        
+        public ActionResult ThemGiaoDich(int hoaDonID, Pager pager)
         {
-            ViewBag.HoaDonID = hoaDonID;
-            return View();
+            IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
+            var model = hoaDonRepository.GetHoaDonModelByID(hoaDonID);
+            
+            if (model == null)
+                return HttpNotFound();
+            
+            var giaoDichs = giaoDichRepository.GetAllGiaoDichModelByKHID(model.KhachHang.KhachhangID);
+            giaoDichs = pager.ApplyPager(giaoDichs);
+            #region view data
+            ViewBag.HoaDonModel = model;
+            ViewBag.Pager = pager;
+            #endregion
+            return View(giaoDichs.ToList());
         }
     }
 }

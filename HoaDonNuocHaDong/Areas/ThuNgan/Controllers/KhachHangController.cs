@@ -150,15 +150,16 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             }
 
             IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
+            var items = giaoDichRepository.GetAllGiaoDichModelByKHID(id);
+            items = pager.ApplyPager(items);
             
-
             #region view data
             title = "Chi tiết lịch sử giao dịch";
             ViewBag.Pager = pager;
             ViewBag.KhachHang = khachHang;
             #endregion
             
-            return View();
+            return View(items.ToList());
         }
     }
 }

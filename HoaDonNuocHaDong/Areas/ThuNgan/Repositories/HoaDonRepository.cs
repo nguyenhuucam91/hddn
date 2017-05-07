@@ -1,9 +1,8 @@
 ﻿using HDNHD.Core.Repositories;
 using HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces;
-using System.Data.Linq;
-using System.Linq;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
 using HDNHD.Models.DataContexts;
+using System.Linq;
 using System;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
@@ -12,31 +11,34 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
     {
         private HDNHDDataContext dc;
 
-        public HoaDonRepository(DataContext context) : base(context)
+        public HoaDonRepository(HDNHDDataContext context) : base(context)
         {
-            dc = (HDNHDDataContext)context;
+            dc = context;
         }
 
         public IQueryable<HoaDonModel> GetAllHoaDonModel()
         {
-            //return from hd in dc.Hoadonnuocs
-            //       where hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
-            //       join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
-            //       join stntt in dc.SoTienNopTheoThangs on hd.SoTienNopTheoThangID equals stntt.ID
-            //       join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
-            //       join chitietHd in dc.Chitiethoadonnuocs on hd.HoadonnuocID equals chitietHd.HoadonnuocID
-            //       from dco in gj.DefaultIfEmpty()
-            //       orderby kh.TuyenKHID
-            //       orderby kh.TTDoc
-            //       select new HoaDonModel()
-            //       {
-            //           HoaDon = hd,
-            //           KhachHang = kh,
-            //           SoTienNopTheoThang = stntt,
-            //           DuCo = dco,
-            //           ChiTietHoaDon = chitietHd
-            //       };
-            return null;
+            var items = from hd in dc.Hoadonnuocs
+                        where hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
+                        join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
+                        join stntt in dc.SoTienNopTheoThangs on hd.SoTienNopTheoThangID equals stntt.ID
+                        join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
+                        from dco in gj.DefaultIfEmpty()
+                        join chitietHd in dc.Chitiethoadonnuocs on hd.HoadonnuocID equals chitietHd.HoadonnuocID
+                        let cnt = (from _hd in dc.Hoadonnuocs where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < _hd.HoadonnuocID select dc).Count()
+                        orderby kh.TuyenKHID
+                        orderby kh.TTDoc
+                        select new HoaDonModel()
+                        {
+                            HoaDon = hd,
+                            KhachHang = kh,
+                            SoTienNopTheoThang = stntt,
+                            DuCo = dco,
+                            ChiTietHoaDon = chitietHd,
+                            CoDuNoQuaHan = cnt > 0
+                        };
+
+            return items;
         }
 
         public IQueryable<DuNoModel> GetAllDuNoModel()
@@ -65,6 +67,16 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         public IQueryable<HoaDonModel> GetAllHoaDonModelByKHID(int khachHangID)
         {
             return GetAllHoaDonModel().Where(m => m.KhachHang.KhachhangID == khachHangID);
+        }
+
+        public HoaDonModel GetPrevUnPaidHoaDonModel(HoaDonModel model)
+        {
+            return GetAllHoaDonModelByKHID(model.KhachHang.KhachhangID).FirstOrDefault((m => m.HoaDon.HoadonnuocID < model.HoaDon.HoadonnuocID && (m.HoaDon.Trangthaithu == null || m.HoaDon.Trangthaithu == false)));
+        }
+
+        public HoaDonModel GetPrevPaidHoaDonModel(HoaDonModel model)
+        {
+            return GetAllHoaDonModelByKHID(model.KhachHang.KhachhangID).FirstOrDefault((m => m.HoaDon.HoadonnuocID < model.HoaDon.HoadonnuocID && m.HoaDon.Trangthaithu == true));
         }
     }
 }

@@ -8,6 +8,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces
     {
         IQueryable<HoaDonModel> GetAllHoaDonModel();
         IQueryable<HoaDonModel> GetAllHoaDonModelByKHID(int khachHangID);
+        /// <requires>
+        /// model != null /\ model.HoaDon != null /\ model.KhachHang != null
+        /// </requires>
+        HoaDonModel GetPrevUnPaidHoaDonModel(HoaDonModel model);
+        HoaDonModel GetPrevPaidHoaDonModel(HoaDonModel model);
+        
 
         HoaDonModel GetHoaDonModelByID(int hoaDonID);
         

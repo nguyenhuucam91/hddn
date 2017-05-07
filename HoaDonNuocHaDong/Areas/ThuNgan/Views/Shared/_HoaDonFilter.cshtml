@@ -1,74 +1,78 @@
 ﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel
 @using HDNHD.Models.Constants;
 
-<div class="form-horizontal form-filter text-center">
+<div class="form-horizontal">
     <ul class="nav nav-tabs">
-        <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active": "")"><a data-toggle="tab" href="#tab1">Lọc theo thông tin quản lý</a></li>
-        <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByUserInfo ? "active": "")"><a data-toggle="tab" href="#tab2">Lọc theo thông tin khách hàng</a></liclass=">
+        <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active" : "")"><a data-toggle="tab" href="#tab1">Lọc theo thông tin quản lý</a></li>
+        <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByUserInfo ? "active" : "")"><a data-toggle="tab" href="#tab2">Lọc theo thông tin khách hàng</a></liclass=">
     </ul>
 
     <div class="tab-content">
-        <div id="tab1" class="tab-pane fade in @(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active": "")">
+        <div id="tab1" class="tab-pane fade in @(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active" : "")">
             <form method="get" action="">
-                <div class="form-group">
-                    Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Filter.Month" style="text-align: center" min="1" max="12" />
-                    Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Filter.Year" style="text-align: center" min="1970" />
+                <div class="form-filter text-center">
+                    <div class="form-group">
+                        Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Filter.Month" style="text-align: center" min="1" max="12" />
+                        Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Filter.Year" required style="text-align: center" min="1970" />
+                    </div>
+                    <div class="form-group">
+                        <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
+                            <option></option>
+                            <option value="@ELoaiKhachHang.CoQuanToChuc" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc ? "selected" : "")>= Cơ quan, tổ chức =</option>
+                            <option value="@ELoaiKhachHang.HoGiaDinh" @(Model.LoaiKhachHang == ELoaiKhachHang.HoGiaDinh ? "selected" : "")>Hộ gia đình</option>
+                            <option value="@ELoaiKhachHang.HoKinhDoanhDichVu" @(Model.LoaiKhachHang == ELoaiKhachHang.HoKinhDoanhDichVu ? "selected" : "")>Hộ kinh doanh dịch vụ</option>
+                            <option value="@ELoaiKhachHang.CoQuanDoanhNghiep" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanDoanhNghiep ? "selected" : "")>Cơ quan doanh nghiệp</option>
+                            <option value="@ELoaiKhachHang.KhuTapThe" @(Model.LoaiKhachHang == ELoaiKhachHang.KhuTapThe ? "selected" : "")>Khu tập thể (hợp đồng tổng)</option>
+                        </select>
+                        <select class="select2" name="HinhThucThanhToan" data-placeholder="Hình thức thanh toán" data-allow-clear="true">
+                            <option></option>
+                            <option value="@EHinhThucThanhToan.TienMat" @(Model.HinhThucThanhToan == EHinhThucThanhToan.TienMat ? "selected" : "")>Tiền mặt</option>
+                            <option value="@EHinhThucThanhToan.ChuyenKhoan" @(Model.HinhThucThanhToan == EHinhThucThanhToan.ChuyenKhoan ? "selected" : "")>Chuyển khoản</option>
+                        </select>
+                        <select class="select2" name="TrangThaiThu" data-placeholder="Trạng thái thu" data-allow-clear="true">
+                            <option></option>
+                            <option value="@ETrangThaiThu.DaNopTien" @(Model.TrangThaiThu == ETrangThaiThu.DaNopTien ? "selected" : "")>Đã nộp tiền</option>
+                            <option value="@ETrangThaiThu.ChuaNopTien" @(Model.TrangThaiThu == ETrangThaiThu.ChuaNopTien ? "selected" : "")>Chưa nộp tiền</option>
+                            <option value="@ETrangThaiThu.DaQuaHan" @(Model.TrangThaiThu == ETrangThaiThu.DaQuaHan ? "selected" : "")>Đã quá hạn</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="false"></select>
+                        <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
+                        <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
+                        <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="Mode" value="@HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo" />
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
-                        <option></option>
-                        <option value="@ELoaiKhachHang.CoQuanToChuc" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc ? "selected" : "")>= Cơ quan, tổ chức =</option>
-                        <option value="@ELoaiKhachHang.HoGiaDinh" @(Model.LoaiKhachHang == ELoaiKhachHang.HoGiaDinh ? "selected" : "")>Hộ gia đình</option>
-                        <option value="@ELoaiKhachHang.HoKinhDoanhDichVu" @(Model.LoaiKhachHang == ELoaiKhachHang.HoKinhDoanhDichVu ? "selected" : "")>Hộ kinh doanh dịch vụ</option>
-                        <option value="@ELoaiKhachHang.CoQuanDoanhNghiep" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanDoanhNghiep ? "selected" : "")>Cơ quan doanh nghiệp</option>
-                        <option value="@ELoaiKhachHang.KhuTapThe" @(Model.LoaiKhachHang == ELoaiKhachHang.KhuTapThe ? "selected" : "")>Khu tập thể (hợp đồng tổng)</option>
-                    </select>
-                    <select class="select2" name="HinhThucThanhToan" data-placeholder="Hình thức thanh toán" data-allow-clear="true">
-                        <option></option>
-                        <option value="@EHinhThucThanhToan.TienMat" @(Model.HinhThucThanhToan == EHinhThucThanhToan.TienMat ? "selected" : "")>Tiền mặt</option>
-                        <option value="@EHinhThucThanhToan.ChuyenKhoan" @(Model.HinhThucThanhToan == EHinhThucThanhToan.ChuyenKhoan ? "selected" : "")>Chuyển khoản</option>
-                    </select>
-                    <select class="select2" name="TrangThaiThu" data-placeholder="Trạng thái thu" data-allow-clear="true">
-                        <option></option>
-                        <option value="true" @(Model.TrangThaiThu == true ? "selected" : "")>Đã nộp tiền</option>
-                        <option value="false" @(Model.TrangThaiThu == false ? "selected" : "")>Chưa nộp tiền</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="false"></select>
-                    <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
-                    <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
-                    <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
-                </div>
-                <div class="form-group">
-                    <input type="hidden" name="Mode" value="@HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo" />
-                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                </div>
+                @if (ViewBag.Current.Month == ViewBag.Filter.Month && ViewBag.Current.Year == ViewBag.Filter.Year && ViewBag.Filter.TrangThaiThu == ETrangThaiThu.ChuaNopTien)
+                {
+                    <div class="form-control">
+                        <button type="submit" class="btn btn-warning" name="ToDo" value="DanhDauTatCa"
+                                onclick="return confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?\n\n- Chú ý: ĐIỀU KIỆN LỌC khách hàng hiện tại!');">
+                            Đánh dấu tất cả đã nộp
+                        </button>
+                    </div>
+                }
             </form>
         </div>
         <div id="tab2" class="tab-pane fade in @(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByUserInfo ? "active": "")">
             <form method="get" action="">
-                <div class="form-group">
-                    <input type="text" name="MaKH" class="detail" placeholder="Mã khách hàng" value="@Model.MaKH" />
-                    <input type="text" name="TenKH" class="detail" placeholder="Tên khách hàng" value="@Model.TenKH" />
-                    <input type="text" name="DiaChiKH" class="detail" placeholder="Địa chỉ khách hàng" value="@Model.DiaChiKH" />
-                </div>
-                <div class="form-group">
-                    <input type="hidden" name="Mode" value="@HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByUserInfo" />
-                    <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
-                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                <div class="form-filter text-center">
+                    <div class="form-group">
+                        <input type="text" name="MaKH" class="detail" placeholder="Mã khách hàng" value="@Model.MaKH" />
+                        <input type="text" name="TenKH" class="detail" placeholder="Tên khách hàng" value="@Model.TenKH" />
+                        <input type="text" name="DiaChiKH" class="detail" placeholder="Địa chỉ khách hàng" value="@Model.DiaChiKH" />
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="Mode" value="@HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByUserInfo" />
+                        <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
-    @if (Model.TrangThaiThu == false)
-    {
-        <div class="form-control">
-            <button type="submit" class="btn btn-warning" name="ToDo" value="DanhDauTatCa"
-                    onclick="return confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?\n\n- Chú ý: ĐIỀU KIỆN LỌC khách hàng hiện tại!');">
-                Đánh dấu tất cả đã nộp
-            </button>
-        </div>
-    }
 </div>
-

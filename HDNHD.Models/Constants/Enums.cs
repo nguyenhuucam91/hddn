@@ -6,6 +6,14 @@ using System.Web;
 
 namespace HDNHD.Models.Constants
 {
+    public enum EUserRole
+    {
+        Admin = 1,
+        InHoaDon = 2,
+        KinhDoanh = 3,
+        ThuNgan = 4
+    }
+
     public enum ELoaiKhachHang
     {
         CoQuanToChuc = 0,
@@ -25,6 +33,13 @@ namespace HDNHD.Models.Constants
         TienMat = 1,
         [Description("Chuyển khoản")]
         ChuyenKhoan = 2
+    }
+
+    public enum ETrangThaiThu
+    {
+        DaNopTien = 1,
+        ChuaNopTien = 2,
+        DaQuaHan = 3
     }
 
     public enum EApGia : int
@@ -48,14 +63,6 @@ namespace HDNHD.Models.Constants
         SH2 = 10,
         SH3 = 11,
         SH4 = 12
-    }
-
-    public enum EUserRole
-    {
-        Admin = 1,
-        InHoaDon = 2,
-        KinhDoanh = 3,
-        ThuNgan = 4
     }
 
     public enum ECachTinhGia
