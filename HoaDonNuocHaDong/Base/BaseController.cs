@@ -82,7 +82,7 @@ namespace HoaDonNuocHaDong.Base
             string actionName = this.ControllerContext.RouteData.Values["action"].ToString();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
             int chucNangID = getChucNangIDFromUrl(controllerName, actionName);
-            appendToLogTable(chucNangID);
+            //appendToLogTable(chucNangID);
         }
 
         private void appendToLogTable(int chucNangID)
