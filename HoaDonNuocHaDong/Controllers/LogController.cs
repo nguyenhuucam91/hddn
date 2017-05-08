@@ -22,8 +22,8 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Index()
         {
             saveControllerList();
-            
-            List<Lichsusudungct> ls = db.Lichsusudungcts.ToList();
+
+            List<Lichsusudungct> ls = db.Lichsusudungcts.OrderByDescending(p => p.Thoigian).ToList();
             ViewBag.nhomChucNang = db.Nhomchucnangs.ToList();
             ViewBag.lichSu = ls;
             ViewBag.startTime = "";
