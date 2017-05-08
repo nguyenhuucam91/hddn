@@ -15,7 +15,6 @@
             <th>Tháng</th>
             <th>Số hóa đơn</th>
             <th>Số tiền</th>
-            <th>Nhân viên</th>
         </tr>
     </thead>
     <tbody>
@@ -36,7 +35,6 @@
                 <td style='mso-number-format:"mm\/yyyy"'>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
                 <td>@item.HoaDon.Sohoadon</td>
                 <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop : 0)</td>
-                <td>@item.NhanVien.Ten</td>
             </tr>
         }
     </tbody>

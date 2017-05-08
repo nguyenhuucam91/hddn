@@ -19,13 +19,13 @@
                                                 <thead>
                                                     <tr>
                                                         <th>STT</th>
+                                                        <th>ID khách hàng</th>
                                                         <th>Mã khách hàng</th>
                                                         <th>Tên khách hàng</th>
                                                         <th>Địa chỉ</th>
                                                         <th>Tuyến</th>
                                                         <th>Tháng</th>
                                                         <th>Số tiền</th>
-                                                        <th>Nhân viên</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -38,13 +38,13 @@
                                                         }
                                                         <tr>
                                                             <td>@(stt++)</td>
+                                                            <td>@item.KhachHang.KhachhangID</td>
                                                             <td>@item.KhachHang.MaKhachHang</td>
                                                             <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=item.KhachHang.KhachhangID})" target="_blank">@item.KhachHang.Ten</a></td>
                                                             <td>@item.KhachHang.Diachi</td>
                                                             <td>@item.TuyenKhachHang.Ten</td>
                                                             <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
                                                             <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop : 0)</td>
-                                                            <td>@item.NhanVien.Ten</td>
                                                         </tr>
                                                     }
                                                 </tbody>

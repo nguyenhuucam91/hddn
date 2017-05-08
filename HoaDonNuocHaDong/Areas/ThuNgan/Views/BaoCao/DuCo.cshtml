@@ -16,12 +16,12 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
+                                        <th>ID khách hàng</th>
                                         <th>Mã khách hàng</th>
                                         <th>Tên khách hàng</th>
                                         <th>Địa chỉ</th>
                                         <th>Tuyến khách hàng</th>
                                         <th>Số tiền dư</th>
-                                        <th>Nhân viên</th>
                                     </tr>
                                 </thead>
                                 @{ var tong = 0; int i = 1; }
@@ -30,12 +30,12 @@
                                     tong += (item.DuCo.SoTienDu ?? 0);
                                     <tr>
                                         <td>@(i++)</td>
+                                        <td>@item.KhachHang.KhachhangID</td>
                                         <td>@item.DuCo.KhachhangID</td>
                                         <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" target="_blank">@item.KhachHang.Ten</a></td>
                                         <td>@item.KhachHang.Diachi</td>
                                         <td>@item.TuyenKH.Ten</td>
                                         <td>@(item.DuCo.SoTienDu ?? 0)</td>
-                                        
                                     </tr>
                                 }
                                 <tfoot>

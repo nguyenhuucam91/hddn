@@ -50,10 +50,9 @@
                 @if (ViewBag.Current.Month == ViewBag.Filter.Month && ViewBag.Current.Year == ViewBag.Filter.Year && ViewBag.Filter.TrangThaiThu == ETrangThaiThu.ChuaNopTien)
                 {
                     <div class="form-control">
-                        <button type="submit" class="btn btn-warning" name="ToDo" value="DanhDauTatCa"
-                                onclick="return confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?\n\n- Chú ý: ĐIỀU KIỆN LỌC khách hàng hiện tại!');">
+                        <a href="#" class="btn btn-warning" id="btn-danh-dau-tat-ca">
                             Đánh dấu tất cả đã nộp
-                        </button>
+                        </a>
                     </div>
                 }
             </form>

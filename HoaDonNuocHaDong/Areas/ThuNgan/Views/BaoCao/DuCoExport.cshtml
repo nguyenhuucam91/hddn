@@ -6,12 +6,12 @@
 <table border="1">
     <tr>
         <th>STT</th>
+        <th>ID khách hàng</th>
         <th>Mã khách hàng</th>
         <th>Tên khách hàng</th>
         <th>Địa chỉ</th>
         <th>Tuyến khách hàng</th>
         <th>Số tiền dư</th>
-        <th>Nhân viên</th>
     </tr>
     @{ var tong = 0; int i = 1; }
     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuCoModel item in Model)
@@ -19,6 +19,7 @@
         tong += (item.DuCo.SoTienDu ?? 0);
         <tr>
             <td>@(i++)</td>
+            <td>@item.KhachHang.KhachhangID</td>
             <td>@item.DuCo.KhachhangID</td>
             <td>
                 @item.KhachHang.Ten
@@ -26,7 +27,6 @@
             <td>@item.KhachHang.Diachi</td>
             <td>@item.TuyenKH.Ten</td>
             <td>@(item.DuCo.SoTienDu ?? 0)</td>
-            <td>@(item.NhanVien.Ten)</td>
         </tr>
     }
     <tr>
