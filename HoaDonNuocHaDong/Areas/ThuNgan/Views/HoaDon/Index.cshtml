@@ -273,7 +273,15 @@
                 e.preventDefault();
 
                 if (confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?')) {
-                    
+                    // wait ajax to complete
+                    $.ajaxSetup({ async: false });
+
+                    // check all
+                    $(".chk-thanh-toan").each(function (i, obj) {
+                        var $trangThaiThu = $(this);
+                        
+                        $trangThaiThu.prop("checked", true);
+                    });
                 }
             });
             /* END Đánh dấu tất cả */

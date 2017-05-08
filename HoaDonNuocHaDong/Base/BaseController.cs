@@ -81,8 +81,14 @@ namespace HoaDonNuocHaDong.Base
             base.OnResultExecuted(filterContext);
             string actionName = this.ControllerContext.RouteData.Values["action"].ToString();
             string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
-            int chucNangID = getChucNangIDFromUrl(controllerName, actionName);
-            appendToLogTable(chucNangID);
+            try
+            {
+                int chucNangID = getChucNangIDFromUrl(controllerName, actionName);
+                appendToLogTable(chucNangID);
+            } catch (Exception)
+            {
+                // ignore this
+            }
         }
 
         private void appendToLogTable(int chucNangID)
