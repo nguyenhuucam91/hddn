@@ -135,7 +135,7 @@ namespace HoaDonNuocHaDong.Controllers
                     db.SaveChanges();
                     nhomChucNangID = _chucNang.NhomchucnangID;
                 }
-                insertChucNangChuongTrinhIfNotExist(nhomChucNangID, item);
+                //insertChucNangChuongTrinhIfNotExist(nhomChucNangID, item);
             }
         }
 
