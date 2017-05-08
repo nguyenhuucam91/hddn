@@ -188,6 +188,8 @@
           <Property Name="TienNopTheoThangID" Type="int" />
           <Property Name="KhachhangID" Type="int" />
           <Property Name="SoTienDu" Type="int" />
+          <Property Name="TrangThaiTruHet" Type="bit" Nullable="false" />
+          <Property Name="NgayTruHet" Type="date" />
         </EntityType>
         <EntityType Name="GiaoDich">
           <Key>
@@ -303,6 +305,7 @@
           <Property Name="Ghichu" Type="nvarchar" MaxLength="100" />
           <Property Name="Chisoluckiemdinh" Type="int" />
           <Property Name="Chisosaukiemdinh" Type="int" />
+          <Property Name="HoaDonId" Type="int" />
         </EntityType>
         <EntityType Name="Lichsuhoadon">
           <Key>
@@ -1318,7 +1321,6 @@
           <EntitySet Name="Hoadonnuocs" EntityType="HoaDonHaDongModel.Hoadonnuoc" />
           <EntitySet Name="Hoadonnuocbihuys" EntityType="HoaDonHaDongModel.Hoadonnuocbihuy" />
           <EntitySet Name="Khachhangs" EntityType="HoaDonHaDongModel.Khachhang" />
-          <EntitySet Name="Kiemdinhs" EntityType="HoaDonHaDongModel.Kiemdinh" />
           <EntitySet Name="Lichsuhoadons" EntityType="HoaDonHaDongModel.Lichsuhoadon" />
           <EntitySet Name="Lichsusudungcts" EntityType="HoaDonHaDongModel.Lichsusudungct" />
           <EntitySet Name="Loaiapgias" EntityType="HoaDonHaDongModel.Loaiapgia" />
@@ -1510,6 +1512,7 @@
             <End Role="Tuyenong" EntitySet="Tuyenongs" />
             <End Role="Tuyenong1" EntitySet="Tuyenongs" />
           </AssociationSet>
+          <EntitySet Name="Kiemdinhs" EntityType="HoaDonHaDongModel.Kiemdinh" />
         </EntityContainer>
         <EntityType Name="Apgia">
           <Key>
@@ -1719,6 +1722,8 @@
           <Property Name="SoTienDu" Type="Int32" />
           <NavigationProperty Name="Khachhang" Relationship="HoaDonHaDongModel.FK_DuCo_Khachhang" FromRole="DuCo" ToRole="Khachhang" />
           <NavigationProperty Name="SoTienNopTheoThang" Relationship="HoaDonHaDongModel.FK_DuCo_SoTienNopTheoThang" FromRole="DuCo" ToRole="SoTienNopTheoThang" />
+          <Property Name="TrangThaiTruHet" Type="Boolean" Nullable="false" />
+          <Property Name="NgayTruHet" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="GiaoDich">
           <Key>
@@ -1838,17 +1843,6 @@
           <NavigationProperty Name="Khachhang2" Relationship="HoaDonHaDongModel.FK_Khachhang_Khachhang" FromRole="Khachhang1" ToRole="Khachhang" />
           <NavigationProperty Name="Phuongxa" Relationship="HoaDonHaDongModel.FK_Khachhang_Phuongxa" FromRole="Khachhang" ToRole="Phuongxa" />
           <NavigationProperty Name="Tuyenkhachhang" Relationship="HoaDonHaDongModel.FK_Khachhang_Tuyenkhachhang" FromRole="Khachhang" ToRole="Tuyenkhachhang" />
-        </EntityType>
-        <EntityType Name="Kiemdinh">
-          <Key>
-            <PropertyRef Name="KiemdinhID" />
-          </Key>
-          <Property Name="KiemdinhID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KhachhangID" Type="Int32" />
-          <Property Name="Ngaykiemdinh" Type="DateTime" Precision="0" />
-          <Property Name="Ghichu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Chisoluckiemdinh" Type="Int32" />
-          <Property Name="Chisosaukiemdinh" Type="Int32" />
         </EntityType>
         <EntityType Name="Lichsuhoadon">
           <Key>
@@ -2663,6 +2657,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Kiemdinh">
+          <Key>
+            <PropertyRef Name="KiemdinhID" />
+          </Key>
+          <Property Name="KiemdinhID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KhachhangID" Type="Int32" />
+          <Property Name="Ngaykiemdinh" Type="DateTime" Precision="0" />
+          <Property Name="Ghichu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Chisoluckiemdinh" Type="Int32" />
+          <Property Name="Chisosaukiemdinh" Type="Int32" />
+          <Property Name="HoaDonId" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2863,6 +2869,8 @@
           <EntitySetMapping Name="DuCoes">
             <EntityTypeMapping TypeName="HoaDonHaDongModel.DuCo">
               <MappingFragment StoreEntitySet="DuCo">
+                <ScalarProperty Name="NgayTruHet" ColumnName="NgayTruHet" />
+                <ScalarProperty Name="TrangThaiTruHet" ColumnName="TrangThaiTruHet" />
                 <ScalarProperty Name="SoTienDu" ColumnName="SoTienDu" />
                 <ScalarProperty Name="KhachhangID" ColumnName="KhachhangID" />
                 <ScalarProperty Name="TienNopTheoThangID" ColumnName="TienNopTheoThangID" />
@@ -2977,18 +2985,6 @@
                 <ScalarProperty Name="PhuongxaID" ColumnName="PhuongxaID" />
                 <ScalarProperty Name="QuanhuyenID" ColumnName="QuanhuyenID" />
                 <ScalarProperty Name="KhachhangID" ColumnName="KhachhangID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Kiemdinhs">
-            <EntityTypeMapping TypeName="HoaDonHaDongModel.Kiemdinh">
-              <MappingFragment StoreEntitySet="Kiemdinh">
-                <ScalarProperty Name="Chisosaukiemdinh" ColumnName="Chisosaukiemdinh" />
-                <ScalarProperty Name="Chisoluckiemdinh" ColumnName="Chisoluckiemdinh" />
-                <ScalarProperty Name="Ghichu" ColumnName="Ghichu" />
-                <ScalarProperty Name="Ngaykiemdinh" ColumnName="Ngaykiemdinh" />
-                <ScalarProperty Name="KhachhangID" ColumnName="KhachhangID" />
-                <ScalarProperty Name="KiemdinhID" ColumnName="KiemdinhID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3277,6 +3273,19 @@
                 <ScalarProperty Name="TuyenKHID" ColumnName="TuyenKHID" />
                 <ScalarProperty Name="NhanVienID" ColumnName="NhanVienID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kiemdinhs">
+            <EntityTypeMapping TypeName="HoaDonHaDongModel.Kiemdinh">
+              <MappingFragment StoreEntitySet="Kiemdinh">
+                <ScalarProperty Name="HoaDonId" ColumnName="HoaDonId" />
+                <ScalarProperty Name="Chisosaukiemdinh" ColumnName="Chisosaukiemdinh" />
+                <ScalarProperty Name="Chisoluckiemdinh" ColumnName="Chisoluckiemdinh" />
+                <ScalarProperty Name="Ghichu" ColumnName="Ghichu" />
+                <ScalarProperty Name="Ngaykiemdinh" ColumnName="Ngaykiemdinh" />
+                <ScalarProperty Name="KhachhangID" ColumnName="KhachhangID" />
+                <ScalarProperty Name="KiemdinhID" ColumnName="KiemdinhID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

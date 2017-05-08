@@ -266,8 +266,8 @@ namespace HoaDonNuocHaDong.Controllers
                 //nếu khách hàng đang chỉnh sửa chưa kiểm định mà nhập số thì tính như bình thường
                 if (isKiemDinh)
                 {
-                    var kiemDinh1 = HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(KHID, _month, _year) - ChiSoDau.Value;
-                    var kiemDinh2 = ChiSoCuoi.Value - HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(KHID, _month, _year);
+                    var kiemDinh1 = kiemDinh.getChiSoLucKiemDinh(KHID, _month, _year) - ChiSoDau.Value;
+                    var kiemDinh2 = ChiSoCuoi.Value - kiemDinh.getChiSoSauKiemDinh(KHID, _month, _year);
                     _tongKiemDinh = kiemDinh1 + kiemDinh2;
                     _TongSoTieuThu = _tongKiemDinh;
                 }

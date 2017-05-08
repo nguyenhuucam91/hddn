@@ -284,8 +284,8 @@
                                                                             <td>
                                                                                 @if (kiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
                                                                                 {
-                                                                                    <input type="checkbox" name="kiemdinh" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
-                                                                                           data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
+                                                                                    <input type="checkbox" name="kiemdinh" class="toggle" checked="checked" disabled data-truockd="@kiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
+                                                                                           data-saukd="@kiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
                                                                                     //thêm arrow nếu có kiểm định
                                                                                     <button data-trid="details-@i" type="button" data-khid="@item.KhachHangID" data-month="@month" data-year="@year"
                                                                                             title="Xem chi tiết kiểm định" class="btn btn-default dropdown-toggle xemChiTietKD">

@@ -2,9 +2,10 @@
     ViewBag.Title = "Baocaophinuocthai";
     Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
     List<HoaDonNuocHaDong.Models.BaoCaoInHoaDon.BaoCaoPhiNuocThai> ls = ViewData["bc"] as List<HoaDonNuocHaDong.Models.BaoCaoInHoaDon.BaoCaoPhiNuocThai>;
+    double tongTruocThue = 0;
+    double tongThue = 0;
+    double tongCong = 0;
 }
-
-
 
 <style>
     .xulybc {
@@ -44,6 +45,9 @@
     <tbody>
         @foreach (var item in ls)
         {
+            tongTruocThue += item.TruocThue;
+            tongThue += item.Thue;
+            tongCong += item.Tong;
             <tr>
                 <td>@item.SoTT</td>
                 <td>@item.tenKhachHang</td>
@@ -56,6 +60,15 @@
             </tr>
         }
     </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="5" style="font-weight:bold">Tổng cộng</td>
+            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongTruocThue)</td>
+            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongThue)</td>
+            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongCong)</td>
+        </tr>
+    </tfoot>
 </table>
 
 <p style="float:right">Hà đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</p>

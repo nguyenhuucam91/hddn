@@ -42,7 +42,8 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.Nam = namKiemDinh;
             #endregion
 
-            Kiemdinh kD = new Kiemdinh();
+            Kiemdinh kD = new Kiemdinh();            
+
             var khachHang = (from i in db.Khachhangs
                              join r in db.Hoadonnuocs on i.KhachhangID equals r.KhachhangID
                              where i.MaKhachHang == maKhachHang && r.ThangHoaDon.ToString() == thangKiemDinh && r.NamHoaDon.ToString() == namKiemDinh
@@ -60,21 +61,32 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 maKhachHang = khachHang.MaKH;
                 var hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHang.KHID && p.ThangHoaDon.ToString() == thangKiemDinh && p.NamHoaDon.ToString() == namKiemDinh);
-
+                var kiemDinhHoaDonNuocID = 0;
                 if (hoaDonNuoc != null)
                 {
-                    hoaDonNuocID = hoaDonNuoc.HoadonnuocID;
+                    kiemDinhHoaDonNuocID = hoaDonNuoc.HoadonnuocID;
                 }
 
-                #region ViewBag
-                ViewBag.message = null;
-                ViewBag.khachHang = khachHang;
-                ViewBag.maKH = maKhachHang;
-                ViewBag.khachHangID = khachHang.KHID;
-                ViewBag.chiSoThangTruoc = ChiSo.getChiSoThang(thangKiemDinh, namKiemDinh, khachHang.KHID);                
-                ViewBag.result = true;                                
-                ViewBag.HoaDonID = hoaDonNuocID;
-                #endregion
+                var isKiemDinhExist = db.Kiemdinhs.FirstOrDefault(p => p.HoaDonId == kiemDinhHoaDonNuocID);
+                if (isKiemDinhExist == null)
+                {
+                    #region ViewBag
+                    ViewBag.message = null;
+                    ViewBag.khachHang = khachHang;
+                    ViewBag.maKH = maKhachHang;
+                    ViewBag.khachHangID = khachHang.KHID;
+                    ViewBag.chiSoThangTruoc = ChiSo.getChiSoThang(thangKiemDinh, namKiemDinh, khachHang.KHID);
+                    ViewBag.result = true;
+                    ViewBag.HoaDonID = kiemDinhHoaDonNuocID;
+                    #endregion
+                }
+                else
+                {
+                    ViewBag.message = "Thông tin kiểm định đã tồn tại";
+                    ViewBag.result = false;
+                    ViewBag.maKH = maKhachHang;
+                    return View();
+                }                
                 return View(kD);
             }
             else

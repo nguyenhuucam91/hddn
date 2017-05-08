@@ -28,7 +28,6 @@
         <EntityTypeShape EntityType="HoaDonHaDongModel.Hoadonnuoc" Width="1.5" PointX="12.75" PointY="25.625" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Hoadonnuocbihuy" Width="1.5" PointX="5.75" PointY="10.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Khachhang" Width="1.5" PointX="14.75" PointY="13.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Kiemdinh" Width="1.5" PointX="10.75" PointY="7.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Lichsuhoadon" Width="1.5" PointX="7.75" PointY="10.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Lichsusudungct" Width="1.5" PointX="12" PointY="37.125" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Loaiapgia" Width="1.5" PointX="5.75" PointY="7.125" />
@@ -94,6 +93,7 @@
         <AssociationConnector Association="HoaDonHaDongModel.FK_Quyencuanguoidung_Quyen" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Tuyenkhachhang_To" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Tuyenong_Tuyenong" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Kiemdinh" Width="1.5" PointX="13.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -18,6 +18,8 @@ namespace HoaDonNuocHaDong
         public Nullable<int> TienNopTheoThangID { get; set; }
         public Nullable<int> KhachhangID { get; set; }
         public Nullable<int> SoTienDu { get; set; }
+        public bool TrangThaiTruHet { get; set; }
+        public Nullable<System.DateTime> NgayTruHet { get; set; }
     
         public virtual Khachhang Khachhang { get; set; }
         public virtual SoTienNopTheoThang SoTienNopTheoThang { get; set; }

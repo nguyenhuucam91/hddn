@@ -9,7 +9,7 @@ namespace HoaDonNuocHaDong.Helper
 {
     public class KiemDinh
     {
-        static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+         HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         /// <summary>
         /// xem danh sách kiểm định
         /// </summary>
@@ -68,12 +68,10 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public bool checkKiemDinhStatus(int khachHangID, int month, int year)
         {
-            var isKiemDinh = (from i in db.Kiemdinhs
-                              join r in db.Hoadonnuocs on i.HoaDonId.Value equals r.HoadonnuocID
+            var isKiemDinh = (from r in db.Hoadonnuocs
+                              join i in db.Kiemdinhs on r.HoadonnuocID equals i.HoaDonId.Value
                               where r.KhachhangID == khachHangID && r.ThangHoaDon == month && r.NamHoaDon == year
-                              select new { 
-                              
-                              }).ToList();
+                              select new {}).ToList();
             //nếu k có thì return false;
             if (isKiemDinh.Count > 0)
             {
@@ -89,8 +87,9 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="month"></param>
         /// <param name="year"></param>
         /// <returns></returns>
-        public static int getChiSoLucKiemDinh(int KHID, int month, int year)
+        public int getChiSoLucKiemDinh(int KHID, int month, int year)
         {
+           
             var kiemDinh = (from i in db.Kiemdinhs
                             join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID
                             where r.ThangHoaDon == month && r.NamHoaDon == year
@@ -112,7 +111,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="month"></param>
         /// <param name="year"></param>
         /// <returns></returns>
-        public static int getChiSoSauKiemDinh(int KHID, int month, int year)
+        public int getChiSoSauKiemDinh(int KHID, int month, int year)
         {
             var kiemDinh = (from i in db.Kiemdinhs
                             join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID
