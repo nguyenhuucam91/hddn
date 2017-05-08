@@ -73,9 +73,9 @@ namespace HoaDonNuocHaDong.Helper
                               where r.KhachhangID == khachHangID && r.ThangHoaDon == month && r.NamHoaDon == year
                               select new { 
                               
-                              }).Count();
+                              }).ToList();
             //nếu k có thì return false;
-            if (isKiemDinh > 0)
+            if (isKiemDinh.Count > 0)
             {
                 return true;
             }
