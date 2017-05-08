@@ -69,7 +69,7 @@ namespace HoaDonNuocHaDong.Helper
         public bool checkKiemDinhStatus(int khachHangID, int month, int year)
         {
             var isKiemDinh = (from i in db.Kiemdinhs
-                              join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID
+                              join r in db.Hoadonnuocs on i.HoaDonId.Value equals r.HoadonnuocID
                               where r.KhachhangID == khachHangID && r.ThangHoaDon == month && r.NamHoaDon == year
                               select new { 
                               
