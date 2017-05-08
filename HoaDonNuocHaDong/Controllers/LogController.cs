@@ -90,6 +90,39 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
+        private static List<Type> GetSubClasses<T>()
+        {
+            return Assembly.GetCallingAssembly().GetTypes().Where(
+                type => type.IsSubclassOf(typeof(T))).ToList();
+        }
+
+        /// <summary>
+        /// Lưu danh sách controller vào db
+        /// </summary>
+        private void saveControllerList()
+        {
+            List<String> danhSachController = GetControllerNames();
+            foreach (var item in danhSachController)
+            {
+                Nhomchucnang _controller = db.Nhomchucnangs.FirstOrDefault(p => p.TenController == item);
+                if (_controller != null)
+                {
+                    int nhomChucNangID = _controller.NhomchucnangID;
+                    if (_controller == null)
+                    {
+                        Nhomchucnang _chucNang = new Nhomchucnang();
+                        _chucNang.TenController = item;
+                        _chucNang.Ten = "";
+                        db.Nhomchucnangs.Add(_chucNang);
+                        db.SaveChanges();
+                        nhomChucNangID = _chucNang.NhomchucnangID;
+                    }
+                    insertChucNangChuongTrinhIfNotExist(nhomChucNangID, item);
+                }
+            }
+        }
+
+
         private void insertChucNangChuongTrinhIfNotExist(int id, String controllerName)
         {
             List<String> actionName = getActionNames(controllerName);
@@ -106,36 +139,6 @@ namespace HoaDonNuocHaDong.Controllers
                     db.Chucnangchuongtrinhs.Add(cN);
                     db.SaveChanges();
                 }
-            }
-        }
-
-
-        private static List<Type> GetSubClasses<T>()
-        {
-            return Assembly.GetCallingAssembly().GetTypes().Where(
-                type => type.IsSubclassOf(typeof(T))).ToList();
-        }
-
-        /// <summary>
-        /// Lưu danh sách controller vào db
-        /// </summary>
-        private void saveControllerList()
-        {
-            List<String> danhSachController = GetControllerNames();
-            foreach (var item in danhSachController)
-            {
-                Nhomchucnang _controller = db.Nhomchucnangs.FirstOrDefault(p => p.TenController == item);
-                int nhomChucNangID = _controller.NhomchucnangID;
-                if (_controller == null)
-                {
-                    Nhomchucnang _chucNang = new Nhomchucnang();
-                    _chucNang.TenController = item;
-                    _chucNang.Ten = "";
-                    db.Nhomchucnangs.Add(_chucNang);                    
-                    db.SaveChanges();
-                    nhomChucNangID = _chucNang.NhomchucnangID;
-                }
-                //insertChucNangChuongTrinhIfNotExist(nhomChucNangID, item);
             }
         }
 
