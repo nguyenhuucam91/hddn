@@ -63,16 +63,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             // query items
             var items = hoaDonRepository.GetAllHoaDonModel();
             items = filter.ApplyFilter(items);
-
-            // apply actions
-            //if (todo == "DanhDauTatCa")
-            //{
-            //    foreach (var item in items)
-            //    {
-            //        HoaDonHelpers.ThanhToan(item, DateTime.Now, uow);
-            //    }
-            //}
-
+            
             items = pager.ApplyPager(items);
 
             #region view data
@@ -81,6 +72,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             ViewBag.Current = current;
+            ViewBag.ToDo = todo; // actions
             #endregion
             return View(items.ToList());
         }

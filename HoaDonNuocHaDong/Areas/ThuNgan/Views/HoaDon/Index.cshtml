@@ -1,4 +1,5 @@
 ﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel>
+@using HDNHD.Core.Models;
 
 <div class="main">
     <div class="main-inner">
@@ -137,10 +138,17 @@
     </div>
 </div>
 
+@section Styles {
+    <link rel="stylesheet" href="~/Assets/css/toastr.min.css" />
+}
+
 <!-- end modal -->
 @section Scripts {
+    <script src="~/Assets/js/toastr.min.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
+
             // onInit:
             loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
 
@@ -268,22 +276,63 @@
                     .modal("show");
             });
 
+            // check if process DanhDauTatCa
+            var isCheckingAll = @(ViewBag.ToDo == "DanhDauTatCa" ? "true" : "false");
+
+            if (isCheckingAll)
+                danhDauTatCa();
+
             /* Đánh dấu tất cả */
             $('#btn-danh-dau-tat-ca').click(function (e) {
                 e.preventDefault();
 
                 if (confirm('Bạn có chắc chắn muốn đánh dấu tất cả những khách hàng này ĐÃ NỘP TIỀN?')) {
-                    // wait ajax to complete
-                    $.ajaxSetup({ async: false });
-
-                    // check all
-                    $(".chk-thanh-toan").each(function (i, obj) {
-                        var $trangThaiThu = $(this);
-                        
-                        $trangThaiThu.prop("checked", true);
-                    });
+                    danhDauTatCa();
                 }
             });
+
+            function danhDauTatCa() {
+                // waiting
+                toastr.options = {
+                    "closeButton": false,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "0",
+                    "extendedTimeOut": "0",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+
+                toastr.warning("Đang đánh dấu tất cả đã nộp. Vui lòng đợi...");
+
+                // wait ajax to complete
+                $.ajaxSetup({ async: false });
+
+                // check all
+                $(".chk-thanh-toan").each(function (i, obj) {
+                    var $trangThaiThu = $(this);
+
+                    $trangThaiThu.prop("checked", true).change();
+                });
+
+                var hasNextPage = @(ViewBag.Pager.NoPages > ViewBag.Pager.Page ? "true" : "false");
+                if (hasNextPage) {
+                    var url = "@Pager.BuildQueryStringUrl(ViewBag.Pager.UrlNext().ToString(), new string[] { "ToDo=DanhDauTatCa" })";
+                    window.location.replace(url);
+                } else {
+                    toastr.clear();
+                    toastr.success("Hoàn tất đánh dấu tất cả ĐÃ NỘP!");
+                }
+            }
+
             /* END Đánh dấu tất cả */
         });
     </script>

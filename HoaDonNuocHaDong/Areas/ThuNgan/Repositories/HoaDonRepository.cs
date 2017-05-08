@@ -68,15 +68,5 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         {
             return GetAllHoaDonModel().Where(m => m.KhachHang.KhachhangID == khachHangID);
         }
-
-        public HoaDonModel GetPrevUnPaidHoaDonModel(HoaDonModel model)
-        {
-            return GetAllHoaDonModelByKHID(model.KhachHang.KhachhangID).FirstOrDefault((m => m.HoaDon.HoadonnuocID < model.HoaDon.HoadonnuocID && (m.HoaDon.Trangthaithu == null || m.HoaDon.Trangthaithu == false)));
-        }
-
-        public HoaDonModel GetPrevPaidHoaDonModel(HoaDonModel model)
-        {
-            return GetAllHoaDonModelByKHID(model.KhachHang.KhachhangID).FirstOrDefault((m => m.HoaDon.HoadonnuocID < model.HoaDon.HoadonnuocID && m.HoaDon.Trangthaithu == true));
-        }
     }
 }

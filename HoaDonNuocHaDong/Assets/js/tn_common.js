@@ -153,7 +153,7 @@ function loadTuyen($slTuyen, nhanVienID, tuyenID) {
  * update HoaDon status against database & get back updated model
  * update GUI trangThaiThu, ngayThu, soTienDaNop
  */
-function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTienConThieu) {
+function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTienConThieu, count = 0) {
     var trangThaiThu = $trangThaiThu.is(":checked"),
         ngayThu = $ngayThu.val();
 
@@ -200,50 +200,50 @@ function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTi
     $trangThaiThu.siblings(".progress-striped").remove();
 }
 
-function capNhatNgayThu($ngayThu, hoaDonID, ngayThu) {
-    // waiting
-    $ngayThu.attr("disabled", true);
-    $ngayThu.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
+    function capNhatNgayThu($ngayThu, hoaDonID, ngayThu) {
+        // waiting
+        $ngayThu.attr("disabled", true);
+        $ngayThu.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
 
-    // processing
-    var url = "/Services/HoaDon/CapNhatNgayThu",
-        data = { hoaDonID: hoaDonID, ngayThu: ngayThu};
+        // processing
+        var url = "/Services/HoaDon/CapNhatNgayThu",
+            data = { hoaDonID: hoaDonID, ngayThu: ngayThu};
 
-    BUtils.ajax(url, data,
-        function (data) { // success
-            $ngayThu.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
-        },
-        function (data) { // error
-            var model = data.Data;
-            $ngayThu.val(model.HoaDon.NgayNopTien); // back state
-            $ngayThu.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
-        });
+        BUtils.ajax(url, data,
+            function (data) { // success
+                $ngayThu.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
+            },
+            function (data) { // error
+                var model = data.Data;
+                $ngayThu.val(model.HoaDon.NgayNopTien); // back state
+                $ngayThu.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
+            });
 
-    // done
-    $ngayThu.attr("disabled", false);
-    $ngayThu.siblings(".progress-striped").remove();
-}
+        // done
+        $ngayThu.attr("disabled", false);
+        $ngayThu.siblings(".progress-striped").remove();
+    }
 
-function huyGiaoDich($lnkHuyGiaoDich, khachHangID, giaoDichID) {
-    // waiting
-    $lnkHuyGiaoDich.hide();
-    $lnkHuyGiaoDich.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
+    function huyGiaoDich($lnkHuyGiaoDich, khachHangID, giaoDichID) {
+        // waiting
+        $lnkHuyGiaoDich.hide();
+        $lnkHuyGiaoDich.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
 
-    // processing
-    var url = "/Services/GiaoDich/HuyGiaoDich",
-        data = { khachHangID: khachHangID, giaoDichID: giaoDichID};
+        // processing
+        var url = "/Services/GiaoDich/HuyGiaoDich",
+            data = { khachHangID: khachHangID, giaoDichID: giaoDichID};
 
-    BUtils.ajax(url, data,
-        function (data) { // success
-            $lnkHuyGiaoDich.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
-        },
-        function (data) { // error
-            var model = data.Data;
-            $lnkHuyGiaoDich.show(); // back state
-            $lnkHuyGiaoDich.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
-        });
+        BUtils.ajax(url, data,
+            function (data) { // success
+                $lnkHuyGiaoDich.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
+            },
+            function (data) { // error
+                var model = data.Data;
+                $lnkHuyGiaoDich.show(); // back state
+                $lnkHuyGiaoDich.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
+            });
 
-    // done
-    $lnkHuyGiaoDich.siblings(".progress-striped").remove();
-}
-/***** END Thanh Toan HD *****/
+        // done
+        $lnkHuyGiaoDich.siblings(".progress-striped").remove();
+    }
+    /***** END Thanh Toan HD *****/
