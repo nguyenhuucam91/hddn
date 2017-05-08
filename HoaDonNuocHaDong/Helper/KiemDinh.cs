@@ -66,7 +66,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="month"></param>
         /// <param name="year"></param>
         /// <returns></returns>
-        public static bool checkKiemDinhStatus(int khachHangID, int month, int year)
+        public bool checkKiemDinhStatus(int khachHangID, int month, int year)
         {
             var isKiemDinh = (from i in db.Kiemdinhs
                               join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID

@@ -27,6 +27,7 @@
     var nhanVienID = ViewBag.selectedNhanVien;
     var tuyenID = ViewBag.selectedTuyen;
     var isAdminVaTruongPhong = ViewBag.isAdminVaTruongPhong;
+    HoaDonNuocHaDong.Helper.KiemDinh kiemDinh = new HoaDonNuocHaDong.Helper.KiemDinh();
 }
 <script src="~/Assets/js/jquery.dataTables.min.js"></script>
 <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
@@ -281,7 +282,7 @@
                                                                                 }
                                                                             </td>
                                                                             <td>
-                                                                                @if (HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
+                                                                                @if (kiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
                                                                                 {
                                                                                     <input type="checkbox" name="kiemdinh" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
                                                                                            data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />

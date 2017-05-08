@@ -21,6 +21,7 @@ namespace HoaDonNuocHaDong.Controllers
         private HoaDonNuoc hD = new HoaDonNuoc();
         private KhachHang kHHelper = new KhachHang();
         private NguoidungHelper ngDungHelper = new NguoidungHelper();
+        private KiemDinh kiemDinh = new KiemDinh();
 
 
         // GET: /SoLieuTieuThu/
@@ -261,7 +262,7 @@ namespace HoaDonNuocHaDong.Controllers
                     hoaDon.NhanvienID = int.Parse(Session["nhanVienID"].ToString());
                 }
 
-                var isKiemDinh = HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(KHID, _month, _year);
+                var isKiemDinh = kiemDinh.checkKiemDinhStatus(KHID, _month, _year);
                 //nếu khách hàng đang chỉnh sửa chưa kiểm định mà nhập số thì tính như bình thường
                 if (isKiemDinh)
                 {

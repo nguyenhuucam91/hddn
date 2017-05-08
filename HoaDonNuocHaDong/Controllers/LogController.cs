@@ -28,10 +28,13 @@ namespace HoaDonNuocHaDong.Controllers
             DateTime currentDate = DateTime.Now;
             List<Lichsusudungct> ls = db.Lichsusudungcts.OrderByDescending(p => p.Thoigian)
                 .Where(p=>p.Thoigian <= currentDate && p.Thoigian >= aWeekAgoFromCurrent).ToList();
+
+            #region ViewBag
             ViewBag.nhomChucNang = db.Nhomchucnangs.ToList();
             ViewBag.lichSu = ls;
             ViewBag.startTime = "";
             ViewBag.endTime = "";
+            #endregion
             return View();
         }
 
