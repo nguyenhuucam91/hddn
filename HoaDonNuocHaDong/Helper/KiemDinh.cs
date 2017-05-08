@@ -72,7 +72,7 @@ namespace HoaDonNuocHaDong.Helper
                               join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID
                               where r.KhachhangID == khachHangID && r.ThangHoaDon == month && r.NamHoaDon == year
                               select new { 
-                              HoaDonID = r.HoadonnuocID,
+                              
                               }).Count();
             //nếu k có thì return false;
             if (isKiemDinh > 0)
