@@ -16,6 +16,7 @@ namespace HoaDonNuocHaDong.Controllers
     {
         HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
+
         //
         // GET: /Log/
 
@@ -23,7 +24,10 @@ namespace HoaDonNuocHaDong.Controllers
         {
             saveControllerList();
 
-            List<Lichsusudungct> ls = db.Lichsusudungcts.OrderByDescending(p => p.Thoigian).ToList();
+            DateTime aWeekAgoFromCurrent = DateTime.Now.AddDays(-7);
+            DateTime currentDate = DateTime.Now;
+            List<Lichsusudungct> ls = db.Lichsusudungcts.OrderByDescending(p => p.Thoigian)
+                .Where(p=>p.Thoigian <= currentDate && p.Thoigian >= aWeekAgoFromCurrent).ToList();
             ViewBag.nhomChucNang = db.Nhomchucnangs.ToList();
             ViewBag.lichSu = ls;
             ViewBag.startTime = "";
