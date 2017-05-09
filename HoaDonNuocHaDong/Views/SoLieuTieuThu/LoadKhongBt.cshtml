@@ -22,7 +22,7 @@
     int tuyenID = Convert.ToInt32(Request.QueryString["tuyenID"]);
     var toID = Request.QueryString["toID"];
     HoaDonHaDong.Helper.ChiSo cS = new HoaDonHaDong.Helper.ChiSo();
-
+    HoaDonNuocHaDong.Helper.KiemDinh kiemDinh = new HoaDonNuocHaDong.Helper.KiemDinh();
 }
 
 <script src="~/Assets/js/jquery.dataTables.min.js"></script>
@@ -163,10 +163,10 @@
                                             <!-- so khoán -->
                                             <td><input data-khid="@item.KhachHangID" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:80px" placeholder="0" value="@item.SoKhoan" /></td>
                                             <td>
-                                                @if (HoaDonNuocHaDong.Helper.KiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
+                                                @if (kiemDinh.checkKiemDinhStatus(item.KhachHangID, month, year))
                                                 {
-                                                    <input type="checkbox" class="toggle" checked="checked" disabled data-truockd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
-                                                           data-saukd="@HoaDonNuocHaDong.Helper.KiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
+                                                    <input type="checkbox" class="toggle" checked="checked" disabled data-truockd="@kiemDinh.getChiSoLucKiemDinh(item.KhachHangID,month,year)"
+                                                           data-saukd="@kiemDinh.getChiSoSauKiemDinh(item.KhachHangID,month,year)" />
                                                     //thêm arrow nếu có kiểm định
                                                     <button data-trid="details-@i" type="button" data-khid="@item.KhachHangID" data-month="@month" data-year="@year"
                                                             title="Xem chi tiết kiểm định" class="btn btn-default dropdown-toggle xemChiTietKD">

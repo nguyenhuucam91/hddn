@@ -71,4 +71,11 @@ namespace HDNHD.Models.Constants
         TONGHOPSOKHOAN = 0,
         TONGHOPPHANTRAM = 1
     }
+
+    public enum PrintModeEnum
+    {
+        PRINT_ALL = 1,
+        PRINT_SELECTED = 2,
+        PRINT_FROM_RECEIPT_TO_RECEIPT = 3
+    }
 }
