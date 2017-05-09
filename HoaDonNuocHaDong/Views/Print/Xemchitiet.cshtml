@@ -41,12 +41,12 @@
 
                             @if (HDNHD.Core.Models.RequestScope.UserRole == HDNHD.Models.Constants.EUserRole.InHoaDon)
                             {
-                                <button type="button" class="btn btn-default" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear })')">In tất cả</button>
+                                <button type="button" class="btn btn-warning" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear })')">In tất cả</button>
                                 <p></p>
                                 <!--Form in danh sách khách hàng được chọn-->
                                 <form action="/Print/PrintSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                     <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />
-                                    <button type="submit" class="btn btn-default printSelected">In hóa đơn được chọn</button>
+                                    <button type="submit" class="btn btn-success printSelected">In hóa đơn được chọn</button>
                                 </form>
 
                                 <form action="/Print/PrintFrom?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
