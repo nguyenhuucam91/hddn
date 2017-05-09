@@ -635,7 +635,27 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 hoaDon.Trangthaichot = false;
                 hoaDon.Trangthaiin = false;
+                hoaDon.Tongsotieuthu = 0;
                 db.Entry(hoaDon).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            Lichsuhoadon lichSuHoaDon = db.Lichsuhoadons.Find(hoadonID);
+            if (lichSuHoaDon != null)
+            {
+                lichSuHoaDon.SanLuongTieuThu = 0;
+                lichSuHoaDon.ChiSoMoi = 0;
+                lichSuHoaDon.SH1 = 0;
+                lichSuHoaDon.SH2 = 0;
+                lichSuHoaDon.SH3 = 0;
+                lichSuHoaDon.SH4 = 0;
+                lichSuHoaDon.CC = 0;
+                lichSuHoaDon.HC = 0;
+                lichSuHoaDon.SX = 0;
+                lichSuHoaDon.KD = 0;
+                lichSuHoaDon.PhiBVMT = 0;
+                lichSuHoaDon.TongCong = 0;
+                db.Entry(lichSuHoaDon).State = EntityState.Modified;
                 db.SaveChanges();
             }
             return RedirectToAction("DsHuyHoaDon");
