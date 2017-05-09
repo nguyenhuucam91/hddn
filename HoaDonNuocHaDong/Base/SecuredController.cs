@@ -43,6 +43,7 @@ namespace HoaDonNuocHaDong.Base
                 LoggedInUser = nguoiDungRepository.GetByID(dangNhap.NguoidungID);
                 // update last_login
                 dangNhap.Thoigiandangnhap = DateTime.Now;
+                dangNhap.Solandangnhapsai = 0;
                 adminUow.SubmitChanges();
             }
 

@@ -155,7 +155,7 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Nguoidung/Create
         public ActionResult Create()
         {
-            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
+            bool isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
             int phongBanID = getPhongBanNguoiDung();
             if (phongBanID == 0)
             {
@@ -165,6 +165,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanID).ToList();
             }
+            ViewBag.isAdmin = isAdmin;
             return View();
         }
 
