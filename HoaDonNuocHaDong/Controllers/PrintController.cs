@@ -640,7 +640,7 @@ namespace HoaDonNuocHaDong.Controllers
                 db.SaveChanges();
             }
 
-            Lichsuhoadon lichSuHoaDon = db.Lichsuhoadons.Find(hoadonID);
+            Lichsuhoadon lichSuHoaDon = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == hoadonID);
             if (lichSuHoaDon != null)
             {
                 lichSuHoaDon.SanLuongTieuThu = 0;
