@@ -41,21 +41,35 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
             return items;
         }
 
-        public IQueryable<DuNoModel> GetAllDuNoModel()
+        /// <summary>
+        /// trả về ds hóa đơn chưa thanh toán cho tới thời điểm month/ year
+        /// </summary>
+        public IQueryable<DuNoModel> GetAllDuNoModel(int month, int year)
         {
             return from hd in dc.Hoadonnuocs
-                   where hd.Trangthaithu == false || hd.Trangthaithu == null
+                   where hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
+                   && ((hd.Trangthaithu == false || hd.Trangthaithu == null)) || // chưa thanh toán HOẶC đã thanh toán nhưng sau thời điểm month/ year
+                        (hd.Trangthaithu == true &&
+                          (hd.NgayNopTien.Value.Year > year || (hd.NgayNopTien.Value.Year == year && hd.NgayNopTien.Value.Month > month)))
+                           && hd.NamHoaDon < year || (hd.NamHoaDon == year && hd.ThangHoaDon <= month) // hóa đơn trong tháng hoặc trước đó
                    join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
-                   join nv in dc.Nhanviens on hd.NhanvienID equals nv.NhanvienID
                    join stntt in dc.SoTienNopTheoThangs on hd.HoadonnuocID equals stntt.HoaDonNuocID
                    join t in dc.Tuyenkhachhangs on kh.TuyenKHID equals t.TuyenKHID
+                   let lgd = (from gd in dc.GiaoDiches
+                              where gd.TienNopTheoThangID == stntt.ID
+                              where gd.NgayGiaoDich.Value.Year < year || (gd.NgayGiaoDich.Value.Year == year && gd.NgayGiaoDich.Value.Month <= month)
+                              select gd).FirstOrDefault()
+                   orderby kh.TuyenKHID
+                   orderby kh.TTDoc
                    select new DuNoModel()
                    {
                        HoaDon = hd,
                        KhachHang = kh,
-                       NhanVien = nv,
                        SoTienNopTheoThang = stntt,
-                       TuyenKhachHang = t
+                       TuyenKhachHang = t,
+                       LastGiaoDich = lgd,
+                       SoTienDaNop = lgd != null ? (long)(stntt.SoTienPhaiNop - lgd.SoDu) : 0,
+                       SoTienNo = (long)(lgd != null ? lgd.SoDu : stntt.SoTienPhaiNop),
                    };
         }
 

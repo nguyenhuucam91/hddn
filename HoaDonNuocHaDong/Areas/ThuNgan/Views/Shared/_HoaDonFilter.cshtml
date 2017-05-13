@@ -12,8 +12,8 @@
             <form method="get" action="">
                 <div class="form-filter text-center">
                     <div class="form-group">
-                        Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Filter.Month" style="text-align: center" min="1" max="12" />
-                        Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Filter.Year" required style="text-align: center" min="1970" />
+                        Tháng: <input type="number" name="Month" autocomplete="off" placeholder="Tháng" value="@ViewBag.Filter.Month" style="text-align: center" min="1" max="12" />
+                        Năm: <input type="number" name="Year" autocomplete="off" placeholder="Năm" value="@ViewBag.Filter.Year" required style="text-align: center" min="1970" />
                     </div>
                     <div class="form-group">
                         <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
@@ -33,7 +33,7 @@
                             <option></option>
                             <option value="@ETrangThaiThu.DaNopTien" @(Model.TrangThaiThu == ETrangThaiThu.DaNopTien ? "selected" : "")>Đã nộp tiền</option>
                             <option value="@ETrangThaiThu.ChuaNopTien" @(Model.TrangThaiThu == ETrangThaiThu.ChuaNopTien ? "selected" : "")>Chưa nộp tiền</option>
-                            <option value="@ETrangThaiThu.DaQuaHan" @(Model.TrangThaiThu == ETrangThaiThu.DaQuaHan ? "selected" : "")>Đã quá hạn</option>
+                            <option value="@ETrangThaiThu.DaQuaHan" @(Model.TrangThaiThu == ETrangThaiThu.DaQuaHan ? "selected" : "")>= Đã quá hạn =</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -47,14 +47,16 @@
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </div>
                 </div>
-                @if (ViewBag.Current.Month == ViewBag.Filter.Month && ViewBag.Current.Year == ViewBag.Filter.Year && ViewBag.Filter.TrangThaiThu == ETrangThaiThu.ChuaNopTien)
-                {
-                    <div class="form-control">
+
+                <div class="center form-group">
+                    <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-default">Xuất excel</button>
+                    @if (ViewBag.Current.Month == ViewBag.Filter.Month && ViewBag.Current.Year == ViewBag.Filter.Year && ViewBag.Filter.TrangThaiThu == ETrangThaiThu.ChuaNopTien)
+                    {
                         <a href="#" class="btn btn-warning" id="btn-danh-dau-tat-ca">
                             Đánh dấu tất cả đã nộp
                         </a>
-                    </div>
-                }
+                    }
+                </div>
             </form>
         </div>
         <div id="tab2" class="tab-pane fade in @(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByUserInfo ? "active": "")">
@@ -70,6 +72,9 @@
                         <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </div>
+                </div>
+                <div class="center form-group">
+                    <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-default">Xuất excel</button>
                 </div>
             </form>
         </div>

@@ -11,6 +11,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces
         
         HoaDonModel GetHoaDonModelByID(int hoaDonID);
         
-        IQueryable<DuNoModel> GetAllDuNoModel();
+        IQueryable<DuNoModel> GetAllDuNoModel(int month, int year);
     }
 }

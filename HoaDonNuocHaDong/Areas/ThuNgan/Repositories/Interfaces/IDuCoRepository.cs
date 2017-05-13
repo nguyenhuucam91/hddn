@@ -6,6 +6,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces
 {
     public interface IDuCoRepository : IRepository<HDNHD.Models.DataContexts.DuCo>
     {
-        IQueryable<DuCoModel> GetAllDuCoModel();
+        IQueryable<DuCoModel> GetAllDuCoModel(int month, int year);
     }
 }

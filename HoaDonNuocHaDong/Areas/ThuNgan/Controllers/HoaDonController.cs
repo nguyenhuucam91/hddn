@@ -1,4 +1,5 @@
-﻿using HDNHD.Core.Models;
+﻿using HDNHD.Core.Constants;
+using HDNHD.Core.Models;
 using HoaDonNuocHaDong.Areas.ThuNgan.Helpers;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
 using HoaDonNuocHaDong.Areas.ThuNgan.Repositories;
@@ -27,7 +28,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// <summary>
         /// view list of HoaDon with filter
         /// </summary>
-        public ActionResult Index(HoaDonFilterModel filter, Pager pager, String todo)
+        public ActionResult Index(HoaDonFilterModel filter, Pager pager, String todo, ViewMode viewMode = ViewMode.Default)
         {
             var current = DateTime.Now.AddMonths(-1);
 
@@ -63,7 +64,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             // query items
             var items = hoaDonRepository.GetAllHoaDonModel();
             items = filter.ApplyFilter(items);
-            
+
+            ViewBag.TongSoTienPhaiNop = items.Sum(m => m.SoTienNopTheoThang.SoTienPhaiNop) ?? 0;
+            ViewBag.TongSoTienDaNop = items.Sum(m => m.SoTienNopTheoThang.SoTienDaThu) ?? 0;
+
+            if (viewMode == ViewMode.Excel)
+                return ExcelResult("IndexExport", items.ToList());
+
             items = pager.ApplyPager(items);
 
             #region view data
@@ -90,6 +97,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             #region view data
             ViewBag.HoaDonModel = model;
             ViewBag.Pager = pager;
+            ViewBag.KhachHang = model.KhachHang;
             #endregion
             return View(giaoDichs.ToList());
         }

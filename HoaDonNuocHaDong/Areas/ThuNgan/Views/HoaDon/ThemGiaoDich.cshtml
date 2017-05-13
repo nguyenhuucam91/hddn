@@ -38,7 +38,6 @@
             <th>Số tiền giao dịch</th>
             <th>Số tiền còn thiếu</th>
             <th>Ngày giao dịch</th>
-            <th></th>
         </tr>
     </thead>
     @{ var i = 1; }
@@ -52,17 +51,14 @@
             <td style="text-align:right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(duNo)</td>
             <td style="text-align:right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.GiaoDich.SoTien.Value)</td>
             <td style="text-align:center;">@item.GiaoDich.NgayGiaoDich.Value.ToString("dd/MM/yyyy")</td>
-            <td>
-                @if (i == 2) // first
-                {
-                    <a href="#" id="btn-huy-giao-dich">Hủy</a>
-                }
-            </td>
         </tr>
     }
-
 </table>
-@if (ViewBag.Pager.NoPages > 1)
-{
-    <a href="@Url.Action("LichSuGiaoDich", "KhachHang", new { area="ThuNgan", id=ViewBag.KhachHang.KhachhangID })" target="_blank">Xem nhiều hơn...</a>
-}
+<p>Vui lòng <strong>Xem nhiều hơn</strong> hoặc <strong>Hủy</strong> tại trang <a href="@Url.Action("LichSuGiaoDich", "KhachHang", new { area="ThuNgan", id=ViewBag.KhachHang.KhachhangID })" target="_blank">Lịch sử giao dịch.</a>.</p>
+
+<script>
+    $(".tbx-ngay-thu").datepicker({
+        todayBtn: "linked",
+        format: 'dd/mm/yyyy',
+    });
+</script>

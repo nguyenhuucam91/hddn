@@ -10,32 +10,22 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public int? QuanHuyenID { get; set; }
         public int? ToID { get; set; }
         public int? NhanVienID { get; set; }
-        public int? Month { get; set; }
-        public int? Year { get; set; }
+       
         public ELoaiKhachHang? LoaiKhachHang { get; set; }
 
         public override void ApplyFilter(ref IQueryable<DuNoModel> items)
         {
             var context = (HDNHDDataContext)GetDataContext(items);
-            
-            // year
-            if (Year != null)
-            {
-                // month
-                if (Month != null)
-                {
-                    items = items.Where(m => m.HoaDon.NamHoaDon < Year || (m.HoaDon.NamHoaDon == Year && m.HoaDon.ThangHoaDon <= Month));
-                }
-                else
-                {
-                    items = items.Where(m => m.HoaDon.NamHoaDon <= Year);
-                }
-            }
-            
+
+
+            //* filter by management info
             // nhan vien
             if (NhanVienID != null)
             {
-                items = items.Where(m => m.NhanVien.NhanvienID == NhanVienID);
+                items = from hdkh in items
+                        join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
+                        where ttnv.NhanVienID == NhanVienID
+                        select hdkh;
             } // to
             else if (ToID != null)
             {
@@ -43,6 +33,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                         join to in context.ToQuanHuyens on item.KhachHang.QuanhuyenID equals to.QuanHuyenID
                         where to.ToQuanHuyenID == ToID
                         select item;
+
+                //items = from hdkh in items
+                //        join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
+                //        join nv in context.Nhanviens on ttnv.NhanVienID equals nv.NhanvienID
+                //        where nv.ToQuanHuyenID == ToID
+                //        group hdkh by hdkh.HoaDon.HoadonnuocID into g
+                //        select g.First();
             } // quan huyen
             else if (QuanHuyenID != null) // find by QuanHuyenID
             {

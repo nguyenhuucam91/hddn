@@ -3,8 +3,8 @@
 <form method="get" action="">
     <div class="form-horizontal form-filter text-center">
         <div class="form-group">
-            Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Filter.Month" style="text-align: center" min="1" max="12" />
-            Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Filter.Year" style="text-align: center" min="1970" />
+            Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Month" style="text-align: center" min="1" max="12" />
+            Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Year" style="text-align: center" min="1970" />
             <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
                 <option></option>
                 <option value="@ELoaiKhachHang.CoQuanToChuc" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc ? "selected" : "")>= Cơ quan, tổ chức =</option>
@@ -15,7 +15,7 @@
             </select>
         </div>
         <div class="form-group">
-            <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
+            <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận"></select>
             <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
             <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
         </div>

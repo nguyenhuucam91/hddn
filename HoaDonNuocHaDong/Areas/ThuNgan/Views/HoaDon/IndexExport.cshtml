@@ -1,0 +1,54 @@
+﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel>
+@{
+    Layout = null;
+}
+<meta charset="utf-8" />
+<table border="1">
+    <thead>
+        <tr>
+            <th>TT</th>
+            <th>Mã khách hàng</th>
+            <th>Tên khách hàng</th>
+            <th>Địa chỉ</th>
+            <th>Tháng</th>
+            <th>Số tiền phải nộp</th>
+            <th>Dư nợ/ có theo hóa đơn</th>
+            <th>Trạng thái thu</th>
+            <th>Ngày thu</th>
+            <th>Số tiền đã nộp</th>
+        </tr>
+    </thead>
+    @{
+        var stt = 0;
+    }
+    @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
+    {
+        int duNo = (int)(item.SoTienNopTheoThang.SoTienPhaiNop - item.SoTienNopTheoThang.SoTienDaThu);
+        <tr>
+            <td style="text-align: right">@(++stt)</td>
+            <td class="text-center">@item.KhachHang.MaKhachHang</td>
+            <td>@item.KhachHang.Ten</td>
+            <td>@item.KhachHang.Diachi</td>
+            <td style='mso-number-format:"mm\/yyyy"'>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
+            <td style="text-align: right; font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(duNo)</td>
+            <td style="text-align: center;">
+                @(item.HoaDon.Trangthaithu == true ? "x" : "")
+            </td>
+            <td style='mso-number-format:"dd\/mm\/yyyy"'>
+                @(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")
+            </td>
+            <td style="text-align: right">
+                @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
+            </td>
+        </tr>
+    }
+    <tfoot>
+        <tr style="font-weight: bold;">
+            <td style="text-align: right;" colspan="5">Tổng số tiền phải nộp</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienPhaiNop)</td>
+            <td style="text-align: right;" colspan="3">Tổng số tiền đã thu</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienDaNop)</td>
+        </tr>
+    </tfoot>
+</table>

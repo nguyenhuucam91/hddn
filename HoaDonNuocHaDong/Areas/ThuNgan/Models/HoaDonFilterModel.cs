@@ -2,7 +2,6 @@
 using HDNHD.Models.DataContexts;
 using System;
 using System.Linq;
-using HDNHD.Core.Extensions;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {
@@ -108,11 +107,17 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 }
                 else if (ToID != null)
                 {
-                    items = from hdkh in items
-                            join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
-                            join nv in context.Nhanviens on ttnv.NhanVienID equals nv.NhanvienID
-                            where nv.ToQuanHuyenID == ToID
-                            select hdkh;
+                    items = from item in items
+                            join to in context.ToQuanHuyens on item.KhachHang.QuanhuyenID equals to.QuanHuyenID
+                            where to.ToQuanHuyenID == ToID
+                            select item;
+
+                    //items = from hdkh in items
+                    //        join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID
+                    //        join nv in context.Nhanviens on ttnv.NhanVienID equals nv.NhanvienID
+                    //        where nv.ToQuanHuyenID == ToID
+                    //        group hdkh by hdkh.HoaDon.HoadonnuocID into g
+                    //        select g.First();
                 }
                 else if (QuanHuyenID != null)
                 {

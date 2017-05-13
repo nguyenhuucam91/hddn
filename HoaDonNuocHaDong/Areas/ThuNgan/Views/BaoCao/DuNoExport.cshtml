@@ -14,34 +14,36 @@
             <th>Tuyến</th>
             <th>Tháng</th>
             <th>Số hóa đơn</th>
-            <th>Số tiền</th>
+            <th>Số tiền phải nộp</th>
+            <th>Số tiền đã nộp</th>
+            <th>Dư nợ</th>
         </tr>
     </thead>
     <tbody>
-        @{ double tong = 0; int stt = 1; }
+        @{ int stt = 1; }
         @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuNoModel item in Model)
         {
-            if (item.SoTienNopTheoThang != null)
-            {
-                tong += item.SoTienNopTheoThang.SoTienPhaiNop ?? 0;
-            }
             <tr>
-                <td>@(stt++)</td>
-                <td>@item.KhachHang.KhachhangID</td>
-                <td>@item.KhachHang.MaKhachHang</td>
+                <td style="text-align: right">@(stt++)</td>
+                <td style="text-align: center">@item.KhachHang.KhachhangID</td>
+                <td style="text-align: center">@item.KhachHang.MaKhachHang</td>
                 <td>@item.KhachHang.Ten</td>
                 <td>@item.KhachHang.Diachi</td>
                 <td>@item.TuyenKhachHang.Ten</td>
                 <td style='mso-number-format:"mm\/yyyy"'>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
                 <td>@item.HoaDon.Sohoadon</td>
-                <td>@(item.SoTienNopTheoThang != null ? item.SoTienNopTheoThang.SoTienPhaiNop : 0)</td>
+                <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)item.SoTienNopTheoThang.SoTienPhaiNop)</td>
+                <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)item.SoTienDaNop)</td>
+                <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)item.SoTienNo)</td>
             </tr>
         }
     </tbody>
     <tfoot>
         <tr role="row" style="font-weight:bold">
-            <td colspan="7" style="text-align: right">Tổng</td>
-            <td colspan="2">@tong</td>
+            <td colspan="8" style="text-align: right">Tổng</td>
+            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienPhaiNop)</td>
+            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienDaNop)</td>
+            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienNo)</td>
         </tr>
     </tfoot>
 </table>

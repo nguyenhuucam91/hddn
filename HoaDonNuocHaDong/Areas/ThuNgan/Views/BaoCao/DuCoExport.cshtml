@@ -4,34 +4,36 @@
 }
 <meta charset="utf-8" />
 <table border="1">
-    <tr>
-        <th>STT</th>
-        <th>ID khách hàng</th>
-        <th>Mã khách hàng</th>
-        <th>Tên khách hàng</th>
-        <th>Địa chỉ</th>
-        <th>Tuyến khách hàng</th>
-        <th>Số tiền dư</th>
-    </tr>
-    @{ var tong = 0; int i = 1; }
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>ID khách hàng</th>
+            <th>Mã khách hàng</th>
+            <th>Tên khách hàng</th>
+            <th>Địa chỉ</th>
+            <th>Tuyến khách hàng</th>
+            <th>Tháng hóa đơn</th>
+            <th>Dư có</th>
+        </tr>
+    </thead>
+    @{ int i = 1; }
     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuCoModel item in Model)
     {
-        tong += (item.DuCo.SoTienDu ?? 0);
         <tr>
-            <td>@(i++)</td>
+            <td style="text-align: right;">@(i++)</td>
             <td>@item.KhachHang.KhachhangID</td>
-            <td>@item.DuCo.KhachhangID</td>
-            <td>
-                @item.KhachHang.Ten
-            </td>
+            <td>@item.KhachHang.MaKhachHang</td>
+            <td>@item.KhachHang.Ten</td>
             <td>@item.KhachHang.Diachi</td>
             <td>@item.TuyenKH.Ten</td>
-            <td>@(item.DuCo.SoTienDu ?? 0)</td>
+            <td style="mso-number-format:mm\/yyyy; text-align: center;">@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)item.SoTien)</td>
         </tr>
     }
-    <tr>
-        <td colspan="4">Tổng</td>
-        <td class="tong"> @tong </td>
-        <td></td>
-    </tr>
+    <tfoot>
+        <tr style="font-weight: bold;">
+            <td style="text-align: right;" colspan="7">Tổng</td>
+            <td style="text-align: right;"> @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)ViewBag.TongSoDu) </td>
+        </tr>
+    </tfoot>
 </table>

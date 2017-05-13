@@ -10,7 +10,7 @@
                         <h3>Báo cáo dư có</h3>
                     </div>
                     <div class="widget-content">
-                        @Html.Partial("_DuCoFilter", (object) ViewBag.Filter)
+                        @Html.Partial("_DuCoFilter", (object)ViewBag.Filter)
                         <div class="col-md-12">
                             <table class="table table-striped table-bordered data-table">
                                 <thead>
@@ -21,28 +21,28 @@
                                         <th>Tên khách hàng</th>
                                         <th>Địa chỉ</th>
                                         <th>Tuyến khách hàng</th>
-                                        <th>Số tiền dư</th>
+                                        <th>Tháng hóa đơn</th>
+                                        <th>Dư có</th>
                                     </tr>
                                 </thead>
-                                @{ var tong = 0; int i = 1; }
+                                @{ int i = 1; }
                                 @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuCoModel item in Model)
                                 {
-                                    tong += (item.DuCo.SoTienDu ?? 0);
                                     <tr>
-                                        <td>@(i++)</td>
+                                        <td style="text-align: right;">@(i++)</td>
                                         <td>@item.KhachHang.KhachhangID</td>
-                                        <td>@item.DuCo.KhachhangID</td>
-                                        <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" target="_blank">@item.KhachHang.Ten</a></td>
+                                        <td>@item.KhachHang.MaKhachHang</td>
+                                        <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" title="Xem chi tiết khách hàng" target="_blank">@item.KhachHang.Ten</a></td>
                                         <td>@item.KhachHang.Diachi</td>
                                         <td>@item.TuyenKH.Ten</td>
-                                        <td>@(item.DuCo.SoTienDu ?? 0)</td>
+                                        <td style="mso-number-format:mm\/yyyy; text-align: center;"><a href="@Url.Action("LichSuDungNuoc", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" title="Xem lịch sử dùng nước" target="_blank">@item.HoaDon.ThangHoaDon/ @item.HoaDon.NamHoaDon</a></td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)item.SoTien)</td>
                                     </tr>
                                 }
                                 <tfoot>
-                                    <tr>
-                                        <td colspan="5">Tổng</td>
-                                        <td class="tong"> @tong </td>
-                                        <td></td>
+                                    <tr style="font-weight: bold;">
+                                        <td style="text-align: right;" colspan="7">Tổng</td>
+                                        <td style="mso-number-format:\#\.\#\#0; text-align: right;"> @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)ViewBag.TongSoDu) </td>
                                     </tr>
                                 </tfoot>
                             </table>

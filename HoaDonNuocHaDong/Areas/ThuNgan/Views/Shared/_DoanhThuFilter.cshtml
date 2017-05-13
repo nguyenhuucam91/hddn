@@ -1,19 +1,8 @@
-﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.DuCoFilterModel
-@using HDNHD.Models.Constants;
-
-<form method="get" action="">
+﻿<form method="get" action="">
     <div class="form-horizontal form-filter text-center">
         <div class="form-group">
             Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Month" style="text-align: center" min="1" max="12" />
             Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Year" style="text-align: center" min="1970" />
-            <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
-                <option></option>
-                <option value="@ELoaiKhachHang.CoQuanToChuc" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc ? "selected" : "")>= Cơ quan, tổ chức =</option>
-                <option value="@ELoaiKhachHang.HoGiaDinh" @(Model.LoaiKhachHang == ELoaiKhachHang.HoGiaDinh ? "selected" : "")>Hộ gia đình</option>
-                <option value="@ELoaiKhachHang.HoKinhDoanhDichVu" @(Model.LoaiKhachHang == ELoaiKhachHang.HoKinhDoanhDichVu ? "selected" : "")>Hộ kinh doanh dịch vụ</option>
-                <option value="@ELoaiKhachHang.CoQuanDoanhNghiep" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanDoanhNghiep ? "selected" : "")>Cơ quan doanh nghiệp</option>
-                <option value="@ELoaiKhachHang.KhuTapThe" @(Model.LoaiKhachHang == ELoaiKhachHang.KhuTapThe ? "selected" : "")>Khu tập thể (hợp đồng tổng)</option>
-            </select>
         </div>
         <div class="form-group">
             <!-- Chi nhánh -->
@@ -25,7 +14,6 @@
         </div>
         <div class="form-group">
             <input type="hidden" name="Mode" value="search" />
-            <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
             <button type="submit" class="btn btn-primary">Tìm kiếm</button>
         </div>
     </div>

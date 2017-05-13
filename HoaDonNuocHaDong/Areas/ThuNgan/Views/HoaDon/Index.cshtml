@@ -21,8 +21,8 @@
                                         <th>Tên khách hàng</th>
                                         <th>Địa chỉ</th>
                                         <th>Tháng</th>
-                                        <th>Số tiền trên hóa đơn</th>
-                                        <th>Dư nợ/ Dư có</th>
+                                        <th>Số tiền phải nộp</th>
+                                        <th>Dư nợ/ có theo hóa đơn</th>
                                         <th>Trạng thái thu</th>
                                         <th>Ngày thu</th>
                                         <th>Số tiền đã nộp</th>
@@ -104,11 +104,11 @@
                                     </tr>
                                 }
                                 <tfoot>
-                                    <tr>
-                                        <td colspan="6">Tổng tiền trong hóa đơn</td>
-                                        <td class="tong"> @Html.Raw(HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tong)) </td>
-                                        <td colspan="2"></td>
-                                        <td></td>
+                                    <tr style="font-weight: bold;">
+                                        <td style="text-align: right;" colspan="5">Tổng số tiền phải nộp</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienPhaiNop)</td>
+                                        <td style="text-align: right;" colspan="3">Tổng số tiền đã thu</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienDaNop)</td>
                                     </tr>
                                 </tfoot>
                             </table>
