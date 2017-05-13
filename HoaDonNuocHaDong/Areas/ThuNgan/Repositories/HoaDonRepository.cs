@@ -25,7 +25,11 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                         join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
                         from dco in gj.DefaultIfEmpty()
                         join chitietHd in dc.Chitiethoadonnuocs on hd.HoadonnuocID equals chitietHd.HoadonnuocID
-                        let cnt = (from _hd in dc.Hoadonnuocs where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < _hd.HoadonnuocID select dc).Count()
+                        let cnt = (from _hd in dc.Hoadonnuocs
+                                   where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < hd.HoadonnuocID
+                                       && (_hd.Trangthaixoa == false || _hd.Trangthaixoa == null)
+                                       && (_hd.Trangthaithu == false || _hd.Trangthaithu == null)
+                                   select dc).Count()
                         orderby kh.TuyenKHID
                         orderby kh.TTDoc
                         select new HoaDonModel()
