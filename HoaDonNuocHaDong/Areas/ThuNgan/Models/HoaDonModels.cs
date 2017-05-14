@@ -18,14 +18,14 @@
 
         public HDNHD.Models.DataContexts.DuCo DuCo { get; set; }
         public HDNHD.Models.DataContexts.Tuyenkhachhang TuyenKH { get; set; }
-        public int? SoTien { get; set; }
+        public long? SoTien { get; set; }
     }
 
     public class DuNoModel
     {
         public HDNHD.Models.DataContexts.Hoadonnuoc HoaDon { get; set; }
         public HDNHD.Models.DataContexts.Khachhang KhachHang { get; set; }
-        public HDNHD.Models.DataContexts.GiaoDich LastGiaoDich { get; set; }
+        public HDNHD.Models.DataContexts.GiaoDich LastGiaoDich { get; set; } // nullable
 
         public HDNHD.Models.DataContexts.SoTienNopTheoThang SoTienNopTheoThang { get; set; }
         public HDNHD.Models.DataContexts.Tuyenkhachhang TuyenKhachHang { get; set; }

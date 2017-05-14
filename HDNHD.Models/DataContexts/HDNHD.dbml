@@ -188,14 +188,6 @@
       <Column Name="KDDV" Type="System.Double" DbType="Float" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.SoTienNopTheoThang" Member="SoTienNopTheoThangs">
-    <Type Name="SoTienNopTheoThang">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="HoaDonNuocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SoTienPhaiNop" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="SoTienDaThu" Type="System.Int32" DbType="Int" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.DuCo" Member="DuCos">
     <Type Name="DuCo">
       <Column Name="DuCoID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -204,6 +196,15 @@
       <Column Name="SoTienDu" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="TrangThaiTruHet" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Column Name="NgayTruHet" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SoTienNopTheoThang" Member="SoTienNopTheoThangs">
+    <Type Name="SoTienNopTheoThang">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HoaDonNuocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoTienPhaiNop" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SoTienDaThu" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SoTienTrenHoaDon" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

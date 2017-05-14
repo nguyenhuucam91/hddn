@@ -17,9 +17,17 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
             dc = (HDNHDDataContext)context;
         }
 
-        public IQueryable<HDNHD.Models.DataContexts.SoTienNopTheoThang> GetAllByMonthYear(int month, int year)
+        public IQueryable<SoTienNopTheoThangModel> GetAllByMonthYear(int month, int year)
         {
-            return null;
+            return from item in dc.SoTienNopTheoThangs
+                   join hd in dc.Hoadonnuocs on item.HoaDonNuocID equals hd.HoadonnuocID
+                   where hd.ThangHoaDon == month && hd.NamHoaDon == year
+                   select new SoTienNopTheoThangModel()
+                   {
+                       SoTienNopTheoThang = item,
+                       SoTienPhaiNop = (long?) item.SoTienPhaiNop,
+                       SoTienTrenHoaDon = item.SoTienTrenHoaDon
+                   };
         }
     }
 }

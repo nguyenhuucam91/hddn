@@ -24,7 +24,13 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuNoDauKy)</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuCoDauKy)</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienTrenHoaDon)</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienPhaiThu)</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienDaThu)</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuNoCuoiKy)</td>
+                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuCoCuoiKy)</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -35,3 +41,38 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+
+            // onInit:
+            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+
+            // load data onChange
+            $(".sl-quan-huyen").on("change", function () {
+                // get selected quanHuyenID
+                var quanHuyenID = $(this).val();
+
+                // loadTo
+                loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID");
+            });
+
+            $(".sl-to").on("change", function () {
+                // get selected toID
+                var toID = $(this).val();
+
+                // loadNhanVien
+                loadNhanVien($(".sl-nhan-vien"), toID, "@ViewBag.Filter.NhanVienID");
+            });
+
+            $(".sl-nhan-vien").on("change", function () {
+                // get selected nhanVien
+                var nhanVienID = $(this).val();
+
+                // loadTuyen
+                loadTuyen($(".sl-tuyen-kh"), nhanVienID, "@ViewBag.Filter.TuyenKHID");
+            });
+
+        });
+</script>
+}

@@ -6,6 +6,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces
 {
     public interface ISoTienNopTheoThangRepository : IRepository<HDNHD.Models.DataContexts.SoTienNopTheoThang>
     {
-        IQueryable<HDNHD.Models.DataContexts.SoTienNopTheoThang> GetAllByMonthYear(int month, int year);
+        IQueryable<SoTienNopTheoThangModel> GetAllByMonthYear(int month, int year);
     }
 }

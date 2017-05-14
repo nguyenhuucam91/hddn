@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'F:\Project\hddn\HoaDonNuocHaDong\HoaDonHaDong.edmx'. 
+﻿// T4 code generation is enabled for model 'F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HoaDonNuocHaDong\HoaDonHaDong.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

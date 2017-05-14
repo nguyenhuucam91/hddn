@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+<meta charset="utf-8" />
+<table border="1">
+    <thead>
+        <tr>
+            <th>Dư nợ đầu kỳ</th>
+            <th>Dư có đầu kỳ</th>
+            <th>HĐ in trong tháng</th>
+            <th>Doanh thu phải thu trong tháng</th>
+            <th>Doanh thu đã thu trong tháng</th>
+            <th>Dư nợ cuối kỳ</th>
+            <th>Dư có cuối kỳ</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuNoDauKy)</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuCoDauKy)</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienTrenHoaDon)</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienPhaiThu)</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienDaThu)</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuNoCuoiKy)</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuCoCuoiKy)</td>
+        </tr>
+    </tbody>
+</table>

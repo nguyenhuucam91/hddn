@@ -11,6 +11,7 @@
             <th>Tên khách hàng</th>
             <th>Địa chỉ</th>
             <th>Tháng</th>
+            <th>Số tiền trên hóa đơn</th>
             <th>Số tiền phải nộp</th>
             <th>Dư nợ/ có theo hóa đơn</th>
             <th>Trạng thái thu</th>
@@ -30,6 +31,7 @@
             <td>@item.KhachHang.Ten</td>
             <td>@item.KhachHang.Diachi</td>
             <td style='mso-number-format:"mm\/yyyy"'>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienTrenHoaDon)</td>
             <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
             <td style="text-align: right; font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(duNo)</td>
             <td style="text-align: center;">

@@ -16,7 +16,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
             dc = (HDNHDDataContext)context;
         }
 
-        IQueryable<DuCoModel> IDuCoRepository.GetAllDuCoModel(int month, int year)
+        public IQueryable<DuCoModel> GetAllDuCoModel(int month, int year)
         {
             return from d in dc.DuCos
                    join stntt in dc.SoTienNopTheoThangs on d.TienNopTheoThangID equals stntt.ID
@@ -30,7 +30,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                    let lgd = (from gd in dc.GiaoDiches
                               where gd.TienNopTheoThangID == stntt.ID
                               where gd.NgayGiaoDich.Value.Year < year || (gd.NgayGiaoDich.Value.Year == year && gd.NgayGiaoDich.Value.Month <= month)
-                              select gd).FirstOrDefault()
+                              select gd).FirstOrDefault() // nullable
                    orderby kh.TuyenKHID
                    orderby kh.TTDoc
                    //where kh.LoaiKHID != (int)EApGia.SinhHoat
@@ -40,7 +40,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                        HoaDon = hd,
                        KhachHang = kh,
                        TuyenKH = t,
-                       SoTien = (d.SoTienDu - lgd.SoDu) ?? 0
+                       SoTien = lgd != null ? d.SoTienDu - lgd.SoDu : 0 // sau giao dịch phát sinh dư có, GiaoDich.SoDu = dư có trước đó
                    };
         }
     }

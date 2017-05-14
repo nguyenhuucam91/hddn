@@ -133,7 +133,7 @@
                                                         @tenPhongBan
                                                     </td>
                                                     <td>
-                                                        @HoaDonNuocHaDong.Helper.UserInfo.getTenTo(item.ToQuanHuyenID.Value)
+                                                        @(item.ToQuanHuyenID != null ? HoaDonNuocHaDong.Helper.UserInfo.getTenTo(item.ToQuanHuyenID.Value) : "")
                                                     </td>
 
                                                     <td>

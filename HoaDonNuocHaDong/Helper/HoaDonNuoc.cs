@@ -135,7 +135,7 @@ namespace HoaDonNuocHaDong.Helper
                 CC = chiTiet.CC.GetValueOrDefault();
                 KDDV = chiTiet.KDDV.GetValueOrDefault();
             }
-            var soTienPhaiNopTheoThang = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
+
             int thangHoaDon = hoadon.ThangHoaDon.Value;
             int namHoaDon = hoadon.NamHoaDon.Value;
             int PhiBVMT = hoadon.Khachhang.Tilephimoitruong.Value;
@@ -151,46 +151,71 @@ namespace HoaDonNuocHaDong.Helper
             double soBVMT = Convert.ToDouble(phiBVMT.TilePhiMoiTruong.Value);
             double tileBVMT = soBVMT / 100; //ra 0
             double tongPhiBVMT = Convert.ToInt32(tongTienDinhMuc * tileBVMT);
-            if (soTienPhaiNopTheoThang != null)
+
+            /* congnv 170515 */
+            var stntt = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
+            var ducoTruoc = db.DuCoes.FirstOrDefault(m => m.KhachhangID == hoadon.KhachhangID // dư có trước đó chưa trừ hết
+                && (m.TrangThaiTruHet == false || // chưa trừ hoặc đã trừ hết cho hóa đơn này trước đó (trong TH cập nhật)
+                (m.TrangThaiTruHet == true && m.NgayTruHet.Value.Month == hoadon.ThangHoaDon && m.NgayTruHet.Value.Year == hoadon.NamHoaDon)));
+            DuCo duco = null; // dư có tháng này (trong TH cập nhật)
+
+            if (stntt == null)
             {
-                soTienPhaiNopTheoThang.SoTienPhaiNop = tongTienDinhMuc + tongVAT + tongPhiBVMT;
-                db.Entry(soTienPhaiNopTheoThang).State = System.Data.Entity.EntityState.Modified;
-                hoadon.SoTienNopTheoThangID = soTienPhaiNopTheoThang.ID;
-                hoadon.SoTienNopTheoThang = soTienPhaiNopTheoThang;
-                db.SaveChanges();
-            }
-            else
-            {
-                SoTienNopTheoThang sotien = new SoTienNopTheoThang();
-                sotien.HoaDonNuocID = HoaDonID;
-                sotien.SoTienPhaiNop = tongTienDinhMuc + tongPhiBVMT + tongVAT;
-                sotien.SoTienDaThu = 0;
-                hoadon.SoTienNopTheoThangID = sotien.ID;
-                hoadon.SoTienNopTheoThang = sotien;
-                db.SoTienNopTheoThangs.Add(sotien);
-                db.SaveChanges();
+                stntt = new SoTienNopTheoThang()
+                {
+                    HoaDonNuocID = hoadon.HoadonnuocID,
+                    SoTienDaThu = 0,
+                    SoTienPhaiNop = 0
+                };
+
+                db.SoTienNopTheoThangs.Add(stntt);
+            } else {
+                db.Entry(stntt).State = System.Data.Entity.EntityState.Modified;
+                duco = db.DuCoes.FirstOrDefault(m => m.TienNopTheoThangID == stntt.ID);
             }
 
-            var KhID = hoadon.KhachhangID;
-            var thang = hoadon.ThangHoaDon - 1;
-            var nam = hoadon.NamHoaDon;
-            if (DateTime.Now.Month == 1)
-            {
-                thang = 12;
-                nam = nam - 1;
-            }
-            DuCo duCoTruoc = db.DuCoes.FirstOrDefault(d => d.KhachhangID == KhID && d.SoTienNopTheoThang.Hoadonnuoc.ThangHoaDon == thang && d.SoTienNopTheoThang.Hoadonnuoc.NamHoaDon == nam);
-            if (duCoTruoc != null)
-            {
-                var DuCo = new DuCo();
-                DuCo.KhachhangID = KhID;
+            stntt.SoTienTrenHoaDon = (int) (tongTienDinhMuc + tongVAT + tongPhiBVMT);
+            stntt.SoTienPhaiNop = stntt.SoTienTrenHoaDon;
 
-                DuCo.TienNopTheoThangID = soTienPhaiNopTheoThang.ID;
-                DuCo.SoTienDu = duCoTruoc.SoTienDu;
-                db.DuCoes.Add(DuCo);
-                db.SaveChanges();
-                int id = DuCo.DuCoID;
+            if (ducoTruoc != null) // trừ dư có (nếu có)
+            {
+                ducoTruoc.TrangThaiTruHet = true;
+                ducoTruoc.NgayTruHet = DateTime.Now;
+
+                if (ducoTruoc.SoTienDu < stntt.SoTienTrenHoaDon)
+                {
+                    stntt.SoTienPhaiNop -= ducoTruoc.SoTienDu;
+                } else
+                {
+                    stntt.SoTienPhaiNop = 0;
+                    // update hoadon
+                    hoadon.Trangthaithu = true;
+                    hoadon.NgayNopTien = DateTime.Now;
+
+                    // save db cập nhật stntt.ID
+                    db.SaveChanges();
+
+                    if (ducoTruoc.SoTienDu > stntt.SoTienTrenHoaDon)
+                    {
+                       if (duco == null)
+                        {
+                            duco = new DuCo()
+                            {
+                                KhachhangID = hoadon.KhachhangID,
+                                TienNopTheoThangID = stntt.ID,
+                            };
+                            db.DuCoes.Add(duco);
+                        } else
+                        {
+                            db.Entry(duco).State = System.Data.Entity.EntityState.Modified;
+                        }
+
+                        duco.SoTienDu = ducoTruoc.SoTienDu - stntt.SoTienTrenHoaDon;
+                    }
+                }
             }
+            db.SaveChanges();
+            /* END congnv 170515 */
         }
 
         /// <summary>
@@ -205,7 +230,7 @@ namespace HoaDonNuocHaDong.Helper
         }
 
         public String getCssClassTinhTrangHoaDonBiHuy(int hoaDonNuocID)
-        {           
+        {
             Hoadonnuocbihuy hoaDonBiHuy = _db.Hoadonnuocbihuys.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuocID);
             String cssClass = "";
             if (hoaDonBiHuy != null)
@@ -221,10 +246,10 @@ namespace HoaDonNuocHaDong.Helper
             }
             return cssClass;
         }
-        
+
         public DateTime compareNgayCapNuocLaiVoiNgayBatDauHoaDon(DateTime ngayCapNuocLai, DateTime ngayBatDauHoaDon)
         {
-            if (DateTime.Compare(ngayCapNuocLai,ngayBatDauHoaDon) > 0)
+            if (DateTime.Compare(ngayCapNuocLai, ngayBatDauHoaDon) > 0)
             {
                 return ngayCapNuocLai;
             }

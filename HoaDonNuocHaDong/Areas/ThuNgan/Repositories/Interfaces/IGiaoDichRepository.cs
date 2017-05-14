@@ -11,5 +11,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces
         GiaoDichModel GetGiaoDichModelByID(int id);
         GiaoDichModel GetLastGiaoDichByKHID(int khachHangID);
         HDNHD.Models.DataContexts.GiaoDich GetGDThanhToanByHDID(int hoaDonID);
+
+        IQueryable<GiaoDichSumModel> GetAllByMonthYear(int month, int year);
     }
 }

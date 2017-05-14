@@ -26,6 +26,7 @@ namespace HoaDonNuocHaDong
         public Nullable<int> HoaDonNuocID { get; set; }
         public Nullable<double> SoTienPhaiNop { get; set; }
         public Nullable<int> SoTienDaThu { get; set; }
+        public int SoTienTrenHoaDon { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DuCo> DuCoes { get; set; }

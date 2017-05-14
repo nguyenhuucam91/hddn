@@ -48,7 +48,6 @@ namespace HoaDonNuocHaDong
         public virtual DbSet<Hoadonnuoc> Hoadonnuocs { get; set; }
         public virtual DbSet<Hoadonnuocbihuy> Hoadonnuocbihuys { get; set; }
         public virtual DbSet<Khachhang> Khachhangs { get; set; }
-        public virtual DbSet<Kiemdinh> Kiemdinhs { get; set; }
         public virtual DbSet<Lichsuhoadon> Lichsuhoadons { get; set; }
         public virtual DbSet<Lichsusudungct> Lichsusudungcts { get; set; }
         public virtual DbSet<Loaiapgia> Loaiapgias { get; set; }
@@ -72,5 +71,6 @@ namespace HoaDonNuocHaDong
         public virtual DbSet<Tuyenong> Tuyenongs { get; set; }
         public virtual DbSet<Tuyenongkythuat> Tuyenongkythuats { get; set; }
         public virtual DbSet<Tuyentheonhanvien> Tuyentheonhanviens { get; set; }
+        public virtual DbSet<Kiemdinh> Kiemdinhs { get; set; }
     }
 }

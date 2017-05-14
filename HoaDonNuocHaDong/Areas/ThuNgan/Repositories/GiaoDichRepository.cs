@@ -16,6 +16,17 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
             dc = context;
         }
 
+        public IQueryable<GiaoDichSumModel> GetAllByMonthYear(int month, int year)
+        {
+            return from gd in dc.GiaoDiches
+                   where gd.NgayGiaoDich.Value.Month == month && gd.NgayGiaoDich.Value.Year == year
+                   select new GiaoDichSumModel()
+                   {
+                       GiaoDich = gd,
+                       SoTien = gd.SoTien
+                   };
+        }
+
         public IQueryable<GiaoDichModel> GetAllGiaoDichModel()
         {
             return from gd in dc.GiaoDiches

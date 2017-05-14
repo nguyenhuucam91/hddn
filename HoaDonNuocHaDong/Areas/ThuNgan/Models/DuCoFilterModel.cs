@@ -10,14 +10,18 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public int? QuanHuyenID { get; set; }
         public int? ToID { get; set; }
         public int? NhanVienID { get; set; }
+        public int? TuyenKHID { get; set; }
+
         public ELoaiKhachHang? LoaiKhachHang { get; set; }
 
         public override void ApplyFilter(ref IQueryable<DuCoModel> items)
         {
             HDNHDDataContext context = (HDNHDDataContext)GetDataContext(items);
-            
-            // nhan vien
-            if (NhanVienID != null)
+
+            if (TuyenKHID != null)
+            {
+                items = items.Where(m => m.KhachHang.TuyenKHID == TuyenKHID);
+            } else if (NhanVienID != null) // nhan vien
             {
                 items = from hdkh in items
                         join ttnv in context.Tuyentheonhanviens on hdkh.KhachHang.TuyenKHID equals ttnv.TuyenKHID

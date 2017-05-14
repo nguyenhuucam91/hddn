@@ -12,4 +12,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public HDNHD.Models.DataContexts.Hoadonnuoc HoaDon { get; set; }
         public HDNHD.Models.DataContexts.DuCo DuCo { get; set; }
     }
+
+    public class GiaoDichSumModel
+    {
+        public HDNHD.Models.DataContexts.GiaoDich GiaoDich { get; set; }
+        public long? SoTien { get; set; }
+    }
 }
