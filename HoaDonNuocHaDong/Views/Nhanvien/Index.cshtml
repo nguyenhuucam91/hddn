@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<HoaDonNuocHaDong.Nhanvien>
 
 @{
-
     ViewBag.Title = "Danh sách nhân viên";
-    var phongBan = ViewBag.phongBan;
     var chiNhanh = ViewBag.chiNhanh;
     var chucVu = ViewBag.chucVu;
     List<Tuyenkhachhang> tuyenKH = ViewData["Tuyen"] as List<Tuyenkhachhang>;
@@ -12,6 +10,7 @@
     var selectedQuan = ViewBag.selectedQuan;
     var selectedTo = ViewBag.selectedTo;
     var phongBans = ViewBag.phongBan;
+    var toQuanHuyens = ViewBag.ToQuanHuyen;
     var selectedPhongBan = ViewBag.selectedPhongban;
 }
 
@@ -91,10 +90,10 @@
                                                 }
                                             </select>
 
-                                            <!-- Phòng ban -->
+                                            <!-- To quan huyen -->
                                             <select class="dropdown form-control to" style="width: 20%; float: left; margin-right: 3%" name="to">
                                                 <option selected disabled></option>
-                                                @foreach (var item in phongBan)
+                                                @foreach (var item in toQuanHuyens)
                                                 {
                                                     if (item.ToQuanHuyenID == selectedTo)
                                                     {
@@ -166,13 +165,7 @@
                                                         }
                                                         @tenPhongBan
                                                     </td>
-<<<<<<< Updated upstream
-                                                    <td>
-                                                        @(item.ToQuanHuyenID != null ? HoaDonNuocHaDong.Helper.UserInfo.getTenTo(item.ToQuanHuyenID.Value) : "")
-                                                    </td>
-=======
->>>>>>> Stashed changes
-
+                                                  
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.Chucvu.Ten)
                                                     </td>
