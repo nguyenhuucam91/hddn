@@ -92,7 +92,7 @@ namespace HoaDonNuocHaDong.Helper
            
             var kiemDinh = (from i in db.Kiemdinhs
                             join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID
-                            where r.ThangHoaDon == month && r.NamHoaDon == year
+                            where r.ThangHoaDon == month && r.NamHoaDon == year && r.KhachhangID == KHID
                             select new KiemDinhModel
                             {
                                 ChiSoLucKiemDinh = i.Chisoluckiemdinh.Value,
@@ -115,7 +115,7 @@ namespace HoaDonNuocHaDong.Helper
         {
             var kiemDinh = (from i in db.Kiemdinhs
                             join r in db.Hoadonnuocs on i.HoaDonId equals r.HoadonnuocID
-                            where r.ThangHoaDon == month && r.NamHoaDon == year
+                            where r.ThangHoaDon == month && r.NamHoaDon == year && r.KhachhangID == KHID
                             select new KiemDinhModel
                             {
                                 ChiSoSauKiemDinh = i.Chisosaukiemdinh.Value,
