@@ -1,10 +1,12 @@
 ﻿using HDNHD.Core.Repositories;
+using HDNHD.Core.Repositories.Interfaces;
 using HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces;
-using System.Data.Linq;
-using HoaDonNuocHaDong.Areas.ThuNgan.Models;
-using System.Linq;
-using HDNHD.Models.DataContexts;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using HoaDonNuocHaDong.Areas.ThuNgan.Models;
+using HDNHD.Models.DataContexts;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
 {
@@ -12,20 +14,21 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
     {
         private HDNHDDataContext dc;
 
-        public SoTienNopTheoThangRepository(DataContext context) : base(context)
+        public SoTienNopTheoThangRepository(HDNHDDataContext context) : base(context)
         {
-            dc = (HDNHDDataContext)context;
+            dc = context;
         }
 
         public IQueryable<SoTienNopTheoThangModel> GetAllByMonthYear(int month, int year)
         {
             return from item in dc.SoTienNopTheoThangs
                    join hd in dc.Hoadonnuocs on item.HoaDonNuocID equals hd.HoadonnuocID
-                   where hd.ThangHoaDon == month && hd.NamHoaDon == year
+                   where hd.ThangHoaDon == month && hd.NamHoaDon == year &&
+                   hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
                    select new SoTienNopTheoThangModel()
                    {
                        SoTienNopTheoThang = item,
-                       SoTienPhaiNop = (long?) item.SoTienPhaiNop,
+                       SoTienPhaiNop = (long) item.SoTienPhaiNop,
                        SoTienTrenHoaDon = item.SoTienTrenHoaDon
                    };
         }

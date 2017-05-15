@@ -219,6 +219,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.DuCoCuoiKy = duCoCuoiKy.Sum(m => m.SoTien) ?? 0;
 
             #region viewdata
+            title = "Báo cáo doanh thu";
+
             ViewBag.Month = month.Value;
             ViewBag.Year = year.Value;
             ViewBag.Filter = filter;
