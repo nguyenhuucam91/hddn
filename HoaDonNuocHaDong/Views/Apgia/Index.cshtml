@@ -18,11 +18,7 @@
                         <div class="widget-content">
                             <div class="tabbable">
                                 <div class="tab-content">
-                                    <div class="form-group">
-                                        <p>
-                                            <a class="btn btn-primary" href="@Url.Action("Create", "Apgia")" role="button">Thêm mới áp giá</a>
-                                        </p>
-                                    </div>
+
                                     <table class="example table table-striped table-bordered">
                                         <thead>
                                             <tr>
@@ -58,7 +54,7 @@
                                                     </td>
                                                     <td>
                                                         @Html.ActionLink("Sửa", "Edit", new { id = item.ApgiaID }) |
-                                                        @Html.ActionLink("Xóa", "Delete", new { id = item.ApgiaID }, new { @onclick="return confirm('Bạn có muốn xóa áp giá này không')"})
+                                                      
                                                     </td>
                                                 </tr>
                                                 i++;
