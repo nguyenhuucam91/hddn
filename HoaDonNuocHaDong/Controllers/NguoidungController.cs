@@ -155,7 +155,7 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Nguoidung/Create
         public ActionResult Create()
         {
-            bool isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
+            int isAdmin = LoggedInUser.Isadmin.Value == true ? 1 : 0;
             int phongBanID = getPhongBanNguoiDung();
             if (phongBanID == 0)
             {
