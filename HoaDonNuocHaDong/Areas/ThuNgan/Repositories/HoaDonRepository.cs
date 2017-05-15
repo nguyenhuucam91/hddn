@@ -42,8 +42,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                             ChiTietHoaDon = chitietHd,
                             CoDuNoQuaHan = cnt > 0
                         };
-
-
+            
             return items;
         }
 
