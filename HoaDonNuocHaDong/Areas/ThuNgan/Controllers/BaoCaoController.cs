@@ -149,6 +149,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                 month = current.Month;
             if (year == null)
                 year = current.Year;
+            current = new DateTime(year.Value, month.Value, 1);
 
             if (filter.Mode == null) // not in filter
             {
@@ -227,11 +228,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             #endregion
             
             return View();
-        }
-
-        private IRepository DuNoRepository()
-        {
-            throw new NotImplementedException();
         }
     }
 }
