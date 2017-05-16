@@ -133,16 +133,15 @@
                                             var soLuongHoaDonDaIn = soLuongHoaDonThuc.Where(p => p.TTIn == true);
 
                                             //tổng số tiền của tuyến
-                                            var tongSoTienTuyen = (from hd in db.Hoadonnuocs
+                                            var tongSoTienTuyen = (from lshd in db.Lichsuhoadons
+                                                                   join hd in db.Hoadonnuocs on lshd.HoaDonID equals hd.HoadonnuocID
                                                                    join r in db.Khachhangs on hd.KhachhangID equals r.KhachhangID
-                                                                   join lshd in db.Lichsuhoadons on hd.HoadonnuocID equals lshd.HoaDonID
                                                                    where r.TuyenKHID == item.TuyenKHID && hd.ThangHoaDon == monthInt && hd.NamHoaDon == yearInt &&
-                                                                    r.TuyenKHID == item.TuyenKHID &&
-                                                                    (hd.Trangthaixoa == false || hd.Trangthaixoa == null) &&
-                                                                    ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) ||
-                                                                    (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
-                                                                    hd.Tongsotieuthu > 0
-                                                                    group lshd by lshd.TuyenKHID into tongCongCongDon
+                                                                         r.TuyenKHID == item.TuyenKHID &&
+                                                                         (hd.Trangthaixoa == false || hd.Trangthaixoa == null) && hd.Trangthaichot == true &&
+                                                                         ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) 
+                                                                         
+                                                                   group lshd by lshd.TuyenKHID into tongCongCongDon
                                                                    select new
                                                                    {
                                                                        tongTien = tongCongCongDon.Sum(p=>p.TongCong)

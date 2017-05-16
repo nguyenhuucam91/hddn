@@ -11,6 +11,7 @@ using HoaDonNuocHaDong.Helper;
 using System.Web.Routing;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
+using System.Data.SqlClient;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -20,7 +21,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult Index()
         {
-           
+
             ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
 
             int phongbanId = getPhongBanNguoiDung();
@@ -30,9 +31,9 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                ViewBag.phongBan = db.Phongbans.Where(p=>p.PhongbanID == phongbanId).ToList();
+                ViewBag.phongBan = db.Phongbans.Where(p => p.PhongbanID == phongbanId).ToList();
             }
-            
+
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             int phongBanId = getPhongBanNguoiDung();
             var nguoidungs = new List<Nguoidung>();
@@ -50,9 +51,13 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 nguoidungs = db.Nguoidungs.ToList();
             }
+
+            #region ViewBag
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
             int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
             ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
+            ViewBag.currentlyLoggedInUser = LoggedInUser.NguoidungID;
+            #endregion
             return View(nguoidungs.ToList());
         }
 
@@ -96,8 +101,8 @@ namespace HoaDonNuocHaDong.Controllers
                 }
                 else
                 {
-                    nguoiDung = nguoiDungChiNhanh.Where(p=>p.phongBanID == phongBanNguoiDung).Select(p => p.nguoiDung).Distinct().ToList();
-                }               
+                    nguoiDung = nguoiDungChiNhanh.Where(p => p.phongBanID == phongBanNguoiDung).Select(p => p.nguoiDung).Distinct().ToList();
+                }
             }
             //nếu phòng ban không để trông thì lọc theo phòng ban của ng dùng
             if (!String.IsNullOrEmpty(phongBan))
@@ -277,7 +282,7 @@ namespace HoaDonNuocHaDong.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "NguoidungID,NhanvienID,Taikhoan,Matkhau")] Nguoidung nguoidung, int id, FormCollection form)
         {
-
+            int nhanvienID = int.Parse(form["NhanvienID"]);
             String repeatMK = form["RepeatMatKhau"];
             //lấy giá trị checkbox
             String isAdmin = form["isAdmin"];
@@ -291,6 +296,7 @@ namespace HoaDonNuocHaDong.Controllers
                     String matKhau = nguoidung.Matkhau;
                     String firstHash = String.Concat(UserInfo.CreateMD5(matKhau).ToLower(), matKhau);
                     currentlyEditedNguoiDung.Matkhau = UserInfo.CreateMD5(firstHash).ToLower();
+                    currentlyEditedNguoiDung.NhanvienID = nhanvienID;
                     //lưu record người dùng vào CSDL                
                     if (Convert.ToInt32(isAdmin) == 1)
                     {
@@ -332,6 +338,8 @@ namespace HoaDonNuocHaDong.Controllers
             Nguoidung nguoidung = db.Nguoidungs.Find(id);
             int ngDungID = nguoidung.NguoidungID;
             Dangnhap dN = db.Dangnhaps.FirstOrDefault(p => p.NguoidungID == ngDungID);
+            String sqlCommand = "DELETE FROM [HoaDonHaDong].[dbo].[Lichsusudungct] WHERE NguoidungID = @user";
+            db.Database.ExecuteSqlCommand(sqlCommand, new SqlParameter("@user", ngDungID));
             //xóa record đăng nhập
             db.Dangnhaps.Remove(dN);
             db.Nguoidungs.Remove(nguoidung);

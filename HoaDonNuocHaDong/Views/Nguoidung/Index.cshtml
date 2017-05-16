@@ -6,6 +6,7 @@
     var chiNhanh = ViewBag.chinhanh;
     var loggedInUserIsAdmin = ViewBag.isAdmin;
     var loggedInUserQuanHuyenId = ViewBag.loggedInUserQuanHuyenId;
+    var currentlyLoggedInUser = ViewBag.currentlyLoggedInUser;
 }
 
 <div class="main">
@@ -162,22 +163,24 @@
                                                     {
                                                         @Html.ActionLink("Đặt admin", "SetAsAdmin", new { id = item.NguoidungID })
                                                         @Html.Raw("|")
+                                                     <a href="/nguoidung/edit/@item.NguoidungID">Sửa</a>
+                                                            <span>|</span>
+                                                            <a href="/nguoidung/delete/@item.NguoidungID" onclick="return confirm('Bạn có muốn xóa người dùng này không.')">Xóa</a>
                                                     }
                                                     else
                                                     {
-                                                        if (Convert.ToInt32(Session["nguoiDungID"]) != item.NguoidungID)
+                                                        if (item.NguoidungID != currentlyLoggedInUser)
                                                         {
                                                             @Html.ActionLink("Hủy admin", "RemoveAdmin", new { id = item.NguoidungID }, new { @style = "color:red" })
                                                             @Html.Raw("|")
+                                                            <a href="/nguoidung/edit/@item.NguoidungID">Sửa</a>
+                                                            <span>|</span>
+                                                            <a href="/nguoidung/delete/@item.NguoidungID" onclick="return confirm('Bạn có muốn xóa người dùng này không.')">Xóa</a>
                                                         }
                                                     }
                                                 }
 
-                                                @Html.ActionLink("Sửa", "Edit", new { id = item.NguoidungID }) |
-                                                @Html.ActionLink("Xóa", "Delete", new { id = item.NguoidungID }, new
-                                           {
-                                               onclick = "return confirm('Bạn có muốn xóa người dùng này không.')"
-                                           })
+                                               
                                             </td>
                                         </tr>
                                                 i++;
