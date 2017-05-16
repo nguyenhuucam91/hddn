@@ -168,7 +168,8 @@ namespace HoaDonNuocHaDong.Controllers
                                 NgayHoaDon = i.Ngayhoadon,
                                 TenKH = r.TenKH,
                                 TongTien = r.TongCong,
-                                TuyenKHID = t.TuyenKHID
+                                TuyenKHID = t.TuyenKHID,
+                                DiaChi = t.Diachi
                             }).ToList();
 
             if (tuyen != 0)

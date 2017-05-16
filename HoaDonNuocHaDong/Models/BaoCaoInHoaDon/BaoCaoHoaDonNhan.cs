@@ -14,5 +14,6 @@ namespace HoaDonNuocHaDong.Models.BaoCaoInHoaDon
         public DateTime? NgayHoaDon { get; set; }
         public double TongTien { get; set; }
         public int? TuyenKHID { get; set; }
+        public String DiaChi { get; set; }
     }
 }

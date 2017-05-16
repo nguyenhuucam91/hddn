@@ -32,7 +32,7 @@
                         <!-- /widget-header -->
                         <div class="widget-content">
                             <form action="/Print/ChiSoTuyen" method="post">
-                                <input type="hidden" value="@Request.QueryString["quan"]" name="quan"/>
+                                <input type="hidden" value="@Request.QueryString["quan"]" name="quan" />
                                 <input type="hidden" value="@Request.QueryString["to"]" name="to" />
                                 <input type="hidden" value="@Request.QueryString["month"]" name="thang" />
                                 <input type="hidden" value="@Request.QueryString["year"]" name="nam" />
@@ -41,11 +41,19 @@
 
                             @if (HDNHD.Core.Models.RequestScope.UserRole == HDNHD.Models.Constants.EUserRole.InHoaDon)
                             {
-                                <button type="button" class="btn btn-warning" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { @TuyenID = ViewBag.selectedTuyen, @month = selectedMonth, @year = selectedYear })')">In tất cả</button>
+                                <button type="button" class="btn btn-warning" onclick="window.open('@Url.Action("PrintAllPreview", "Print", new { 
+                                                                                                   @TuyenID = ViewBag.selectedTuyen, 
+                                                                                                   @month = selectedMonth, 
+                                                                                                   @year = selectedYear })')">Xem trước in tất cả</button>
+                                
+                                <button type="button" class="btn btn-warning" onclick="window.open('@Url.Action("PrintCrystalReport", "Print", new { 
+                                                                                                   @TuyenID = ViewBag.selectedTuyen, 
+                                                                                                   @month = selectedMonth, 
+                                                                                                   @year = selectedYear })')">In tất cả</button>
                                 <p></p>
                                 <!--Form in danh sách khách hàng được chọn-->
                                 <form action="/Print/PrintSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
-                                    <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />
+                                    <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />                                    
                                     <button type="submit" class="btn btn-success printSelected">In hóa đơn được chọn</button>
                                 </form>
 
@@ -104,10 +112,10 @@
 
                                         int hoaDonNuocID = item.HoaDonNuoc;
                                         Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);
-                                        String ttHoaDonBiHuyCssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);  
-                                        String ttInCssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";                                       
+                                        String ttHoaDonBiHuyCssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);
+                                        String ttInCssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";
 
-                                        String cssClass = String.Join(" ", new String[] { ttHoaDonBiHuyCssClass, ttInCssClass });                                       
+                                        String cssClass = String.Join(" ", new String[] { ttHoaDonBiHuyCssClass, ttInCssClass });
                                         <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
                                             <td>@i</td>
@@ -127,20 +135,20 @@
                                             <td>@item.TTDoc</td>
                                             <td>@item.SanLuong</td>
                                             @{
-                                                double Sum = item.SH1Price * item.SH1 + item.SH2Price * item.SH2 + item.SH3Price * item.SH3 + item.SH4Price * item.SH4 + 
-                                                    item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
+                                        double Sum = item.SH1Price * item.SH1 + item.SH2Price * item.SH2 + item.SH3Price * item.SH3 + item.SH4Price * item.SH4 +
+                                            item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
                                             }
                                             <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", Sum)</td>
                                             <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.PhiVAT)</td>
                                             <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.PhiBVMT)</td>
                                             <td style="color:blue">@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.TongCong)</td>
                                         </tr>
-                                            i++;
+                                        i++;
                                     }
 
                                 </tbody>
 
-                                
+
                             </table>
 
                         </div>

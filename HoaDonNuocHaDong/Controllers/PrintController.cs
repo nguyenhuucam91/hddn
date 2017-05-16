@@ -22,6 +22,7 @@ using HoaDonNuocHaDong.Base;
 using System.Configuration;
 using HoaDonNuocHaDong.Models.InHoaDon;
 using HDNHD.Models.Constants;
+using System.Runtime.Serialization;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -38,15 +39,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             this.printCircumstance = printCircumstance;
         }
-        /// <summary>
-        /// Tính tiền theo tuyến
-        /// </summary>
-        /// <param name="tuyenID"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <param name="chinhanhID"></param>
-        /// <param name="toID"></param>
-        /// <param name="nhanvien"></param>
+       
         public void tinhTienTheoTuyen(String tuyenID, String month, String year, String chinhanhID = null, String toID = null, String nhanvien = null)
         {
             int _tuyenID = Convert.ToInt32(tuyenID);
@@ -134,8 +127,6 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
-        
-
         private void updateSelectedReceipt(string tuyenID, int thangIn, int namIn, String[] hoaDons)
         {
             int soHoaDon = 1; double tongTienCongDon = 0;
@@ -190,8 +181,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         [HttpPost]
         public ActionResult PrintSelected(FormCollection form, int? TuyenID, int? month, int? year)
-        {
-           
+        {           
             Report report = new Report();
             report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
             String[] selectedForm = form["printSelectedHidden"].Split(',');
@@ -263,10 +253,6 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
-        /// <summary>
-        /// Cập nhật trạng thái in cho các hóa đơn
-        /// </summary>
-        /// <param name="HoaDonID"></param>
         public void CapNhatTrangThaiIn(int HoaDonID)
         {
             Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(HoaDonID);
@@ -280,7 +266,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
-        public List<LichSuHoaDon> DanhSachHoaDons(int TuyenID, int month, int year)
+        public List<LichSuHoaDon> GetDanhSachHoaDons(int TuyenID, int month, int year)
         {
             var lichsuhoadons = (from p in db.Lichsuhoadons
                                  where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.SanLuongTieuThu > 0
@@ -327,13 +313,8 @@ namespace HoaDonNuocHaDong.Controllers
             return lichsuhoadons.ToList();
         }
 
-        /// <summary>
-        /// In tất cả danh sách
-        /// </summary>
-        /// <param name="TuyenID"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+               
+
         [HttpPost]
         public ActionResult PrintFrom(FormCollection form, int TuyenID, int month, int year)
         {
@@ -347,7 +328,7 @@ namespace HoaDonNuocHaDong.Controllers
             int fromSoHoaDon = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
             int toSoHoaDon = String.IsNullOrEmpty(form["to"]) ? count : Convert.ToInt16(form["to"]);
 
-            List<LichSuHoaDon> danhSachHoaDons = DanhSachHoaDons(TuyenID, month, year);
+            List<LichSuHoaDon> danhSachHoaDons = GetDanhSachHoaDons(TuyenID, month, year);
 
             if (toSoHoaDon >= danhSachHoaDons.Count)
             {
@@ -427,8 +408,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             Report report = new Report();
             report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
-            var danhSachHoaDons = DanhSachHoaDons(TuyenID, month, year);
-            var source = danhSachHoaDons.ToList();
+            var source = GetDanhSachHoaDons(TuyenID, month, year).ToList();            
             //cập nhật trạng thái in cho tất cả các hóa đơn
             foreach (var item in source)
             {
@@ -449,10 +429,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
-        /// <summary>
-        /// Danh sách tuyến đã có chỉ số
-        /// </summary>
-        /// <returns></returns>
+       
         public ActionResult ChiSoTuyen()
         {
             ViewBag.beforeFiltered = true;
@@ -480,11 +457,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Lọc danh sách tuyến đã có chỉ số bằng cách ấn nút Lọc
-        /// </summary>
-        /// <param name="form"></param>
-        /// <returns></returns>
+      
         [HttpPost]
         public ActionResult ChiSoTuyen(FormCollection form)
         {
@@ -509,7 +482,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             List<Tuyenkhachhang> tuyensKhachHang = new List<Tuyenkhachhang>();
             //nếu tổ ko đc chọn
-            if (to == 0)
+            if (quanHuyen == 0 && to == 0)
             {
                 //lấy toàn bộ danh sách tuyến trong hệ thống không lọc                
                 List<TuyenDuocChot> tuyen = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).ToList();
@@ -546,13 +519,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
 
-        /// <summary>
-        /// Xem chi tiết thông tin tính tiền của tuyến trong tháng và năm
-        /// </summary>
-        /// <param name="tuyen"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
+      
         public ActionResult XemChiTiet(String tuyen, String month, String year)
         {
             //Cập nhật trạng thái tính tiền
@@ -590,10 +557,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
-        /// <summary>
-        /// Hủy hóa đơn cho khách hàng
-        /// </summary>
-        /// <returns></returns>
+     
         public ActionResult HuyHoaDon()
         {
             ViewBag.hasMaKhachHang = false;
@@ -603,11 +567,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Hàm lọc khách hàng hủy hóa đơn dựa trên mã khách hàng
-        /// </summary>
-        /// <param name="form"></param>
-        /// <returns></returns>
+       
         [HttpPost]
         public ActionResult HuyHoaDon(FormCollection form)
         {
@@ -637,10 +597,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Hiển thị danh sách hủy hóa đơn trong hệ thống
-        /// </summary>
-        /// <returns></returns>
+      
         public ActionResult DsHuyHoaDon()
         {
             var huyhd = (from i in db.Hoadonnuocbihuys
@@ -665,10 +622,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        /// <summary>
-        /// Xác nhận hủy hóa đơn trong hệ thống
-        /// </summary>
-        /// <returns></returns>
+       
         [HttpPost]
         public ActionResult Xacnhanhuy(FormCollection form)
         {
