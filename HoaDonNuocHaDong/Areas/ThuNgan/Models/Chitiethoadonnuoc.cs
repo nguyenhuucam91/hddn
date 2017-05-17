@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace HDNHD.Models.DataContexts
+namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {
     public class Chitiethoadonnuoc
     {
