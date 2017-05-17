@@ -39,7 +39,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             this.printCircumstance = printCircumstance;
         }
-       
+
         public void tinhTienTheoTuyen(String tuyenID, String month, String year, String chinhanhID = null, String toID = null, String nhanvien = null)
         {
             int _tuyenID = Convert.ToInt32(tuyenID);
@@ -123,7 +123,7 @@ namespace HoaDonNuocHaDong.Controllers
                     break;
                 case (int)PrintModeEnum.PRINT_SELECTED:
                     updateSelectedReceipt(tuyenID, thangIn, namIn, hoaDons);
-                    break;                
+                    break;
             }
         }
 
@@ -181,7 +181,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         [HttpPost]
         public ActionResult PrintSelected(FormCollection form, int? TuyenID, int? month, int? year)
-        {           
+        {
             Report report = new Report();
             report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
             String[] selectedForm = form["printSelectedHidden"].Split(',');
@@ -270,8 +270,8 @@ namespace HoaDonNuocHaDong.Controllers
         {
             var lichsuhoadons = (from p in db.Lichsuhoadons
                                  join r in db.Hoadonnuocs on p.HoaDonID equals r.HoadonnuocID
-                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && 
-                                 p.NamHoaDon == year && p.SanLuongTieuThu > 0 && r.Trangthaiin == false
+                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month &&
+                                 p.NamHoaDon == year && p.SanLuongTieuThu > 0 
                                  orderby p.TTDoc
                                  select new HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon
                                  {
@@ -315,7 +315,7 @@ namespace HoaDonNuocHaDong.Controllers
             return lichsuhoadons.ToList();
         }
 
-               
+
 
         [HttpPost]
         public ActionResult PrintFrom(FormCollection form, int TuyenID, int month, int year)
@@ -410,7 +410,8 @@ namespace HoaDonNuocHaDong.Controllers
 
             Report report = new Report();
             report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
-            var source = GetDanhSachHoaDons(TuyenID, month, year).ToList();            
+            var source = GetDanhSachHoaDons(TuyenID, month, year).ToList();
+
             //cập nhật trạng thái in cho tất cả các hóa đơn
             foreach (var item in source)
             {
@@ -418,6 +419,7 @@ namespace HoaDonNuocHaDong.Controllers
                 CapNhatTrangThaiIn(hoaDonID);
             }
             //đặt datasource để đẩy vào crystal report
+
             report.SetDataSource(source);
             try
             {
@@ -429,9 +431,10 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 throw new Exception(ex.ToString());
             }
+
         }
 
-       
+
         public ActionResult ChiSoTuyen()
         {
             ViewBag.beforeFiltered = true;
@@ -459,7 +462,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-      
+
         [HttpPost]
         public ActionResult ChiSoTuyen(FormCollection form)
         {
@@ -521,7 +524,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
 
-      
+
         public ActionResult XemChiTiet(String tuyen, String month, String year)
         {
             //Cập nhật trạng thái tính tiền
@@ -559,7 +562,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
-     
+
         public ActionResult HuyHoaDon()
         {
             ViewBag.hasMaKhachHang = false;
@@ -569,7 +572,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-       
+
         [HttpPost]
         public ActionResult HuyHoaDon(FormCollection form)
         {
@@ -599,7 +602,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-      
+
         public ActionResult DsHuyHoaDon()
         {
             var huyhd = (from i in db.Hoadonnuocbihuys
@@ -624,7 +627,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-       
+
         [HttpPost]
         public ActionResult Xacnhanhuy(FormCollection form)
         {
