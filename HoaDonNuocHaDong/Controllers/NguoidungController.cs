@@ -136,9 +136,13 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewBag.phongBan = db.Phongbans.Where(p => p.PhongbanID == phongbanId).ToList();
             }
+
+            #region ViewBag
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
             ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
+            ViewBag.currentlyLoggedInUser = LoggedInUser.NguoidungID;
+            #endregion
             return View(nguoiDung.OrderByDescending(p => p.NguoidungID).ToList());
         }
 
@@ -244,7 +248,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanID).ToList();
             }
-            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? true : false;
+            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? 1 : 0;
             return View(nguoidung);
         }
 

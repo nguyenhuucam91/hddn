@@ -73,13 +73,21 @@
             i++;
             TongSoTienHoaDon += item.TongTien;
         }
+
+        <tr>
+            <td>Tổng cộng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(TongSoTienHoaDon)</td>
+        </tr>
     </tbody>
 
     <tfoot>
-        <tr>
-            <td colspan="7">Tổng cộng</td>
-            <td style="font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(TongSoTienHoaDon)</td>
-        </tr>
+       
     </tfoot>
 </table>
 

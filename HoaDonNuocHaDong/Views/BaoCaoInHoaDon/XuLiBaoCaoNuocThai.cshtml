@@ -59,16 +59,20 @@
                 <td style="font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.Tong)</td>
             </tr>
         }
+
+        <tr>          
+            <td>Tổng cộng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><b>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongTruocThue)</b></td>
+            <td><b>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongThue)</b></td>
+            <td><b>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongCong)</b></td>
+        </tr>
     </tbody>
 
-    <tfoot>
-        <tr>
-            <td colspan="5" style="font-weight:bold">Tổng cộng</td>
-            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongTruocThue)</td>
-            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongThue)</td>
-            <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(tongCong)</td>
-        </tr>
-    </tfoot>
+   
 </table>
 
 <p style="float:right">Hà đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</p>

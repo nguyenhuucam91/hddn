@@ -140,7 +140,7 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Nhanvien/Create
         public ActionResult Create()
         {
-            ViewBag._TuyenKHID = db.Tuyenkhachhangs.ToList();
+            ViewBag._TuyenKHID = db.Tuyenkhachhangs.Where(p=>p.IsDelete==false).ToList();
             ViewBag.ChinhanhID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
 
 
@@ -282,7 +282,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ViewBag.selectedTo = nhanvien.ToQuanHuyenID;
-            ViewBag.selectedQuanHuyen = getQuanHuyenIDFromToID(nhanvien.ToQuanHuyenID.Value);
+            ViewBag.selectedQuanHuyen = getQuanHuyenIDFromToID(nhanvien.ToQuanHuyenID);
             int phongbanId = getPhongBanNguoiDung();
             if (phongbanId == 0)
             {
@@ -296,12 +296,12 @@ namespace HoaDonNuocHaDong.Controllers
             return View(nhanvien);
         }
 
-        private int getQuanHuyenIDFromToID(int toID)
+        private int? getQuanHuyenIDFromToID(int? toID)
         {
             ToQuanHuyen toQuanHuyen = db.ToQuanHuyens.Find(toID);
             if (toQuanHuyen != null)
             {
-                return toQuanHuyen.QuanHuyenID.Value;
+                return toQuanHuyen.QuanHuyenID == null ? 0 : toQuanHuyen.QuanHuyenID;
             }
             return 0;
         }

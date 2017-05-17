@@ -269,7 +269,9 @@ namespace HoaDonNuocHaDong.Controllers
         public List<LichSuHoaDon> GetDanhSachHoaDons(int TuyenID, int month, int year)
         {
             var lichsuhoadons = (from p in db.Lichsuhoadons
-                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.SanLuongTieuThu > 0
+                                 join r in db.Hoadonnuocs on p.HoaDonID equals r.HoadonnuocID
+                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && 
+                                 p.NamHoaDon == year && p.SanLuongTieuThu > 0 && r.Trangthaiin == false
                                  orderby p.TTDoc
                                  select new HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon
                                  {
