@@ -56,7 +56,7 @@
                     </div> <!-- /widget-header -->
 
                     <div class="widget-content">
-                        
+
                         <input type="hidden" name="isBack" value="@Request.QueryString["isback"]" />
 
                         <h4>Bạn đang nhập số liệu cho:</h4>
@@ -227,30 +227,29 @@
                                                                                 {
                                                                                     <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
                                                                                            value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
-                                                                                           data-hoadonid="@item.HoaDonNuocID" class="endDate[@i]"
-                                                                                           />
+                                                                                           data-hoadonid="@item.HoaDonNuocID" class="endDate[@i]" />
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
                                                                                            value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
-                                                                                           data-hoadonid="@item.HoaDonNuocID" 
-                                                                                           />
+                                                                                           data-hoadonid="@item.HoaDonNuocID" />
                                                                                 }
 
                                                                             </td>
                                                                             <!-- Chỉ số cũ -->
                                                                             <td><input type="text" style="width:55px" value="@item.ChiSoCu" disabled /></td>
 
-                                                                            <!-- Chỉ số mới: nếu là nhân viên, nếu đã chốt thì disabled đối với nhân viên(enable với trưởng phòng), nếu chưa chốt thì mở ô ra cho nhập -->
                                                                             @if (isChot == null || isChot == false)
                                                                             {
+                                                                                <!-- Chỉ số mới: nếu là nhân viên, nếu đã chốt thì disabled đối với nhân viên(enable với trưởng phòng), nếu chưa chốt thì mở ô ra cho nhập -->
                                                                                 String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
-                                                                                <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@chiSoMoi"></td>
+                                                                                <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@item.ChiSoMoi"></td>
                                                                             }
-                                                                            //nếu đã chốt hóa đơn (chốt = true) mà phòng in hóa đơn tiến hành hủy hóa đơn thì vấn edit lại được
                                                                             else
                                                                             {
+                                                                                //nếu đã chốt hóa đơn (chốt = true) mà phòng in hóa đơn tiến hành hủy hóa đơn thì vấn edit lại được
+
                                                                                 String chiSoMoi = item.ChiSoMoi == 0 || item.ChiSoMoi == null ? "" : item.ChiSoMoi.ToString();
                                                                                 if (cS.isChotHoaDon(hoaDonID))
                                                                                 {
@@ -258,7 +257,7 @@
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi" value="@chiSoMoi"></td>
+                                                                                    <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" placeholder="@item.ChiSoMoi"></td>
                                                                                 }
                                                                             }
 

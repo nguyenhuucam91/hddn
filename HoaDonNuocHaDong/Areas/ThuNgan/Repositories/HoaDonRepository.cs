@@ -18,8 +18,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
 
         public IQueryable<HoaDonModel> GetAllHoaDonModel()
         {
-
-            var items = from hd in dc.Hoadonnuocs
+             var items = from hd in dc.Hoadonnuocs
                         where hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
                         join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
                         join stntt in dc.SoTienNopTheoThangs on hd.SoTienNopTheoThangID equals stntt.ID
@@ -42,7 +41,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                             ChiTietHoaDon = chitietHd,
                             CoDuNoQuaHan = cnt > 0
                         };
-            
+
+
             return items;
         }
 
