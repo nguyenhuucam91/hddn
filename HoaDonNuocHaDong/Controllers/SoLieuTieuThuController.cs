@@ -379,13 +379,12 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     int soNhanKhau = kHHelper.getSoNhanKhau(KHID);
                     int soHo = kHHelper.getSoHo(KHID);
-                    int dinhMucCoSo = apGia[0].Denmuc.Value;
+                    int dinhMucCoSo = 10;
                     double dinhMucTungNha = cS.getDinhMucTungNha(soHo, soNhanKhau, dinhMucCoSo);
-                    ////40 => 16                    
+                                
                     double SH1, SH2, SH3, SH4;
                     SH1 = _TongSoTieuThu <= dinhMucTungNha ? _TongSoTieuThu : dinhMucTungNha;
-                    ////40-16 = 24<=20 ? 4:20
-                    ////33-16 = 17<=20 ? 17:20
+                  
                     double dinhMucSH1 = dinhMucTungNha;
                     double dinhMucSH2 = dinhMucTungNha * 2;
                     double dinhMucSH3 = dinhMucTungNha * 3;
