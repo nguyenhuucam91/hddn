@@ -221,7 +221,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.isChot = false;
             }
             #region ViewBag
-            int loggedInRole = getLoggedInUserRole();
+            int loggedInRole = getUserRole(LoggedInUser.NhanvienID);
             //lấy danh sách quận huyện để đẩy vào phần lọc chỉ số KH
             ViewBag.selectedChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
             ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
@@ -601,7 +601,7 @@ namespace HoaDonNuocHaDong.Controllers
             //load chỉ số và thông tin tách số vào đây
             List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);
             int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == false);           
-            int loggedInRole = getLoggedInUserRole();
+            int loggedInRole = getUserRole(LoggedInUser.NhanvienID);
 
             #region ViewBag
             ViewBag.trangthaiChotTuyen = soLuongHoaDonChuaChot;
@@ -616,19 +616,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        private int getLoggedInUserRole()
-        {
-            if (LoggedInUser.NhanvienID != null)
-            {
-                int nhanvienLoggedInId = LoggedInUser.NhanvienID.Value;
-                Nhanvien loggedInUserRoleRecord = db.Nhanviens.Find(nhanvienLoggedInId);
-                if (loggedInUserRoleRecord != null)
-                {
-                    return loggedInUserRoleRecord.ChucvuID.Value;
-                }
-            }
-            return 0;
-        }
+        
 
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getDanhSachHoaDonTieuThu(int _month, int _year, int tuyenID)
         {

@@ -52,9 +52,10 @@ namespace HoaDonNuocHaDong.Controllers
         {
             if (ModelState.IsValid)
             {
-                thongbao.Nguoitao = Convert.ToInt32(Session["nguoiDungID"]);
+                int currentLoggedInNguoiDungId = LoggedInUser.NguoidungID;
+                thongbao.Nguoitao = currentLoggedInNguoiDungId;
                 thongbao.Ngaytao = DateTime.Now;
-                thongbao.Nguoichinhsua = Convert.ToInt32(Session["nguoiDungID"]);
+                thongbao.Nguoichinhsua = currentLoggedInNguoiDungId;
                 thongbao.Ngaychinhsua = DateTime.Now;
                 db.Thongbaos.Add(thongbao);
                 db.SaveChanges();
@@ -106,7 +107,8 @@ namespace HoaDonNuocHaDong.Controllers
         {
             if (ModelState.IsValid)
             {
-                thongbao.Nguoichinhsua = Convert.ToInt32(Session["nguoiDungID"]);
+                int currentLoggedInNguoiDungId = LoggedInUser.NguoidungID;
+                thongbao.Nguoichinhsua = currentLoggedInNguoiDungId;
                 thongbao.Ngaychinhsua = DateTime.Now;
                 db.Entry(thongbao).State = EntityState.Modified;
                 db.SaveChanges();

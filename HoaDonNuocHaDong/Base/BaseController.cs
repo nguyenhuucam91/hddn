@@ -2,6 +2,8 @@
 using HDNHD.Core.Controllers;
 using HDNHD.Core.Models;
 using HDNHD.Models.Constants;
+using HoaDonNuocHaDong.Helper;
+using HoaDonNuocHaDong.Models;
 using HoaDonNuocHaDong.Models.KhachHang;
 using HoaDonNuocHaDong.Repositories;
 using HoaDonNuocHaDong.Repositories.Interfaces;
@@ -85,7 +87,8 @@ namespace HoaDonNuocHaDong.Base
             {
                 int chucNangID = getChucNangIDFromUrl(controllerName, actionName);
                 appendToLogTable(chucNangID);
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 // ignore this
             }
@@ -152,5 +155,72 @@ namespace HoaDonNuocHaDong.Base
 
             return View(view, data);
         }
+
+        public int getUserRole(int? NhanVienID)
+        {
+            if (NhanVienID != null)
+            {
+                int nhanvienLoggedInId = NhanVienID.Value;
+                Nhanvien nhanVien = db.Nhanviens.Find(nhanvienLoggedInId);
+                if (nhanVien != null)
+                {
+                    return nhanVien.ChucvuID.Value;
+                }
+            }
+            return 0;
+        }
+
+        public List<ModelNhanVien> getNhanViensByTo(int? ToID)
+        {
+            int phongBanID = getPhongBanNguoiDung();
+            var nhanViens = (from i in db.Nhanviens
+                             where i.ToQuanHuyenID == ToID.Value && i.IsDelete == false && i.PhongbanID == phongBanID
+                             select new ModelNhanVien
+                             {
+                                 NhanvienID = i.NhanvienID,
+                                 Ten = i.Ten,
+                                 MaNhanVien = i.MaNhanVien,
+                                 ChucvuID = i.ChucvuID
+                             }).Distinct().ToList();
+            return nhanViens;
+        }
+
+        public List<ToQuanHuyen> getToes(int quanHuyenID, int phongBanID)
+        {
+            return db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
+        }
+
+        public int getQuanHuyenOfLoggedInUser()
+        {
+            return Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
+        }
+
+        public int getPhongBanNguoiDung() 
+        {
+            var phongBanRepository = uow.Repository<PhongBanRepository>();
+            if (nhanVien != null)
+            {
+                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
+                int phongBanID = phongBan.PhongbanID;
+                return phongBanID;
+            }
+            return 0;
+        }
+
+        public List<ModelTuyen> getTuyensThuocNhanVien(int? NhanVienID)
+        {
+            var tuyens = (from i in db.Tuyentheonhanviens
+                          join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
+                          where i.NhanVienID == NhanVienID && r.IsDelete == false
+                          select new ModelTuyen
+                          {
+                              TuyenID = r.TuyenKHID,
+                              Ten = r.Ten,
+                              Matuyen = r.Matuyen,
+                          }).Distinct().ToList();
+            return tuyens;
+        }
+
+        
     }
 }

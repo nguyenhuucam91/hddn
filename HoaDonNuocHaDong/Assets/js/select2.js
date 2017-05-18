@@ -369,7 +369,7 @@ $("table tbody tr td input").click(function () {
 });
 
 //nếu như ngày bắt đầu và ngày kết thúc để trống thì tải lại trang để cập nhật vào ô ngày bắt đầu và ngày kết thúc tương ứng của khách hàng
-$(document).ready(function(){
+$(document).ready(function () {
     $(".endDateFixedTop").change(function () {
         var endDateValue = $(this).val();
         $("input[name='endDateHolder']").val(endDateValue);
@@ -406,9 +406,9 @@ $(document).ready(function () {
             if (endFixedTop != "") {
                 dateEndInput.val(endFixedTop);
             }
-           
+
             var dateEnd = dateEndInput.val();
-        }     
+        }
 
         var hoaDonID = $(this).data("hoadonid");
         var KHID = $(this).data("khid");
@@ -435,7 +435,7 @@ $(document).ready(function () {
             var sanLuongValue = $(this).parent().next("td").find("input").val(hieuSo);
         }
 
-        removeClassHasSanLuongAmInTr(hieuSo,trParent);
+        removeClassHasSanLuongAmInTr(hieuSo, trParent);
 
         //console.log(JSON.stringify(sanLuongValue.));
         //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
@@ -457,7 +457,7 @@ function removeClassHasSanLuongAmInTr(sanLuong, trParent) {
         if (trParent.hasClass('hasSanLuongAm')) {
             trParent.removeClass('hasSanLuongAm');
         }
-      
+
     } else {
         if (!trParent.hasClass('hasSanLuongAm')) {
             trParent.addClass('hasSanLuongAm');
@@ -648,7 +648,7 @@ $(document).ready(function () {
             method: "GET",
             contentType: "application/json",
             data: { HoaDonID: hoaDonID, KhachHangID: khID, ngayKetThuc: newVal, thangNay: month, thangSau: nextMonth, namNay: year, namSau: nextYear },
-            
+
         });
     });
 });

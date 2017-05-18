@@ -19,6 +19,7 @@ using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using HDNHD.Models.Constants;
 using System.Configuration;
+using HoaDonNuocHaDong.Models;
 
 
 namespace HoaDonNuocHaDong.Controllers
@@ -32,17 +33,16 @@ namespace HoaDonNuocHaDong.Controllers
         NguoidungHelper ngDungHelper = new NguoidungHelper();
         KiemDinh kiemDinhHelper = new KiemDinh();
         public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+        const int ADMIN = 0;
+        const int TRUONG_PHONG = 2;
+        const int NHAN_VIEN = 1;
 
         public static int makh { get; private set; }
         public ActionResult Index(string TinhTrang = null, string catNuoc = null)
         {
-            //xem danh sách khách hàng
-            ViewBag.showKhachHang = false;
-            //code lại từ đầu
-            int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-            ViewBag.selectedChiNhanh = quanHuyenID;
-            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
 
+            ViewBag.showKhachHang = false;
+            int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
@@ -59,6 +59,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.nhanVien = nVLs;
             //load danh sách tuyến thuộc nhân viên đó.
             List<Tuyenkhachhang> tuyensLs = new List<Tuyenkhachhang>();
+
             foreach (var item in nVLs)
             {
                 var tuyenTheoNhanVien = (from i in db.Tuyentheonhanviens
@@ -103,6 +104,9 @@ namespace HoaDonNuocHaDong.Controllers
                     ViewBag.showKhachHang = true;
                 }
             }
+
+            ViewBag.selectedChiNhanh = quanHuyenID;
+            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
             ViewBag.tuyen = tuyensLs;
 
             return View();
@@ -113,9 +117,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
 
-            var phongBanRepository = uow.Repository<PhongBanRepository>();
-            var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
-            int phongBanID = phongBan.PhongbanID;
+            int phongBanID = getPhongBanNguoiDung();
 
             int toForm = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
             int tuyenID = 0;
@@ -145,7 +147,7 @@ namespace HoaDonNuocHaDong.Controllers
             //load viewbag mặc định
             ViewBag.chiNhanh = db.Chinhanhs.OrderBy(p => p.Ten).ToList();
             ViewBag.to = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
-            ViewBag.nhanVien = db.Nhanviens.Where(p => p.ToQuanHuyenID == toForm && (p.IsDelete == false || p.IsDelete == null)).ToList();
+            ViewBag.nhanVien = getNhanViensByTo(toForm);
             var tuyenTheoNhanVien = from i in db.Tuyentheonhanviens
                                     join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
                                     join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
@@ -345,17 +347,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         }
 
-        public int getPhongBanNguoiDung()
-        {
-            var phongBanRepository = uow.Repository<PhongBanRepository>();
-            if (nhanVien != null)
-            {
-                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
-                int phongBanID = phongBan.PhongbanID;
-                return phongBanID;
-            }
-            return 0;
-        }
+
 
         /// <summary>
         /// Fill tuyến theo quận
@@ -437,17 +429,39 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns></returns>
         public JsonResult FillTuyen(int? NhanVienID)
         {
-            var tuyen = (from i in db.Tuyentheonhanviens
-                         join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                         where i.NhanVienID == NhanVienID && r.IsDelete == false
-                         select new
-                         {
-                             TuyenID = r.TuyenKHID,
-                             Ten = r.Ten,
-                             Matuyen = r.Matuyen,
-                         }).Distinct().ToList();
+            int userRole = getUserRole(LoggedInUser.NhanvienID);
+            int quanHuyenCurrentLoggedInUser = getQuanHuyenOfLoggedInUser();
+            int phongBanCurrentLoggedInUser = getPhongBanNguoiDung();
+            List<ToQuanHuyen> tos = getToes(quanHuyenCurrentLoggedInUser, phongBanCurrentLoggedInUser);
+            List<ModelNhanVien> nhanviens = new List<ModelNhanVien>();
+            List<ModelTuyen> tuyens = new List<ModelTuyen>();
+            foreach (var to in tos)
+            {
+                List<ModelNhanVien> nhanVien = getNhanViensByTo(to.ToQuanHuyenID);
+                nhanviens.AddRange(nhanVien);
+            }
 
-            return Json(tuyen, JsonRequestBehavior.AllowGet);
+            if (userRole == NHAN_VIEN)
+            {
+                tuyens = getTuyensThuocNhanVien(NhanVienID);
+            }
+            else
+            {
+                int selectedUserRole = getUserRole(NhanVienID);
+                if (selectedUserRole == NHAN_VIEN)
+                {
+                    tuyens = getTuyensThuocNhanVien(NhanVienID);
+                }
+                else
+                {
+                    foreach (var nhanvien in nhanviens)
+                    {
+                        List<ModelTuyen> tuyensThuocNhanVien = getTuyensThuocNhanVien(nhanvien.NhanvienID);
+                        tuyens.AddRange(tuyensThuocNhanVien);
+                    }
+                }
+            }
+            return Json(tuyens.Distinct(), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -457,17 +471,17 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns></returns>
         public JsonResult FillNhanVienByTo(int? ToID)
         {
-            var tuyen = (from i in db.Nhanviens
-                         where i.ToQuanHuyenID == ToID.Value && i.IsDelete == false
-                         select new
-                         {
-                             NhanvienID = i.NhanvienID,
-                             Ten = i.Ten,
-                             MaNhanVien = i.MaNhanVien,
-                         }).Distinct().ToList();
-
-            return Json(tuyen, JsonRequestBehavior.AllowGet);
+            int isAdminAndTruongPhong = getUserRole(LoggedInUser.NhanvienID);
+            var nhanViens = getNhanViensByTo(ToID);
+            if (isAdminAndTruongPhong != ADMIN && isAdminAndTruongPhong != TRUONG_PHONG) //2: Truong phong
+            {
+                nhanViens = nhanViens.Where(p => p.ChucvuID == 1).ToList();
+                return Json(nhanViens, JsonRequestBehavior.AllowGet);
+            }
+            return Json(nhanViens, JsonRequestBehavior.AllowGet);
         }
+
+
 
         // GET: /Khachhang/Details/5
         public ActionResult Details(int? id)
@@ -541,9 +555,9 @@ namespace HoaDonNuocHaDong.Controllers
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "SELECT TOP 1 MaKhachHang FROM dbo.Khachhang ORDER BY KhachhangID DESC";             
+                command.CommandText = "SELECT TOP 1 MaKhachHang FROM dbo.Khachhang ORDER BY KhachhangID DESC";
                 reader = command.ExecuteReader();
-                
+
                 if (reader.Read())
                 {
                     maKhachHangLonNhat = Convert.ToInt32(reader["MaKhachHang"]);
@@ -564,24 +578,25 @@ namespace HoaDonNuocHaDong.Controllers
             return 0;
         }
 
-        public bool isMaKhachHangExistedInDB(int maKhachHang){
+        public bool isMaKhachHangExistedInDB(int maKhachHang)
+        {
             int numberOfRowExisted = 0;
-             using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
                 command.CommandText = "SELECT MaKhachHang FROM dbo.Khachhang WHERE MaKhachHang = @maKH";
-                command.Parameters.AddWithValue("@maKH",maKhachHang);
+                command.Parameters.AddWithValue("@maKH", maKhachHang);
                 numberOfRowExisted = command.ExecuteNonQuery();
                 connection.Close();
             }
 
-             if (numberOfRowExisted > 0)
-             {
-                 return true;
-             }
+            if (numberOfRowExisted > 0)
+            {
+                return true;
+            }
 
-             return false;
+            return false;
         }
 
         // POST: /Khachhang/Create
