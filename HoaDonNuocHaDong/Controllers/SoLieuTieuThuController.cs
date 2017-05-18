@@ -1051,7 +1051,7 @@ namespace HoaDonNuocHaDong.Controllers
 
                             if (item.IDLoaiApGia == KhachHang.SINHHOAT)
                             {
-                                int dinhMucCoSo = db.Apgias.Find(item.IDLoaiApGia).Denmuc.Value;
+                                int dinhMucCoSo = 10;
                                 List<double> chiaChiSoSinhHoatTuongUng = chiaChiSoSinhHoat(sanLuongThuc, dinhMucCoSo, KhachHangID);
                                 chiTiet.SH1 = chiaChiSoSinhHoatTuongUng[0];
                                 chiTiet.SH2 = chiaChiSoSinhHoatTuongUng[1];
@@ -1108,7 +1108,7 @@ namespace HoaDonNuocHaDong.Controllers
 
                             if (item.IDLoaiApGia == KhachHang.SINHHOAT)
                             {
-                                int dinhMucCoSo = db.Apgias.Find(item.IDLoaiApGia).Denmuc.Value;
+                                int dinhMucCoSo = 10;
                                 List<double> chiaChiSoSinhHoatTuongUng = chiaChiSoSinhHoat(sanLuongThuc, dinhMucCoSo, KhachHangID);
                                 chiTiet.SH1 = chiaChiSoSinhHoatTuongUng[0];
                                 chiTiet.SH2 = chiaChiSoSinhHoatTuongUng[1];
@@ -1222,7 +1222,7 @@ namespace HoaDonNuocHaDong.Controllers
                             {
                                 double SanLuongConLai = SanLuong - SanLuongTong;
                                 double _TongSoTieuThu = SanLuongConLai;
-                                int dinhMucCoSo = db.Apgias.Find(item.IDLoaiApGia).Denmuc.Value;
+                                int dinhMucCoSo = 10;
                                 List<double> chiaChiSoSinhHoatTuongUng = chiaChiSoSinhHoat(_TongSoTieuThu, dinhMucCoSo, KhachHangID);
                                 chiTiet.SH1 = chiaChiSoSinhHoatTuongUng[0];
                                 chiTiet.SH2 = chiaChiSoSinhHoatTuongUng[1];
