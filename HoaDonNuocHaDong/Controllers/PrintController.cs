@@ -180,6 +180,78 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
+        public ActionResult PrintAllSelected(FormCollection form, int? TuyenID, int? month, int? year)
+        {
+            Report report = new Report();
+            report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
+            String[] selectedForm = form["printSelectedHidden"].Split(',');
+
+            setPrintCircumstance((int)PrintModeEnum.PRINT_SELECTED);
+            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month.Value, year.Value, selectedForm);
+
+
+            List<dynamic> ls = new List<dynamic>();
+            foreach (var item in selectedForm)
+            {
+                int HoaDonID = Convert.ToInt32(item);
+                var source = (from p in db.Lichsuhoadons
+                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.HoaDonID == HoaDonID
+                              select new
+                              {
+                                  ThangHoaDon = p.ThangHoaDon,
+                                  NamHoaDon = p.NamHoaDon,
+                                  TenKH = p.TenKH,
+                                  DiaChi = p.Diachi,
+                                  MST = p.MST,
+                                  MaKH = p.MaKH,
+                                  SoHopDong = p.SoHopDong,
+                                  SanLuongTieuThu = p.SanLuongTieuThu,
+                                  ChiSoCu = p.ChiSoCu,
+                                  ChiSoMoi = p.ChiSoMoi,
+                                  SH1 = p.SH1,
+                                  SH2 = p.SH2,
+                                  SH3 = p.SH3,
+                                  SH4 = p.SH4,
+                                  SH1Price = p.SH1Price,
+                                  SH2Price = p.SH2Price,
+                                  SH3Price = p.SH3Price,
+                                  SH4Price = p.SH4Price,
+                                  HC = p.HC,
+                                  CC = p.CC,
+                                  SX = p.SX,
+                                  KD = p.KD,
+                                  HCPrice = p.HCPrice,
+                                  CCPrice = p.CCPrice,
+                                  SXPrice = p.SXPrice,
+                                  KDPrice = p.KDPrice,
+                                  TileBVMT = p.TileBVMT,
+                                  PhiBVMT = p.PhiBVMT,
+                                  TongCong = p.TongCong,
+                                  BangChu = p.BangChu,
+                                  TTVoOng = p.TTVoOng,
+                                  TTThungan = p.TTThungan,
+                                  NgayBatDau = p.NgayBatDau,
+                                  NgayKetThuc = p.NgayKetThuc,
+                                  ChiSoCongDon = p.ChiSoCongDon,
+                              }).FirstOrDefault();
+                ls.Add(source);
+            }
+
+            report.SetDataSource(ls);
+
+            try
+            {
+                Stream str = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                str.Seek(0, SeekOrigin.Begin);
+                return File(str, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        [HttpPost]
         public ActionResult PrintSelected(FormCollection form, int? TuyenID, int? month, int? year)
         {
             Report report = new Report();
@@ -315,10 +387,104 @@ namespace HoaDonNuocHaDong.Controllers
             return lichsuhoadons.ToList();
         }
 
+        [HttpPost]        
+        public ActionResult PrintPreviewFrom(FormCollection form, int TuyenID, int month, int year)
+        {
+            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
+            //here;
+            updateAllHoaDon(TuyenID.ToString(), month, year);
 
+            Report report = new Report();
+            int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
+            Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
+            int fromSoHoaDon = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
+            int toSoHoaDon = String.IsNullOrEmpty(form["to"]) ? count : Convert.ToInt16(form["to"]);
+
+            List<LichSuHoaDon> danhSachHoaDons = GetDanhSachHoaDons(TuyenID, month, year);
+
+            if (toSoHoaDon >= danhSachHoaDons.Count)
+            {
+                toSoHoaDon = danhSachHoaDons.Count();
+            }
+            List<dynamic> ls = new List<dynamic>();
+            for (int i = fromSoHoaDon; i <= toSoHoaDon; i++)
+            {
+                var source = (from p in db.Lichsuhoadons
+                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year
+                                  && p.TTThungan == (p.TTDoc + "/" + tuyenKH.Matuyen + " - " + i)
+                              select new
+                              {
+                                  HoaDonID = p.HoaDonID,
+                                  ThangHoaDon = p.ThangHoaDon,
+                                  NamHoaDon = p.NamHoaDon,
+                                  TenKH = p.TenKH,
+                                  DiaChi = p.Diachi,
+                                  MST = p.MST,
+                                  MaKH = p.MaKH,
+                                  SoHopDong = p.SoHopDong,
+                                  SanLuongTieuThu = p.SanLuongTieuThu,
+                                  ChiSoCu = p.ChiSoCu,
+                                  ChiSoMoi = p.ChiSoMoi,
+                                  SH1 = p.SH1,
+                                  SH2 = p.SH2,
+                                  SH3 = p.SH3,
+                                  SH4 = p.SH4,
+                                  SH1Price = p.SH1Price,
+                                  SH2Price = p.SH2Price,
+                                  SH3Price = p.SH3Price,
+                                  SH4Price = p.SH4Price,
+                                  HC = p.HC,
+                                  CC = p.CC,
+                                  SX = p.SX,
+                                  KD = p.KD,
+                                  HCPrice = p.HCPrice,
+                                  CCPrice = p.CCPrice,
+                                  SXPrice = p.SXPrice,
+                                  KDPrice = p.KDPrice,
+                                  TileBVMT = p.TileBVMT,
+                                  PhiBVMT = p.PhiBVMT,
+                                  TongCong = p.TongCong,
+                                  BangChu = p.BangChu,
+                                  TTVoOng = p.TTVoOng,
+                                  TTThungan = p.TTThungan,
+                                  NgayBatDau = p.NgayBatDau,
+                                  NgayKetThuc = p.NgayKetThuc,
+                                  ChiSoCongDon = p.ChiSoCongDon,
+                              }).FirstOrDefault();
+                ls.Add(source);
+
+                //cập nhật trạng thái in cho hóa đơn được in từ số thứ tự (số hóa đơn) từ xx->yy
+                int hoaDonID = source.HoaDonID;                
+            }
+
+            report.SetDataSource(ls);
+
+            try
+            {
+                Stream str = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                str.Seek(0, SeekOrigin.Begin);
+                return File(str, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
 
         [HttpPost]
-        public ActionResult PrintFrom(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintFrom(String printFrom, FormCollection form, int TuyenID, int month, int year)
+        {
+            switch (printFrom) 
+            {
+                case "Xem trước in danh sách theo số hóa đơn":
+                    return PrintPreviewFrom(form, TuyenID, month, year);
+                case "In danh sách theo số hóa đơn":
+                    return PrintFromTo(form, TuyenID, month, year);
+            }
+            return View();
+        }
+
+        public ActionResult PrintFromTo(FormCollection form, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
             //here;
@@ -401,6 +567,36 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 throw new Exception(ex.ToString());
             }
+
+        }
+
+        public ActionResult PrintAllPreview(int TuyenID, int month, int year)
+        {
+            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
+            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, null);
+
+            Report report = new Report();
+            report.Load(Path.Combine(Server.MapPath("~/Reports/Report.rpt")));
+            var source = GetDanhSachHoaDons(TuyenID, month, year).ToList();
+
+            //cập nhật trạng thái in cho tất cả các hóa đơn
+            foreach (var item in source)
+            {
+                int hoaDonID = item.HoaDonID;
+            }
+            //đặt datasource để đẩy vào crystal report
+            report.SetDataSource(source);
+            try
+            {
+                Stream str = report.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                str.Seek(0, SeekOrigin.Begin);
+                return File(str, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+
         }
 
         public ActionResult PrintCrystalReport(int TuyenID, int month, int year)

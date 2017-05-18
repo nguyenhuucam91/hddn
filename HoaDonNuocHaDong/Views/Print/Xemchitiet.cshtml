@@ -51,16 +51,26 @@
                                                                                                    @month = selectedMonth, 
                                                                                                    @year = selectedYear })')">In tất cả</button>
                                 <p></p>
+                                <!-- Preview khách hàng được chọn -->
+                                 <form action="/Print/PrintAllSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                    <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />                                    
+                                    <button type="submit" class="btn btn-success printSelected">Xem trước in hóa đơn được chọn</button>
+                                  
+                                </form>
+                                
                                 <!--Form in danh sách khách hàng được chọn-->
                                 <form action="/Print/PrintSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
-                                    <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />                                    
+                                    <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />                                                                       
                                     <button type="submit" class="btn btn-success printSelected">In hóa đơn được chọn</button>
                                 </form>
 
+                                 
+                                
                                 <form action="/Print/PrintFrom?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                     <input type="number" placeholder="Từ số hóa đơn" name="from" class="negNumber" />
                                     <input type="number" placeholder="đến số hóa đơn" name="to" class="negNumber" />
-                                    <input type="submit" value="In danh sách theo số hóa đơn" />
+                                    <input type="submit" value="Xem trước in danh sách theo số hóa đơn" name="printFrom"/>
+                                    <input type="submit" value="In danh sách theo số hóa đơn" name="printFrom" />
                                 </form>
                             }
 
