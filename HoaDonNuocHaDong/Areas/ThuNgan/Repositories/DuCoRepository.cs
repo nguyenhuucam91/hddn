@@ -4,6 +4,7 @@ using System.Data.Linq;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
 using System.Linq;
 using HDNHD.Models.DataContexts;
+using System;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
 {
@@ -18,10 +19,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
 
         public IQueryable<DuCoModel> GetAllDuCoModel(int month, int year)
         {
+            var dtHoaDon = new DateTime(year, month, 1).AddMonths(-1); 
+
             return from d in dc.DuCos
                    join stntt in dc.SoTienNopTheoThangs on d.TienNopTheoThangID equals stntt.ID
                    join hd in dc.Hoadonnuocs on stntt.HoaDonNuocID equals hd.HoadonnuocID
-                   where (hd.NamHoaDon < year || (hd.NamHoaDon == year && hd.ThangHoaDon <= month)) &&
+                   where (hd.NamHoaDon < dtHoaDon.Year || (hd.NamHoaDon == dtHoaDon.Year && hd.ThangHoaDon <= dtHoaDon.Month)) &&
                     (d.TrangThaiTruHet == false ||
                     (d.TrangThaiTruHet == true && (d.NgayTruHet.Value.Year > year ||
                     (d.NgayTruHet.Value.Year == year && d.NgayTruHet.Value.Month > month)))) // chưa trừ HOẶC đã trừ nhưng sau thời điểm month/ year
@@ -37,6 +40,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                    select new DuCoModel()
                    {
                        DuCo = d,
+                       SoTienNopTheoThang = stntt,
                        HoaDon = hd,
                        KhachHang = kh,
                        TuyenKH = t,

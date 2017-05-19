@@ -16,15 +16,23 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
             dc = context;
         }
 
+        // override lọc bỏ bản ghi đã xóa
+        public override IQueryable<HDNHD.Models.DataContexts.Hoadonnuoc> GetAll()
+        {
+            return base.GetAll().Where(m => m.Trangthaixoa == null || m.Trangthaixoa == false);
+        }
+
         public IQueryable<HoaDonModel> GetAllHoaDonModel()
         {
-             var items = from hd in dc.Hoadonnuocs
-                        where hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
+            var hds = GetAll();
+
+            var items = from hd in hds
+                        where hd.Trangthaiin == true // đã in
                         join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
-                        join stntt in dc.SoTienNopTheoThangs on hd.SoTienNopTheoThangID equals stntt.ID
+                        join lshd in dc.Lichsuhoadons on hd.HoadonnuocID equals lshd.HoaDonID
+                        join stntt in dc.SoTienNopTheoThangs on hd.HoadonnuocID equals stntt.HoaDonNuocID
                         join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
                         from dco in gj.DefaultIfEmpty()
-                        join chitietHd in dc.Chitiethoadonnuocs on hd.HoadonnuocID equals chitietHd.HoadonnuocID
                         let cnt = (from _hd in dc.Hoadonnuocs
                                    where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < hd.HoadonnuocID
                                        && (_hd.Trangthaixoa == false || _hd.Trangthaixoa == null)
@@ -32,16 +40,16 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                                    select dc).Count()
                         orderby kh.TuyenKHID
                         orderby kh.TTDoc
+                        orderby hd.HoadonnuocID descending
                         select new HoaDonModel()
                         {
                             HoaDon = hd,
                             KhachHang = kh,
+                            LichSuHoaDon = lshd,
                             SoTienNopTheoThang = stntt,
                             DuCo = dco,
-                            ChiTietHoaDon = chitietHd,
                             CoDuNoQuaHan = cnt > 0
                         };
-
 
             return items;
         }
@@ -51,12 +59,16 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         /// </summary>
         public IQueryable<DuNoModel> GetAllDuNoModel(int month, int year)
         {
-            return from hd in dc.Hoadonnuocs
-                   where hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
-                   && ((hd.Trangthaithu == false || hd.Trangthaithu == null)) || // chưa thanh toán HOẶC đã thanh toán nhưng sau thời điểm month/ year
+            var hds = GetAll();
+
+            var dtHoaDon = new DateTime(year, month, 1).AddMonths(-1);
+
+            return from hd in hds
+                   where hd.Trangthaiin == true
+                   && hd.NamHoaDon < dtHoaDon.Year || (hd.NamHoaDon == dtHoaDon.Year && hd.ThangHoaDon <= dtHoaDon.Month) // hóa đơn trong tháng hoặc trước đó
+                   && ((hd.Trangthaithu == false || hd.Trangthaithu == null) || // chưa thanh toán HOẶC đã thanh toán nhưng sau thời điểm month/ year
                         (hd.Trangthaithu == true &&
-                          (hd.NgayNopTien.Value.Year > year || (hd.NgayNopTien.Value.Year == year && hd.NgayNopTien.Value.Month > month)))
-                           && hd.NamHoaDon < year || (hd.NamHoaDon == year && hd.ThangHoaDon <= month) // hóa đơn trong tháng hoặc trước đó
+                          (hd.NgayNopTien.Value.Year > year || (hd.NgayNopTien.Value.Year == year && hd.NgayNopTien.Value.Month > month))))
                    join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
                    join stntt in dc.SoTienNopTheoThangs on hd.HoadonnuocID equals stntt.HoaDonNuocID
                    join t in dc.Tuyenkhachhangs on kh.TuyenKHID equals t.TuyenKHID
@@ -66,6 +78,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                               select gd).FirstOrDefault()
                    orderby kh.TuyenKHID
                    orderby kh.TTDoc
+                   orderby hd.HoadonnuocID descending
                    select new DuNoModel()
                    {
                        HoaDon = hd,

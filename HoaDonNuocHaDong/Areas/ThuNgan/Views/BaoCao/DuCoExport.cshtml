@@ -1,5 +1,6 @@
 ﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.DuCoModel>
-@{ 
+@using HDNHD.Core.Helpers;
+@{
     Layout = null;
 }
 <meta charset="utf-8" />
@@ -11,8 +12,11 @@
             <th>Mã khách hàng</th>
             <th>Tên khách hàng</th>
             <th>Địa chỉ</th>
-            <th>Tuyến khách hàng</th>
-            <th>Tháng hóa đơn</th>
+            <th>Tuyến</th>
+            <th>Tháng</th>
+            <th>Số tiền trên hóa đơn</th>
+            <th>Số tiền phải nộp</th>
+            <th>Số tiền đã nộp</th>
             <th>Dư có</th>
         </tr>
     </thead>
@@ -26,14 +30,17 @@
             <td>@item.KhachHang.Ten</td>
             <td>@item.KhachHang.Diachi</td>
             <td>@item.TuyenKH.Ten</td>
-            <td style="mso-number-format:mm\/yyyy; text-align: center;">@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)item.SoTien)</td>
+            <td style="mso-number-format:mm\/yyyy;">@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+            <td style="text-align: right;">@item.SoTienNopTheoThang.SoTienTrenHoaDon</td>
+            <td style="text-align: right;">@item.SoTienNopTheoThang.SoTienPhaiNop</td>
+            <td style="text-align: right;">@item.SoTienNopTheoThang.SoTienDaThu</td>
+            <td style="text-align: right;">@item.SoTien</td>
         </tr>
     }
     <tfoot>
         <tr style="font-weight: bold;">
-            <td style="text-align: right;" colspan="7">Tổng</td>
-            <td style="text-align: right;"> @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int)ViewBag.TongSoDu) </td>
+            <td style="text-align: right;" colspan="10">Tổng</td>
+            <td style="text-align: right;"> @ViewBag.TongSoDu </td>
         </tr>
     </tfoot>
 </table>

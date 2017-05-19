@@ -1,4 +1,6 @@
-﻿<div class="main">
+﻿@using HDNHD.Core.Helpers;
+
+<div class="main">
     <div class="main-inner">
         <div class="container">
             <div class="row">
@@ -24,13 +26,13 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuNoDauKy)</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuCoDauKy)</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienTrenHoaDon)</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienPhaiThu)</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.SoTienDaThu)</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuNoCuoiKy)</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.DuCoCuoiKy)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoDauKy)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoDauKy)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienTrenHoaDon)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienPhaiThu)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThu)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoCuoiKy)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoCuoiKy)</td>
                                     </tr>
                                 </tbody>
                             </table>

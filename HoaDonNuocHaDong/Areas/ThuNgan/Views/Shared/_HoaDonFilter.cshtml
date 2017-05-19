@@ -3,12 +3,12 @@
 
 <div class="form-horizontal">
     <ul class="nav nav-tabs">
-        <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active" : "")"><a data-toggle="tab" href="#tab1">Lọc theo thông tin quản lý</a></li>
+        <li class="@(Model.Mode == null || Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active" : "")"><a data-toggle="tab" href="#tab1">Lọc theo thông tin quản lý</a></li>
         <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByUserInfo ? "active" : "")"><a data-toggle="tab" href="#tab2">Lọc theo thông tin khách hàng</a></liclass=">
     </ul>
 
     <div class="tab-content">
-        <div id="tab1" class="tab-pane fade in @(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active" : "")">
+        <div id="tab1" class="tab-pane fade in @(Model.Mode == null || Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonFilterModel.FilterByManagementInfo ? "active" : "")">
             <form method="get" action="">
                 <div class="form-filter text-center">
                     <div class="form-group">
@@ -50,7 +50,7 @@
 
                 <div class="center form-group">
                     <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-default">Xuất excel</button>
-                    @if (ViewBag.Current.Month == ViewBag.Filter.Month && ViewBag.Current.Year == ViewBag.Filter.Year && ViewBag.Filter.TrangThaiThu == ETrangThaiThu.ChuaNopTien)
+                    @if (ViewBag.Filter.Month == DateTime.Now.Month && ViewBag.Filter.Year == DateTime.Now.Year && ViewBag.Filter.TrangThaiThu == ETrangThaiThu.ChuaNopTien)
                     {
                         <a href="#" class="btn btn-warning" id="btn-danh-dau-tat-ca">
                             Đánh dấu tất cả đã nộp

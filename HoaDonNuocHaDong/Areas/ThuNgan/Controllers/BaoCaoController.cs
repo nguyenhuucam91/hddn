@@ -33,13 +33,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         public ActionResult DuCo(int? month, int? year, DuCoFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
         {
             IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
-
-            // default values
-            var current = DateTime.Now.AddMonths(-1);
+            
+            // default values: xem báo cáo tháng trước
+            var dtBaoCao = DateTime.Now.AddMonths(-1);
             if (month == null)
-                month = current.Month;
+                month = dtBaoCao.Month;
             if (year == null)
-                year = current.Year;
+                year = dtBaoCao.Year;
 
             if (filter.Mode == null) // not in filter
             {
@@ -84,12 +84,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         {
             IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
 
-            // default values
-            var current = DateTime.Now.AddMonths(-1);
+            // default values: xem báo cáo tháng trước
+            var dtBaoCao = DateTime.Now.AddMonths(-1);
             if (month == null)
-                month = current.Month;
+                month = dtBaoCao.Month;
             if (year == null)
-                year = current.Year;
+                year = dtBaoCao.Year;
             
             if (filter.Mode == null) // not in filter
             {
@@ -142,14 +142,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             var duCoRepository = uow.Repository<DuCoRepository>();
             var giaoDichRepository = uow.Repository<GiaoDichRepository>();
             var soTienNopTheoThangRepository = uow.Repository<SoTienNopTheoThangRepository>();
-           
-            // default values
-            var current = DateTime.Now.AddMonths(-1);
+
+            // default values: xem báo cáo tháng trước
+            var dtBaoCao = DateTime.Now.AddMonths(-1);
             if (month == null)
-                month = current.Month;
+                month = dtBaoCao.Month;
             if (year == null)
-                year = current.Year;
-            current = new DateTime(year.Value, month.Value, 1);
+                year = dtBaoCao.Year;
 
             if (filter.Mode == null) // not in filter
             {
@@ -184,20 +183,27 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             }
 
             // data
-            var prev = current.AddMonths(-1);
-
+            var prevMonth = month;
+            var prevYear = year;
+            prevMonth--;
+            if (prevMonth < 1)
+            {
+                prevMonth = 12;
+                prevYear--;
+            }
+            
             // dư nợ đầu kỳ
-            var duNoDauKy = hoaDonRepository.GetAllDuNoModel(prev.Month, prev.Year);
+            var duNoDauKy = hoaDonRepository.GetAllDuNoModel(prevMonth.Value, prevYear.Value);
             duNoDauKy = duNoFilter.ApplyFilter(duNoDauKy);
             ViewBag.DuNoDauKy = duNoDauKy.Sum(m => m.SoTienNo) ?? 0;
 
             // dư có đầu kỳ
-            var duCoDauKy = duCoRepository.GetAllDuCoModel(prev.Month, prev.Year);
+            var duCoDauKy = duCoRepository.GetAllDuCoModel(prevMonth.Value, prevYear.Value);
             duCoDauKy = duCoFilter.ApplyFilter(duCoDauKy);
             ViewBag.DuCoDauKy = duCoDauKy.Sum(m => m.SoTien) ?? 0;
 
-            // hóa đơn in trong tháng
-            var soTienNopTheoThang = soTienNopTheoThangRepository.GetAllByMonthYear(current.Month, current.Year);
+            // hóa đơn in trong tháng (tháng hóa đơn - 1)
+            var soTienNopTheoThang = soTienNopTheoThangRepository.GetAllByMonthYear(month.Value, year.Value);
             soTienNopTheoThang = soTienNopTheoThangFilter.ApplyFilter(soTienNopTheoThang);
             ViewBag.SoTienTrenHoaDon = soTienNopTheoThang.Sum(m => m.SoTienTrenHoaDon) ?? 0;
             
@@ -205,17 +211,17 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.SoTienPhaiThu = soTienNopTheoThang.Sum(m => m.SoTienPhaiNop) ?? 0;
 
             // số tiền đã thu 
-            var giaoDich = giaoDichRepository.GetAllByMonthYear(current.Month, current.Year);
+            var giaoDich = giaoDichRepository.GetAllByMonthYear(month.Value, year.Value);
             giaoDich = giaoDichFilter.ApplyFilter(giaoDich);
             ViewBag.SoTienDaThu = giaoDich.Sum(m => m.SoTien) ?? 0;
 
             // dư nợ cuối kỳ
-            var duNoCuoiKy = hoaDonRepository.GetAllDuNoModel(current.Month, current.Year);
+            var duNoCuoiKy = hoaDonRepository.GetAllDuNoModel(month.Value, year.Value);
             duNoCuoiKy = duNoFilter.ApplyFilter(duNoCuoiKy);
             ViewBag.DuNoCuoiKy = duNoCuoiKy.Sum(m => m.SoTienNo) ?? 0;
 
             // dư có cuối kỳ
-            var duCoCuoiKy = duCoRepository.GetAllDuCoModel(current.Month, current.Year);
+            var duCoCuoiKy = duCoRepository.GetAllDuCoModel(month.Value, year.Value);
             duCoCuoiKy = duCoFilter.ApplyFilter(duCoCuoiKy);
             ViewBag.DuCoCuoiKy = duCoCuoiKy.Sum(m => m.SoTien) ?? 0;
 

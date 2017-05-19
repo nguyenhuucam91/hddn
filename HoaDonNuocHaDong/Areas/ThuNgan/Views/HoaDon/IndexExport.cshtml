@@ -6,7 +6,7 @@
 <table border="1">
     <thead>
         <tr>
-            <th>TT</th>
+            <th>STT</th>
             <th>Mã khách hàng</th>
             <th>Tên khách hàng</th>
             <th>Địa chỉ</th>
@@ -30,27 +30,29 @@
             <td class="text-center">@item.KhachHang.MaKhachHang</td>
             <td>@item.KhachHang.Ten</td>
             <td>@item.KhachHang.Diachi</td>
-            <td style='mso-number-format:"mm\/yyyy"'>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienTrenHoaDon)</td>
-            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
-            <td style="text-align: right; font-weight:bold">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(duNo)</td>
+            <td style="mso-number-format:mm\/yyyy">@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+            <td style="text-align: right;">@item.LichSuHoaDon.TongCong</td>
+            <td style="text-align: right;">@item.SoTienNopTheoThang.SoTienPhaiNop</td>
+            <td style="text-align: right; font-weight:bold color:@(duNo > 0 ? "red" : "green")">
+                @(duNo > 0 ? duNo : -duNo)
+            </td>
             <td style="text-align: center;">
                 @(item.HoaDon.Trangthaithu == true ? "x" : "")
             </td>
-            <td style='mso-number-format:"dd\/mm\/yyyy"'>
+            <td style="mso-number-format:dd\/mm\/yyyy">
                 @(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")
             </td>
             <td style="text-align: right">
-                @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
+                @item.SoTienNopTheoThang.SoTienDaThu.Value
             </td>
         </tr>
     }
     <tfoot>
         <tr style="font-weight: bold;">
             <td style="text-align: right;" colspan="6">Tổng số tiền phải nộp</td>
-            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienPhaiNop)</td>
+            <td style="text-align: right;">@ViewBag.TongSoTienPhaiNop</td>
             <td style="text-align: right;" colspan="3">Tổng số tiền đã thu</td>
-            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienDaNop)</td>
+            <td style="text-align: right;">@ViewBag.TongSoTienDaNop</td>
         </tr>
     </tfoot>
 </table>

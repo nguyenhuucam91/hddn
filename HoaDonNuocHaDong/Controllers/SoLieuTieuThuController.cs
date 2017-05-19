@@ -287,7 +287,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             //thêm 1 records số tiền phải nộp vào tháng sau với ngày kết thúc của tháng này là ngày bắt đầu của tháng sau
             HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
-            hD.themMoiSoTienPhaiNop(HoaDonID);
+            themMoiSoTienPhaiNop(HoaDonID);
             //lấy 2 object đẩy vào 
 
             //thêm mới record vào bảng lịch sử sử dụng nước để in
@@ -513,7 +513,7 @@ namespace HoaDonNuocHaDong.Controllers
             //Cập nhật lại SH1...
             tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value, SoKhoan, KHID);
             HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
-            hD.themMoiSoTienPhaiNop(HoaDonID);
+            themMoiSoTienPhaiNop(HoaDonID);
             //thêm vào bảng lịch sử sử dụng nước
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
@@ -814,7 +814,7 @@ namespace HoaDonNuocHaDong.Controllers
             //thêm 1 records số tiền phải nộp
             //HoaDonNuoc.themMoiHoaDonThangSau(KHID, id.Value, ChiSoCu + Sum, Convert.ToInt32(Session["nhanvien"]),null,null);
 
-            hD.themMoiSoTienPhaiNop(id.Value);
+            themMoiSoTienPhaiNop(id.Value);
             //thêm vào bảng lịch sử
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
 
@@ -859,6 +859,121 @@ namespace HoaDonNuocHaDong.Controllers
                   thuNgan, obj.TuyenKHID.Value, obj.TTDoc.Value, tongCongCongDon, startDate, endDate);
 
             return RedirectToAction("Index", new { to = to, nhanvien = nhanvien, tuyen = tuyen, thang = thang, nam = nam });
+        }
+
+        /// <summary>
+        /// Thêm mới số tiền phải nộp trong tháng đó
+        /// </summary>
+        /// <param name="HoaDonID"></param>
+
+        public void themMoiSoTienPhaiNop(int HoaDonID)
+        {
+            Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
+            Hoadonnuoc hoadon = db.Hoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
+            //khu vực SH
+            double SH1 = 0; double SXXD = 0;
+            double SH2 = 0; double HC = 0;
+            double SH3 = 0; double CC = 0;
+            double SH4 = 0; double KDDV = 0;
+
+            if (chiTiet != null)
+            {
+                SH1 = chiTiet.SH1.GetValueOrDefault();
+                SH2 = chiTiet.SH2.GetValueOrDefault();
+                SH3 = chiTiet.SH3.GetValueOrDefault();
+                SH4 = chiTiet.SH4.GetValueOrDefault();
+                SXXD = chiTiet.SXXD.GetValueOrDefault();
+                HC = chiTiet.HC.GetValueOrDefault();
+                CC = chiTiet.CC.GetValueOrDefault();
+                KDDV = chiTiet.KDDV.GetValueOrDefault();
+            }
+
+            int thangHoaDon = hoadon.ThangHoaDon.Value;
+            int namHoaDon = hoadon.NamHoaDon.Value;
+            int PhiBVMT = hoadon.Khachhang.Tilephimoitruong.Value;
+            //tỉnh tổng định mức
+            double tongTienDinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, SH1, SH2, SH3, SH4, HC, CC, KDDV, SXXD);
+            double tongVAT = Convert.ToInt32(tongTienDinhMuc * 0.05);
+            var phiBVMT = (from i in db.Hoadonnuocs
+                           join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
+                           select new
+                           {
+                               TilePhiMoiTruong = r.Tilephimoitruong
+                           }).FirstOrDefault();
+            double soBVMT = Convert.ToDouble(phiBVMT.TilePhiMoiTruong.Value);
+            double tileBVMT = soBVMT / 100; //ra 0
+            double tongPhiBVMT = Convert.ToInt32(tongTienDinhMuc * tileBVMT);
+
+            var tmp = (int)(tongTienDinhMuc + tongVAT + tongPhiBVMT);
+
+            /* congnv 170515 */
+            var stntt = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
+            var ducoTruoc = db.DuCoes.FirstOrDefault(m => m.KhachhangID == hoadon.KhachhangID // dư có trước đó chưa trừ hết
+                && (m.TrangThaiTruHet == false || // chưa trừ hoặc đã trừ hết cho hóa đơn này trước đó (trong TH cập nhật)
+                (m.TrangThaiTruHet == true && m.NgayTruHet.Value.Month == hoadon.ThangHoaDon && m.NgayTruHet.Value.Year == hoadon.NamHoaDon)));
+            DuCo duco = null; // dư có tháng này (trong TH cập nhật)
+
+            if (stntt == null)
+            {
+                stntt = new SoTienNopTheoThang()
+                {
+                    HoaDonNuocID = hoadon.HoadonnuocID,
+                    SoTienDaThu = 0,
+                    SoTienPhaiNop = 0
+                };
+
+                db.SoTienNopTheoThangs.Add(stntt);
+            }
+            else
+            {
+                db.Entry(stntt).State = System.Data.Entity.EntityState.Modified;
+                duco = db.DuCoes.FirstOrDefault(m => m.TienNopTheoThangID == stntt.ID);
+            }
+
+            stntt.SoTienTrenHoaDon = (int)(tongTienDinhMuc + tongVAT + tongPhiBVMT);
+            stntt.SoTienPhaiNop = stntt.SoTienTrenHoaDon;
+
+            if (ducoTruoc != null) // trừ dư có (nếu có)
+            {
+                ducoTruoc.TrangThaiTruHet = true;
+                ducoTruoc.NgayTruHet = DateTime.Now;
+
+                if (ducoTruoc.SoTienDu < stntt.SoTienTrenHoaDon)
+                {
+                    stntt.SoTienPhaiNop -= ducoTruoc.SoTienDu;
+                }
+                else
+                {
+                    stntt.SoTienPhaiNop = 0;
+                    // update hoadon
+                    hoadon.Trangthaithu = true;
+                    hoadon.NgayNopTien = DateTime.Now;
+
+                    // save db cập nhật stntt.ID
+                    db.SaveChanges();
+
+                    if (ducoTruoc.SoTienDu > stntt.SoTienTrenHoaDon)
+                    {
+                        if (duco == null)
+                        {
+                            duco = new DuCo()
+                            {
+                                KhachhangID = hoadon.KhachhangID,
+                                TienNopTheoThangID = stntt.ID,
+                            };
+                            db.DuCoes.Add(duco);
+                        }
+                        else
+                        {
+                            db.Entry(duco).State = System.Data.Entity.EntityState.Modified;
+                        }
+
+                        duco.SoTienDu = ducoTruoc.SoTienDu - stntt.SoTienTrenHoaDon;
+                    }
+                }
+            }
+            db.SaveChanges();
+            /* END congnv 170515 */
         }
 
         public string insertToLichSuSuDungNuoc(int HoaDonID, int thangHoaDon, int namHoaDon, String tenKH, String diaChi, String MST, String maKH, int TuyenKHID, String soHD,

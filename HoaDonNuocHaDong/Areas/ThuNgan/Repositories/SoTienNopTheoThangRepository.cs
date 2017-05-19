@@ -21,9 +21,11 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
 
         public IQueryable<SoTienNopTheoThangModel> GetAllByMonthYear(int month, int year)
         {
+            var dtHoaDon = new DateTime(year, month, 1).AddMonths(-1);
+
             return from item in dc.SoTienNopTheoThangs
                    join hd in dc.Hoadonnuocs on item.HoaDonNuocID equals hd.HoadonnuocID
-                   where hd.ThangHoaDon == month && hd.NamHoaDon == year &&
+                   where hd.ThangHoaDon == dtHoaDon.Month && hd.NamHoaDon == dtHoaDon.Year &&
                    hd.Trangthaiin == true && (hd.Trangthaixoa == false || hd.Trangthaixoa == null)
                    select new SoTienNopTheoThangModel()
                    {

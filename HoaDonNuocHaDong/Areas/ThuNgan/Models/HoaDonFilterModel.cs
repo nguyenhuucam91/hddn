@@ -11,7 +11,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public const string FilterByUserInfo = "FilterByUserInfo";
 
         public int? Month { get; set; }
-        public int? Year { get; set; }
+        public int Year { get; set; }
 
         public ELoaiKhachHang? LoaiKhachHang { get; set; }
 
@@ -34,16 +34,11 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public string TenKH { get; set; }
 
         public string DiaChiKH { get; set; }
-
-        public HoaDonFilterModel()
-        {
-            Mode = FilterByManagementInfo;
-        }
-
+    
         #region BaseFilterModel
         public override void ApplyFilter(ref IQueryable<HoaDonModel> items)
         {
-            if (Mode == FilterByManagementInfo)
+            if (Mode == null || Mode == FilterByManagementInfo)
             {
                 HDNHDDataContext context = (HDNHDDataContext)GetDataContext(items);
 
@@ -54,15 +49,23 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 }
                 else
                 {
-                    if (Year != null)
-                    {
-                        items = items.Where(m => m.HoaDon.NamHoaDon == Year);
-                    }
-                    if (Month != null)
-                    {
-                        items = items.Where(m => m.HoaDon.ThangHoaDon == Month);
-                    }
+                    var month = Month;
+                    var year = Year;
 
+                    if (month != null)
+                    {
+                        month--;
+                        if (month < 1)
+                        {
+                            month = 12;
+                            year--;
+                        }   
+                       
+                        items = items.Where(m => m.HoaDon.ThangHoaDon == month);
+                    }
+                    
+                    items = items.Where(m => m.HoaDon.NamHoaDon == year);
+                    
                     if (TrangThaiThu != null)
                     {
                         if (TrangThaiThu == ETrangThaiThu.DaNopTien)

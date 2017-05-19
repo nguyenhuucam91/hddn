@@ -1,12 +1,11 @@
 ﻿using HDNHD.Core.Models;
-using HDNHD.Models.Constants;
+using HDNHD.Core.Helpers;
 using HoaDonNuocHaDong.Areas.ThuNgan.Helpers;
 using HoaDonNuocHaDong.Areas.ThuNgan.Repositories;
 using HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces;
 using HoaDonNuocHaDong.Base;
 using System;
 using System.Globalization;
-using System.Web.Mvc;
 
 namespace HoaDonNuocHaDong.Areas.Services.Controllers
 {
@@ -65,8 +64,8 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
                      },
                      SoTienNopTheoThang = new
                      {
-                         SoTienDaThu = HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(model.SoTienNopTheoThang.SoTienDaThu ?? 0),
-                         DuNo = HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(duNo > 0 ? duNo : -duNo)
+                         SoTienDaThu = CurrencyHelpers.FormatVN(model.SoTienNopTheoThang.SoTienDaThu ?? 0),
+                         DuNo = CurrencyHelpers.FormatVN(duNo > 0 ? duNo : -duNo)
                      }
                  });
         }
@@ -114,8 +113,8 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
                     },
                     SoTienNopTheoThang = new
                     {
-                        SoTienDaThu = HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(model.SoTienNopTheoThang.SoTienDaThu ?? 0),
-                        DuNo = HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(duNo > 0 ? duNo : -duNo)
+                        SoTienDaThu = CurrencyHelpers.FormatVN(model.SoTienNopTheoThang.SoTienDaThu ?? 0),
+                        DuNo = CurrencyHelpers.FormatVN(duNo > 0 ? duNo : -duNo)
                     }
                 });
         }

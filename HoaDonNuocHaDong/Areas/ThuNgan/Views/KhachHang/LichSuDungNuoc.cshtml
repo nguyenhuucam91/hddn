@@ -1,4 +1,6 @@
 ﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel>
+@using HDNHD.Core.Helpers;
+
 <div class="main">
     <div class="main-inner">
         <div class="container">
@@ -22,7 +24,7 @@
                                 <table class="table table-striped table-bordered data-table">
                                     <thead>
                                         <tr>
-                                            <th>TT</th>
+                                            <th>#</th>
                                             <th>Tháng</th>
                                             <th>CS cũ</th>
                                             <th>CS mới</th>
@@ -34,6 +36,7 @@
                                             <th>SXVC</th>
                                             <th>KD</th>
                                             <th>Tổng SL</th>
+                                            <th>Số tiền trên hóa đơn</th>
                                             <th>Số tiền phải nộp</th>
                                             <th>Trạng thái thu</th>
                                             <th>Ngày thu</th>
@@ -49,17 +52,18 @@
                                         <tr>
                                             <td style="text-align: right">@(++stt)</td>
                                             <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-                                            <td>@item.ChiTietHoaDon.Chisocu</td>
-                                            <td>@item.ChiTietHoaDon.Chisomoi</td>
-                                            <td>@item.ChiTietHoaDon.SH1</td>
-                                            <td>@item.ChiTietHoaDon.SH2</td>
-                                            <td>@item.ChiTietHoaDon.SH3</td>
-                                            <td>@item.ChiTietHoaDon.SH4</td>
-                                            <td>@item.ChiTietHoaDon.HC</td>
-                                            <td>@item.ChiTietHoaDon.SXXD</td>
-                                            <td>@item.ChiTietHoaDon.KDDV</td>
-                                            <td>@(item.ChiTietHoaDon.Chisomoi - item.ChiTietHoaDon.Chisocu)</td>
-                                            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
+                                            <td>@item.LichSuHoaDon.ChiSoCu</td>
+                                            <td>@item.LichSuHoaDon.ChiSoMoi</td>
+                                            <td>@item.LichSuHoaDon.SH1</td>
+                                            <td>@item.LichSuHoaDon.SH2</td>
+                                            <td>@item.LichSuHoaDon.SH3</td>
+                                            <td>@item.LichSuHoaDon.SH4</td>
+                                            <td>@item.LichSuHoaDon.HC</td>
+                                            <td>@item.LichSuHoaDon.SX</td>
+                                            <td>@item.LichSuHoaDon.KD</td>
+                                            <td>@item.LichSuHoaDon.SanLuongTieuThu</td>
+                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.LichSuHoaDon.TongCong)</td>
+                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
                                             <td style="text-align: center;">
                                                 <input type="checkbox" @(item.HoaDon.Trangthaithu == true ? "checked" : "") class="chk-thanh-toan" value="@item.HoaDon.HoadonnuocID" />
                                             </td>

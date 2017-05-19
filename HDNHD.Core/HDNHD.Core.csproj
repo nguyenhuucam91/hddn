@@ -110,6 +110,7 @@
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Helpers\ApplicationCache.cs" />
     <Compile Include="Helpers\AuthHelpers.cs" />
+    <Compile Include="Helpers\CurrencyHelpers.cs" />
     <Compile Include="Helpers\StringHelpers.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Models\AjaxResult.cs" />

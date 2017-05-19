@@ -1,5 +1,6 @@
 ﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel>
 @using HDNHD.Core.Models;
+@using HDNHD.Core.Helpers;
 
 <div class="main">
     <div class="main-inner">
@@ -16,7 +17,7 @@
                             <table class="table table-striped table-bordered data-table">
                                 <thead>
                                     <tr>
-                                        <th>TT</th>
+                                        <th>STT</th>
                                         <th>Mã khách hàng</th>
                                         <th>Tên khách hàng</th>
                                         <th>Địa chỉ</th>
@@ -31,11 +32,9 @@
                                 </thead>
                                 @{
                                     var stt = 0;
-                                    int tong = 0;
                                 }
                                 @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
                                 {
-                                    tong += item.SoTienNopTheoThang.SoTienDaThu ?? 0;
                                     int duNo = (int)(item.SoTienNopTheoThang.SoTienPhaiNop - item.SoTienNopTheoThang.SoTienDaThu);
                                     <tr>
                                         <td style="text-align: right">@(++stt)</td>
@@ -47,9 +46,13 @@
                                         </td>
                                         <td>@item.KhachHang.Diachi</td>
                                         <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienTrenHoaDon)</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienPhaiNop.Value)</td>
-                                        <td style="text-align: right; font-weight:bold"><span class="txt-so-tien-con-thieu @(duNo > 0 ? "text-error" : "text-success")">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(duNo > 0 ? duNo : -duNo)</span></td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.LichSuHoaDon.TongCong)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
+                                        <td style="text-align: right; font-weight:bold">
+                                            <span class="txt-so-tien-con-thieu @(duNo > 0 ? "text-error" : "text-success")">
+                                                @CurrencyHelpers.FormatVN(duNo > 0 ? duNo : -duNo)
+                                            </span>
+                                        </td>
                                         <td style="text-align: center;">
                                             @if (item.HoaDon.Trangthaithu == true)
                                             {
@@ -89,8 +92,8 @@
                                             <input type="date" class="tbx-ngay-thu" autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
                                         </td>
                                         <td style="text-align: right; width: 12%">
-                                            <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu.Value > item.SoTienNopTheoThang.SoTienPhaiNop.Value ? "text-success":"")">
-                                                @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
+                                            <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu > item.SoTienNopTheoThang.SoTienPhaiNop ? "text-success":"")">
+                                                @CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienDaThu)
                                             </span>
                                             @if (!item.CoDuNoQuaHan)
                                             {
@@ -108,9 +111,9 @@
                                 <tfoot>
                                     <tr style="font-weight: bold;">
                                         <td style="text-align: right;" colspan="6">Tổng số tiền phải nộp</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienPhaiNop)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienPhaiNop)</td>
                                         <td style="text-align: right;" colspan="3">Tổng số tiền đã thu</td>
-                                        <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienDaNop)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienDaNop)</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -334,7 +337,6 @@
                     toastr.success("Hoàn tất đánh dấu tất cả ĐÃ NỘP!");
                 }
             }
-
             /* END Đánh dấu tất cả */
         });
     </script>

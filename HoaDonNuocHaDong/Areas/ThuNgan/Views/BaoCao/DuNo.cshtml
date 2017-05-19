@@ -1,4 +1,5 @@
 ﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.DuNoModel>
+@using HDNHD.Core.Helpers;
 <div class="main">
     <div class="main-inner">
         <div class="container">
@@ -25,7 +26,7 @@
                                                         <th>Địa chỉ</th>
                                                         <th>Tuyến</th>
                                                         <th>Tháng</th>
-                                                        <th>Số hóa đơn</th>
+                                                        <th>Số tiền trên hóa đơn</th>
                                                         <th>Số tiền phải nộp</th>
                                                         <th>Số tiền đã nộp</th>
                                                         <th>Dư nợ</th>
@@ -43,19 +44,19 @@
                                                             <td>@item.KhachHang.Diachi</td>
                                                             <td>@item.TuyenKhachHang.Ten</td>
                                                             <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-                                                            <td>@item.HoaDon.Sohoadon</td>
-                                                            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int) item.SoTienNopTheoThang.SoTienPhaiNop)</td>
-                                                            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int) item.SoTienDaNop)</td>
-                                                            <td style="text-align: right;">@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency((int) item.SoTienNo)</td>
+                                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienTrenHoaDon)</td>
+                                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
+                                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienDaNop)</td>
+                                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNo)</td>
                                                         </tr>
                                                     }
                                                 </tbody>
                                                 <tfoot>
                                                     <tr role="row" style="font-weight:bold">
                                                         <td colspan="8" style="text-align: right">Tổng</td>
-                                                        <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienPhaiNop)</td>
-                                                        <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienDaNop)</td>
-                                                        <td>@HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(ViewBag.TongSoTienNo)</td>
+                                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienPhaiNop)</td>
+                                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienDaNop)</td>
+                                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienNo)</td>
                                                     </tr>
                                                 </tfoot>
                                             </table>

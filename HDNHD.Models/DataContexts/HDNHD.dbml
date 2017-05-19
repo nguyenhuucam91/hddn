@@ -172,22 +172,6 @@
       <Column Name="ChinhanhID" Type="System.Int32" DbType="Int" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Chitiethoadonnuoc" Member="Chitiethoadonnuocs">
-    <Type Name="Chitiethoadonnuoc">
-      <Column Name="ChitiethoadonnuocID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="HoadonnuocID" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Chisocu" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Chisomoi" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SH1" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="SH2" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="SH3" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="SH4" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="HC" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="CC" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="SXXD" Type="System.Double" DbType="Float" CanBeNull="true" />
-      <Column Name="KDDV" Type="System.Double" DbType="Float" CanBeNull="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.DuCo" Member="DuCos">
     <Type Name="DuCo">
       <Column Name="DuCoID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -205,6 +189,51 @@
       <Column Name="SoTienPhaiNop" Type="System.Double" DbType="Float" CanBeNull="true" />
       <Column Name="SoTienDaThu" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="SoTienTrenHoaDon" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Lichsuhoadon" Member="Lichsuhoadons">
+    <Type Name="Lichsuhoadon">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="HoaDonID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ThangHoaDon" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NamHoaDon" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TenKH" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Diachi" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="MST" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MaKH" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SoHopDong" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SanLuongTieuThu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ChiSoCu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ChiSoMoi" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SH1" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SH1Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SH2" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SH2Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SH3" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SH3Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SH4" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SH4Price" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="HC" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="HCPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CC" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CCPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SX" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="SXPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="KD" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="KDPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ThueSuat" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ThueSuatPrice" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="TileBVMT" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="PhiBVMT" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="TongCong" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="BangChu" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="TTVoOng" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="TTThungan" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TuyenKHID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TTDoc" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ChiSoCongDon" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="NgayBatDau" Type="System.String" DbType="NVarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="NgayKetThuc" Type="System.String" DbType="NVarChar(15) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

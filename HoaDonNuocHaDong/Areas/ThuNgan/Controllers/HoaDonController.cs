@@ -30,16 +30,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult Index(HoaDonFilterModel filter, Pager pager, String todo, ViewMode viewMode = ViewMode.Default)
         {
-            var current = DateTime.Now.AddMonths(-1);
-
             // default values
-            if (filter.Mode == HoaDonFilterModel.FilterByManagementInfo) // not in filter
-            {
-                if ((filter.Month == null && filter.Year == null) ||
-                    filter.TrangThaiThu == HDNHD.Models.Constants.ETrangThaiThu.DaQuaHan)
+            if (filter.Mode == null || filter.Mode == HoaDonFilterModel.FilterByUserInfo) { // not in filter
+                if ((filter.Month == null) || filter.TrangThaiThu == HDNHD.Models.Constants.ETrangThaiThu.DaQuaHan)
                 {
-                    filter.Month = current.Month;
-                    filter.Year = current.Year;
+                    filter.Month = DateTime.Now.Month;
+                    filter.Year = DateTime.Now.Year;
 
                     if (filter.TrangThaiThu == null)
                         filter.TrangThaiThu = HDNHD.Models.Constants.ETrangThaiThu.ChuaNopTien;
@@ -60,9 +56,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                     }
                 }
             }
-
+            
             // query items
             var items = hoaDonRepository.GetAllHoaDonModel();
+
             items = filter.ApplyFilter(items);
 
             ViewBag.TongSoTienPhaiNop = items.Sum(m => m.SoTienNopTheoThang.SoTienPhaiNop) ?? 0;
@@ -78,20 +75,19 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
 
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
-            ViewBag.Current = current;
             ViewBag.ToDo = todo; // actions
             #endregion
             return View(items.ToList());
         }
-        
+
         public ActionResult ThemGiaoDich(int hoaDonID, Pager pager)
         {
             IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
             var model = hoaDonRepository.GetHoaDonModelByID(hoaDonID);
-            
+
             if (model == null)
-                return HttpNotFound();
-            
+                return HttpNotFound("Dữ liệu bất đồng bộ. Vui lòng refresh lại trang!");
+
             var giaoDichs = giaoDichRepository.GetAllGiaoDichModelByKHID(model.KhachHang.KhachhangID);
             giaoDichs = pager.ApplyPager(giaoDichs);
             #region view data
