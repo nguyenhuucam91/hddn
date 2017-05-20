@@ -25,8 +25,9 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class BaoCaoInHoaDonController : BaseController
     {
-        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+       
         NguoidungHelper ngDungHelper = new NguoidungHelper();
+        BaoCaoSanLuongDoanhThu baoCaoSanLuongDoanhThu = new BaoCaoSanLuongDoanhThu();
         // GET: BaoCaoInHoaDon
         public ActionResult Index()
         {
@@ -45,12 +46,12 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult XuliBaoCaoSanLuongDoanhThu(FormCollection form, int type)
         {
             int month = String.IsNullOrEmpty(form["m1"]) ? DateTime.Now.Month : Convert.ToInt32(form["m1"]);
-            int year = String.IsNullOrEmpty(form["y1"]) ? DateTime.Now.Year : Convert.ToInt32(form["y1"]);
-            int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
+            int year = String.IsNullOrEmpty(form["y1"]) ? DateTime.Now.Year : Convert.ToInt32(form["y1"]);           
             ControllerBase<BaoCaoSanLuongDoanhThu> cB = new ControllerBase<BaoCaoSanLuongDoanhThu>();
             //type = 0 => quận
             if (type == 0)
             {
+                int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
                 if (quanHuyenID == 0)
                 {
                     BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVu",
@@ -67,6 +68,7 @@ namespace HoaDonNuocHaDong.Controllers
                        new SqlParameter("@d2", 0.05)).First();
                     ViewData["baoCaoSanLuongDoanhThu"] = bc;
                 }
+                ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(quanHuyenID);
             }
             //type = 1 => tuyến
             if (type == 1)
@@ -80,6 +82,7 @@ namespace HoaDonNuocHaDong.Controllers
                   new SqlParameter("@list", dsTuyen)).First();
 
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
+                ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
             }
 
             ViewBag.selectedMonth = month.ToString();
@@ -283,19 +286,19 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult XuLiBaoCaoSanLuongDoanhThuTheoQuy(FormCollection form, int type)
         {
             int quy = !String.IsNullOrEmpty(form["q1"]) ? Convert.ToInt32(form["q1"]) : 0;
-            int nam = !String.IsNullOrEmpty(form["y1"]) ? Convert.ToInt32(form["y1"]) : 0;
-            int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
+            int nam = !String.IsNullOrEmpty(form["y1"]) ? Convert.ToInt32(form["y1"]) : 0;            
             String thangTrongQuy = getThangTrongQuy(quy);
             ControllerBase<BaoCaoSanLuongDoanhThu> cB = new ControllerBase<BaoCaoSanLuongDoanhThu>();
             if (type == 0)
             {
+                int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
                 BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoQuanTheoQuy",
                            new SqlParameter("@nam", nam),
                            new SqlParameter("@quan", quanHuyenID),
                            new SqlParameter("@d2", 0.05),
                            new SqlParameter("@list", thangTrongQuy)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
-
+                ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(quanHuyenID);
             }
             else
             {
@@ -306,6 +309,7 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@list", thangTrongQuy),
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
+                ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
             }
 
             ViewBag.selectedMonth = thangTrongQuy;
@@ -329,17 +333,17 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult XuLiBaoCaoSanLuongDoanhThuTheoNam(FormCollection form, int type)
         {           
             int nam = !String.IsNullOrEmpty(form["y1"]) ? Convert.ToInt32(form["y1"]) : 0;
-            int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);            
             ControllerBase<BaoCaoSanLuongDoanhThu> cB = new ControllerBase<BaoCaoSanLuongDoanhThu>();
 
             if (type == 0)
             {
+                int quanHuyenID = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);            
                 BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoQuanTheoNam",
                            new SqlParameter("@nam", nam),
                            new SqlParameter("@quan", quanHuyenID),
                            new SqlParameter("@d2", 0.05)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
-
+                ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(quanHuyenID);
             }
             else
             {
@@ -349,6 +353,7 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@d2", 0.05),                           
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
+                ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
             }
 
             ViewBag.selectedMonth = "";

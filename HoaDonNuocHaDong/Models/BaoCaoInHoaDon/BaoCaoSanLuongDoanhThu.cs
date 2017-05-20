@@ -8,6 +8,7 @@ namespace HoaDonNuocHaDong.Models.BaoCaoInHoaDon
 {
     public class BaoCaoSanLuongDoanhThu : ModelBase
     {
+        ModelQuanHuyen modelQuanHuyen = new ModelQuanHuyen();
         public double SanLuongSH1 { get { return GetD(0); } set { SetD(0, value); } }
         public double SanLuongSH2 { get { return GetD(1); } set { SetD(1, value); } }
         public double SanLuongSH3 { get { return GetD(2); } set { SetD(2, value); } }
@@ -70,6 +71,16 @@ namespace HoaDonNuocHaDong.Models.BaoCaoInHoaDon
         protected override Type TransferType()
         {
             return this.GetType();
+        }
+
+        public String getTieuDeSanLuongDoanhThu(int quanHuyenID)
+        {
+            if (quanHuyenID != 0)
+            {
+                string tenQuanHuyen = modelQuanHuyen.getTenQuanHuyenFromQuanHuyenId(quanHuyenID);
+                return tenQuanHuyen;
+            }
+            return "";
         }
     }
 }

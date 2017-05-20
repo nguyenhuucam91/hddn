@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    var tenQuanHuyen = ViewBag.tenQuanHuyen != null ?  ViewBag.tenQuanHuyen : "Xí nghiệp kinh doanh số 1";
 }
 <!DOCTYPE html>
 <html>
@@ -28,8 +29,8 @@
         <div style="margin:5% auto">
             <div>
                 <div style="float:left;width:45%; font-size:16px">
-                    <div style="margin-left:25%">Công ty nước sạch Hà Đông</div>
-                    <div style="margin-left:25%"><b>Xí nghiệp kinh doanh số 1</b></div>
+                    <div class="center">Công ty nước sạch Hà Đông</div>
+                    <div class="center"><b>@tenQuanHuyen</b></div>
                     <hr style="margin:0 40% 0 27%" />
                 </div>
                 <div>
