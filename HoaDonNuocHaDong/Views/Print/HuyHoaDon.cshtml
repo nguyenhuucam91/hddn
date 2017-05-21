@@ -3,7 +3,7 @@
 
     var hasMaKhachHang = ViewBag.hasMaKhachHang;
     var hoaDonObj = ViewData["hoadon"] as Hoadonnuoc;
-    
+
     Khachhang kh = ViewData["khachHang"] as Khachhang;
     Lichsuhoadon soTienObj = ViewData["soTienPhaiNop"] as Lichsuhoadon;
     var maKH = ViewBag.maKhachHang;
@@ -26,10 +26,13 @@
                             @using (Html.BeginForm("HuyHoaDon", "Print", FormMethod.Post))
                             {
                                 <div class="form-group">
-                                    Mã khách hàng: <input type="text" name="maKH" class="form-control" placeholder="Nhập mã khách hàng" value="@maKH" />
-                                    Tháng: <input type="text" name="month" value="@selectedMonth"/>
-                                    Năm: <input type="text" name="year" value="@selectedYear"/>
-                                  
+                                    Mã khách hàng:
+                                    <input type="text" name="maKH" class="form-control" placeholder="Nhập mã khách hàng" value="@maKH" />
+                                    Tháng:
+                                    <input type="text" name="month" value="@selectedMonth" />
+                                    Năm:
+                                    <input type="text" name="year" value="@selectedYear" />
+
                                     <p style="text-align:center"><button class="btn btn-default" type="submit" style="margin-left:1%">Lọc danh sách</button></p>
                                 </div>
                             }
@@ -55,19 +58,19 @@
                                             <tr>
                                                 <td>Địa chỉ</td>
                                                 <td>@kh.Diachi</td>
-                                            </tr> 
+                                            </tr>
                                             <tr>
                                                 <td>Số hóa đơn</td>
-                                                <td><input type="text" name="soHoaDon"/></td>
+                                                <td><input type="text" name="soHoaDon" /></td>
                                             </tr>
                                             <tr>
                                                 <td>Sản lượng</td>
                                                 <td>@hoaDonObj.Tongsotieuthu</td>
-                                            </tr>   
+                                            </tr>
                                             <tr>
                                                 <td>Số tiền phải nộp</td>
-                                                <td>@String.Format("{0:n0}",soTienObj.TongCong)</td>
-                                            </tr>                                                                                    
+                                                <td>@String.Format("{0:n0}", soTienObj.TongCong)</td>
+                                            </tr>
                                             <tr>
                                                 <td>Ngày hủy hóa đơn</td>
                                                 <td><input type="text" class="datepicker" name="ngayhuyhoadon" /></td>
@@ -78,11 +81,11 @@
                                             </tr>
                                             <tr>
                                                 <td>Lí do hủy hóa đơn</td>
-                                                <td><textarea  rows="3" name="lidohuy" style="min-width:347px"></textarea></td>
+                                                <td><textarea rows="3" name="lidohuy" style="min-width:347px"></textarea></td>
                                             </tr>
                                         </table>
                                         <p style="text-align:center">
-                                            <button type="submit" class="btn btn-success">Xác nhận</button>
+                                            <button type="submit" class="btn btn-success" onclick="return confirm('Bạn có chắc muốn hủy hóa đơn này không ?')">Xác nhận</button>
                                             <button type="button" class="btn btn-default" onclick="history.go(-1)">Quay lại</button>
                                         </p>
                                     </div>
