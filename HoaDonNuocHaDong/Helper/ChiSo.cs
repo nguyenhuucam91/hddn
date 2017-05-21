@@ -78,7 +78,7 @@ namespace HoaDonHaDong.Helper
                     {
                         soNgDu = 4;
                     }
-                    return Math.Round((hoKhau - 1) * dinhMucCoSo + soNgDu * 2.5, MidpointRounding.AwayFromZero);
+                    return (hoKhau - 1) * dinhMucCoSo + soNgDu * 2.5;
                 }
             }
             return 0;
