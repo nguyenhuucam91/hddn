@@ -8,6 +8,7 @@ namespace HoaDonNuocHaDong.Models.KhachHang
 {
     public class KhachHangModel : ModelBase
     {
+        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         public int SoTT { get { return GetINT(0); } set { SetINT(0, value); } }
         public String MaKH { get { return GetSTR(1); } set { SetSTR(1, value); } }
         public String maHopDong { get { return GetSTR(2); } set { SetSTR(2, value); } }
@@ -27,6 +28,26 @@ namespace HoaDonNuocHaDong.Models.KhachHang
         protected override Type TransferType()
         {
             return this.GetType();
+        }
+
+        public List<Khachhang> filterByTenKhachHang(String customerNameCriteria)
+        {
+            return db.Khachhangs.Where(p => p.Ten.Contains(customerNameCriteria)).ToList();
+        }
+
+        public List<Khachhang> filterBySoHopDong(String soHopDong) 
+        {
+            return db.Khachhangs.Where(p => p.Sohopdong.Contains(soHopDong)).ToList();
+        }
+
+        public List<Khachhang> filterByMaKhachHang(String maKhachHang) 
+        {
+            return db.Khachhangs.Where(p => p.MaKhachHang.Contains(maKhachHang)).ToList();
+        }
+
+        public List<Khachhang> filterByDiaChi(String diaChi)
+        {
+            return db.Khachhangs.Where(p => p.Diachi.Contains(diaChi)).ToList();
         }
     }
 }

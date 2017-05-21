@@ -32,6 +32,7 @@ namespace HoaDonNuocHaDong.Controllers
         SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
         NguoidungHelper ngDungHelper = new NguoidungHelper();
         KiemDinh kiemDinhHelper = new KiemDinh();
+        KhachHangModel khachHangModel = new KhachHangModel();
         public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
         const int ADMIN = 0;
         const int TRUONG_PHONG = 2;
@@ -1489,11 +1490,27 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult FilterMaKH(FormCollection form)
         {
-            String maKH = String.IsNullOrEmpty(form["maKH"]) ? "" : form["maKH"];
-            var khachHang = db.Khachhangs.Where(p => p.MaKhachHang == maKH && p.IsDelete == false).ToList();
+            String filterString = String.IsNullOrEmpty(form["filterString"]) ? "" : form["filterString"];
+            int filterCriteria = !String.IsNullOrEmpty(form["filterCriteria"]) ? Convert.ToInt16(form["filterCriteria"]) : 1;
+            var khachHangs = new List<Khachhang>();
+            switch (filterCriteria)
+            {
+                case (int)ECustomerFilterCriteria.MA_KHACH_HANG:
+                    khachHangs = khachHangModel.filterByMaKhachHang(filterString);
+                    break;
+                case (int)ECustomerFilterCriteria.TEN_KHACH_HANG:
+                    khachHangs = khachHangModel.filterByTenKhachHang(filterString);
+                    break;
+                case (int)ECustomerFilterCriteria.SO_HOP_DONG:
+                    khachHangs = khachHangModel.filterBySoHopDong(filterString);
+                    break;
+                case (int)ECustomerFilterCriteria.DIA_CHI:
+                    khachHangs = khachHangModel.filterByDiaChi(filterString);
+                    break;
+            }           
 
             #region ViewData
-            ViewData["khachhangAfterFiltered"] = khachHang;
+            ViewData["khachhangAfterFiltered"] = khachHangs;
             #endregion
             return View();
         }

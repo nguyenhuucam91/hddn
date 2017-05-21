@@ -78,4 +78,12 @@ namespace HDNHD.Models.Constants
         PRINT_SELECTED = 2,
         PRINT_FROM_RECEIPT_TO_RECEIPT = 3
     }
+
+    public enum ECustomerFilterCriteria
+    {
+        SO_HOP_DONG = 1,
+        MA_KHACH_HANG = 2,
+        TEN_KHACH_HANG = 3,
+        DIA_CHI = 4
+    }
 }

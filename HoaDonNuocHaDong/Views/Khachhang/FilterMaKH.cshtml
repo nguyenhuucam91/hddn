@@ -26,11 +26,22 @@
                             <!-- Tab lọc khách hàng -->
                             <div id="tab-lockhachhang" class="tab-content tab-pane">
                                 <!-- Form Thứ 2: Lọc theo mã khách hàng -->
-                                <form action='@Url.Action("FilterMaKH","Khachhang")' method="post">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Lọc theo mã khách hàng" name="maKH" class="form-control pull-left" />
-                                        <button type="submit" class="btn btn-default" style="text-align:center;margin-left:12px">Lọc</button>
+                                <form action='@Url.Action("FilterMaKH","Khachhang")' method="post" class="form-inline">
+                                    <div class="form-group pull-left">
+                                        <select class="form-control" name="filterCriteria">
+                                            <option value="1">Lọc theo số hợp đồng</option>
+                                            <option value="2">Lọc theo mã khách hàng</option>
+                                            <option value="3">Lọc theo tên khách hàng</option>
+                                            <option value="4">Lọc theo địa chỉ</option>
+                                        </select>                                      
                                     </div>
+                                  
+                                    <div class="form-group">
+                                        <input type="text" placeholder="Nhập tiêu chí tìm kiếm vào đây" name="filterString" class="form-control pull-left"
+                                               style="margin-left:12px" />
+                                    </div>                                    
+
+                                    <button type="submit" class="btn btn-default" style="text-align: center; margin-left: 12px">Lọc</button>
                                 </form>
 
                                 <!-- Bảng lọc khách hàng -->
