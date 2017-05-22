@@ -8,7 +8,6 @@
 
 @{
     ViewBag.Title = "Thêm mới khách hàng";
-
     var maKH = ViewBag.MaKH;
     var tuyenOngKTID = ViewBag.TuyenongkythuatID;
     var selectedQuanHuyen = ViewBag.selectedQuanHuyen;
@@ -59,9 +58,9 @@
                                     <input type="hidden" value="false" name="IsDelete" />
                                     <!-- Tên khách hàng -->
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-6 pull-left hidden">
+                                        <div class="col-md-6 pull-left">
                                             <label for="" class="control-label">Mã khách hàng:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.MaKhachHang, new { @Value = "0", @readonly = "readonly" })
+                                            @Html.TextBoxFor(model => model.MaKhachHang, new {Value= maKH,@readonly = "readonly" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.MaKhachHang)
                                         </div>

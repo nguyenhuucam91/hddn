@@ -504,8 +504,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Create()
         {
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-            int quanHuyenID = selectedQuanHuyenID;
-
+            int quanHuyenID = selectedQuanHuyenID;         
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
@@ -543,7 +542,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.PhuongxaID = phuongXas;
             ViewBag.QuanhuyenID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList(), "QuanhuyenID", "Ten");
             ViewBag.TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
-
+            ViewBag.MaKH = getMaxMaKhachHang();
             return View();
         }
 
@@ -611,7 +610,8 @@ namespace HoaDonNuocHaDong.Controllers
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
             int ChiSoDau = String.IsNullOrEmpty(form["ChiSoDau"]) ? 0 : Convert.ToInt32(form["ChiSoDau"]);
-            khachhang.MaKhachHang = "0";
+            int maxMaKhachHang = getMaxMaKhachHang();
+            khachhang.MaKhachHang = maxMaKhachHang.ToString();
             int thangKiHopDong = 0;
             int namKiHopDong = 0;
             if (ModelState.IsValid)
@@ -629,7 +629,7 @@ namespace HoaDonNuocHaDong.Controllers
                 }
                 //đặt tình trạng đang sử dụng
                 khachhang.Tinhtrang = 0;
-                int maxMaKhachHang = getMaxMaKhachHang();
+                maxMaKhachHang = getMaxMaKhachHang();
                 khachhang.MaKhachHang = maxMaKhachHang.ToString();
                 db.Khachhangs.Add(khachhang);
                 // lưu thay đổi vào DB và bắt ngoại lệ để debug                            
@@ -739,8 +739,8 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
             ViewBag.selectedTuyenKHID = khachhang.TuyenKHID;
             ViewBag.reEnterCustomer = true;
+            ViewBag.MaKH = maxMaKhachHang.ToString();
             return View(khachhang);
-
         }
 
         // GET: /Khachhang/Edit/5
