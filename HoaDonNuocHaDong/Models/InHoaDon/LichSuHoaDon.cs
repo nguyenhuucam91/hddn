@@ -42,7 +42,7 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
             this.CCPrice = CCPrice;
             this.SXPrice = SXPrice;
             this.KDPrice = KDPrice;
-            this.PhiVAT = PhiVAT;
+            this.ThueSuatPrice = PhiVAT;
             this.TileBVMT = TileBVMT;
             this.PhiBVMT = PhiBVMT;
             this.BangChu = BangChu;
@@ -92,7 +92,7 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public double SXPrice { get; set; }
         public double KDPrice { get; set; }
         #endregion
-        public double PhiVAT { get; set; }
+        public double ThueSuatPrice { get; set; }
         public double TileBVMT { get; set; }
         public double PhiBVMT { get; set; }
         public String BangChu { get; set; }
