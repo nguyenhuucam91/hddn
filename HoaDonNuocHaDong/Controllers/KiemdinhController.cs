@@ -13,7 +13,7 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class KiemdinhController : BaseController
     {
-        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        
         KiemDinh kiemDinhHelper = new KiemDinh();
         NguoidungHelper ngHelper = new NguoidungHelper();
         // GET: /Kiemdinh/
@@ -35,8 +35,7 @@ namespace HoaDonNuocHaDong.Controllers
             String maKhachHang = String.IsNullOrEmpty(form["maKhachHang"]) ? "0" : form["maKhachHang"];
             String thangKiemDinh = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month.ToString() : form["thang"];
             String namKiemDinh = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year.ToString() : form["nam"];
-            int quanHuyenID = Convert.ToInt32(form["quan"]);
-            int hoaDonNuocID = 0;
+            int quanHuyenID = Convert.ToInt32(form["quan"]);            
 
             ViewBag.Thang = thangKiemDinh;
             ViewBag.Nam = namKiemDinh;
@@ -52,10 +51,10 @@ namespace HoaDonNuocHaDong.Controllers
                                  MaKH = i.MaKhachHang,
                                  KHID = i.KhachhangID,
                                  tenKhachHang = i.Ten,
-                                 QuanhuyenID = i.QuanhuyenID.Value,
-                                 PhuongxaID = i.PhuongxaID.Value,
-                                 CumdancuID = i.CumdancuID.Value,
-                                 TuyenKHID = i.TuyenKHID.Value,
+                                 QuanhuyenID = i.QuanhuyenID == null ? 0 : i.QuanhuyenID.Value,
+                                 PhuongxaID = i.PhuongxaID == null ? 0 : i.PhuongxaID.Value,
+                                 CumdancuID = i.CumdancuID == null ? 0 : i.CumdancuID.Value,
+                                 TuyenKHID = i.TuyenKHID == null ? 0 : i.TuyenKHID.Value ,
                              }).FirstOrDefault();            
             if (khachHang != null)
             {

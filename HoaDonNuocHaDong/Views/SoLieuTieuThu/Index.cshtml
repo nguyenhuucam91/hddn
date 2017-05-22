@@ -241,9 +241,7 @@
                                                                             <td><input type="text" style="width:55px" value="@item.ChiSoCu" disabled /></td>
                                                                             @{String chiSoMoi = (item.ChiSoMoi == 0 || item.ChiSoMoi == null) ? "" : item.ChiSoMoi.ToString();}
                                                                             @if (isChot == null || isChot == false)
-                                                                            {
-                                                                                <!-- Chỉ số mới: nếu là nhân viên, nếu đã chốt thì disabled đối với nhân viên(enable với trưởng phòng), nếu chưa chốt thì mở ô ra cho nhập -->
-                                                                               
+                                                                            {                                                                               
                                                                                 <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@chiSoMoi"></td>
                                                                             }
                                                                             else
