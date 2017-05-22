@@ -6,7 +6,54 @@ using System.Web;
 namespace HoaDonNuocHaDong.Models.InHoaDon
 {
     public class LichSuHoaDon
-    {
+    {        
+        public void Lichsuhoadon(int HoaDonID, int ThangHoaDon, int NamHoaDon, String MaKH, String TenKH, String diaChi, String MST, String SoHopDong, 
+            int SanLuongTieuThu, int ChiSoCu, int ChiSoMoi, String NgayBatDau, String NgayKetThuc, double SH1, double SH2, double SH3, double SH4,
+            double SH1Price, double SH2Price, double SH3Price, double SH4Price, double HC, double CC, double SX, double KD, double HCPrice,
+                double CCPrice, double SXPrice, double KDPrice, double PhiVAT, double TileBVMT, double PhiBVMT, String BangChu, String TTVoOng, int TTDoc,
+            int SanLuong, double TongCong, String TTTNgan, int TuyenKHID, double ChiSoCongDon) 
+        {
+            this.HoaDonID = HoaDonID;
+            this.ThangHoaDon = ThangHoaDon;
+            this.NamHoaDon = NamHoaDon;
+            this.MaKH = MaKH;
+            this.TenKH = TenKH;
+            this.DiaChi = diaChi;
+            this.MST = MST;
+            this.SoHopDong = SoHopDong;
+            this.SanLuongTieuThu = SanLuongTieuThu;
+            this.ChiSoCu = ChiSoCu;
+            this.ChiSoMoi = ChiSoMoi;
+            this.NgayBatDau = NgayBatDau;
+            this.NgayKetThuc = NgayKetThuc;
+            this.SH1 = SH1;
+            this.SH2 = SH2;
+            this.SH3 = SH3;
+            this.SH4 = SH4;
+            this.SH1Price = SH1Price;
+            this.SH2Price = SH2Price;
+            this.SH3Price = SH3Price;
+            this.SH4Price = SH4Price;
+            this.HC = HC;
+            this.CC = CC;
+            this.SX = SX;
+            this.KD = KD;
+            this.HCPrice = HCPrice;
+            this.CCPrice = CCPrice;
+            this.SXPrice = SXPrice;
+            this.KDPrice = KDPrice;
+            this.PhiVAT = PhiVAT;
+            this.TileBVMT = TileBVMT;
+            this.PhiBVMT = PhiBVMT;
+            this.BangChu = BangChu;
+            this.TTVoOng = TTVoOng;
+            this.TTDoc = TTDoc;
+            this.SanLuong = SanLuong;
+            this.TongCong = TongCong;
+            this.TTThungan = TTThungan;
+            this.TuyenKHID = TuyenKHID;
+            this.ChiSoCongDon = ChiSoCongDon;
+        }
         #region ThongTinCoBan
         public int HoaDonID { get; set; }
         public int ThangHoaDon { get; set; }
@@ -55,7 +102,8 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public double TongCong { get; set; }
         public String TTThungan { get; set; }
         public int TuyenKHID { get; set; }
-
         public double ChiSoCongDon { get; set; }
+
+        
     }
 }

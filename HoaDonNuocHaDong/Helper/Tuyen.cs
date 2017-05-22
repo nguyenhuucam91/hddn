@@ -9,13 +9,14 @@ namespace HoaDonNuocHaDong.Helper
     public class Tuyen
     {
         static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
+
         /// <summary>
         /// Lấy tên nhân viên theo tuyến ID
         /// </summary>
         /// <returns></returns>
         public String getTuyenCuaNhanVien(int tuyenID)
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             var tuyenTheoNhanVienList = (from p in _db.Tuyentheonhanviens
                                          join q in _db.Tuyenkhachhangs on p.TuyenKHID equals q.TuyenKHID
                                          join r in _db.Nhanviens on p.NhanVienID equals r.NhanvienID
@@ -55,7 +56,6 @@ namespace HoaDonNuocHaDong.Helper
 
         public IQueryable<Tuyenkhachhang> getDanhSachTuyenByNhanVien(int nhanVienID)
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             var tuyenTheoNhanVien = from i in _db.Tuyentheonhanviens
                                     join r in _db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
                                     join s in _db.Nhanviens on i.NhanVienID equals s.NhanvienID
@@ -88,8 +88,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public List<Models.TuyenKhachHang.TuyenKhachHang> getTuyenByTo(int ToID)
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
-
+          
             var dsTuyen = (from i in _db.Tuyentheonhanviens
                            join r in _db.Nhanviens on i.NhanVienID equals r.NhanvienID
                            join t in _db.Tuyenkhachhangs on i.TuyenKHID equals t.TuyenKHID
@@ -103,6 +102,16 @@ namespace HoaDonNuocHaDong.Helper
                            }
                                ).Distinct().ToList();
             return dsTuyen;
+        }
+
+        public string getMaTuyenById(int TuyenKHID)
+        {            
+            Tuyenkhachhang tuyen = _db.Tuyenkhachhangs.Find(TuyenKHID);
+            if (tuyen != null)
+            {
+                return tuyen.Matuyen;
+            }
+            return "";
         }
     }
 }

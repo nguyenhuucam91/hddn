@@ -7,7 +7,7 @@ using System.Linq;
 namespace HoaDonNuocHaDong.Repositories
 {
     public class TuyenKHRepository : LinqRepository<HDNHD.Models.DataContexts.Tuyenkhachhang>, ITuyenKHRepository
-    {
+    {        
         public TuyenKHRepository(DataContext context) : base(context) { }
 
         public IQueryable<HDNHD.Models.DataContexts.Tuyenkhachhang> GetByNhanVienID(int nhanVienID)
@@ -19,5 +19,7 @@ namespace HoaDonNuocHaDong.Repositories
                 tuyenTheoNV => tuyenTheoNV.TuyenKHID, 
                 (tuyenKH, tuyenTheoNV) => tuyenKH);
         }
+
+        
     }
 }

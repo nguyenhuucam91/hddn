@@ -20,25 +20,29 @@ using HoaDonNuocHaDong.Repositories;
 using HDNHD.Models.Constants;
 using System.Configuration;
 using HoaDonNuocHaDong.Models;
+using HoaDonHaDong.Helper;
+using HDNHD.Models.DataContexts;
 
 
 namespace HoaDonNuocHaDong.Controllers
 {
     public class KhachhangController : BaseController
-    {
-        private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-        Tuyen tuyenHelper = new Tuyen();
-        KhachHang khachHangHelper = new KhachHang();
-        SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
-        NguoidungHelper ngDungHelper = new NguoidungHelper();
-        KiemDinh kiemDinhHelper = new KiemDinh();
-        KhachHangModel khachHangModel = new KhachHangModel();
+    {        
+        private Tuyen tuyenHelper = new Tuyen();
+        private KhachHang khachHangHelper = new KhachHang();
+        private SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
+        private NguoidungHelper ngDungHelper = new NguoidungHelper();
+        private KiemDinh kiemDinhHelper = new KiemDinh();
+        private ChiSo chiSo = new ChiSo();
+        private KhachHangModel khachHangModel = new KhachHangModel();        
+        private LichSuHoaDonRepository lichSuHoaDonRepo = new LichSuHoaDonRepository();
+        
         public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+
         const int ADMIN = 0;
         const int TRUONG_PHONG = 2;
         const int NHAN_VIEN = 1;
-
-        public static int makh { get; private set; }
+       
         public ActionResult Index(string TinhTrang = null, string catNuoc = null)
         {
 
@@ -504,7 +508,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Create()
         {
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-            int quanHuyenID = selectedQuanHuyenID;         
+            int quanHuyenID = selectedQuanHuyenID;
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
@@ -1024,8 +1028,52 @@ namespace HoaDonNuocHaDong.Controllers
                     //tách lại chỉ số giá khác
                     else
                     {
-                        sLTT.tachChiSoSanLuong(hD.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);
+                        sLTT.tachChiSoSanLuong(hD.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);                       
                     }
+                    
+                    #region TongTienHoaDon
+                    double dinhMuc = chiSo.tinhTongTienTheoDinhMuc(hD.HoadonnuocID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value);
+                    double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
+                    double thueBVMT = chiSo.tinhThue(hD.HoadonnuocID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, khachhang.Tilephimoitruong.Value);
+                    double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
+
+                    if (tongTienHoaDon <= 0)
+                    {
+                        tongTienHoaDon = 0;
+                    }
+
+                    if (dinhMuc <= 0)
+                    {
+                        dinhMuc = 0;
+                    }
+
+                    if (VAT <= 0)
+                    {
+                        VAT = 0;
+                    }
+
+                    if (thueBVMT <= 0)
+                    {
+                        thueBVMT = 0;
+                    }
+
+                    String thuNgan = khachhang.TTDoc + "/" + tuyenHelper.getMaTuyenById(khachhang.TuyenKHID.Value) + " - " + 0;
+                    #endregion
+
+                    lichSuHoaDonRepo.updateLichSuHoaDon(hD.HoadonnuocID, selectedMonth, selectedYear, khachhang.Ten, khachhang.Diachi, khachhang.Masothue, khachhang.MaKhachHang,
+                           khachhang.TuyenKHID.Value, khachhang.Sohopdong, chiSoDau, chiSoCuoi, sanLuongTieuThu, 
+                           cT.SH1.Value, chiSo.getSoTienTheoApGia("SH1").Value, 
+                           cT.SH2.Value, chiSo.getSoTienTheoApGia("SH2").Value,
+                           cT.SH3.Value, chiSo.getSoTienTheoApGia("SH3").Value,
+                           cT.SH4.Value, chiSo.getSoTienTheoApGia("SH4").Value,
+                           cT.HC.Value, chiSo.getSoTienTheoApGia("HC").Value,
+                           cT.CC.Value, chiSo.getSoTienTheoApGia("CC").Value,
+                           cT.SXXD.Value, chiSo.getSoTienTheoApGia("SXXD").Value, 
+                           cT.KDDV.Value, chiSo.getSoTienTheoApGia("KDDV").Value,
+                           5, VAT, khachhang.Tilephimoitruong.Value, thueBVMT, tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
+                           db.Quanhuyens.Find(khachhang.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(khachhang.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(khachhang.QuanhuyenID).DienThoai3,
+                           thuNgan, khachhang.TuyenKHID.Value, khachhang.TTDoc.Value, 0, String.Format("dd/MM/yyyy",hoaDonNuoc.Ngaybatdausudung.Value),
+                           String.Format("dd/MM/yyyy", hoaDonNuoc.Ngayketthucsudung.Value));
                 } //end hD != null
 
 
@@ -1045,7 +1093,6 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     return RedirectToAction("index", "solieutieuthu");
                 }
-
 
                 TempData["to"] = toID;
                 TempData["tuyen"] = tuyenIDUrl;
@@ -1507,7 +1554,7 @@ namespace HoaDonNuocHaDong.Controllers
                 case (int)ECustomerFilterCriteria.DIA_CHI:
                     khachHangs = khachHangModel.filterByDiaChi(filterString);
                     break;
-            }           
+            }
 
             #region ViewData
             ViewData["khachhangAfterFiltered"] = khachHangs;
