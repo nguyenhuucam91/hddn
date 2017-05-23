@@ -28,5 +28,9 @@ namespace HoaDonNuocHaDong.Models.Hoadonnuocbihuy
         public String lidohuy { get; set; }
 
         public String diachi { get; set; }
+
+        public String ThangHuyHoaDon { get; set; }
+
+        public String NamHuyHoaDon { get; set; }
     }
 }
