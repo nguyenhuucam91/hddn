@@ -21,14 +21,7 @@ namespace HoaDonNuocHaDong.Areas.Admin.Controllers
         public ActionResult Backup()
         {
             String dbFileName = backupRepository.setupBackupFileName();
-            String subPath = "~/DBBackups/";            
-
-            bool exists = System.IO.Directory.Exists(subPath);
-
-            if (!exists)
-            {
-                System.IO.Directory.CreateDirectory(subPath);
-            }
+            String subPath = "~/DBBackups/";                       
 
             String pathBuilder = subPath + dbFileName + ".bak";
             string dbPath = Server.MapPath(pathBuilder);
