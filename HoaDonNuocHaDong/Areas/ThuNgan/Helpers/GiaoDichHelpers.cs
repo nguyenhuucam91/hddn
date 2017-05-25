@@ -73,10 +73,15 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
                             duCoRepository.Insert(model.DuCo);
                         }
                         model.DuCo.SoTienDu = -duNo;
+
+                        // TODO: trừ cho hóa đơn tháng tới (nếu đã chốt)
+                        
                     }
                 } else
                 {
                     giaoDich.SoDu = duNo;
+                    
+                    // TODO: nếu hóa đơn đã thanh toán, giaoDich.SoDu = dư có sau giao dịch
                 }
                
                 uow.SubmitChanges();
@@ -131,6 +136,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
                 // update model
                 model.SoTienNopTheoThang.SoTienDaThu -= soTien;
 
+                // TODO: trừ nếu đã thanh toán cho hóa đơn tháng sau 
+                
                 // trừ dư có
                 int duNo = (int) (model.SoTienNopTheoThang.SoTienPhaiNop - model.SoTienNopTheoThang.SoTienDaThu);
 

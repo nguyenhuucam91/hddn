@@ -197,7 +197,7 @@ function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTi
 
     // done
     $trangThaiThu.attr("disabled", false);
-    $trangThaiThu.siblings(".progress-striped").remove();
+    $trangThaiThu.siblings().remove();
 }
 
     function capNhatNgayThu($ngayThu, hoaDonID, ngayThu) {
@@ -221,7 +221,7 @@ function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTi
 
         // done
         $ngayThu.attr("disabled", false);
-        $ngayThu.siblings(".progress-striped").remove();
+        $ngayThu.siblings().remove();
     }
 
     function huyGiaoDich($lnkHuyGiaoDich, khachHangID, giaoDichID) {
@@ -244,6 +244,6 @@ function capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTi
             });
 
         // done
-        $lnkHuyGiaoDich.siblings(".progress-striped").remove();
+        $lnkHuyGiaoDich.siblings().remove();
     }
     /***** END Thanh Toan HD *****/
