@@ -121,12 +121,12 @@ namespace HoaDonNuocHaDong.Controllers
             int month = String.IsNullOrEmpty(form["month"].ToString()) ? DateTime.Now.Month : Convert.ToInt32(form["month"]);
             int year = String.IsNullOrEmpty(form["year"].ToString()) ? DateTime.Now.Year : Convert.ToInt32(form["year"]);
             int tuyen = String.IsNullOrEmpty(form["tuyen"]) ? 0 : Convert.ToInt32(form["tuyen"]);
-            List<HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel> kiemDinh = kiemDinhHelper.getDanhSachKiemDinh(month, year, tuyen);
+            List<HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel> kiemDinhs = kiemDinhHelper.getDanhSachKiemDinh(month, year, tuyen);
             #region ViewData - ViewBag
             ViewBag.month = month;
-            ViewBag.year = year;
+            ViewBag.year = year;            
+            ViewData["kiemDinh"] = kiemDinhs;
             #endregion
-            ViewData["kiemDinh"] = kiemDinh;
             return View();
         }
 

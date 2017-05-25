@@ -10,6 +10,7 @@ namespace HoaDonNuocHaDong.Models.KhachHang
         public int KhachHangID { get; set; }
         public String MaKhachHang { get; set; }
         public String TenKhachHang { get; set; }
+        public String MaTuyen { get; set; }
         public DateTime NgayKiemDinh { get; set; }
         public int ChiSoCu { get; set; }
         public int ChiSoMoi { get; set; }

@@ -57,6 +57,7 @@
                                                 <th>STT</th>
                                                 <th>Mã khách hàng</th>
                                                 <th>Tên</th>
+                                                <th>Tuyến</th>
                                                 <th>Ngày kiểm định</th>
                                                 <th>Chỉ số cũ</th>
                                                 <th>Chỉ số trước kiểm định</th>
@@ -80,6 +81,9 @@
                                                     </td>
                                                     <td>
                                                         @item.TenKhachHang
+                                                    </td>
+                                                    <td>
+                                                        @item.MaTuyen
                                                     </td>
                                                     <td>
                                                         @item.NgayKiemDinh.ToString("dd-MM-yyyy")

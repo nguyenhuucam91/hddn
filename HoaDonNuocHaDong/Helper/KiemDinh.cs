@@ -25,6 +25,7 @@ namespace HoaDonNuocHaDong.Helper
                                   join t in _db.Hoadonnuocs on i.HoaDonId equals t.HoadonnuocID
                                   join s in _db.Chitiethoadonnuocs on i.HoaDonId equals s.HoadonnuocID
                                   join r in _db.Khachhangs on i.KhachhangID equals r.KhachhangID
+                                  join tuyenKhachHang in _db.Tuyenkhachhangs on r.TuyenKHID equals tuyenKhachHang.TuyenKHID
                                   where t.ThangHoaDon == month && t.NamHoaDon == year
                                   select new HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel
                                   {
@@ -36,7 +37,8 @@ namespace HoaDonNuocHaDong.Helper
                                       ChiSoLucKiemDinh = i.Chisoluckiemdinh.Value,
                                       KiemDinhID = i.KiemdinhID,
                                       GhiChu = i.Ghichu,
-                                      ChiSoSauKiemDinh = i.Chisosaukiemdinh.Value
+                                      ChiSoSauKiemDinh = i.Chisosaukiemdinh.Value,
+                                      MaTuyen = tuyenKhachHang.Matuyen
                                   });
                 return dsKiemDinh.ToList();
             }
