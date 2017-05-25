@@ -35,8 +35,7 @@ namespace HoaDonNuocHaDong.Areas.Admin.Controllers
 
             backupRepository.executeBackupTransaction(dbPath, dbFileName);
             backupRepository.updateOrCreateBackupRecord(LoggedInUser.NguoidungID);
-
-            ViewBag.SuccessMessage = "Sao lưu cơ sở dữ liệu thành công";
+            
             return View();
         }
     }
