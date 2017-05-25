@@ -11,39 +11,28 @@ using System.Web.Routing;
 using System.Data.Entity.Validation;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
+using HDNHD.Models.Constants;
 
 namespace HoaDonNuocHaDong.Controllers
 {
     public class TuyenController : BaseController
     {
-        private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
         // GET: /Tuyen/
         public ActionResult Index()
         {
-            var nhanVien = db.Nhanviens.ToList();
-            if (!LoggedInUser.Isadmin.Value)
-            {
-                int phongBanId = getPhongBanNguoiDung();
-                nhanVien = db.Nhanviens.Where(p => p.PhongbanID == phongBanId).ToList();
-            }
+            int phongBanId = getPhongBanNguoiDung();
+            var nhanViens = (from i in db.Nhanviens
+                            join r in db.Nguoidungs on i.NhanvienID equals r.NhanvienID
+                            where i.PhongbanID == phongBanId && i.ChucvuID == (int)EChucVu.NHAN_VIEN
+                            select new{
+                                nhanvien = i
+                            }).Select(p=>p.nhanvien).ToList();
             var tuyenkhachhangs = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).Include(t => t.Cumdancu).Include(t => t.To);
-            ViewBag._nhanVien = nhanVien;
+            ViewBag._nhanVien = nhanViens;
             return View(tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID).ToList());
         }
 
-
-        public int getPhongBanNguoiDung()
-        {
-            var phongBanRepository = uow.Repository<PhongBanRepository>();
-            if (nhanVien != null)
-            {
-                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
-                int phongBanID = phongBan.PhongbanID;
-                return phongBanID;
-            }
-            return 0;
-        }
 
         [HttpPost]
         public ActionResult Index(FormCollection form)
