@@ -20,12 +20,12 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
         /// returns list of all existing QuanHuyen 
         ///     customized by <tt>this.nhanVien</tt> if exist
         /// </summary>
-        public AjaxResult GetAll()
+        public AjaxResult GetAll(bool byNhanvien = false)
         {
             var models = quanHuyenRepository.GetAll(m => m.IsDelete == false);
             var context = (HDNHDDataContext) uow.GetDataContext();
-
-            if (nhanVien != null && nhanVien.ToQuanHuyenID.HasValue)
+            
+            if (byNhanvien && nhanVien != null && nhanVien.ToQuanHuyenID.HasValue)
             {
                 models = from model in models
                          join to in context.ToQuanHuyens on model.QuanhuyenID equals to.QuanHuyenID

@@ -155,7 +155,7 @@
         $(document).ready(function () {
 
             // onInit:
-            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID", true);
 
             // load data onChange
             $(".sl-quan-huyen").on("change", function () {
@@ -163,7 +163,7 @@
                 var quanHuyenID = $(this).val();
 
                 // loadTo
-                loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID");
+                loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID", true);
             });
 
             $(".sl-to").on("change", function () {
@@ -269,13 +269,13 @@
                                     $themGiaoDich.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
                                 },
                                 function (data) { // error
-                                    $themGiaoDich.prop("checked", !trangThaiThu); // back state
+                                    $themGiaoDich.prop("checked", !model.HoaDon.TrangThaiThu); // back state
                                     $themGiaoDich.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
                                 }, "post");
 
                             // done
                             $themGiaoDich.attr("disabled", false);
-                            $themGiaoDich.siblings(".progress-striped").remove();
+                            $themGiaoDich.siblings().remove();
                         });
                     })
                     .modal("show");

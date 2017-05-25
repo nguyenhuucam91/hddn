@@ -41,11 +41,12 @@
  *      first quanHuyen will be selected
  * #returns selected quanHuyenID
  */
-function loadQuanHuyen($slQuanHuyen, quanHuyenID) {
+function loadQuanHuyen($slQuanHuyen, quanHuyenID, byNhanVien = false) {
     BUtils.slRemoveAllOptions($slQuanHuyen);
 
     $.ajax({
-        url: "/Services/QuanHuyen/GetAll"
+        url: "/Services/QuanHuyen/GetAll",
+        data: { byNhanVien: byNhanVien }
     }).done(function (data) {
         if (data.IsSuccess) {
             var items = [];
@@ -64,7 +65,7 @@ function loadQuanHuyen($slQuanHuyen, quanHuyenID) {
 /**
  * #see: loadQuanHuyen()
  */
-function loadTo($slTo, quanHuyenID, toID) {
+function loadTo($slTo, quanHuyenID, toID, byNhanVien = false) {
     BUtils.slRemoveAllOptions($slTo);
 
     if (quanHuyenID == null) {
@@ -74,7 +75,7 @@ function loadTo($slTo, quanHuyenID, toID) {
 
     $.ajax({
         url: "/Services/To/GetByQuanHuyenID",
-        data: { quanHuyenID: quanHuyenID }
+        data: { quanHuyenID: quanHuyenID, byNhanVien: byNhanVien }
     }).done(function (data) {
         if (data.IsSuccess) {
             var items = [];

@@ -41,21 +41,21 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             if (year == null)
                 year = dtBaoCao.Year;
 
-            if (filter.Mode == null) // not in filter
-            {
-                // set selected to, quan huyen = nhanVien's to, quan huyen
-                if (nhanVien != null)
-                {
-                    filter.NhanVienID = nhanVien.NhanvienID;
-                    filter.ToID = nhanVien.ToQuanHuyenID;
+            //if (filter.Mode == null) // not in filter
+            //{
+            //    // set selected to, quan huyen = nhanVien's to, quan huyen
+            //    if (nhanVien != null)
+            //    {
+            //        filter.NhanVienID = nhanVien.NhanvienID;
+            //        filter.ToID = nhanVien.ToQuanHuyenID;
 
-                    var to = toRepository.GetByID(nhanVien.ToQuanHuyenID ?? 0);
-                    if (to != null)
-                    {
-                        filter.QuanHuyenID = to.QuanHuyenID;
-                    }
-                }
-            }
+            //        var to = toRepository.GetByID(nhanVien.ToQuanHuyenID ?? 0);
+            //        if (to != null)
+            //        {
+            //            filter.QuanHuyenID = to.QuanHuyenID;
+            //        }
+            //    }
+            //}
             var items = duCoRepository.GetAllDuCoModel(month.Value, year.Value);
             items = filter.ApplyFilter(items);
 
@@ -91,21 +91,21 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             if (year == null)
                 year = dtBaoCao.Year;
             
-            if (filter.Mode == null) // not in filter
-            {
-                // set selected to, quan huyen = nhanVien's to, quan huyen
-                if (nhanVien != null)
-                {
-                    filter.NhanVienID = nhanVien.NhanvienID;
-                    filter.ToID = nhanVien.ToQuanHuyenID;
+            //if (filter.Mode == null) // not in filter
+            //{
+            //    // set selected to, quan huyen = nhanVien's to, quan huyen
+            //    if (nhanVien != null)
+            //    {
+            //        filter.NhanVienID = nhanVien.NhanvienID;
+            //        filter.ToID = nhanVien.ToQuanHuyenID;
 
-                    var to = toRepository.GetByID(nhanVien.ToQuanHuyenID ?? 0);
-                    if (to != null)
-                    {
-                        filter.QuanHuyenID = to.QuanHuyenID;
-                    }
-                }
-            }
+            //        var to = toRepository.GetByID(nhanVien.ToQuanHuyenID ?? 0);
+            //        if (to != null)
+            //        {
+            //            filter.QuanHuyenID = to.QuanHuyenID;
+            //        }
+            //    }
+            //}
 
             var items = hoaDonRepository.GetAllDuNoModel(month.Value, year.Value);
             items = filter.ApplyFilter(items);
@@ -127,7 +127,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.Year = year.Value;
             
             #endregion
-            return View(items.ToList());
+            return View("DuNoExport", items.ToList());
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                 // set selected to, quan huyen = nhanVien's to, quan huyen
                 if (nhanVien != null)
                 {
-                    filter.NhanVienID = nhanVien.NhanvienID;
-                    filter.ToID = nhanVien.ToQuanHuyenID;
+                    //filter.NhanVienID = nhanVien.NhanvienID;
+                    //filter.ToID = nhanVien.ToQuanHuyenID;
 
                     var to = toRepository.GetByID(nhanVien.ToQuanHuyenID ?? 0);
                     if (to != null)

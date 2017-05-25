@@ -19,10 +19,10 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
         /// returns list of ToQuanHuyen of the specified <tt>quanHuyenID</tt> 
         ///     customized by <tt>this.phongBan</tt> if exist
         /// </summary>
-        public AjaxResult GetByQuanHuyenID(int quanHuyenID) {
+        public AjaxResult GetByQuanHuyenID(int quanHuyenID, bool byNhanVien = false) {
             var tos = toRepository.GetByQuanHuyenID(quanHuyenID);
 
-            if (phongBan != null)
+            if (byNhanVien && phongBan != null)
             {
                 tos = tos.Where(m => m.PhongbanID == phongBan.PhongbanID);
             }
