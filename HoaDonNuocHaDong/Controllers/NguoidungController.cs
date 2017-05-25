@@ -12,31 +12,18 @@ using System.Web.Routing;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using System.Data.SqlClient;
+using HDNHD.Models.Constants;
 
 namespace HoaDonNuocHaDong.Controllers
 {
     public class NguoidungController : BaseController
     {
-        private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-
         public ActionResult Index()
-        {
-
-            ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
-
-            int phongbanId = getPhongBanNguoiDung();
-            if (phongbanId == 0)
-            {
-                ViewBag.phongBan = db.Phongbans.ToList();
-            }
-            else
-            {
-                ViewBag.phongBan = db.Phongbans.Where(p => p.PhongbanID == phongbanId).ToList();
-            }
-
-            ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
+        {           
             int phongBanId = getPhongBanNguoiDung();
+            ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             var nguoidungs = new List<Nguoidung>();
+            String isAdminVaTruongPhong = isLoggedUserAdminVaTruongPhong();
             if (phongBanId != 0)
             {
                 nguoidungs = (from i in db.Nguoidungs
@@ -44,33 +31,27 @@ namespace HoaDonNuocHaDong.Controllers
                               where r.PhongbanID == phongBanId
                               select new
                               {
-                                  nguoiDung = i
-                              }).Select(p => p.nguoiDung).ToList();
+                                  nguoiDung = i,
+                                  nhanvien = r
+                              }).Select(p => p.nguoiDung).ToList();                
+                ViewBag.phongBan = db.Phongbans.Where(p => p.PhongbanID == phongBanId).ToList();
             }
             else
             {
                 nguoidungs = db.Nguoidungs.ToList();
+                ViewBag.phongBan = db.Phongbans.ToList();
             }
-
+           
             #region ViewBag
-            ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
+
+            ViewBag.isAdminVaTruongPhong = isAdminVaTruongPhong;
+            ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0" ;
             int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
             ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
             ViewBag.currentlyLoggedInUser = LoggedInUser.NguoidungID;
+            ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             #endregion
             return View(nguoidungs.ToList());
-        }
-
-        public int getPhongBanNguoiDung()
-        {
-            var phongBanRepository = uow.Repository<PhongBanRepository>();
-            if (nhanVien != null)
-            {
-                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
-                int phongBanID = phongBan.PhongbanID;
-                return phongBanID;
-            }
-            return 0;
         }
 
         [HttpPost, OutputCache(NoStore = true, Duration = 1)]
@@ -141,7 +122,9 @@ namespace HoaDonNuocHaDong.Controllers
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
             ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
+            ViewBag.isAdminVaTruongPhong = isLoggedUserAdminVaTruongPhong();
             ViewBag.currentlyLoggedInUser = LoggedInUser.NguoidungID;
+            ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0" ;
             #endregion
             return View(nguoiDung.OrderByDescending(p => p.NguoidungID).ToList());
         }

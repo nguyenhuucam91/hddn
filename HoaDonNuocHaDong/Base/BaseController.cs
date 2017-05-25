@@ -221,6 +221,27 @@ namespace HoaDonNuocHaDong.Base
             return tuyens;
         }
 
-        
+        protected String isLoggedUserAdminVaTruongPhong()
+        {
+            String isAdminVaTruongPhong = "0";
+            Nguoidung nguoiDungEntity = db.Nguoidungs.FirstOrDefault(p => p.NguoidungID == LoggedInUser.NguoidungID);
+            if (nguoiDungEntity != null)
+            {
+                Nhanvien nhanVien = nguoiDungEntity.Nhanvien;
+                if (nhanVien != null)
+                {
+                    int? chucVuId = nhanVien.ChucvuID;
+                    if (chucVuId != null)
+                    {
+                        isAdminVaTruongPhong = chucVuId == (int)EChucVu.TRUONG_PHONG ? "1" : "0";
+                    }
+                }
+                else
+                {
+                    isAdminVaTruongPhong = LoggedInUser.Isadmin.Value == true ? "1" : "0";
+                }
+            }
+            return isAdminVaTruongPhong;
+        }
     }
 }

@@ -91,4 +91,10 @@ namespace HDNHD.Models.Constants
     {
         MAX_ALLOWED_FILES = 5
     }
+
+    public enum EChucVu
+    {
+        NHAN_VIEN = 1,
+        TRUONG_PHONG = 2,
+    }
 }
