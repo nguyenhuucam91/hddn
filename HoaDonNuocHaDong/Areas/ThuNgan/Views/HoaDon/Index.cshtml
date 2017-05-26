@@ -36,6 +36,10 @@
                                 @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
                                 {
                                     int duNo = (int)(item.SoTienNopTheoThang.SoTienPhaiNop - item.SoTienNopTheoThang.SoTienDaThu);
+                                    if (item.HoaDon.Trangthaithu == true && item.SoTienNopTheoThang.SoTienDaThu == 0)
+                                    {
+                                        duNo = 0;
+                                    }
                                     <tr>
                                         <td style="text-align: right">@(++stt)</td>
                                         <td class="text-center">@item.KhachHang.MaKhachHang</td>
@@ -103,7 +107,7 @@
                                             }
                                             else
                                             {
-                                                <span style="display:inline-block; min-width:27px;"><a href="#" data-toggle="tooltip" title="Khách hàng có dư nợ quá hạn cần thanh toán trước." class="text-info"><i class="icon-info-sign"></i></a></span>
+                                                <span style="display:inline-block; min-width:27px;"></span>
                                             }
                                         </td>
                                     </tr>
