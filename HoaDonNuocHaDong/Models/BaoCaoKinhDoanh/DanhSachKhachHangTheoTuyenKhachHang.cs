@@ -14,6 +14,7 @@ namespace HoaDonNuocHaDong.Models.BaoCaoKinhDoanh
         public string Ten { get { return GetSTR(3); } set { SetSTR(3, value); } }
         public string Diachi { get { return GetSTR(4); } set { SetSTR(4, value); } }
         public string Ghichu { get { return GetSTR(5); } set { SetSTR(5, value); } }
+        public string ChiSoMoi { get { return GetSTR(6); } set { SetSTR(6, value); } }
         public DanhSachKhachHangTheoTuyenKhachHang()
         {
             MaxPosModelField = 5;
