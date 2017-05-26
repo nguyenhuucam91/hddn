@@ -126,12 +126,7 @@
                                 <div class="clearfix"></div>
 
                                 <div>
-                                    <div style="float:left">
-                                        <div style="width: 30px; height: 30px; background-color: #2982A2; float: left"></div><span>Hóa đơn bị hủy / chưa cập nhật</span>
-                                    </div>
-                                    <div style="float:left;margin-left:30px">
-                                        <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
-                                    </div>
+                                   @Html.Partial("_SoLieuTieuThuChuThich")
 
                                     <div class="clearfix"></div>
                                 </div>
@@ -170,10 +165,12 @@
                                                 int hoaDonID = item.HoaDonNuocID;
                                                 int khachHangIDRow = item.KhachHangID;
                                                 String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonID);
-                                                <tr class=@cssClass>
-                                                    <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
-                                                    <td>
-                                                        <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
+                                                cssClass += ((item.NgayNgungCapNuoc == null && item.NgayCapNuocLai == null) || (item.NgayCapNuocLai <= DateTime.Now)) ? "" : "catnuocBackgroundCss";
+                                                {
+                                                    <tr class=@cssClass>
+                                                        <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
+                                                        <td>
+                                                            <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
                                                                                 toID = @toID,
                                                                                 nhanvienIDUrl = @nhanVienID,
                                                                                 tuyenIDUrl = tuyenID,
@@ -186,8 +183,8 @@
                                                                             <td>@item.SoKhau</td>
                                                                             <!-- Bắt đầu -->
                                                                             @{
-                                                Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
-                                                var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
+                                                    Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
+                                                    var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
                                                                             }
 
                                                                             <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
@@ -241,7 +238,7 @@
                                                                             <td><input type="text" style="width:55px" value="@item.ChiSoCu" disabled /></td>
                                                                             @{String chiSoMoi = (item.ChiSoMoi == 0 || item.ChiSoMoi == null) ? "" : item.ChiSoMoi.ToString();}
                                                                             @if (isChot == null || isChot == false)
-                                                                            {                                                                               
+                                                                            {
                                                                                 <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:55px" value="@chiSoMoi"></td>
                                                                             }
                                                                             else
@@ -291,55 +288,59 @@
                                                                                     <input type="checkbox" class="toggle" disabled />
                                                                                 }
                                                                             </td>
-
-                                                                            @if (!cS.isChotHoaDon(hoaDonID) || isAdminVaTruongPhong == 0 || isAdminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
+                                                                            @if (!cssClass.Contains("catnuoc"))
                                                                             {
-                                                                                if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
+                                                                                if (!cS.isChotHoaDon(hoaDonID) || isAdminVaTruongPhong == 0 || isAdminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
                                                                                 {
-                                                                                    <td style="background-color:#ffcc00">
-                                                                                        <a target="_blank"
-                                                                                           href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year,to=toID,nhanvien=nhanVienID,tuyen=tuyenID, sohoadon = @i})"
-                                                                                           style="color:red">Áp</a>
-                                                                                    </td>
+                                                                                    if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
+                                                                                    {
+                                                                                        <td style="background-color:#ffcc00">
+                                                                                            <a target="_blank"
+                                                                                               href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year,to=toID,nhanvien=nhanVienID,tuyen=tuyenID, sohoadon = @i})"
+                                                                                               style="color:red">Áp</a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td>
+                                                                                            <a target="_blank"
+                                                                                               href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID, nhanvien = nhanVienID, tuyen = tuyenID, sohoadon = @i })">
+                                                                                                Áp
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <td>
-                                                                                        <a target="_blank"
-                                                                                           href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID, nhanvien = nhanVienID, tuyen = tuyenID, sohoadon = @i })">
-                                                                                            Áp
-                                                                                        </a>
-                                                                                    </td>
+                                                                                    if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
+                                                                                    {
+                                                                                        <td style="background-color:#ffcc00">
+                                                                                            <a target="_blank"
+                                                                                               href="javascript:void(0)"
+                                                                                               style="color:red">Áp</a>
+                                                                                        </td>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <td>
+                                                                                            <a target="_blank"
+                                                                                               href="javascript:void(0)">
+                                                                                                Áp
+                                                                                            </a>
+                                                                                        </td>
+                                                                                    }
                                                                                 }
                                                                             }
                                                                             else
                                                                             {
-                                                                                if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
-                                                                                {
-                                                                                    <td style="background-color:#ffcc00">
-                                                                                        <a target="_blank"
-                                                                                           href="javascript:void(0)"
-                                                                                           style="color:red">Áp</a>
-                                                                                    </td>
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    <td>
-                                                                                        <a target="_blank"
-                                                                                           href="javascript:void(0)">
-                                                                                            Áp
-                                                                                        </a>
-                                                                                    </td>
-                                                                                }
+                                                                                <td></td>
                                                                             }
-
                                                                         </tr>
 
                                                                             i++;
+                                                }
                                             }
                                         </tbody>
-
-
                                     </table>
                                     <!--end table-->
                                 </div>

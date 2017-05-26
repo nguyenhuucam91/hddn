@@ -115,7 +115,7 @@ namespace HoaDonHaDong.Helper
                                where i.ThangHoaDon == month && i.NamHoaDon == year && 
                                      r.TuyenKHID == tuyenKHID.Value && 
                                       (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != month && r.Ngaythanhly.Value.Year != year))&&
-                                     ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
+                                     
                                      (i.Trangthaixoa == false || i.Trangthaixoa == null) 
                                orderby r.TTDoc
                                select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
@@ -123,6 +123,8 @@ namespace HoaDonHaDong.Helper
                                    HoaDonNuocID = i.HoadonnuocID,
                                    KhachHangID = r.KhachhangID,
                                    MaKhachHang = r.MaKhachHang,
+                                   NgayNgungCapNuoc = r.Ngayngungcapnuoc,
+                                   NgayCapNuocLai = r.Ngaycapnuoclai,
                                    TenKhachHang = r.Ten,
                                    SoHo = r.Soho,
                                    SoKhau = r.Sonhankhau,

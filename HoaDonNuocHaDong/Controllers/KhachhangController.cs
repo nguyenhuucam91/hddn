@@ -1439,13 +1439,13 @@ namespace HoaDonNuocHaDong.Controllers
                 db.Entry(khachHang).State = EntityState.Modified;
                 db.SaveChanges();
                 //cập nhật lại trạng thái của hóa đơn, từ hiển thị => xóa
-                List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangNgungCapNuocID && p.ThangHoaDon == DateTime.Now.Month && p.NamHoaDon == DateTime.Now.Year).ToList();
-                foreach (var hoadon in hoadons)
-                {
-                    hoadon.Trangthaixoa = true;
-                    db.Entry(hoadon).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
+                //List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => p.KhachhangID == khachHangNgungCapNuocID && p.ThangHoaDon == DateTime.Now.Month && p.NamHoaDon == DateTime.Now.Year).ToList();
+                //foreach (var hoadon in hoadons)
+                //{
+                //    hoadon.Trangthaixoa = true;
+                //    db.Entry(hoadon).State = EntityState.Modified;
+                //    db.SaveChanges();
+                //}
 
                 TempData["nhanvien"] = nhanvienID;
                 TempData["tuyen"] = tuyenID;

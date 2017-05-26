@@ -76,110 +76,100 @@
                             <div class="clearfix"></div>
                         </div>
 
-                        <div>
-                            <div style="float:left;margin-left:12px">
-                                <div style="width:30px;height:30px;background-color:#29a286;float:left"></div><span>Tổng hợp</span>
-                            </div>
-                            <div style="float:left;margin-left:32px">
-                                <div style="width:30px;height:30px;background-color:#e47b0f;float:left"></div><span>Đặc biệt</span>
-                            </div>
-                            <div style="float:left;margin-left:30px">
-                                <div style="width: 30px; height: 30px; background-color: #2982A2; float: left"></div><span>Hóa đơn bị hủy / chưa cập nhật</span>
-                            </div>
-                            <div style="float:left;margin-left:30px">
-                                <div style="width: 30px; height: 30px; background-color: #f1c0c0; float: left"></div><span>Hóa đơn bị hủy / đã cập nhật</span>
-                            </div>
-                            <div class="clearfix"></div>
+                        @Html.Partial("_SoLieuTieuThuChuThich")
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <!--Tắt bật cột-->
+                    <div class="form-actions">
+
+                        <div class="pull-left">
+                            Tắt bật cột (Màu đỏ là cột được ẩn):
+                            <a class="toggle-vis" data-column="0">MãKH</a>
+                            - <a class="toggle-vis" data-column="1">TênKH</a>
+                            - <a class="toggle-vis" data-column="2">TTDoc</a>
+                            - <a class="toggle-vis" data-column="3">Số hộ</a>
+                            - <a class="toggle-vis" data-column="4">Số khẩu</a>
+                            - <a class="toggle-vis" data-column="5">Loại giá</a>
+                            - <a class="toggle-vis" data-column="6">Chỉ số cũ</a>
+                            - <a class="toggle-vis" data-column="7">Chỉ số mới</a>
+                            - <a class="toggle-vis" data-column="8">Số khoán</a>
+                            - <a class="toggle-vis" data-column="9">Sản lượng</a>
                         </div>
-                        <!--Tắt bật cột-->
-                        <div class="form-actions">
-
-                            <div class="pull-left">
-                                Tắt bật cột (Màu đỏ là cột được ẩn):
-                                <a class="toggle-vis" data-column="0">MãKH</a>
-                                - <a class="toggle-vis" data-column="1">TênKH</a>
-                                - <a class="toggle-vis" data-column="2">TTDoc</a>
-                                - <a class="toggle-vis" data-column="3">Số hộ</a>
-                                - <a class="toggle-vis" data-column="4">Số khẩu</a>
-                                - <a class="toggle-vis" data-column="5">Loại giá</a>
-                                - <a class="toggle-vis" data-column="6">Chỉ số cũ</a>
-                                - <a class="toggle-vis" data-column="7">Chỉ số mới</a>
-                                - <a class="toggle-vis" data-column="8">Số khoán</a>
-                                - <a class="toggle-vis" data-column="9">Sản lượng</a>
-                            </div>
-                            <div class="pull-right">
-                                <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
-                            </div>
+                        <div class="pull-right">
+                            <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
                         </div>
-                        <!--Hết tắt bật cột-->
-                        @{
+                    </div>
+                    <!--Hết tắt bật cột-->
+                    @{
 
-                            double sumSanLuong = 0; double sumSH1 = 0; double sumSH2 = 0; double sumSH3 = 0; double sumSH4 = 0;
-                            double sumHC = 0; double sumCC = 0; double sumSX = 0; double sumKD = 0;
-                        }
-                        <table class="table table-bordered hoaDonNuoc">
-                            <thead>
-                                <tr>
-                                    <th style="width:70px;font-size:13px">Mã KH</th>
-                                    <th style="width:240px;font-size:13px">Tên KH</th>
-                                    <th>TT Đọc</th>
-                                    <th style="font-size:13px">Số hộ</th>
-                                    <th style="font-size:13px">Số khẩu</th>
-                                    <th style="font-size:13px">Loại giá</th>
-                                    <th style="width:50px;font-size:13px">CS cũ</th>
-                                    <th style="font-size:13px">CS mới</th>
-                                    <th style="font-size:13px">Khoán</th>
-                                    <th style="font-size:13px">Sản lượng</th>
-                                    <th style="font-size:13px">SH1</th>
-                                    <th style="font-size:13px">SH2</th>
-                                    <th style="font-size:13px">SH3</th>
-                                    <th style="font-size:13px">SH4</th>
-                                    <th style="font-size:13px">HC</th>
-                                    <th style="font-size:13px">CC</th>
-                                    <th style="font-size:13px">SXXD</th>
-                                    <th style="font-size:13px">KDDV</th>
-                                </tr>
-                                <!-- Dòng 2 fixed cột -->
-                                <tr>
-                                    <th colspan="18" style="font-size:15px">
-                                        (@tuyenKH.Matuyen-@tuyen) - (@nV.MaNhanVien - @nV.Ten) - (@Request.QueryString["month"] / @Request.QueryString["year"])
-                                    </th>
-                                </tr>
-                            </thead>
+                        double sumSanLuong = 0; double sumSH1 = 0; double sumSH2 = 0; double sumSH3 = 0; double sumSH4 = 0;
+                        double sumHC = 0; double sumCC = 0; double sumSX = 0; double sumKD = 0;
+                    }
+                    <table class="table table-bordered hoaDonNuoc">
+                        <thead>
+                            <tr>
+                                <th style="width:70px;font-size:13px">Mã KH</th>
+                                <th style="width:240px;font-size:13px">Tên KH</th>
+                                <th>TT Đọc</th>
+                                <th style="font-size:13px">Số hộ</th>
+                                <th style="font-size:13px">Số khẩu</th>
+                                <th style="font-size:13px">Loại giá</th>
+                                <th style="width:50px;font-size:13px">CS cũ</th>
+                                <th style="font-size:13px">CS mới</th>
+                                <th style="font-size:13px">Khoán</th>
+                                <th style="font-size:13px">Sản lượng</th>
+                                <th style="font-size:13px">SH1</th>
+                                <th style="font-size:13px">SH2</th>
+                                <th style="font-size:13px">SH3</th>
+                                <th style="font-size:13px">SH4</th>
+                                <th style="font-size:13px">HC</th>
+                                <th style="font-size:13px">CC</th>
+                                <th style="font-size:13px">SXXD</th>
+                                <th style="font-size:13px">KDDV</th>
+                            </tr>
+                            <!-- Dòng 2 fixed cột -->
+                            <tr>
+                                <th colspan="18" style="font-size:15px">
+                                    (@tuyenKH.Matuyen-@tuyen) - (@nV.MaNhanVien - @nV.Ten) - (@Request.QueryString["month"] / @Request.QueryString["year"])
+                                </th>
+                            </tr>
+                        </thead>
 
-                            <tbody>
+                        <tbody>
 
-                                @foreach (var item in chiSoTieuThu)
-                                {
-                                    int hoaDonID = item.HoaDonNuocID;
-                                    int khachHangIDRow = item.KHID;
+                            @foreach (var item in chiSoTieuThu)
+                            {
+                                int hoaDonID = item.HoaDonNuocID;
+                                int khachHangIDRow = item.KHID;
 
-                                    sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
-                                    sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
-                                    sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
-                                    sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
-                                    sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
-                                    sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
-                                    sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
-                                    sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
-                                    sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
-                                    //kiểm tra áp giá đặc biệt
-                                    bool isDacBiet = cS.isDacBiet(hoaDonID, Request.QueryString["month"], Request.QueryString["year"]);
+                                sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
+                                sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
+                                sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
+                                sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
+                                sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
+                                sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
+                                sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
+                                sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
+                                sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
+                                //kiểm tra áp giá đặc biệt
+                                bool isDacBiet = cS.isDacBiet(hoaDonID, Request.QueryString["month"], Request.QueryString["year"]);
 
-                                    //kiểm tra trong bảng giá đặc biệt, nếu có thì cho background màu vàng ở dòng, nếu không có giá đặc biệt thì hiển thị chữ viết tắt
-                                    String loaiGiaVietTat = item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.SINHHOAT ? "SH" :
-                                        item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU ? "KD" :
-                                        item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.SANXUAT ? "SX" :
-                                        item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH ? "HC" :
-                                    item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP ? "CC" : "TH";
+                                //kiểm tra trong bảng giá đặc biệt, nếu có thì cho background màu vàng ở dòng, nếu không có giá đặc biệt thì hiển thị chữ viết tắt
+                                String loaiGiaVietTat = item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.SINHHOAT ? "SH" :
+                                    item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU ? "KD" :
+                                    item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.SANXUAT ? "SX" :
+                                    item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH ? "HC" :
+                                item.LoaiApGiaID == HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP ? "CC" : "TH";
 
-                                    String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(item.HoaDonNuocID);
+                                String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(item.HoaDonNuocID);
+                                cssClass += ((item.NgayNgungCapNuoc == null && item.NgayCapNuocLai == null) || (item.NgayCapNuocLai <= DateTime.Now)) ? "" : "catnuocBackgroundCss";
 
-                                    <tr @{ String _class = ""; if (isDacBiet == true) { _class = "traverse dacbiet " + item.LoaiApGiaID; } else { _class = "traverse " + item.LoaiApGiaID; } } class="@_class @cssClass">
+                                <tr @{ String _class = ""; if (isDacBiet == true) { _class = "traverse dacbiet " + item.LoaiApGiaID; } else { _class = "traverse " + item.LoaiApGiaID; } } class="@_class @cssClass">
 
-                                        <td><a target="_blank" style="color:blue" href="@Url.Action("ViewDetail", "Khachhang", new { id = khachHangIDRow })">@item.MaKhachHang</a></td>
-                                        <td>
-                                            <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
+                                    <td><a target="_blank" style="color:blue" href="@Url.Action("ViewDetail", "Khachhang", new { id = khachHangIDRow })">@item.MaKhachHang</a></td>
+                                    <td>
+                                        <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
                                                                                 toID = Request.QueryString["toID"],
                                                                                 nhanvienIDUrl = Request.QueryString["nvquanly"],
                                                                                 tuyenIDUrl = Request.QueryString["tuyenID"],
@@ -187,13 +177,13 @@
                                                                                 nam = Request.QueryString["year"],
                                                                                 referrer = "viewdetail"})">@item.TenKhachHang</a>
                                                                             </td>
-                                                                            <td>@item.ThuTuDoc</td>
-                                                                            <td>@item.SoHo</td>
-                                                                            <td>@item.SoKhau</td>
-                                                                            <td>@loaiGiaVietTat</td>
-                                                                            <td>@item.ChiSoCu</td>
-                                                                            <td>@item.ChiSoMoi</td>
-                                                                            <td>@item.SoKhoan</td>
+                                                                            <td><label>@item.ThuTuDoc</label></td>
+                                                                            <td><label>@item.SoHo</label></td>
+                                                                            <td><label>@item.SoKhau</label></td>
+                                                                            <td><label>@loaiGiaVietTat</label></td>
+                                                                            <td><label>@item.ChiSoCu</label></td>
+                                                                            <td><label>@item.ChiSoMoi</label></td>
+                                                                            <td><label>@item.SoKhoan</label></td>
                                                                             <!-- Nếu chỉ số sản lượng != chỉ số mới - chỉ số cũ thì hiện chữ màu đỏ-->
                                                                             <td>
                                                                                 <input class="sanLuong" data-khachhangid="@item.KHID"
@@ -201,55 +191,54 @@
                                                                                        data-month="@item.Thang"
                                                                                        data-year="@item.Nam" />
                                                                             </td>
-                                                                            <td style="color:blue">@item.SH1</td>
-                                                                            <td style="color:blue">@item.SH2</td>
-                                                                            <td style="color:blue">@item.SH3</td>
-                                                                            <td style="color:blue">@item.SH4</td>
-                                                                            <td style="color:blue">@item.HC</td>
-                                                                            <td style="color:blue">@item.CC</td>
-                                                                            <td style="color:blue">@item.SXXD</td>
-                                                                            <td style="color:blue">@item.KDDV</td>
+                                                                            <td style="color:blue"><label>@item.SH1</label></td>
+                                                                            <td style="color:blue"><label>@item.SH2</label></td>
+                                                                            <td style="color:blue"><label>@item.SH3</label></td>
+                                                                            <td style="color:blue"><label>@item.SH4</label></td>
+                                                                            <td style="color:blue"><label>@item.HC</label></td>
+                                                                            <td style="color:blue"><label>@item.CC</label></td>
+                                                                            <td style="color:blue"><label>@item.SXXD</label></td>
+                                                                            <td style="color:blue"><label>@item.KDDV</label></td>
                                                                         </tr>
 
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr role="row">
-                                    <td colspan="9" class="cachTinhGia" style="font-size:15px"></td>
-                                    <td style="color:red;font-size:16px">@sumSanLuong</td>
-                                    <td style="color:blue;font-size:16px">@sumSH1</td>
-                                    <td style="color:blue;font-size:16px">@sumSH2</td>
-                                    <td style="color:blue;font-size:16px">@sumSH3</td>
-                                    <td style="color:blue;font-size:16px">@sumSH4</td>
-                                    <td style="color:blue;font-size:16px">@sumHC</td>
-                                    <td style="color:blue;font-size:16px">@sumCC</td>
-                                    <td style="color:blue;font-size:16px">@sumSX</td>
-                                    <td style="color:blue;font-size:16px">@sumKD</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr role="row">
+                                <td colspan="9" class="cachTinhGia" style="font-size:15px"></td>
+                                <td style="color:red;font-size:16px">@sumSanLuong</td>
+                                <td style="color:blue;font-size:16px">@sumSH1</td>
+                                <td style="color:blue;font-size:16px">@sumSH2</td>
+                                <td style="color:blue;font-size:16px">@sumSH3</td>
+                                <td style="color:blue;font-size:16px">@sumSH4</td>
+                                <td style="color:blue;font-size:16px">@sumHC</td>
+                                <td style="color:blue;font-size:16px">@sumCC</td>
+                                <td style="color:blue;font-size:16px">@sumSX</td>
+                                <td style="color:blue;font-size:16px">@sumKD</td>
+                            </tr>
+                        </tfoot>
+                    </table>
 
-                        <div class="form-actions">
-                            <form action="/solieutieuthu" method="post">
-                                <input type="hidden" name="to" value="@Request.QueryString["toID"]" />
-                                <input type="hidden" name="thang" value="@Request.QueryString["month"]" />
-                                <input type="hidden" name="nam" value="@Request.QueryString["year"]" />
-                                <input type="hidden" name="tuyen" value="@Request.QueryString["tuyenID"]" />
-                                <input type="hidden" name="nhanvien" value="@Request.QueryString["nvquanly"]" />
-                                <button type="submit" class="btn btn-success">Trở lại</button>
-                            </form>
-                            <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
-                        </div> <!-- /form-actions -->
+                    <div class="form-actions">
+                        <form action="/solieutieuthu" method="post">
+                            <input type="hidden" name="to" value="@Request.QueryString["toID"]" />
+                            <input type="hidden" name="thang" value="@Request.QueryString["month"]" />
+                            <input type="hidden" name="nam" value="@Request.QueryString["year"]" />
+                            <input type="hidden" name="tuyen" value="@Request.QueryString["tuyenID"]" />
+                            <input type="hidden" name="nhanvien" value="@Request.QueryString["nvquanly"]" />
+                            <button type="submit" class="btn btn-success">Trở lại</button>
+                        </form>
+                        <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
+                    </div> <!-- /form-actions -->
 
-                    </div> <!-- /widget-content -->
+                </div> <!-- /widget-content -->
 
-                </div> <!-- /widget -->
-            </div> <!-- /row -->
+            </div> <!-- /widget -->
+        </div> <!-- /row -->
 
-        </div> <!-- /container -->
+    </div> <!-- /container -->
 
-    </div> <!-- /main-inner -->
-
+</div> <!-- /main-inner -->
 </div> <!-- /main -->
 <!-- Script để đối màu dòng trong trường hợp áp giá tổng hợp và đặc biệt -->
 <script type="text/javascript">
@@ -309,7 +298,7 @@
             int tongHop = HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
         }
         $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
-        $("tr.dacbiet").css({ "background-color": "#e47b0f", "color": "black" });
+
 
     });
 

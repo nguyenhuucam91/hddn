@@ -74,16 +74,6 @@ namespace HoaDonNuocHaDong.Repositories
             db.SaveChanges();
         }
 
-        public bool isTodayIsMonday()
-        {
-            DateTime today = DateTime.Today;
-            if (today.DayOfWeek == DayOfWeek.Monday)
-            {
-                return true;
-            }
-            return false;
-        }
-
         public void deleteOldBackupFiles()
         {
             int backupNumber = db.Backups.Count();

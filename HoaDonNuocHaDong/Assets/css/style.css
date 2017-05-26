@@ -1396,7 +1396,7 @@ table.fc-border-separate {
     margin-left: 40%;
 }
 
-/*-------------------Hiển thị scrollBar theo Ox nếu như chiều-------*/
+/*--------------- Nhập chỉ số hóa đơn nước-------*/
 .outerTable {
     width: 100%;
     overflow-x: auto;
@@ -1408,28 +1408,56 @@ table.fc-border-separate {
     color: white !important;
 }
 
+.catnuocBackgroundCss {
+    background-color: #888 !important;
+}
+
+    .catnuocBackgroundCss td:nth-child(n+7) label {
+        display: none;
+    }
+
+    .catnuocBackgroundCss input {
+        display: none;
+    }
+
+.tonghop {
+    background-color: #29a286;
+}
+
+.dacbiet {
+    background-color: #e47b0f !important;    
+}
+
+.huychuacapnhat{
+    background-color: #2982A2;
+}
+
+.huydacapnhat{  
+    background-color: #f1c0c0;     
+}
+
 /*------Hướng dẫn tìm kiếm và chú thích-----------------*/
 .huongDan {
     margin-top: 12px;
 }
 
-.huongDan p, .huongDan span {
-    color: red;
-    font-size: 15px;
-}
+    .huongDan p, .huongDan span {
+        color: red;
+        font-size: 15px;
+    }
 
 .hoadonbihuy {
     background-color: #2982A2 !important;
 }
 
-.hoadonduoccapnhat{
+.hoadonduoccapnhat {
     background-color: #f1c0c0 !important;
 }
 
-.hasSanLuongAm{
+.hasSanLuongAm {
     background-color: #d5cd6e !important;
 }
 
-.hoadonprinted{
+.hoadonprinted {
     background-color: #b8860b !important;
 }

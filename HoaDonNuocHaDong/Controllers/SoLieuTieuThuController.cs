@@ -626,8 +626,7 @@ namespace HoaDonNuocHaDong.Controllers
                                 where i.ThangHoaDon == _month && i.NamHoaDon == _year &&
                                       r.TuyenKHID == tuyenID &&
                                       (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != _month && r.Ngaythanhly.Value.Year != _year)) &&
-                                      (i.Trangthaixoa == false || i.Trangthaixoa == null) &&
-                                      ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now))
+                                      (i.Trangthaixoa == false || i.Trangthaixoa == null) 
                                 select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                 {
                                     HoaDonNuocID = i.HoadonnuocID,
@@ -653,7 +652,9 @@ namespace HoaDonNuocHaDong.Controllers
                                     Thang = _month,
                                     Nam = _year,
                                     KHID = r.KhachhangID,
-                                    TrangThaiChot = i.Trangthaichot == null ? false : i.Trangthaichot.Value
+                                    TrangThaiChot = i.Trangthaichot == null ? false : i.Trangthaichot.Value,
+                                    NgayNgungCapNuoc = r.Ngayngungcapnuoc,
+                                    NgayCapNuocLai = r.Ngaycapnuoclai
                                 }).OrderBy(p => p.ThuTuDoc).ToList();
             return chiSoTieuThu;
         }

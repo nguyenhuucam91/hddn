@@ -36,5 +36,8 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
 
         public DateTime? NgayKiHopDong { get; set; }
         public bool TrangThaiChot { get; set; }
+
+        public DateTime? NgayNgungCapNuoc { get; set; }
+        public DateTime? NgayCapNuocLai { get; set; }
     }
 }

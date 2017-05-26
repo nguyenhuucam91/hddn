@@ -35,15 +35,19 @@ namespace HoaDonNuocHaDong.Controllers
             var passwordHash = AuthHelpers.CreatePassword(password);
             var count = nguoiDungRepository.GetAll().Count();
 
-            if (count > 0) {
+            if (count > 0)
+            {
                 // get NguoiDung by username
                 var nguoiDung = nguoiDungRepository.GetSingle(m => m.Taikhoan == username);
 
-                if (nguoiDung != null) {
+                if (nguoiDung != null)
+                {
                     var dangNhap = dangNhapRepository.GetByNguoiDungID(nguoiDung.NguoidungID);
                     // create DangNhap if not exists
-                    if (dangNhap == null) {
-                        dangNhap = new HDNHD.Models.DataContexts.Dangnhap() {
+                    if (dangNhap == null)
+                    {
+                        dangNhap = new HDNHD.Models.DataContexts.Dangnhap()
+                        {
                             NguoidungID = nguoiDung.NguoidungID,
                             Solandangnhapsai = 0
                         };
@@ -51,17 +55,20 @@ namespace HoaDonNuocHaDong.Controllers
                     }
 
                     var encryptedPassword = AuthHelpers.CreatePassword(password);
-                    if (nguoiDung.Matkhau == encryptedPassword) { // password matched
+                    if (nguoiDung.Matkhau == encryptedPassword)
+                    { // password matched
                         // check if locked
-                        if (dangNhap.Trangthaikhoa == true && dangNhap.Thoigianhethankhoa < DateTime.Now) {
+                        if (dangNhap.Trangthaikhoa == true && dangNhap.Thoigianhethankhoa < DateTime.Now)
+                        {
                             // release lock
                             dangNhap.Trangthaikhoa = false;
                             dangNhap.Solandangnhapsai = 0;
                         }
-                        
-                        if (dangNhap.Trangthaikhoa != true) {
+
+                        if (dangNhap.Trangthaikhoa != true)
+                        {
                             // update Thoigiandangnhap
-                            dangNhap.Thoigiandangnhap =  DateTime.Now;
+                            dangNhap.Thoigiandangnhap = DateTime.Now;
                             adminUow.SubmitChanges();
 
                             // set cookie
@@ -70,27 +77,31 @@ namespace HoaDonNuocHaDong.Controllers
                             cookie.Path = "/"; // make cookie available across applications
                             Response.Cookies.Add(cookie);
 
-                            bool isMonday = backupRepository.isTodayIsMonday();
-                            if (isMonday)
-                            {
-                                backupRepository.applyBackupProcess(nguoiDung.NguoidungID);
-                            }
+                            backupRepository.applyBackupProcess(nguoiDung.NguoidungID);
+
                             // redirect
                             if (prevUrl != null)
                                 Response.Redirect(prevUrl);
                             else
-                                return RedirectToAction("Index", "Default", new { area="" });
-                        } else {
-                            ViewBag.Message = "Tài khoản của bạn đã bị khóa (tới sau ngày "+dangNhap.Thoigianhethankhoa+") do nhập sai password quá 5 lần. Xin hãy quay lại sau.";
+                                return RedirectToAction("Index", "Default", new { area = "" });
                         }
-                    } else { // sai mật khẩu => đếm số lần và khóa
+                        else
+                        {
+                            ViewBag.Message = "Tài khoản của bạn đã bị khóa (tới sau ngày " + dangNhap.Thoigianhethankhoa + ") do nhập sai password quá 5 lần. Xin hãy quay lại sau.";
+                        }
+                    }
+                    else
+                    { // sai mật khẩu => đếm số lần và khóa
                         dangNhap.Solandangnhapsai++;
-                        
-                        if (dangNhap.Solandangnhapsai == HDNHDConstants.LOGIN_MAX_FAILS) {
+
+                        if (dangNhap.Solandangnhapsai == HDNHDConstants.LOGIN_MAX_FAILS)
+                        {
                             dangNhap.Trangthaikhoa = true;
                             dangNhap.Thoigianhethankhoa = DateTime.Now.AddDays(HDNHDConstants.LOGIN_LOCK_DAYS);
                             ViewBag.Message = "Tài khoản của bạn đã bị khóa " + HDNHDConstants.LOGIN_LOCK_DAYS + " ngày do nhập sai password quá 5 lần. Xin hãy quay lại sau.";
-                        } else {
+                        }
+                        else
+                        {
                             ViewBag.Message = "Tài khoản hoặc mật khẩu chưa đúng. Vui lòng kiểm tra lại";
                         }
 
@@ -99,8 +110,10 @@ namespace HoaDonNuocHaDong.Controllers
 
 
 
-                } else {
-                    ViewBag.Message = "Tài khoản hoặc mật khẩu chưa đúng. Vui lòng kiểm tra lại.";;
+                }
+                else
+                {
+                    ViewBag.Message = "Tài khoản hoặc mật khẩu chưa đúng. Vui lòng kiểm tra lại."; ;
                 }
             }
             else
@@ -164,5 +177,5 @@ namespace HoaDonNuocHaDong.Controllers
 
             return Content("Users exist. Seeding aborted!");
         }
-	}
+    }
 }
