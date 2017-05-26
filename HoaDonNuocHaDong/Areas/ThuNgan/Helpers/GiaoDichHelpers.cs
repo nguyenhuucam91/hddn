@@ -75,7 +75,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
                         model.DuCo.SoTienDu = -duNo;
 
                         // TODO: trừ cho hóa đơn tháng tới (nếu đã chốt)
-                        
+                                                
                     }
                 } else
                 {
@@ -94,6 +94,15 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
             }
 
             return false;
+        }
+        
+        /// <summary>
+        /// get next hoaDon & update SoTienPhaiNop (if exist)
+        /// </summary>
+        /// <effects.
+        public static bool truDuCo(int hoaDonID)
+        {
+            return false; 
         }
 
         /// <summary>

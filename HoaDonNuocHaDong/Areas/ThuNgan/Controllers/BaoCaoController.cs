@@ -127,7 +127,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.Year = year.Value;
             
             #endregion
-            return View("DuNoExport", items.ToList());
+            return View(items.ToList());
         }
 
         /// <summary>
