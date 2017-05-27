@@ -312,7 +312,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
             }
 
-            ViewBag.selectedMonth = thangTrongQuy;
+            ViewBag.selectedMonth = "Quý "+quy;
             ViewBag.selectedYear = nam.ToString();
             return View("XuliBaoCaoSanLuongDoanhThu");
         }
