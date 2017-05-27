@@ -21,14 +21,16 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Index()
         {           
             int phongBanId = getPhongBanNguoiDung();
-            ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
+            int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);            
             var nguoidungs = new List<Nguoidung>();
             String isAdminVaTruongPhong = isLoggedUserAdminVaTruongPhong();
             if (phongBanId != 0)
             {
                 nguoidungs = (from i in db.Nguoidungs
                               join r in db.Nhanviens on i.NhanvienID equals r.NhanvienID
-                              where r.PhongbanID == phongBanId
+                              join s in db.ToQuanHuyens on r.ToQuanHuyenID equals s.ToQuanHuyenID
+                              join t in db.Quanhuyens on s.QuanHuyenID equals t.QuanhuyenID                              
+                              where r.PhongbanID == phongBanId && i.Isadmin == false && t.QuanhuyenID == loggedInUserQuanHuyenId
                               select new
                               {
                                   nguoiDung = i,
@@ -43,10 +45,9 @@ namespace HoaDonNuocHaDong.Controllers
             }
            
             #region ViewBag
-
             ViewBag.isAdminVaTruongPhong = isAdminVaTruongPhong;
             ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0" ;
-            int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
+            ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
             ViewBag.currentlyLoggedInUser = LoggedInUser.NguoidungID;
             ViewBag.chinhanh = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();

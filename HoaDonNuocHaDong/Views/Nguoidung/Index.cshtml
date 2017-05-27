@@ -29,61 +29,45 @@
                             </div>
 
                             <!-- Bộ lọc để lọc dữ liệu -->
-                            <div style="margin:2% 0 2% 0">
-                                @using (Html.BeginForm("Index", "Nguoidung", FormMethod.Post))
-                                {
-                                    <div class="form-group">
-                                        <!-- chi nhánh -->
-                                        Quận huyện: <select class="dropdown form-control quanAllowClear" name="chinhanh">
-                                            @foreach (var item in chiNhanh)
-                                            {
-                                                if (isAdmin == "1")
+                            @if (isAdmin == "1") {
+                                <div style="margin:2% 0 2% 0">
+                                    @using (Html.BeginForm("Index", "Nguoidung", FormMethod.Post))
+                                    {
+                                        <div class="form-group">
+
+                                            <span>Quận huyện:</span>
+                                            <select class="dropdown form-control quanAllowClear" name="chinhanh">
+                                                @foreach (var item in chiNhanh)
                                                 {
                                                     <option value="@item.QuanhuyenID">@item.Ten</option>
                                                 }
-                                                else
+                                            </select>
+                                            <span>Phòng ban: </span>
+                                            <select class="dropdown form-control phongbanAllowClear" style="width:220px;margin-right:3%" name="phongban">
+                                                <!-- Option mặc định -->
+                                                @foreach (var item in phongBan)
                                                 {
-                                                    if (isAdminAndTruongPhong == "1")
-                                                    {
-                                                        if (item.QuanhuyenID == loggedInUserQuanHuyenId)
-                                                        {
-                                                            <option value="@item.QuanhuyenID">@item.Ten</option>
-                                                        }
-                                                    }
+                                                    <option value="@item.PhongbanID">@item.Ten</option>
                                                 }
+                                            </select>
 
-                                            }
-                                        </select>
-                                        Phòng ban: <select class="dropdown form-control phongbanAllowClear" style="width:220px;margin-right:3%" name="phongban">
-                                            <!-- Option mặc định -->
-                                            @foreach (var item in phongBan)
-                                            {
-                                                <option value="@item.PhongbanID">@item.Ten</option>
-                                            }
-                                        </select>
-
-                                        <select class="dropdown form-control admin" style="width:150px;margin-right:3%" name="isAdmin">
-                                            @if (isAdmin != "")
-                                            {
-                                                <option value="0">Người dùng</option>
-                                            }
-                                            else
-                                            {
-                                                <option disabled="disabled" selected="selected">--Chức vụ--</option>
+                                            <span>Chức vụ:</span>
+                                            <select class="dropdown form-control admin" style="width:150px;margin-right:3%" name="isAdmin">                                               
                                                 <option value="0">Người dùng</option>
                                                 <option value="1">Admin</option>
-                                            }
+                                            </select>
 
-                                        </select>
+                                            <button type="submit" class="btn btn-default">Tìm kiếm</button>
+                                        </div>
+                                    }
+                                </div>
 
-                                        <button type="submit" class="btn btn-default">Tìm kiếm</button>
-                                    </div>
-                                }
-                            </div>
-                            <!-- Hướng dẫn sử dụng -->
-                            <div class="huongDan">
-                                <p>Tìm kiếm danh sách người dùng bằng cách chọn quận huyện và phòng ban tương ứng</p>
-                            </div>
+                                  <!-- Hướng dẫn sử dụng -->
+                                <div class="huongDan">
+                                    <p>Tìm kiếm danh sách người dùng bằng cách chọn quận huyện và phòng ban tương ứng</p>
+                                </div>
+                            }
+
                             <!-- Bảng tuyến -->
                             <table class="example table table-striped table-bordered">
                                 <thead>
