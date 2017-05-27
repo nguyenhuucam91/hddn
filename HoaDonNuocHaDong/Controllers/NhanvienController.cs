@@ -16,38 +16,140 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class NhanvienController : BaseController
     {
-        private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-
         // GET: /Nhanvien/
         public ActionResult Index()
         {
-            ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
+            int quanHuyenIdLoggedInUser = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
             int phongBanId = getPhongBanNguoiDung();
+            String isAdminVaTruongPhong = isLoggedUserAdminVaTruongPhong();
             List<Nhanvien> nhanviens = new List<Nhanvien>();
             if (phongBanId == 0)
             {
-                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
-                nhanviens = db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+                nhanviens = (from i in db.Nhanviens
+                                                    join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                                                    join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
+                                                    where i.IsDelete == false
+                                                    select new
+                                                    {
+                                                        nhanvien = i,                                                        
+                                                    }).Select(p => p.nhanvien).ToList();
+                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);                
+                ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
             }
             else
             {
-                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId);
-                nhanviens = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId).ToList();
+                nhanviens = (from i in db.Nhanviens
+                                                    join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                                                    join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
+                                                    where i.IsDelete == false && i.PhongbanID == phongBanId && s.QuanhuyenID == quanHuyenIdLoggedInUser
+                                                    select new
+                                                    {
+                                                        nhanvien = i,                                                        
+                                                    }).Select(p => p.nhanvien).ToList();
+                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.QuanHuyenID == quanHuyenIdLoggedInUser);               
+                ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.QuanhuyenID == quanHuyenIdLoggedInUser);
             }
-
 
             var userLoggedInRole = getLoggedInUserRole();
 
             #region ViewBag
-            ViewBag.userLoggedInRole = userLoggedInRole;
+            ViewBag.isAdminVaTruongPhong = isAdminVaTruongPhong;
+            ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0";
             ViewBag.chucVu = db.Chucvus;
             ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
-            ViewBag.selectedQuan = 0;
+            ViewBag.selectedQuan = quanHuyenIdLoggedInUser;
             ViewBag.selectedTo = 0;
             ViewBag.phongBan = db.Phongbans.ToList();
             ViewBag.selectedPhongban = 0;
             #endregion
             return View(nhanviens);
+        }
+
+        [HttpPost]
+        public ActionResult FilterNhanVien(FormCollection form)
+        {
+            int phongBanId = getPhongBanNguoiDung();
+            int quanHuyenIdLoggedInUser = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
+            String isAdminVaTruongPhong = isLoggedUserAdminVaTruongPhong();
+            var isAdmin = LoggedInUser.Isadmin == true ? "1" : "0";
+
+            #region FormRequest
+            int selectedQuan = String.IsNullOrEmpty(form["chinhanh"]) ? 0 : Convert.ToInt32(form["chinhanh"]);
+            int selectedTo = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
+            int selectedPhongBan = String.IsNullOrEmpty(form["phongban"]) ? 0 : Convert.ToInt32(form["phongban"]);
+            String chucVu = form["chucVu"];
+            #endregion
+
+            List<Nhanvien> nhanViens = new List<Nhanvien>();
+            if (selectedQuan != 0)
+            {
+                nhanViens = (from i in db.Nhanviens
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                             join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
+                             where i.IsDelete == false && s.QuanhuyenID == selectedQuan 
+                             select new
+                             {
+                                 nhanvien = i,
+                             }).Select(p => p.nhanvien).ToList();
+            }
+            else
+            {
+                nhanViens = (from i in db.Nhanviens
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                             join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
+                             where i.IsDelete == false 
+                             select new
+                             {
+                                 nhanvien = i,
+                             }).Select(p => p.nhanvien).ToList();
+            }
+
+            if (selectedTo != 0)
+            {
+                nhanViens = nhanViens.Where(p => p.ToQuanHuyenID == selectedTo && (p.IsDelete == false || p.IsDelete == null)).ToList();
+            }
+
+            if (selectedPhongBan != 0)
+            {
+                nhanViens = nhanViens.Where(p => p.PhongbanID == selectedPhongBan && (p.IsDelete == false || p.IsDelete == null)).ToList();
+            }
+
+            if (isAdmin == "1")
+            {
+                if (selectedQuan == 0)
+                {
+                    ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false);
+                }
+                else
+                {
+                    ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == selectedQuan);
+                }
+                ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false );                
+            }
+            else
+            {
+                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.QuanHuyenID == quanHuyenIdLoggedInUser);
+                ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.QuanhuyenID == quanHuyenIdLoggedInUser);
+                nhanViens = nhanViens.Where(p => p.PhongbanID == phongBanId).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(chucVu))
+            {
+                nhanViens = nhanViens.Where(p => p.ChucvuID == Convert.ToInt32(chucVu)).ToList();
+            }
+
+            #region ViewBag
+            ViewBag.isAdminVaTruongPhong = isAdminVaTruongPhong;
+            ViewBag.isAdmin = isAdmin;
+            ViewBag.chucVu = db.Chucvus;
+            ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewBag.selectedQuan = selectedQuan;
+            ViewBag.selectedTo = selectedTo;
+            ViewBag.phongBan = db.Phongbans.ToList();
+            ViewBag.selectedPhongBan = selectedPhongBan;
+            #endregion
+
+            return View("Index", nhanViens);
         }
 
         public IQueryable<Nhanvien> filterEmployeesByDepartment()
@@ -74,18 +176,6 @@ namespace HoaDonNuocHaDong.Controllers
                 }
             }
             return nhanviens;
-        }
-
-        public int getPhongBanNguoiDung()
-        {
-            var phongBanRepository = uow.Repository<PhongBanRepository>();
-            if (nhanVien != null)
-            {
-                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
-                int phongBanID = phongBan.PhongbanID;
-                return phongBanID;
-            }
-            return 0;
         }
 
         /// <summary>
@@ -140,7 +230,7 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Nhanvien/Create
         public ActionResult Create()
         {
-            ViewBag._TuyenKHID = db.Tuyenkhachhangs.Where(p=>p.IsDelete==false).ToList();
+            ViewBag._TuyenKHID = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
             ViewBag.ChinhanhID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
 
 
@@ -403,56 +493,5 @@ namespace HoaDonNuocHaDong.Controllers
             base.Dispose(disposing);
         }
 
-        [HttpPost]
-        public ActionResult FilterNhanVien(FormCollection form)
-        {
-            int phongBanId = getPhongBanNguoiDung();
-            int quan = String.IsNullOrEmpty(form["chinhanh"]) ? 0 : Convert.ToInt32(form["chinhanh"]);
-            int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-            int phongBan = String.IsNullOrEmpty(form["phongban"]) ? 0 : Convert.ToInt32(form["phongban"]);
-            List<Nhanvien> nhanViens = db.Nhanviens.ToList();
-            if (phongBanId == 0)
-            {
-                if (phongBan != 0)
-                {
-                    nhanViens = db.Nhanviens.Where(p => p.PhongbanID == phongBan && (p.IsDelete == false || p.IsDelete == null)).ToList();
-                }
-                else
-                {
-                    nhanViens = db.Nhanviens.Include(n => n.Chucvu).Include(n => n.Phongban).Where(p => p.IsDelete == false).ToList();
-                }
-                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
-            }
-            else
-            {
-                nhanViens = db.Nhanviens.Where(p => p.PhongbanID == phongBanId).Include(n => n.Chucvu).Include(n => n.Phongban).Where(p => p.IsDelete == false).ToList();
-                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId);
-            }
-
-            if (to != 0)
-            {
-                nhanViens = nhanViens.Where(p => p.ToQuanHuyenID == to).ToList();
-            }
-            String chucVu = form["chucVu"];
-            if (!String.IsNullOrEmpty(chucVu))
-            {
-                nhanViens = nhanViens.Where(p => p.ChucvuID == Convert.ToInt32(chucVu)).ToList();
-            }
-
-            var userLoggedInRole = getLoggedInUserRole();
-
-            #region ViewBag
-            ViewBag.userLoggedInRole = userLoggedInRole;
-            ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
-            ViewBag.chucVu = db.Chucvus;
-            ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
-            ViewBag.selectedQuan = quan;
-            ViewBag.selectedTo = to;
-            ViewBag.phongBan = db.Phongbans.ToList();
-            ViewBag.selectedPhongBan = phongBan;
-            #endregion
-
-            return View("Index", nhanViens);
-        }
     }
 }

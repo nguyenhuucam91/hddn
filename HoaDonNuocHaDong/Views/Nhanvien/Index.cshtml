@@ -6,12 +6,13 @@
     var chucVu = ViewBag.chucVu;
     List<Tuyenkhachhang> tuyenKH = ViewData["Tuyen"] as List<Tuyenkhachhang>;
     HoaDonNuocHaDong.Helper.NhanVienHelper helper = new HoaDonNuocHaDong.Helper.NhanVienHelper();
-    var userLoggedInRole = ViewBag.userLoggedInRole;
     var selectedQuan = ViewBag.selectedQuan;
     var selectedTo = ViewBag.selectedTo;
     var phongBans = ViewBag.phongBan;
     var toQuanHuyens = ViewBag.ToQuanHuyen;
     var selectedPhongBan = ViewBag.selectedPhongban;
+    var isAdminVaTruongPhong = ViewBag.isAdminVaTruongPhong;
+    var isAdmin = ViewBag.isAdmin;
 }
 
 <div class="main">
@@ -74,7 +75,10 @@
                                     {
                                         <div class="form-group">
                                             <!-- Bộ lọc -->
-                                            <select class="dropdown form-control quan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
+                                            @{
+                                        String cssClassQuan = isAdmin == "1" ? "quanAllowClear" : "quan";
+                                            }
+                                            <select class="dropdown form-control @cssClassQuan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
                                                 <!-- Option mặc định -->
                                                 <option selected disabled></option>
                                                 @foreach (var item in chiNhanh)
@@ -85,13 +89,13 @@
                                                     }
                                                     else
                                                     {
-                                                    <option value="@item.QuanhuyenID">@item.Ten</option>
+                                                        <option value="@item.QuanhuyenID">@item.Ten</option>
                                                     }
                                                 }
                                             </select>
 
                                             <!-- To quan huyen -->
-                                            <select class="dropdown form-control to" style="width: 20%; float: left; margin-right: 3%" name="to">
+                                            <select class="dropdown form-control toAllowClear" style="width: 20%; float: left; margin-right: 3%" name="to">
                                                 <option selected disabled></option>
                                                 @foreach (var item in toQuanHuyens)
                                                 {
@@ -105,7 +109,9 @@
                                                     }
                                                 }
                                             </select>
-                                            @if (userLoggedInRole == 0)
+
+
+                                            @if (isAdmin == "1")
                                             {
                                             <!-- Phòng ban-->
                                                 <select class="dropdown form-control phongBan" style="width: 20%; float: left; margin-right: 3%" name="phongban">
@@ -137,7 +143,7 @@
                                                 <th>Tên nhân viên</th>
                                                 <th>Phòng ban</th>
                                                 <th>Chức vụ</th>
-                                                @if (userLoggedInRole == 0 || userLoggedInRole == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
+                                                @if (isAdminVaTruongPhong == "1")
                                                 {
                                                     <th></th>
                                                 }
@@ -165,11 +171,11 @@
                                                         }
                                                         @tenPhongBan
                                                     </td>
-                                                  
+
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.Chucvu.Ten)
                                                     </td>
-                                                    @if (userLoggedInRole == 0 || userLoggedInRole == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
+                                                    @if (isAdminVaTruongPhong == "1")
                                                     {
                                                         <td>
                                                             @Html.ActionLink("Sửa", "Edit", new { id = item.NhanvienID })

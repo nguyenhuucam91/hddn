@@ -19,9 +19,9 @@ namespace HoaDonNuocHaDong.Controllers
     public class NguoidungController : BaseController
     {
         public ActionResult Index()
-        {           
+        {
             int phongBanId = getPhongBanNguoiDung();
-            int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);            
+            int loggedInUserQuanHuyenId = (int)NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
             var nguoidungs = new List<Nguoidung>();
             String isAdminVaTruongPhong = isLoggedUserAdminVaTruongPhong();
             if (phongBanId != 0)
@@ -29,13 +29,13 @@ namespace HoaDonNuocHaDong.Controllers
                 nguoidungs = (from i in db.Nguoidungs
                               join r in db.Nhanviens on i.NhanvienID equals r.NhanvienID
                               join s in db.ToQuanHuyens on r.ToQuanHuyenID equals s.ToQuanHuyenID
-                              join t in db.Quanhuyens on s.QuanHuyenID equals t.QuanhuyenID                              
+                              join t in db.Quanhuyens on s.QuanHuyenID equals t.QuanhuyenID
                               where r.PhongbanID == phongBanId && i.Isadmin == false && t.QuanhuyenID == loggedInUserQuanHuyenId
                               select new
                               {
                                   nguoiDung = i,
                                   nhanvien = r
-                              }).Select(p => p.nguoiDung).ToList();                
+                              }).Select(p => p.nguoiDung).ToList();
                 ViewBag.phongBan = db.Phongbans.Where(p => p.PhongbanID == phongBanId).ToList();
             }
             else
@@ -43,10 +43,10 @@ namespace HoaDonNuocHaDong.Controllers
                 nguoidungs = db.Nguoidungs.ToList();
                 ViewBag.phongBan = db.Phongbans.ToList();
             }
-           
+
             #region ViewBag
             ViewBag.isAdminVaTruongPhong = isAdminVaTruongPhong;
-            ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0" ;
+            ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0";
             ViewData["toQuanHuyens"] = db.ToQuanHuyens.Where(p => p.IsDelete == false).ToList();
             ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
             ViewBag.currentlyLoggedInUser = LoggedInUser.NguoidungID;
