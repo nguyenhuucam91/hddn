@@ -21,13 +21,31 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Tuyen/
         public ActionResult Index()
         {
+            int quanHuyenId = getQuanHuyenOfLoggedInUser();
             int phongBanId = getPhongBanNguoiDung();
-            var nhanViens = (from i in db.Nhanviens
-                            join r in db.Nguoidungs on i.NhanvienID equals r.NhanvienID
-                            where i.PhongbanID == phongBanId && i.ChucvuID == (int)EChucVu.NHAN_VIEN
-                            select new{
-                                nhanvien = i
-                            }).Select(p=>p.nhanvien).ToList();
+            var isAdmin = LoggedInUser.Isadmin;
+            List<Nhanvien> nhanViens = new List<Nhanvien>();
+            if (!isAdmin.Value)
+            {
+                nhanViens = (from i in db.Nhanviens
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                             join t in db.Quanhuyens on r.QuanHuyenID equals quanHuyenId
+                             where i.PhongbanID == phongBanId && i.ChucvuID == (int)EChucVu.NHAN_VIEN && t.QuanhuyenID == quanHuyenId
+                             select new
+                             {
+                                 nhanvien = i
+                             }).Select(p => p.nhanvien).ToList();
+            }
+            else
+            {
+                nhanViens = (from i in db.Nhanviens
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                             join t in db.Quanhuyens on r.QuanHuyenID equals quanHuyenId
+                             select new
+                             {
+                                 nhanvien = i
+                             }).Select(p => p.nhanvien).ToList();
+            }
             var tuyenkhachhangs = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).Include(t => t.Cumdancu).Include(t => t.To);
             ViewBag._nhanVien = nhanViens;
             return View(tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID).ToList());
@@ -127,7 +145,7 @@ namespace HoaDonNuocHaDong.Controllers
             if (ModelState.IsValid)
             {
                 //kiểm tra trong tuyến trước
-                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.Ten == tuyenkhachhang.Ten && p.IsDelete == false);
+                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.IsDelete == false);
                 if (existingTuyen == null)
                 {
                     db.Tuyenkhachhangs.Add(tuyenkhachhang);
@@ -184,7 +202,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             if (ModelState.IsValid)
             {
-                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.Ten == tuyenkhachhang.Ten && p.IsDelete == false);
+                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.IsDelete == false);
                 if (existingTuyen == null)
                 {
                     db.Entry(tuyenkhachhang).State = EntityState.Modified;
@@ -194,7 +212,7 @@ namespace HoaDonNuocHaDong.Controllers
                 else
                 {
                     ViewBag.hasTuyen = true;
-                }               
+                }
             }
             ViewBag.nhanVien = new SelectList(db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null), "NhanvienID", "Ten");
             ViewBag.CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false || p.IsDelete == null), "CumdancuID", "Ten", tuyenkhachhang.CumdancuID);
