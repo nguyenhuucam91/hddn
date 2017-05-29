@@ -25,6 +25,16 @@
     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
     {
         int duNo = (int)(item.SoTienNopTheoThang.SoTienPhaiNop - item.SoTienNopTheoThang.SoTienDaThu);
+
+        if (item.HoaDon.Trangthaithu == true)
+        {
+            duNo = 0;
+        }
+
+        if (item.DuCo != null)
+        {
+            duNo = (int)-item.DuCo.SoTienDu;
+        }
         <tr>
             <td style="text-align: right">@(++stt)</td>
             <td class="text-center">@item.KhachHang.MaKhachHang</td>

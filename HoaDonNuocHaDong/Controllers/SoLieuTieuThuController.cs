@@ -22,7 +22,7 @@ namespace HoaDonNuocHaDong.Controllers
         private NguoidungHelper ngDungHelper = new NguoidungHelper();
         private KiemDinh kiemDinh = new KiemDinh();
         private LichSuHoaDonRepository lichSuHoaDonRepository = new LichSuHoaDonRepository();
-       
+
         // GET: /SoLieuTieuThu/
         /// <summary>
         /// Hiển thị danh sách chi nhánh, tổ, nhân viên, tuyến và khách hàng
@@ -626,7 +626,7 @@ namespace HoaDonNuocHaDong.Controllers
                                 where i.ThangHoaDon == _month && i.NamHoaDon == _year &&
                                       r.TuyenKHID == tuyenID &&
                                       (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != _month && r.Ngaythanhly.Value.Year != _year)) &&
-                                      (i.Trangthaixoa == false || i.Trangthaixoa == null) 
+                                      (i.Trangthaixoa == false || i.Trangthaixoa == null)
                                 select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                 {
                                     HoaDonNuocID = i.HoadonnuocID,
@@ -881,9 +881,12 @@ namespace HoaDonNuocHaDong.Controllers
             /* congnv 170515 */
             var stntt = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
             var ducoTruoc = db.DuCoes.FirstOrDefault(m => m.KhachhangID == hoaDon.KhachhangID // dư có trước đó chưa trừ hết
-                && (m.TrangThaiTruHet == false || // chưa trừ hoặc đã trừ hết cho hóa đơn này trước đó (trong TH cập nhật)
-                (m.TrangThaiTruHet == true && m.NgayTruHet.Value.Month == hoaDon.ThangHoaDon && m.NgayTruHet.Value.Year == hoaDon.NamHoaDon)));
-            DuCo duco = null; // dư có tháng này (trong TH cập nhật)
+                && (
+                    m.TrangThaiTruHet == false || // chưa trừ hoặc đã trừ hết cho hóa đơn này trước đó (trong TH cập nhật)
+                    (m.TrangThaiTruHet == true && m.NgayTruHet.Value.Month == hoaDon.ThangHoaDon && m.NgayTruHet.Value.Year == hoaDon.NamHoaDon)
+                )
+            );
+            DuCo duCo = null; // dư có tháng này (trong TH cập nhật)
 
             if (stntt == null)
             {
@@ -898,8 +901,11 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                db.Entry(stntt).State = System.Data.Entity.EntityState.Modified;
-                duco = db.DuCoes.FirstOrDefault(m => m.TienNopTheoThangID == stntt.ID);
+                // reset hoaDon status
+                hoaDon.Trangthaithu = false;
+                hoaDon.NgayNopTien = null;
+
+                duCo = db.DuCoes.FirstOrDefault(m => m.TienNopTheoThangID == stntt.ID);
             }
 
             stntt.SoTienTrenHoaDon = (int)lichSuHD.TongCong;
@@ -908,42 +914,45 @@ namespace HoaDonNuocHaDong.Controllers
             if (ducoTruoc != null) // trừ dư có (nếu có)
             {
                 ducoTruoc.TrangThaiTruHet = true;
-                ducoTruoc.NgayTruHet = DateTime.Now;
+                ducoTruoc.NgayTruHet = new DateTime(hoaDon.NamHoaDon.Value, hoaDon.ThangHoaDon.Value, 1);
 
-                if (ducoTruoc.SoTienDu < stntt.SoTienTrenHoaDon)
+                if (ducoTruoc.SoTienDu <= stntt.SoTienTrenHoaDon)
                 {
                     stntt.SoTienPhaiNop -= ducoTruoc.SoTienDu;
+
+                    if (duCo != null)
+                    {
+                        db.DuCoes.Remove(duCo);
+                    }
                 }
                 else
                 {
                     stntt.SoTienPhaiNop = 0;
-                    // update hoadon
-                    hoaDon.Trangthaithu = true;
-                    hoaDon.NgayNopTien = DateTime.Now;
 
                     // save db cập nhật stntt.ID
                     db.SaveChanges();
 
-                    if (ducoTruoc.SoTienDu > stntt.SoTienTrenHoaDon)
+                    if (duCo == null)
                     {
-                        if (duco == null)
+                        duCo = new DuCo()
                         {
-                            duco = new DuCo()
-                            {
-                                KhachhangID = hoaDon.KhachhangID,
-                                TienNopTheoThangID = stntt.ID,
-                            };
-                            db.DuCoes.Add(duco);
-                        }
-                        else
-                        {
-                            db.Entry(duco).State = System.Data.Entity.EntityState.Modified;
-                        }
-
-                        duco.SoTienDu = ducoTruoc.SoTienDu - stntt.SoTienTrenHoaDon;
+                            KhachhangID = hoaDon.KhachhangID,
+                            TienNopTheoThangID = stntt.ID,
+                        };
+                        db.DuCoes.Add(duCo);
                     }
+
+                    duCo.SoTienDu = ducoTruoc.SoTienDu - stntt.SoTienTrenHoaDon;
                 }
             }
+
+            if (stntt.SoTienPhaiNop == 0)
+            {
+                // update hoadon
+                hoaDon.Trangthaithu = true;
+                hoaDon.NgayNopTien = DateTime.Now;
+            }
+
             db.SaveChanges();
             /* END congnv 170515 */
         }
@@ -955,10 +964,10 @@ namespace HoaDonNuocHaDong.Controllers
                                                                        where i.SanLuong != 0
                                                                        orderby r.MucDoUuTienTinhGia
                                                                        select new HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop
-                                                                        {
-                                                                            SanLuong = i.SanLuong.Value,
-                                                                            IDLoaiApGia = i.IDLoaiApGia.Value
-                                                                        }).ToList();
+                                                                       {
+                                                                           SanLuong = i.SanLuong.Value,
+                                                                           IDLoaiApGia = i.IDLoaiApGia.Value
+                                                                       }).ToList();
 
             List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sanLuongZero = (from i in ls
                                                                              where i.SanLuong == 0

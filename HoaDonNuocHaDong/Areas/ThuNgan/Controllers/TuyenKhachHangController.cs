@@ -12,6 +12,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
     {
         public ActionResult Index(TuyenKhachHangFilterModel filter, Pager pager)
         {
+            title = "Danh sách tuyến khách hàng đã có chỉ số";
+            
             ITuyenKHRepository tuyenKHRepository = uow.Repository<TuyenKHRepository>();
             
             var items = tuyenKHRepository.GetAll().Select(m => new TuyenKhachHangModel()
@@ -23,7 +25,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             pager.ApplyPager(ref items);
 
             #region view data
-            title = "Danh sách tuyến khách hàng đã có chỉ số";
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             #endregion

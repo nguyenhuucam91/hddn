@@ -30,6 +30,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult Index(HoaDonFilterModel filter, Pager pager, String todo, ViewMode viewMode = ViewMode.Default)
         {
+            title = "Quản lý công nợ khách hàng";
+            
             // default values
             if (filter.Mode == null || filter.Mode == HoaDonFilterModel.FilterByUserInfo) { // not in filter
                 if ((filter.Month == null) || filter.TrangThaiThu == HDNHD.Models.Constants.ETrangThaiThu.DaQuaHan)
@@ -71,8 +73,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = pager.ApplyPager(items);
 
             #region view data
-            title = "Quản lý công nợ khách hàng";
-
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             ViewBag.ToDo = todo; // actions

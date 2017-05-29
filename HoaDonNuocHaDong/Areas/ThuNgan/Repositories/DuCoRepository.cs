@@ -34,8 +34,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                               where gd.TienNopTheoThangID == stntt.ID
                               where gd.NgayGiaoDich.Value.Year < year || (gd.NgayGiaoDich.Value.Year == year && gd.NgayGiaoDich.Value.Month <= month)
                               select gd).FirstOrDefault() // nullable
-                   orderby kh.TuyenKHID
-                   orderby kh.TTDoc
+                   orderby kh.TuyenKHID, kh.TTDoc, hd.HoadonnuocID descending
                    //where kh.LoaiKHID != (int)EApGia.SinhHoat
                    select new DuCoModel()
                    {

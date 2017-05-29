@@ -25,6 +25,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult Index(KhachHangFilterModel filter, Pager pager)
         {
+            title = "Quản lý Khách hàng";
+
             // default values
             if (filter.Mode == KhachHangFilterModel.FilterByManagementInfo) // not in filter
             {
@@ -48,7 +50,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = pager.ApplyPager(items);
             
             #region view data
-            title = "Quản lý Khách hàng";
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             #endregion
@@ -60,32 +61,28 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult ChiTiet(int id)
         {
+            title = "Chi tiết thông tin khách hàng";
+
             var model = khachHangRepository.GetKhachHangDetailsModel(id);
 
             if (model == null)
             {
                 return RedirectToAction("Index");
             }
-
-            #region view data
-            title = "Chi tiết thông tin khách hàng";
-            #endregion
-
+            
             return View(model);
         }
         
         public ActionResult CapNhat(int id)
         {
+            title = "Cập nhật thông tin khách hàng";
+
             var item = khachHangRepository.GetByID(id);
             if (item == null)
             {
                 return RedirectToAction("Index");
             }
-
-            #region view data
-            title = "Cập nhật thông tin khách hàng";
-            #endregion
-
+            
             return View(item);
         }
 
@@ -116,6 +113,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </effects>
         public ActionResult LichSuDungNuoc(int id, Pager pager)
         {
+            title = "Chi tiết lịch sử dùng nước";
+
             var khachHang = khachHangRepository.GetByID(id);
 
             if (khachHang == null)
@@ -129,7 +128,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = pager.ApplyPager(items);
 
             #region view data
-            title = "Chi tiết lịch sử dùng nước";
             ViewBag.Pager = pager;
             ViewBag.KhachHang = khachHang;
             #endregion
@@ -142,6 +140,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult LichSuGiaoDich(int id, Pager pager)
         {
+            title = "Chi tiết lịch sử giao dịch";
+
             var khachHang = khachHangRepository.GetByID(id);
 
             if (khachHang == null)
@@ -154,7 +154,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = pager.ApplyPager(items);
             
             #region view data
-            title = "Chi tiết lịch sử giao dịch";
             ViewBag.Pager = pager;
             ViewBag.KhachHang = khachHang;
             #endregion

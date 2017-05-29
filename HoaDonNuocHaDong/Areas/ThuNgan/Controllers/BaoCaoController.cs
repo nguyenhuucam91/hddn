@@ -32,6 +32,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult DuCo(int? month, int? year, DuCoFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
         {
+            title = "Báo cáo dư có";
+
             IDuCoRepository duCoRepository = uow.Repository<DuCoRepository>();
             
             // default values: xem báo cáo tháng trước
@@ -67,7 +69,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = pager.ApplyPager(items);
 
             #region view data
-            title = "Báo cáo dư có";
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             ViewBag.Month = month.Value;
@@ -82,6 +83,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// </summary>
         public ActionResult DuNo(int? month, int? year, DuNoFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
         {
+            title = "Báo cáo dư nợ";
+
             IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
 
             // default values: xem báo cáo tháng trước
@@ -120,7 +123,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = pager.ApplyPager(items);
 
             #region view data 
-            title = "Báo cáo dư nợ";
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             ViewBag.Month = month.Value;
@@ -138,6 +140,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         public ActionResult DoanhThu(int? month, int? year, DoanhThuFilterModel filter, GiaoDichFilterModel giaoDichFilter, 
             DuCoFilterModel duCoFilter, DuNoFilterModel duNoFilter, SoTienNopTheoThangFilterModel soTienNopTheoThangFilter, ViewMode viewMode = ViewMode.Default)
         {
+            title = "Báo cáo doanh thu";
+
             var hoaDonRepository = uow.Repository<HoaDonRepository>();
             var duCoRepository = uow.Repository<DuCoRepository>();
             var giaoDichRepository = uow.Repository<GiaoDichRepository>();
@@ -226,8 +230,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.DuCoCuoiKy = duCoCuoiKy.Sum(m => m.SoTien) ?? 0;
 
             #region viewdata
-            title = "Báo cáo doanh thu";
-
             ViewBag.Month = month.Value;
             ViewBag.Year = year.Value;
             ViewBag.Filter = filter;

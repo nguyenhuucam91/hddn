@@ -74,13 +74,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
                         }
                         model.DuCo.SoTienDu = -duNo;
 
-                        // TODO: trừ cho hóa đơn tháng tới (nếu đã chốt)
-                                                
+                        // TODO: áp dụng dư có cho hóa đơn tiếp theo (nếu có)
+
                     }
                 } else
                 {
                     giaoDich.SoDu = duNo;
-                    
+
                     // TODO: nếu hóa đơn đã thanh toán, giaoDich.SoDu = dư có sau giao dịch
                 }
                

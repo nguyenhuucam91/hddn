@@ -38,9 +38,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                                        && (_hd.Trangthaixoa == false || _hd.Trangthaixoa == null)
                                        && (_hd.Trangthaithu == false || _hd.Trangthaithu == null)
                                    select dc).Count()
-                        orderby kh.TuyenKHID ascending
-                        orderby kh.TTDoc ascending
-                        orderby hd.HoadonnuocID descending
+                        orderby kh.TuyenKHID, kh.TTDoc, hd.HoadonnuocID descending
                         select new HoaDonModel()
                         {
                             HoaDon = hd,
@@ -76,9 +74,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                               where gd.TienNopTheoThangID == stntt.ID
                               where gd.NgayGiaoDich.Value.Year < year || (gd.NgayGiaoDich.Value.Year == year && gd.NgayGiaoDich.Value.Month <= month)
                               select gd).FirstOrDefault()
-                   orderby kh.TuyenKHID
-                   orderby kh.TTDoc
-                   orderby hd.HoadonnuocID descending
+                   orderby kh.TuyenKHID, kh.TTDoc, hd.HoadonnuocID descending
                    select new DuNoModel()
                    {
                        HoaDon = hd,
