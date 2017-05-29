@@ -108,7 +108,7 @@
                                             </span>
                                             @if (!item.CoDuNoQuaHan)
                                             {
-                                                <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" data-toggle="modal" data-target="#modal-them-giao-dich" data-remote="false" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm vào dư có">
+                                                <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm vào dư có">
                                                     +
                                                 </a>
                                             }
@@ -156,6 +156,13 @@
 
 @section Styles {
     <link rel="stylesheet" href="~/Assets/css/toastr.min.css" />
+    <style>
+        .disabled {
+          opacity: 0.5;
+          pointer-events: none;
+          cursor: default;
+        }
+    </style>
 }
 
 <!-- end modal -->
@@ -214,7 +221,12 @@
                 capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTienConThieu);
             });
 
+
             /* cập nhật ngày thu */
+            $(".disabled").click(function(e){
+                e.preventDefault();
+            });
+
             $(".tbx-ngay-thu").datepicker({
                 todayBtn: "linked",
                 format: 'dd/mm/yyyy',
@@ -233,6 +245,7 @@
             });
 
             /* thêm giao dịch */
+          
             $(".btn-them-giao-dich").click(function (e) {
                 e.preventDefault();
 
@@ -244,7 +257,10 @@
                     $soTienConThieu = $tr.find(".txt-so-tien-con-thieu"),
                     $modal = $("#modal-them-giao-dich");
 
+                $.ajaxSetup({ async: false });
+
                 $modal.find(".modal-body").load($themGiaoDich.attr("href"));
+
                 $modal
                     .one("shown.bs.modal", function () {
                         $modal.find("form").submit(function (e) {
@@ -256,7 +272,8 @@
                             $modal.modal("hide");
 
                             // waiting
-                            $themGiaoDich.attr("disabled", true);
+                            $themGiaoDich.siblings("div").remove();
+                            $themGiaoDich.addClass("disabled");
                             $themGiaoDich.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
 
                             BUtils.ajax(url, data,
@@ -285,8 +302,8 @@
                                 }, "post");
 
                             // done
-                            $themGiaoDich.attr("disabled", false);
-                            $themGiaoDich.siblings("div").remove();
+                            $themGiaoDich.removeClass("disabled");
+                            $themGiaoDich.siblings(".progress-striped").remove();
                         });
                     })
                     .modal("show");
