@@ -9,6 +9,7 @@ namespace HDNHD.Core.Constants
     {
         Default,
         Excel,
+        Print
     }
 
 }

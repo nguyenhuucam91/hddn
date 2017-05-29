@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    @Styles.Render("~/Assets/css/bootstrap.min.css")
+    @*@Styles.Render("~/Assets/css/bootstrap.css")*@
+    @Styles.Render("~/Assets/css/bootstrap-responsive.min.css")
+    <title>@Html.Raw(ViewBag.Title)</title>
+
+    @Styles.Render("~/Assets/css/style.css")
+    @Styles.Render("~/Assets/css/dashboard.css")
+    @Styles.Render("~/Assets/components/datatables/media/css/jquery.dataTables.min.css")
+    @Styles.Render("~/fonts/OpenSans.css")
+    @Styles.Render("~/Assets/components/font-awesome/css/font-awesome.css")
+    @Styles.Render("~/Assets/components/select2/dist/css/select2.min.css")
+    @Styles.Render("~/Assets/components/jTreeView/zTree_v3-master/css/zTreeStyle/zTreeStyle.css")
+    @Styles.Render("~/Assets/components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css")
+    @Styles.Render("/Assets/css/buttons.dataTables.min.css")
+    <style>
+        .dataTables_wrapper {
+            overflow-x: auto;
+        }
+
+        .red {
+            color: red;
+        }
+
+        table.dataTable thead th, table.dataTable thead td {
+            padding: 10px 10px !important;
+        }
+    </style>
+
+    @RenderSection("Styles", required: false)
+    <!-- Jquery -->
+    @Scripts.Render("~/Assets/components/jquery/dist/jquery.js")
+
+</head>
+<body>
+    <!-- main -->
+    @RenderBody()
+
+    <!-- Le javascript
+     ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/Assets/components/datatables/media/js/jquery.dataTables.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Assets/components/ckeditor/ckeditor.js")
+    @Scripts.Render("~/Assets/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js")
+    @Scripts.Render("~/Assets/components/jTreeView/zTree_v3-master/js/jquery.ztree.core.js")
+    @Scripts.Render("~/Assets/js/datatable_custom.js")
+
+    @Scripts.Render("~/Assets/js/toggle.js")
+    @Scripts.Render("~/Assets/js/ckeditor.js")
+    @*@Scripts.Render("~/Assets/js/CongNo.js")*@
+    @Scripts.Render("~/Assets/js/KhachHang.js")
+    @Scripts.Render("~/Assets/js/LogHandler.js")
+    @Scripts.Render("~/Assets/js/CommonHandler.js")
+    @Scripts.Render("~/Assets/components/select2/dist/js/select2.min.js")
+    @Scripts.Render("~/Assets/js/select2.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/dataTables.buttons.min.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/buttons.html5.min.js")
+    @Scripts.Render("~/Assets/BaoCaoJs/jszip.min.js")
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -62,17 +62,19 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = filter.ApplyFilter(items);
 
             ViewBag.TongSoDu = items.Sum(m => m.SoTien) ?? 0;
+            ViewBag.Month = month.Value;
+            ViewBag.Year = year.Value;
 
             if (viewMode == ViewMode.Excel)
                 return ExcelResult("DuCoExport", items.ToList());
+            if (viewMode == ViewMode.Print)
+                return View("DuCoPrint", items.ToList());
 
             items = pager.ApplyPager(items);
 
             #region view data
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
-            ViewBag.Month = month.Value;
-            ViewBag.Year = year.Value;
             #endregion
 
             return View(items.ToList());
@@ -116,18 +118,19 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.TongSoTienPhaiNop = (long) (items.Sum(m => m.SoTienNopTheoThang.SoTienPhaiNop) ?? 0);
             ViewBag.TongSoTienDaNop = items.Sum(m => m.SoTienDaNop) ?? 0;
             ViewBag.TongSoTienNo = items.Sum(m => m.SoTienNo) ?? 0;
+            ViewBag.Month = month.Value;
+            ViewBag.Year = year.Value;
 
             if (viewMode == ViewMode.Excel)
                 return ExcelResult("DuNoExport", items.ToList());
+            if (viewMode == ViewMode.Print)
+                return View("DuNoPrint", items.ToList());
 
             items = pager.ApplyPager(items);
 
             #region view data 
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
-            ViewBag.Month = month.Value;
-            ViewBag.Year = year.Value;
-            
             #endregion
             return View(items.ToList());
         }

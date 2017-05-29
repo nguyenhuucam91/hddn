@@ -1,0 +1,60 @@
+﻿@{ 
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.DuCoModel>
+@using HDNHD.Core.Helpers;
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="text-center" style="margin-top:15px; margin-bottom: 15px">
+                    <h1>BẢNG KÊ KH ĐÃ NỘP THỪA TIỀN NƯỚC <br /><small>Tháng @ViewBag.Month năm @ViewBag.Year</small></h1>
+                </div>
+                <table class="table table-striped table-bordered data-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>ID khách hàng</th>
+                            <th>Mã khách hàng</th>
+                            <th>Tên khách hàng</th>
+                            <th>Địa chỉ</th>
+                            <th>Tuyến</th>
+                            <th>Tháng</th>
+                            <th>Số tiền trên hóa đơn</th>
+                            <th>Số tiền phải nộp</th>
+                            <th>Số tiền đã nộp</th>
+                            <th>Dư có</th>
+                        </tr>
+                    </thead>
+                    @{ int i = 1; }
+                    @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.DuCoModel item in Model)
+                    {
+                        <tr>
+                            <td style="text-align: right;">@(i++)</td>
+                            <td>@item.KhachHang.KhachhangID</td>
+                            <td>@item.KhachHang.MaKhachHang</td>
+                            <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" title="Xem chi tiết khách hàng" target="_blank">@item.KhachHang.Ten</a></td>
+                            <td>@item.KhachHang.Diachi</td>
+                            <td>@item.TuyenKH.Ten</td>
+                            <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienTrenHoaDon)</td>
+                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
+                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienDaThu)</td>
+                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTien)</td>
+                        </tr>
+                    }
+                    <tfoot>
+                        <tr style="font-weight: bold;">
+                            <td style="text-align: right;" colspan="10">Tổng</td>
+                            <td style="text-align: right;"> @CurrencyHelpers.FormatVN(ViewBag.TongSoDu) </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Styles {
+    <link rel="stylesheet" href="~/Assets/css/tn_common.css" />
+}

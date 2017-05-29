@@ -27,5 +27,6 @@
     </div>
     <div class="center form-group">
         <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-default">Xuất excel</button>
+        <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Print" class="btn btn-default" onclick="$(this).closest('form').attr('target', '_blank');">Xem & in</button>
     </div>
 </form>
