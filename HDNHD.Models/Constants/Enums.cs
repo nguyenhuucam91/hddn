@@ -89,12 +89,12 @@ namespace HDNHD.Models.Constants
 
     public enum EBackupThreshold
     {
-        MAX_ALLOWED_FILES = 5
+        MAX_ALLOWED_FILES = 7
     }
 
     public enum EChucVu
     {
         NHAN_VIEN = 1,
-        TRUONG_PHONG = 2,
+        TRUONG_PHONG = 2
     }
 }

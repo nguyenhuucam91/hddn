@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using HDNHD.Models.Constants;
 using System.IO;
+using System.Web.Mvc;
 
 namespace HoaDonNuocHaDong.Repositories
 {
@@ -94,7 +95,6 @@ namespace HoaDonNuocHaDong.Repositories
                     catch (Exception e)
                     {
                         String exception = e.ToString();
-
                     }
                 }
 
@@ -127,6 +127,7 @@ namespace HoaDonNuocHaDong.Repositories
             executeBackupTransaction(dbFileName);
             updateOrCreateBackupRecord(nguoiDungId);
             deleteOldBackupFiles();
+           // new FilePathResult(dbPath, "application/octet-stream");
         }
     }
 }
