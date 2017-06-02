@@ -68,3 +68,9 @@
     color: #d9534f;
 }
 /* END message icons */
+/* disable link */
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
+}

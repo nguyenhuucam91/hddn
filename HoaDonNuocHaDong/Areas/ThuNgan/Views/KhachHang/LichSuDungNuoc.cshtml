@@ -1,6 +1,8 @@
 ﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel>
 @using HDNHD.Core.Helpers;
-
+@{
+    var current = DateTime.Now.AddMonths(-1);
+}
 <div class="main">
     <div class="main-inner">
         <div class="container">
@@ -49,8 +51,7 @@
                                             <th>Dư có</th>
                                         </tr>
                                     </thead>
-                                    @{ var stt = 0; 
-                                       double DuNo = 0;}
+                                    @{ var stt = 0; long tongDuNo = 0; long tongDuCo = 0; }
                                     @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
                                     {
                                         <tr>
@@ -69,36 +70,99 @@
                                             <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.LichSuHoaDon.TongCong)</td>
                                             <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
                                             <td style="text-align: center;">
-                                                <input type="checkbox" @(item.HoaDon.Trangthaithu == true ? "checked" : "") class="chk-thanh-toan" value="@item.HoaDon.HoadonnuocID" />
-                                            </td>
-                                            <td width=10%>
-                                                <input type="date" class="tbx-ngay-thu" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
-                                            </td>
-                                            <td style="text-align: right; width: 12%">
-                                                <span class="txt-so-tien-da-nop" style="@(item.SoTienNopTheoThang.SoTienDaThu.Value > item.SoTienNopTheoThang.SoTienPhaiNop.Value ? "color:red": "")">
-                                                    @HoaDonNuocHaDong.Helper.HoaDonNuoc.formatCurrency(item.SoTienNopTheoThang.SoTienDaThu.Value)
-                                                </span>
-                                                <a href="@Url.Action("ThemVaoDuCo", "HoaDon", new { area="ThuNgan", hoaDonID=@item.HoaDon.HoadonnuocID })" data-toggle="modal" data-target="#modal_them-vao-du-co" data-remote="false" class="btn btn-small" style="margin-bottom: 8px">
-                                                    +
-                                                </a>
-                                            </td>
-                                            <td>@{
-                                                    var tienThu = item.SoTienNopTheoThang.SoTienDaThu == null ? 0 : item.SoTienNopTheoThang.SoTienDaThu.Value;
-                                                    var dn = item.SoTienNopTheoThang.SoTienPhaiNop.Value - tienThu;
-                                                      if(dn>0){
-                                                         @dn
-                                                           DuNo = DuNo + dn;   
-                                                      }
+                                                @if (item.HoaDon.Trangthaithu == true)
+                                                {
+                                                    if (item.SoTienNopTheoThang.SoTienDaThu == 0)
+                                                    {
+                                                        <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                        <a href="#" data-toggle="tooltip" title="Khách hàng thanh toán trừ dư có." class="text-info"><i class="icon-info-sign"></i></a>
+                                                    }
+                                                    else if (item.KhachHang.HinhthucttID == (int)HDNHD.Models.Constants.EHinhThucThanhToan.ChuyenKhoan)
+                                                    {
+                                                        <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                        <a href="#" data-toggle="tooltip" title="Khách hàng thanh toán qua chuyển khoản. Chuyển khách hàng sang Hình thức thanh toán 'Tiền mặt' để cập nhật." class="text-info"><i class="icon-info-sign"></i></a>
+                                                    }
+                                                    else if (item.HoaDonTiepTheo != null && item.HoaDonTiepTheo.Trangthaithu == true
+                                                        && (item.HoaDon.ThangHoaDon != current.Month || item.HoaDon.NamHoaDon != current.Year))
+                                                    {
+                                                        <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                        <a href="#" data-toggle="tooltip" title="Khách hàng đã thanh toán hóa đơn tiếp theo." class="text-info"><i class="icon-info-sign"></i></a>
+                                                    }
+                                                    else if (item.HoaDon.NgayNopTien.Value.Month != DateTime.Now.Month || item.HoaDon.NgayNopTien.Value.Year != DateTime.Now.Year)
+                                                    {
+                                                        <input type="checkbox" checked class="chk-thanh-toan thanh-toan" autocomplete="off" data-confirm="Hóa đơn KHÔNG được thanh toán trong tháng này. Xác nhận hủy?" value="@item.HoaDon.HoadonnuocID" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" checked class="chk-thanh-toan thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (item.CoDuNoQuaHan)
+                                                    {
+                                                        <input type="checkbox" disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                        <a href="#" data-toggle="tooltip" title="Khách hàng có dư nợ quá hạn cần thanh toán trước." class="text-warning"><i class="icon-info-sign"></i></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" class="chk-thanh-toan thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
+                                                    }
                                                 }
                                             </td>
-                                            <td>@if(item.DuCo != null){@item.DuCo.SoTienDu}</td>
+                                            <td width=10%>
+                                                @if (item.HoaDon.Trangthaithu == true && item.SoTienNopTheoThang.SoTienDaThu == 0) {
+                                                    <input type="text" class="tbx-ngay-thu" disabled autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
+                                                } else {
+                                                    <input type="text" class="tbx-ngay-thu" autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
+                                                }
+                                            </td>
+                                            <td style="text-align: right; width: 12%">
+                                                <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu > item.SoTienNopTheoThang.SoTienPhaiNop ? "text-success" : "")">
+                                                    @CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienDaThu)
+                                                </span>
+                                                @if (!item.CoDuNoQuaHan && // không có dư nợ & (tháng hiện tại || (< tháng hiện tại & chưa thu))
+                                                    ((item.HoaDon.ThangHoaDon == current.Month && item.HoaDon.NamHoaDon == current.Year) ||
+                                                    ((item.HoaDon.NamHoaDon < current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon < current.Month))
+                                                        && (item.HoaDon.Trangthaithu == false || item.HoaDon.Trangthaithu == null))))
+                                                {
+                                                    <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm giao dịch">
+                                                        +
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span style="display:inline-block; min-width:27px;"></span>
+                                                }
+                                            </td>
+
+                                            <td style="text-align: right;">
+                                                @{ 
+                                                    int duNo = (int)(item.SoTienNopTheoThang.SoTienPhaiNop - item.SoTienNopTheoThang.SoTienDaThu);
+
+                                                    if (item.HoaDon.Trangthaithu == true)
+                                                    {
+                                                        duNo = 0;
+                                                    }
+
+                                                    tongDuNo += duNo;
+                                                }
+                                                @CurrencyHelpers.FormatVN(duNo)
+                                            </td>
+                                            <td style="text-align: right;">
+                                                @{
+                                                    var duCo = item.DuCo != null ? item.DuCo.SoTienDu : 0;
+                                                    tongDuCo += (long) duCo;
+                                                }
+                                                @CurrencyHelpers.FormatVN(duCo)
+                                            </td>
                                         </tr>
                                     }
                                     <tfoot>
-                                        <tr>
-                                            <th colspan="17" style="text-align:right;">Tổng</th>
-                                            <th style="text-align: right">@DuNo</th>
-                                            <th style="text-align: right">@DuNo</th>
+                                        <tr style="font-weight: bold;">
+                                            <td colspan="17" style="text-align:right;">Tổng hiển thị</td>
+                                            <td style="text-align: right">@CurrencyHelpers.FormatVN(tongDuNo)</td>
+                                            <td style="text-align: right">@CurrencyHelpers.FormatVN(tongDuCo)</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -111,3 +175,135 @@
         </div>
     </div>
 </div>
+
+<!-- Modal box đóng thêm tiền của khách hàng-->
+<div id="modal-them-giao-dich" class="modal fade" role="dialog" style="top:50%;display:none">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"></h3>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end modal -->
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /* check thanh toán */
+            $(".chk-thanh-toan").change(function () {
+                var $trangThaiThu = $(this),
+                    message = $trangThaiThu.attr('data-confirm');
+
+                if (message !== undefined) {
+                    if (!confirm(message)) {
+                        $trangThaiThu.prop("checked", !$trangThaiThu.is(":checked"));
+                        return;
+                    }
+                }
+
+                var hoaDonID = $trangThaiThu.val(),
+                    $tr = $trangThaiThu.closest("tr"),
+                    $ngayThu = $tr.find(".tbx-ngay-thu"),
+                    $soTienDaNop = $tr.find(".txt-so-tien-da-nop"),
+                    $soTienConThieu = $tr.find(".txt-so-tien-con-thieu");
+
+                capNhatThanhToan(hoaDonID, $trangThaiThu, $ngayThu, $soTienDaNop, $soTienConThieu);
+            });
+
+            /* cập nhật ngày thu */
+            $(".disabled").click(function(e){
+                e.preventDefault();
+            });
+
+            $(".tbx-ngay-thu").datepicker({
+                todayBtn: "linked",
+                format: 'dd/mm/yyyy',
+            }).on("change", function () {
+                var $ngayThu = $(this),
+                    $tr = $ngayThu.closest("tr"),
+                    $trangThaiThu = $tr.find(".thanh-toan");
+
+                var ngayThu = $(this).val(),
+                    trangThaiThu = $trangThaiThu.is(":checked"),
+                    hoaDonID = $trangThaiThu.val();
+
+                if (ngayThu.length == "dd/mm/yyyy".length && trangThaiThu) {
+                    capNhatNgayThu($ngayThu, hoaDonID, ngayThu);
+                }
+            });
+
+            /* thêm giao dịch */
+
+            $(".btn-them-giao-dich").click(function (e) {
+                e.preventDefault();
+
+                var $themGiaoDich = $(this),
+                    $tr = $themGiaoDich.closest("tr"),
+                    $trangThaiThu = $tr.find(".chk-thanh-toan"),
+                    $ngayThu = $tr.find(".tbx-ngay-thu"),
+                    $soTienDaNop = $tr.find(".txt-so-tien-da-nop"),
+                    $soTienConThieu = $tr.find(".txt-so-tien-con-thieu"),
+                    $modal = $("#modal-them-giao-dich");
+
+                $.ajaxSetup({ async: false });
+
+                $modal.find(".modal-body").load($themGiaoDich.attr("href"));
+
+                $modal
+                    .one("shown.bs.modal", function () {
+                        $modal.find("form").submit(function (e) {
+                            e.preventDefault();
+
+                            var url = $(this).attr("action"),
+                                data = $(this).serialize();
+
+                            $modal.modal("hide");
+
+                            // waiting
+                            $themGiaoDich.siblings("div").remove();
+                            $themGiaoDich.addClass("disabled");
+                            $themGiaoDich.after('<div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div>');
+
+                            BUtils.ajax(url, data,
+                                function (data) { // success
+                                    var model = data.Data;
+                                    $trangThaiThu.prop("checked", model.HoaDon.TrangThaiThu);
+                                    $ngayThu.val(model.HoaDon.NgayNopTien);
+                                    $soTienDaNop.html(model.SoTienNopTheoThang.SoTienDaThu);
+                                    $soTienConThieu.html(model.SoTienNopTheoThang.DuNo);
+                                    // set màu cho duNo/ duCo
+                                    if (!model.HoaDon.TrangThaiThu) {
+                                        $soTienConThieu.removeClass("text-success");
+                                        $soTienConThieu.addClass("text-error");
+                                        $soTienDaNop.removeClass("text-success");
+                                    } else {
+                                        $soTienConThieu.removeClass("text-error");
+                                        $soTienConThieu.addClass("text-success");
+                                        $soTienDaNop.addClass("text-success");
+                                    }
+
+                                    $themGiaoDich.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
+                                    location.reload();
+                                },
+                                function (data) { // error
+                                    $themGiaoDich.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
+                                }, "post");
+
+                            // done
+                            $themGiaoDich.removeClass("disabled");
+                            $themGiaoDich.siblings(".progress-striped").remove();
+                        });
+                    })
+                    .modal("show");
+            });
+        });
+    </script>
+}
