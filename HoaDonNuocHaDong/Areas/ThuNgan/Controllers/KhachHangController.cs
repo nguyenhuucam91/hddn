@@ -77,23 +77,23 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         {
             title = "Cập nhật thông tin khách hàng";
 
-            var item = khachHangRepository.GetByID(id);
-            if (item == null)
+            var khachHangModel = khachHangRepository.GetKhachHangDetailsModel(id);
+            if (khachHangModel == null)
             {
                 return RedirectToAction("Index");
             }
             
-            return View(item);
+            return View(khachHangModel);
         }
 
         [HttpPost]
         public ActionResult CapNhat(int id, EHinhThucThanhToan hinhThucThanhToan, ELoaiKhachHang loaiKhachHang)
         {
-            var item = khachHangRepository.GetByID(id);
-            if (item != null)
+            var khachHangModel = khachHangRepository.GetKhachHangDetailsModel(id);
+            if (khachHangModel != null)
             {
-                item.HinhthucttID = (int)hinhThucThanhToan;
-                item.LoaiKHID = (int)loaiKhachHang;
+                khachHangModel.KhachHang.HinhthucttID = (int)hinhThucThanhToan;
+                khachHangModel.KhachHang.LoaiKHID = (int)loaiKhachHang;
 
                 uow.SubmitChanges();
             }
@@ -115,9 +115,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         {
             title = "Chi tiết lịch sử dùng nước";
 
-            var khachHang = khachHangRepository.GetByID(id);
+            var khachHangModel = khachHangRepository.GetKhachHangDetailsModel(id);
 
-            if (khachHang == null)
+            if (khachHangModel == null)
             {
                 return RedirectToAction("Index");
             }
@@ -125,11 +125,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
             var items = hoaDonRepository.GetAllHoaDonModelByKHID(id);
 
+            pager.PageSize = 12; // hien thi 12 hoa don gan nhat
             items = pager.ApplyPager(items);
 
             #region view data
             ViewBag.Pager = pager;
-            ViewBag.KhachHang = khachHang;
+            ViewBag.KhachHangModel = khachHangModel;
             #endregion
 
             return View(items.ToList());
@@ -142,9 +143,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         {
             title = "Chi tiết lịch sử giao dịch";
 
-            var khachHang = khachHangRepository.GetByID(id);
+            var khachHangModel = khachHangRepository.GetKhachHangDetailsModel(id);
 
-            if (khachHang == null)
+            if (khachHangModel == null)
             {
                 return RedirectToAction("Index");
             }
@@ -155,9 +156,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             
             #region view data
             ViewBag.Pager = pager;
-            ViewBag.KhachHang = khachHang;
+            ViewBag.KhachHangModel = khachHangModel;
             #endregion
-            
+
             return View(items.ToList());
         }
     }

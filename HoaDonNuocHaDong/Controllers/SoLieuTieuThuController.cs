@@ -950,7 +950,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 // update hoadon
                 hoaDon.Trangthaithu = true;
-                hoaDon.NgayNopTien = DateTime.Now;
+                hoaDon.NgayNopTien = new DateTime(hoaDon.NamHoaDon.Value, hoaDon.ThangHoaDon.Value, 1);
             }
 
             db.SaveChanges();

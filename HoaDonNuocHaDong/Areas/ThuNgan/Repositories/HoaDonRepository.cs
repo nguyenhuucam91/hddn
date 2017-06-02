@@ -22,22 +22,22 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
             return base.GetAll().Where(m => m.Trangthaixoa == null || m.Trangthaixoa == false);
         }
 
-        public IQueryable<HoaDonModel> GetAllHoaDonModel()
+        public IQueryable<HoaDonModel> GetAllHoaDonModel(bool? trangThaiIn = true)
         {
             var hds = GetAll();
 
             var items = from hd in hds
-                        where hd.Trangthaiin == true // đã in
                         join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
                         join lshd in dc.Lichsuhoadons on hd.HoadonnuocID equals lshd.HoaDonID
                         join stntt in dc.SoTienNopTheoThangs on hd.HoadonnuocID equals stntt.HoaDonNuocID
                         join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
                         from dco in gj.DefaultIfEmpty()
-                        let cnt = (from _hd in dc.Hoadonnuocs
-                                   where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < hd.HoadonnuocID
-                                       && (_hd.Trangthaixoa == false || _hd.Trangthaixoa == null)
-                                       && (_hd.Trangthaithu == false || _hd.Trangthaithu == null)
-                                   select dc).Count()
+                        let cnt = (from _hd in GetAll()
+                                   where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < hd.HoadonnuocID && _hd.Trangthaithu == false
+                                   select _hd).Count()
+                        let hdTiepTheo = (from _hd in GetAll()
+                                          where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID > hd.HoadonnuocID
+                                          select _hd).FirstOrDefault()
                         orderby kh.TuyenKHID, kh.TTDoc, hd.HoadonnuocID descending
                         select new HoaDonModel()
                         {
@@ -46,8 +46,14 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                             LichSuHoaDon = lshd,
                             SoTienNopTheoThang = stntt,
                             DuCo = dco,
-                            CoDuNoQuaHan = cnt > 0
+                            CoDuNoQuaHan = cnt > 0,
+                            HoaDonTiepTheo = hdTiepTheo
                         };
+
+            if (trangThaiIn != null)
+            {
+                items = items.Where(m => m.HoaDon.Trangthaiin == trangThaiIn); // mặc định: đã in
+            }
 
             return items;
         }
@@ -87,9 +93,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                    };
         }
 
-        public HoaDonModel GetHoaDonModelByID(int hoaDonID)
+        public HoaDonModel GetHoaDonModelByID(int hoaDonID, bool? trangThaiIn = true)
         {
-            return GetAllHoaDonModel().FirstOrDefault(m => m.HoaDon.HoadonnuocID == hoaDonID);
+            return GetAllHoaDonModel(trangThaiIn).FirstOrDefault(m => m.HoaDon.HoadonnuocID == hoaDonID);
         }
 
         public IQueryable<HoaDonModel> GetAllHoaDonModelByKHID(int khachHangID)

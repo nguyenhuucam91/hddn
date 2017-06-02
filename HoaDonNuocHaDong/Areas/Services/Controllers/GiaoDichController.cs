@@ -26,18 +26,27 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
         {
             IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
             var model = hoaDonRepository.GetHoaDonModelByID(hoaDonID);
-            
+
             if (model == null)
                 return AjaxResult.Fail("Hóa đơn không tồn tại. Vui lòng tải lại trang.", true);
 
             if (model.CoDuNoQuaHan)
                 return AjaxResult.Fail("Khách hàng có dư nợ quá hạn cần thanh toán trước.", true);
 
+            var current = DateTime.Now.AddMonths(-1);
+            if (!(!model.CoDuNoQuaHan && // không có dư nợ & (tháng hiện tại || (< tháng hiện tại & chưa thu))
+                ((model.HoaDon.ThangHoaDon == current.Month && model.HoaDon.NamHoaDon == current.Year) ||
+                ((model.HoaDon.NamHoaDon < current.Year || (model.HoaDon.NamHoaDon == current.Year && model.HoaDon.ThangHoaDon < current.Year))
+                && (model.HoaDon.Trangthaithu == false || model.HoaDon.Trangthaithu == null)))))
+            {
+                return AjaxResult.Fail("Không thể thêm giao dịch cho hóa đơn này. Dữ liệu bất đồng bộ, vui lòng load lại trang.", true);
+            }
+
             DateTime dt;
             if (!DateTime.TryParseExact(ngayGiaoDich, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
                 dt = DateTime.Now;
 
-            if(!GiaoDichHelpers.ThemGiaoDich(model, soTien, dt, uow))
+            if (!GiaoDichHelpers.ThemGiaoDich(model, soTien, dt, uow))
             {
                 return AjaxResult.Fail("Lỗi thêm giao dịch. Vui lòng thử lại.");
             }
@@ -72,7 +81,7 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
         public AjaxResult HuyGiaoDich(int khachHangID, int giaoDichID)
         {
             IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
-            
+
             var model = giaoDichRepository.GetLastGiaoDichByKHID(khachHangID);
             if (model == null || model.GiaoDich.GiaoDichID != giaoDichID)
                 return AjaxResult.Fail("Dữ liệu bất đồng bộ. Vui lòng tải lại trang.", true);

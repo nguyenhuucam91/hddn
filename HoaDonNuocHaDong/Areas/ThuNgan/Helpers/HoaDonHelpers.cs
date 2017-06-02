@@ -30,7 +30,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
             if (model.CoDuNoQuaHan)
                 throw new Exception("Khách hàng còn dư nợ quá hạn cần thanh toán trước.");
 
-            int duNo = (int) (model.SoTienNopTheoThang.SoTienPhaiNop - model.SoTienNopTheoThang.SoTienDaThu);
+            int duNo = (int)(model.SoTienNopTheoThang.SoTienPhaiNop - model.SoTienNopTheoThang.SoTienDaThu);
 
             return GiaoDichHelpers.ThemGiaoDich(model, duNo, ngayThu, uow);
         }
@@ -60,6 +60,13 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
             if (model.KhachHang.HinhthucttID == (int)EHinhThucThanhToan.ChuyenKhoan)
                 throw new Exception("Khách hàng thanh toán qua chuyển khoản.");
 
+            var current = DateTime.Now.AddMonths(-1);
+            if (model.HoaDonTiepTheo != null && model.HoaDonTiepTheo.Trangthaithu == true
+                && (model.HoaDon.ThangHoaDon != current.Month || model.HoaDon.NamHoaDon != current.Year))
+            {
+                throw new Exception("Khách hàng đã thanh toán hóa đơn tiếp theo.");
+            }
+
             IGiaoDichRepository giaoDichRepository = uow.Repository<GiaoDichRepository>();
             var lastGiaoDich = giaoDichRepository.GetLastGiaoDichByKHID(model.KhachHang.KhachhangID);
 
@@ -69,7 +76,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
             if (lastGiaoDich.SoTienNopTheoThang.ID != model.SoTienNopTheoThang.ID ||
                 lastGiaoDich.GiaoDich.SoTien != model.SoTienNopTheoThang.SoTienDaThu)
             {
-                throw new Exception("Không thể hủy thanh toán tại đây! Vui lòng hủy tại trang Lịch sử giao dịch.");
+                throw new Exception("Không thể hủy thanh toán tại đây! Vui lòng hủy tại trang 'Lịch sử giao dịch'.");
             }
 
             return GiaoDichHelpers.HuyGiaoDich(lastGiaoDich, uow);

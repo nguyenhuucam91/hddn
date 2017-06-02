@@ -1,4 +1,4 @@
-﻿@model HDNHD.Models.DataContexts.Khachhang
+﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangDetailsModel
 @using HDNHD.Models.Constants;
 <div class="main">
     <div class="main-inner">
@@ -11,23 +11,28 @@
                     </div>
                     <div class="widget-content">
                         <ul class="nav nav-tabs">
-                            <li><a href="@Url.Action("ChiTiet", new { id = Model.KhachhangID})">Thông tin khách hàng</a></li>
-                            <li class="active"><a href="@Url.Action("CapNhat", new { id = Model.KhachhangID})">Cập nhật</a></li>
-                            <li><a href="@Url.Action("LichSuDungNuoc", new { id = Model.KhachhangID})">Lịch sử dùng nước</a></li>
-                            <li><a href="@Url.Action("LichSuGiaoDich", new { id = Model.KhachhangID})">Lịch sử giao dịch</a></li>
+                            <li><a href="@Url.Action("ChiTiet", new { id = Model.KhachHang.KhachhangID})">Thông tin khách hàng</a></li>
+                            <li class="active"><a href="@Url.Action("CapNhat", new { id = Model.KhachHang.KhachhangID})">Cập nhật</a></li>
+                            <li><a href="@Url.Action("LichSuDungNuoc", new { id = Model.KhachHang.KhachhangID})">Lịch sử dùng nước</a></li>
+                            <li><a href="@Url.Action("LichSuGiaoDich", new { id = Model.KhachHang.KhachhangID})">Lịch sử giao dịch</a></li>
                         </ul>
                         <div class="tab-content">
-                            <h4 class="header-title">Khách hàng: <span class="big">@Model.MaKhachHang - @Model.Ten</span></h4>
-
+                            <h4 class="header-title">Khách hàng: <span class="big">@Model.KhachHang.MaKhachHang - @Model.KhachHang.Ten</span></h4>
+                            <p>
+                                <strong>Địa chỉ: </strong>@Model.KhachHang.Diachi
+                                <br />
+                                <strong>Tuyến khách hàng: </strong>@Model.TuyenKH.Ten
+                            </p>
+                            <hr/>
                             <form method="post" action="" class="form-horizontal">
                                 <div class="control-group">
                                     <label class="control-label">Loại khách hàng</label>
                                     <div class="controls">
                                         <select class="select2" name="LoaiKhachHang">
-                                            <option value="@ELoaiKhachHang.HoGiaDinh" @(Model.LoaiKHID == (int)ELoaiKhachHang.HoGiaDinh ? "selected" : "")>Hộ gia đình</option>
-                                            <option value="@ELoaiKhachHang.HoKinhDoanhDichVu" @(Model.LoaiKHID == (int)ELoaiKhachHang.HoKinhDoanhDichVu ? "selected" : "")>Hộ kinh doanh dịch vụ</option>
-                                            <option value="@ELoaiKhachHang.CoQuanDoanhNghiep" @(Model.LoaiKHID == (int)ELoaiKhachHang.CoQuanDoanhNghiep ? "selected" : "")>Cơ quan doanh nghiệp</option>
-                                            <option value="@ELoaiKhachHang.KhuTapThe" @(Model.LoaiKHID == (int)ELoaiKhachHang.KhuTapThe ? "selected" : "")>Khu tập thể (hợp đồng tổng)</option>
+                                            <option value="@ELoaiKhachHang.HoGiaDinh" @(Model.KhachHang.LoaiKHID == (int)ELoaiKhachHang.HoGiaDinh ? "selected" : "")>Hộ gia đình</option>
+                                            <option value="@ELoaiKhachHang.HoKinhDoanhDichVu" @(Model.KhachHang.LoaiKHID == (int)ELoaiKhachHang.HoKinhDoanhDichVu ? "selected" : "")>Hộ kinh doanh dịch vụ</option>
+                                            <option value="@ELoaiKhachHang.CoQuanDoanhNghiep" @(Model.KhachHang.LoaiKHID == (int)ELoaiKhachHang.CoQuanDoanhNghiep ? "selected" : "")>Cơ quan doanh nghiệp</option>
+                                            <option value="@ELoaiKhachHang.KhuTapThe" @(Model.KhachHang.LoaiKHID == (int)ELoaiKhachHang.KhuTapThe ? "selected" : "")>Khu tập thể (hợp đồng tổng)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -35,8 +40,8 @@
                                     <label class="control-label">Hình thức thanh toán</label>
                                     <div class="controls">
                                         <select class="select2" name="HinhThucThanhToan">
-                                            <option value="@EHinhThucThanhToan.TienMat" @(Model.HinhthucttID == (int)EHinhThucThanhToan.TienMat ? "selected" : "")>Tiền mặt</option>
-                                            <option value="@EHinhThucThanhToan.ChuyenKhoan" @(Model.HinhthucttID == (int)EHinhThucThanhToan.ChuyenKhoan ? "selected" : "")>Chuyển khoản</option>
+                                            <option value="@EHinhThucThanhToan.TienMat" @(Model.KhachHang.HinhthucttID == (int)EHinhThucThanhToan.TienMat ? "selected" : "")>Tiền mặt</option>
+                                            <option value="@EHinhThucThanhToan.ChuyenKhoan" @(Model.KhachHang.HinhthucttID == (int)EHinhThucThanhToan.ChuyenKhoan ? "selected" : "")>Chuyển khoản</option>
                                         </select>
                                     </div>
                                 </div>

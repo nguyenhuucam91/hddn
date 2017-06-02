@@ -74,8 +74,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
                         }
                         model.DuCo.SoTienDu = -duNo;
 
-                        // TODO: áp dụng dư có cho hóa đơn tiếp theo (nếu có)
-
+                        // trừ dư có cho hóa đơn tiếp theo (nếu có)
+                        apDungDuCo(model, uow);
                     }
                 } else
                 {
@@ -97,12 +97,56 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
         }
         
         /// <summary>
-        /// get next hoaDon & update SoTienPhaiNop (if exist)
+        /// áp dụng dư có tại model cho những hóa đơn tháng sau (nếu có)
         /// </summary>
-        /// <effects.
-        public static bool truDuCo(int hoaDonID)
+        public static void apDungDuCo(HoaDonModel model, HDNHDUnitOfWork uow = null)
         {
-            return false; 
+            if (uow == null) uow = new HDNHDUnitOfWork();
+            var hoaDonRepository = uow.Repository<HoaDonRepository>();
+            var duCoRepository = uow.Repository<DuCoRepository>();
+
+            if (model.HoaDonTiepTheo != null && model.DuCo != null && model.HoaDonTiepTheo.Tongsotieuthu > 0) // đã nhập số liệu
+            {
+                var _model = hoaDonRepository.GetHoaDonModelByID(model.HoaDonTiepTheo.HoadonnuocID, null);
+                
+                if (model.DuCo.SoTienDu <= _model.SoTienNopTheoThang.SoTienTrenHoaDon)
+                {
+                    _model.SoTienNopTheoThang.SoTienPhaiNop = _model.SoTienNopTheoThang.SoTienTrenHoaDon - model.DuCo.SoTienDu;
+
+                    if (_model.DuCo != null)
+                    {
+                        duCoRepository.Delete(_model.DuCo);
+                        thuHoiDuCo(_model, uow);
+                    }
+                }
+                else
+                {
+                    _model.SoTienNopTheoThang.SoTienPhaiNop = 0;
+                    
+                    if (_model.DuCo == null)
+                    {
+                        _model.DuCo = new HDNHD.Models.DataContexts.DuCo()
+                        {
+                            KhachhangID = _model.KhachHang.KhachhangID,
+                            TienNopTheoThangID = _model.SoTienNopTheoThang.ID,
+                        };
+                        duCoRepository.Insert(_model.DuCo);
+                    }
+
+                    _model.DuCo.SoTienDu = model.DuCo.SoTienDu - _model.SoTienNopTheoThang.SoTienTrenHoaDon;
+                }
+
+                if (_model.SoTienNopTheoThang.SoTienPhaiNop == 0)
+                {
+                    _model.HoaDon.Trangthaithu = true;
+                    _model.HoaDon.NgayNopTien = new DateTime(_model.HoaDon.NamHoaDon.Value, _model.HoaDon.ThangHoaDon.Value, 1);
+                }
+
+                uow.SubmitChanges();
+
+                // recursive
+                apDungDuCo(_model, uow);
+            }
         }
 
         /// <summary>
@@ -144,25 +188,32 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
 
                 // update model
                 model.SoTienNopTheoThang.SoTienDaThu -= soTien;
-
-                // TODO: trừ nếu đã thanh toán cho hóa đơn tháng sau 
                 
-                // trừ dư có
                 int duNo = (int) (model.SoTienNopTheoThang.SoTienPhaiNop - model.SoTienNopTheoThang.SoTienDaThu);
 
                 if (duNo > 0)
                 {
                     model.HoaDon.Trangthaithu = false;
-                    if (model.DuCo != null)
-                        duCoRepository.Delete(model.DuCo);
-                } else
-                {
-                    if (model.DuCo != null)
-                    {
-                        model.DuCo.SoTienDu -= soTien;
+                    model.HoaDon.NgayNopTien = null;
+                }
 
-                        if (model.DuCo.SoTienDu == 0)
-                            duCoRepository.Delete(model.DuCo);
+                // trừ dư có
+                if (model.DuCo != null)
+                {
+                    // thu hồi dư có nếu đã áp dụng cho hóa đơn tháng sau 
+                    IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
+                    var hoaDonModel = hoaDonRepository.GetHoaDonModelByID(model.HoaDon.HoadonnuocID);
+
+                    // cập nhật dư có
+                    model.DuCo.SoTienDu -= soTien;
+
+                    if (model.DuCo.SoTienDu <= 0)
+                    {
+                        duCoRepository.Delete(model.DuCo);
+                        thuHoiDuCo(hoaDonModel, uow);
+                    } else
+                    {
+                        apDungDuCo(hoaDonModel, uow);
                     }
                 }
 
@@ -176,6 +227,35 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// thu hồi dư có nếu đã áp dụng cho những hóa đơn tháng sau trước đó
+        /// </summary>
+        public static void thuHoiDuCo(HoaDonModel model, HDNHDUnitOfWork uow = null)
+        {
+            if (uow == null) uow = new HDNHDUnitOfWork();
+            var hoaDonRepository = uow.Repository<HoaDonRepository>();
+            var duCoRepository = uow.Repository<DuCoRepository>();
+
+            if (model.HoaDonTiepTheo != null && model.HoaDonTiepTheo.Tongsotieuthu > 0)
+            {
+                var _model = hoaDonRepository.GetHoaDonModelByID(model.HoaDonTiepTheo.HoadonnuocID, null);
+
+                _model.SoTienNopTheoThang.SoTienPhaiNop = _model.SoTienNopTheoThang.SoTienTrenHoaDon;
+                _model.HoaDon.Trangthaithu = false;
+                _model.HoaDon.NgayNopTien = null;
+                
+                if (_model.DuCo != null)
+                {
+                    duCoRepository.Delete(_model.DuCo);
+                    uow.SubmitChanges();
+
+                    // recursive
+                    thuHoiDuCo(_model, uow);
+                }
+                uow.SubmitChanges();
+            }
         }
     }
 }

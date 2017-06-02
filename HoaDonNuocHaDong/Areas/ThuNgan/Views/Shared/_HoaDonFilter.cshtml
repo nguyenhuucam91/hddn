@@ -47,7 +47,13 @@
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </div>
                 </div>
-
+                <!-- Hướng dẫn -->
+                <div class="well">
+                    <ul class="helper">
+                        <li>Chức năng "Đánh dấu tất cả ĐÃ NỘP" chỉ giành cho tháng hiện tại & Trạng thái thu = "Chưa nộp tiền".</li>
+                        <li>Chức năng "Thêm giao dịch" chỉ giành cho hóa đơn tháng hiện tại KHÔNG có dư nợ quá hạn hoặc tháng dư nợ quá hạn đầu tiên của mỗi khách hàng.</li>
+                    </ul>
+                </div>
                 <div class="center form-group">
                     <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-default">Xuất excel</button>
                     @if (ViewBag.Filter.Month == DateTime.Now.Month && ViewBag.Filter.Year == DateTime.Now.Year && ViewBag.Filter.TrangThaiThu == ETrangThaiThu.ChuaNopTien)
@@ -72,6 +78,12 @@
                         <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                     </div>
+                </div>
+                <!-- Hướng dẫn -->
+                <div class="well">
+                    <ul class="helper">
+                        <li>Kết quả hiển thị hóa đơn GẦN NHẤT của những khách hàng trùng khớp. Click tên khách hàng để xem lịch sử dùng nước & cập nhật trạng thái thu.</li>
+                    </ul>
                 </div>
                 <div class="center form-group">
                     <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-default">Xuất excel</button>

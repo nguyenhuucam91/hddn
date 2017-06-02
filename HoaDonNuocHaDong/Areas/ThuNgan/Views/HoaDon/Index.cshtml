@@ -1,7 +1,9 @@
 ﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel>
 @using HDNHD.Core.Models;
 @using HDNHD.Core.Helpers;
-
+@{ 
+    var current = DateTime.Now.AddMonths(-1);
+}
 <div class="main">
     <div class="main-inner">
         <div class="container">
@@ -51,13 +53,13 @@
                                         <td style="text-align: right">@(++stt)</td>
                                         <td class="text-center">@item.KhachHang.MaKhachHang</td>
                                         <td>
-                                            <a href="@Url.Action("LichSuDungNuoc", "KhachHang", new { area="ThuNgan", id=@item.KhachHang.KhachhangID })" target="_blank">
+                                            <a href="@Url.Action("LichSuDungNuoc", "KhachHang", new { area = "ThuNgan", id = @item.KhachHang.KhachhangID })" target="_blank">
                                                 @item.KhachHang.Ten
                                             </a>
                                         </td>
                                         <td>@item.KhachHang.Diachi</td>
                                         <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.LichSuHoaDon.TongCong)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienTrenHoaDon)</td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
                                         <td style="text-align: right; font-weight:bold">
                                             <span class="txt-so-tien-con-thieu @(duNo > 0 ? "text-error" : "text-success")">
@@ -75,15 +77,21 @@
                                                 else if (item.KhachHang.HinhthucttID == (int)HDNHD.Models.Constants.EHinhThucThanhToan.ChuyenKhoan)
                                                 {
                                                     <input type="checkbox" checked disabled />
-                                                    <a href="#" data-toggle="tooltip" title="Khách hàng thanh toán qua chuyển khoản." class="text-info"><i class="icon-info-sign"></i></a>
+                                                    <a href="#" data-toggle="tooltip" title="Khách hàng thanh toán qua chuyển khoản. Chuyển khách hàng sang Hình thức thanh toán 'Tiền mặt' để cập nhật." class="text-info"><i class="icon-info-sign"></i></a>
                                                 }
-                                                else if (item.HoaDon.Trangthaithu == true && item.HoaDon.NgayNopTien.Value.Month == DateTime.Now.Month && item.HoaDon.NgayNopTien.Value.Year == DateTime.Now.Year)
+                                                else if (item.HoaDonTiepTheo != null && item.HoaDonTiepTheo.Trangthaithu == true
+                                                    && (ViewBag.Filter.Month != DateTime.Now.Month || ViewBag.Filter.Year != DateTime.Now.Year))
                                                 {
-                                                    <input type="checkbox" checked class="chk-thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
+                                                    <input type="checkbox" checked disabled />
+                                                    <a href="#" data-toggle="tooltip" title="Khách hàng đã thanh toán hóa đơn tiếp theo." class="text-info"><i class="icon-info-sign"></i></a>
+                                                }
+                                                else if (item.HoaDon.NgayNopTien.Value.Month != DateTime.Now.Month || item.HoaDon.NgayNopTien.Value.Year != DateTime.Now.Year)
+                                                {
+                                                    <input type="checkbox" checked class="chk-thanh-toan" autocomplete="off" data-confirm="Hóa đơn KHÔNG được thanh toán trong tháng này. Xác nhận hủy?" value="@item.HoaDon.HoadonnuocID" />
                                                 }
                                                 else
                                                 {
-                                                    <input type="checkbox" checked class="chk-thanh-toan" autocomplete="off" data-confirm="Hóa đơn KHÔNG được thanh toán trong tháng này. Xác nhận hủy?" value="@item.HoaDon.HoadonnuocID" />
+                                                    <input type="checkbox" checked class="chk-thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
                                                 }
                                             }
                                             else
@@ -103,18 +111,29 @@
                                             <input type="text" class="tbx-ngay-thu" autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
                                         </td>
                                         <td style="text-align: right; width: 12%">
-                                            <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu > item.SoTienNopTheoThang.SoTienPhaiNop ? "text-success":"")">
+                                            <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu > item.SoTienNopTheoThang.SoTienPhaiNop ? "text-success" : "")">
                                                 @CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienDaThu)
                                             </span>
-                                            @if (!item.CoDuNoQuaHan)
+                                            @if (!item.CoDuNoQuaHan && // không có dư nợ & (tháng hiện tại || (< tháng hiện tại & chưa thu))
+                                                ((item.HoaDon.ThangHoaDon == current.Month && item.HoaDon.NamHoaDon == current.Year) ||
+                                                ((item.HoaDon.NamHoaDon < current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon < current.Year))
+                                                && (item.HoaDon.Trangthaithu == false || item.HoaDon.Trangthaithu == null))))
                                             {
-                                                <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm vào dư có">
+                                                <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm giao dịch">
                                                     +
                                                 </a>
                                             }
                                             else
                                             {
                                                 <span style="display:inline-block; min-width:27px;"></span>
+                                            }
+                                            @if (item.CoDuNoQuaHan || 
+                                                ((item.HoaDon.NamHoaDon > current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon > current.Month))
+                                            || (item.HoaDonTiepTheo != null && item.HoaDonTiepTheo.Trangthaiin == true // tồn tại hóa đơn tiếp theo mà không phải tháng thu hiện tại
+                                            && (item.HoaDon.ThangHoaDon != current.Month || item.HoaDon.NamHoaDon != current.Year))))
+                                            {
+                                            } else {
+                                               
                                             }
                                         </td>
                                     </tr>
@@ -158,9 +177,9 @@
     <link rel="stylesheet" href="~/Assets/css/toastr.min.css" />
     <style>
         .disabled {
-          opacity: 0.5;
-          pointer-events: none;
-          cursor: default;
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: default;
         }
     </style>
 }
@@ -245,7 +264,7 @@
             });
 
             /* thêm giao dịch */
-          
+
             $(".btn-them-giao-dich").click(function (e) {
                 e.preventDefault();
 
@@ -297,7 +316,6 @@
                                     $themGiaoDich.after('<div class="progress progress-success"><div class="bar" style="width: 100%;"></div></div>');
                                 },
                                 function (data) { // error
-                                    $themGiaoDich.prop("checked", !model.HoaDon.TrangThaiThu); // back state
                                     $themGiaoDich.after('<div><a href="#" class="text-error" data-toggle="tooltip" title="' + data.Message + '"><i class="icon-info-sign"></i></a></div>');
                                 }, "post");
 

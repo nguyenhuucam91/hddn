@@ -145,6 +145,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 {
                     items = items.Where(m => m.KhachHang.Diachi.Contains(DiaChiKH));
                 }
+
+                items = from item in items
+                        group item by item.KhachHang.KhachhangID into g
+                        select g.First();
             }
         }
         #endregion
