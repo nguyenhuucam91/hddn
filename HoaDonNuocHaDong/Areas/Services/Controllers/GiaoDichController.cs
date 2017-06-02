@@ -36,7 +36,7 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
             var current = DateTime.Now.AddMonths(-1);
             if (!(!model.CoDuNoQuaHan && // không có dư nợ & (tháng hiện tại || (< tháng hiện tại & chưa thu))
                 ((model.HoaDon.ThangHoaDon == current.Month && model.HoaDon.NamHoaDon == current.Year) ||
-                ((model.HoaDon.NamHoaDon < current.Year || (model.HoaDon.NamHoaDon == current.Year && model.HoaDon.ThangHoaDon < current.Year))
+                ((model.HoaDon.NamHoaDon < current.Year || (model.HoaDon.NamHoaDon == current.Year && model.HoaDon.ThangHoaDon < current.Month))
                 && (model.HoaDon.Trangthaithu == false || model.HoaDon.Trangthaithu == null)))))
             {
                 return AjaxResult.Fail("Không thể thêm giao dịch cho hóa đơn này. Dữ liệu bất đồng bộ, vui lòng load lại trang.", true);

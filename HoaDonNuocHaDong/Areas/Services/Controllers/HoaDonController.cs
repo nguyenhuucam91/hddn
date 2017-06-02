@@ -19,8 +19,7 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
             hoaDonRepository = uow.Repository<HoaDonRepository>();
             current = DateTime.Now.AddMonths(-1);
         }
-
-
+        
         /// <summary>
         /// thanh toán hóa đơn vs ID đã cho
         /// nếu ngày nộp không đúng > ngày nộp = ngày hiện tại

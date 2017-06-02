@@ -33,7 +33,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                         join d in dc.DuCos on stntt.ID equals d.TienNopTheoThangID into gj
                         from dco in gj.DefaultIfEmpty()
                         let cnt = (from _hd in GetAll()
-                                   where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < hd.HoadonnuocID && _hd.Trangthaithu == false
+                                   where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID < hd.HoadonnuocID && (_hd.Trangthaithu == false || _hd.Trangthaithu == null)
                                    select _hd).Count()
                         let hdTiepTheo = (from _hd in GetAll()
                                           where _hd.KhachhangID == hd.KhachhangID && _hd.HoadonnuocID > hd.HoadonnuocID

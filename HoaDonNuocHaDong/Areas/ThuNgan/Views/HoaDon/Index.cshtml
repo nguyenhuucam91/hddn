@@ -116,8 +116,8 @@
                                             </span>
                                             @if (!item.CoDuNoQuaHan && // không có dư nợ & (tháng hiện tại || (< tháng hiện tại & chưa thu))
                                                 ((item.HoaDon.ThangHoaDon == current.Month && item.HoaDon.NamHoaDon == current.Year) ||
-                                                ((item.HoaDon.NamHoaDon < current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon < current.Year))
-                                                && (item.HoaDon.Trangthaithu == false || item.HoaDon.Trangthaithu == null))))
+                                                ((item.HoaDon.NamHoaDon < current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon < current.Month))
+                                                    && (item.HoaDon.Trangthaithu == false || item.HoaDon.Trangthaithu == null))))
                                             {
                                                 <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm giao dịch">
                                                     +
@@ -126,14 +126,6 @@
                                             else
                                             {
                                                 <span style="display:inline-block; min-width:27px;"></span>
-                                            }
-                                            @if (item.CoDuNoQuaHan || 
-                                                ((item.HoaDon.NamHoaDon > current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon > current.Month))
-                                            || (item.HoaDonTiepTheo != null && item.HoaDonTiepTheo.Trangthaiin == true // tồn tại hóa đơn tiếp theo mà không phải tháng thu hiện tại
-                                            && (item.HoaDon.ThangHoaDon != current.Month || item.HoaDon.NamHoaDon != current.Year))))
-                                            {
-                                            } else {
-                                               
                                             }
                                         </td>
                                     </tr>
