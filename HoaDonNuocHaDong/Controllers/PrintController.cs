@@ -888,6 +888,9 @@ namespace HoaDonNuocHaDong.Controllers
                 db.Entry(lichSuHoaDon).State = EntityState.Modified;
                 db.SaveChanges();
             }
+
+            // TODO: áp dụng lại dư có cho những tháng sau (nếu có)
+            
             return RedirectToAction("DsHuyHoaDon");
         }
     }

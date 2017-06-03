@@ -108,7 +108,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
             if (model.HoaDonTiepTheo != null && model.DuCo != null && model.HoaDonTiepTheo.Tongsotieuthu > 0) // đã nhập số liệu
             {
                 var _model = hoaDonRepository.GetHoaDonModelByID(model.HoaDonTiepTheo.HoadonnuocID, null);
-                
+
+                // cap nhat trang thai du co
+                model.DuCo.TrangThaiTruHet = true;
+                model.DuCo.NgayTruHet = new DateTime(_model.HoaDon.NamHoaDon.Value, _model.HoaDon.ThangHoaDon.Value, 1);
+
+
                 if (model.DuCo.SoTienDu <= _model.SoTienNopTheoThang.SoTienTrenHoaDon)
                 {
                     _model.SoTienNopTheoThang.SoTienPhaiNop = _model.SoTienNopTheoThang.SoTienTrenHoaDon - model.DuCo.SoTienDu;
