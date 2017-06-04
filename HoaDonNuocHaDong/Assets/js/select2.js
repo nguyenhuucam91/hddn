@@ -13,6 +13,10 @@ $(".dropdown.quan").select2({
     placeholder: "Chọn quận",
 });
 
+$(".dropdown.nhanvien-quan").select2({
+    placeholder: "Chọn quận",
+});
+
 $('.allowClear').select2({
     placeholder: "Chọn một",
     allowClear: true,
@@ -56,6 +60,7 @@ $(".dropdown.chinhanh").select2({
 $(".dropdown.to").select2({
     placeholder: "Chọn tổ",
 });
+
 $(".dropdown.toAllowClear").select2({
     placeholder: "Chọn tổ",
     allowClear: true
@@ -161,7 +166,7 @@ $(".quan").change(function () {
     $.ajax({
         url: '/khachhang/filltobyquan',
         method: "GET",
-        data: { ChiNhanhID: selectedVal },
+        data: { ChiNhanhID: selectedVal},
         success: function (result) {
             $.each(result, function (key, value) {
                 $(".to").append("<option value=" + value.ToID + ">" + (value.ToID + " - " + value.Ten) + "</option>");
@@ -169,6 +174,33 @@ $(".quan").change(function () {
         }
     });
 });
+
+$(".nhanvien-phongban").change(function () {
+    ajaxLoadToByPhongBanAndQuanHuyen();
+});
+
+$(".nhanvien-quan").change(function () {
+    ajaxLoadToByPhongBanAndQuanHuyen();
+})
+
+function ajaxLoadToByPhongBanAndQuanHuyen() {
+    $(".to").find("option").remove().end();
+    var quan = $(".nhanvien-quan").val();
+    var phongban = $(".nhanvien-phongban").val();
+    $.ajax({
+        url: '/khachhang/filltobyquan',
+        method: "GET",
+        data: { ChiNhanhID: quan, PhongBanAjax: phongban },
+        success: function (result) {
+            $.each(result, function (key, value) {
+                $(".to").append("<option value=" + value.ToID + ">" + (value.ToID + " - " + value.Ten) + "</option>");
+            });
+        },
+        error: function (result) {
+            console.log(result);
+        }
+    });
+}
 
 $(".quanAllowClear").change(function () {
     //clear result trước khi thay đổi    

@@ -303,7 +303,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// </summary>
         /// <param name="ChiNhanhID"></param>
         /// <returns>Chuỗi JSON</returns>
-        public JsonResult FillToByQuan(int ChiNhanhID)
+        public JsonResult FillToByQuan(int ChiNhanhID, int PhongBanAjax)
         {
             /** congnv - 170403 - trả về list tổ kinh doanh nếu vai trò ng dùng là inhoadon */
             if (HDNHD.Core.Models.RequestScope.UserRole == EUserRole.InHoaDon)
@@ -330,7 +330,7 @@ namespace HoaDonNuocHaDong.Controllers
             if (phongBanId == 0)
             {
                 var to = (from i in db.ToQuanHuyens
-                          where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false
+                          where i.QuanHuyenID == ChiNhanhID && i.IsDelete == false && i.PhongbanID == PhongBanAjax
                           select new
                           {
                               Ten = i.Ma,

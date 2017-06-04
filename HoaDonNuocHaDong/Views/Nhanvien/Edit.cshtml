@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Cập nhật thông tin nhân viên";
 
-    var tuyenKHID = ViewBag._TuyenKHID;
+    var tuyenKHID = ViewBag._TuyenKHID as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
     String selectedTuyenKHID = (String)ViewBag.selectedTuyenKHID;
     String[] output = selectedTuyenKHID.Split(',');
     var to = ViewBag._To;
@@ -17,7 +17,7 @@
 {
     @Html.HiddenFor(model => model.NhanvienID)
     @Html.AntiForgeryToken()
-    <input type="hidden" name="IsDelete" value="false"/>
+    <input type="hidden" name="IsDelete" value="false" />
     <div class="main form-horizontal">
         <div class="main-inner">
             <div class="container">
@@ -65,7 +65,7 @@
                                 <div class="row" style="margin: 1% 0 0 0%">
                                     <div class="col-md-4">
                                         <label for="" class="control-label">Quận huyện:</label>&nbsp;&nbsp;
-                                        <select id="Chinhanh" name="Chinhanh" class="dropdown quan" required>
+                                        <select id="Chinhanh" name="Chinhanh" class="dropdown nhanvien-quan" required>
                                             @foreach (var item in quanHuyens)
                                             {
                                                 if (item.QuanhuyenID == selectedQuanHuyen)
@@ -74,7 +74,7 @@
                                                 }
                                                 else
                                                 {
-                                                     <option value="@item.QuanhuyenID">@item.Ten</option>
+                                                    <option value="@item.QuanhuyenID">@item.Ten</option>
                                                 }
                                             }
                                         </select>
@@ -83,8 +83,17 @@
 
                                 <div class="row" style="margin: 1% 0 0 0%">
                                     <div class="col-md-4">
+                                        <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
+                                        @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown nhanvien-phongban" })
+                                        <br />
+                                        @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
+                                    </div>
+                                </div>
+
+                                <div class="row" style="margin: 1% 0 0 0%">
+                                    <div class="col-md-4">
                                         <label for="" class="control-label">Tổ:</label>&nbsp;&nbsp;
-                                        <select name="ToQuanHuyenID" class="dropdown toes">
+                                        <select name="ToQuanHuyenID" class="dropdown to">
                                             @foreach (var item in to)
                                             {
                                                 if (item.ToQuanHuyenID == selectedTo)
@@ -100,16 +109,9 @@
 
                                         @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
                                     </div>
-                                </div>                                
-
-                                <div class="row" style="margin: 1% 0 0 0%">
-                                    <div class="col-md-4">
-                                        <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
-                                        @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown phongban" })
-                                        <br />
-                                        @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
-                                    </div>
                                 </div>
+
+
 
                                 <div class="row" style="margin: 1% 0 0 0%">
                                     <div class="col-md-4 pull-left">
@@ -128,7 +130,14 @@
                                             <!-- Nếu không có nhóm nào được chọn-->
                                             @foreach (var item in tuyenKHID)
                                             {
-                                                <option value="@item.TuyenKHID">@item.Matuyen - @item.Ten</option>
+                                                if (output.Contains(item.TuyenKHID))
+                                                {
+                                                    <option value="@item.TuyenKHID" selected>@item.MaTuyenKH - @item.TenTuyen</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
+                                                }
                                             }
 
 
@@ -159,16 +168,5 @@
     </div>
   <!-- /main -->
 }
-
-<script type="text/javascript">
-    $(function () {
-        @foreach (var item in output)
-            {
-                <text>
-        $('.tuyen option[value="@item"]').prop('selected', true).trigger('change');
-        </text>
-            }
-    });
-</script>
 
 <script src="~/Js/NhanVienTuyenKhachHang.js"></script>

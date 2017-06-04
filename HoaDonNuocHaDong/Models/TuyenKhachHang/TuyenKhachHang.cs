@@ -10,5 +10,7 @@ namespace HoaDonNuocHaDong.Models.TuyenKhachHang
         public int TuyenCuaKH { get; set; }
         public string MaTuyenKH { get; set; }
         public string TenTuyen { get; set; }
+
+        public String TuyenKHID { get; set; }
     }
 }

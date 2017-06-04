@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -8,7 +10,7 @@ namespace HoaDonNuocHaDong.Helper
     public class NhanVienHelper
     {
         static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-
+        String connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
         public String getPhongBan(int? nhanVienID)
         {
             HoaDonHaDongEntities db1 = new HoaDonHaDongEntities();
@@ -75,6 +77,22 @@ namespace HoaDonNuocHaDong.Helper
                 }
             }
             return "Không có";
+        }
+
+        public List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> loadTuyenChuaCoNhanVien()
+        {
+            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
+            var tuyens = (from i in _db.Tuyenkhachhangs
+                          join j in _db.Tuyentheonhanviens on i.TuyenKHID equals j.TuyenKHID into j1
+                          from j2 in j1.DefaultIfEmpty()
+                          where j2.TuyenKHID == null && i.IsDelete == false
+                          select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang
+                          {
+                              MaTuyenKH = i.Matuyen,
+                              TenTuyen = i.Ten,
+                              TuyenKHID = i.TuyenKHID.ToString(),
+                          }).ToList();
+            return tuyens;
         }
     }
 }

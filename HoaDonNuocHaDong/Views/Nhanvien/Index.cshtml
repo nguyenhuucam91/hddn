@@ -134,7 +134,7 @@
                                         </div>
                                     }
                                     <!--Danh sách nhân viên dạng bảng-->
-                                    <table class="example table table-striped table-bordered">
+                                    <table class="example table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th></th>
@@ -197,3 +197,22 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    $(function () {
+        $("input[type='checkbox']").change(function () {
+            var highlightColor = "#eca45a ";
+            if ($(this).is(':checked')) {
+                
+                $(this).closest('tr').css('background-color', highlightColor);
+                $("input[type='checkbox']").hide();
+                $(this).show();
+            }
+            else {
+                $("input[type='checkbox']").show();
+                $(this).closest('tr').css('background-color', 'none');
+            }
+        });
+    });
+</script>

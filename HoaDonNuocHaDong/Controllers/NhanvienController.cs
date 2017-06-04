@@ -16,6 +16,7 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class NhanvienController : BaseController
     {
+        NhanVienHelper nhanVienHelper = new NhanVienHelper();
         // GET: /Nhanvien/
         public ActionResult Index()
         {
@@ -26,27 +27,27 @@ namespace HoaDonNuocHaDong.Controllers
             if (phongBanId == 0)
             {
                 nhanviens = (from i in db.Nhanviens
-                                                    join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
-                                                    join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
-                                                    where i.IsDelete == false
-                                                    select new
-                                                    {
-                                                        nhanvien = i,                                                        
-                                                    }).Select(p => p.nhanvien).ToList();
-                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);                
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                             join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
+                             where i.IsDelete == false
+                             select new
+                             {
+                                 nhanvien = i,
+                             }).Select(p => p.nhanvien).ToList();
+                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
                 ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null);
             }
             else
             {
                 nhanviens = (from i in db.Nhanviens
-                                                    join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
-                                                    join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
-                                                    where i.IsDelete == false && i.PhongbanID == phongBanId && s.QuanhuyenID == quanHuyenIdLoggedInUser
-                                                    select new
-                                                    {
-                                                        nhanvien = i,                                                        
-                                                    }).Select(p => p.nhanvien).ToList();
-                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.QuanHuyenID == quanHuyenIdLoggedInUser);               
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                             join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
+                             where i.IsDelete == false && i.PhongbanID == phongBanId && s.QuanhuyenID == quanHuyenIdLoggedInUser
+                             select new
+                             {
+                                 nhanvien = i,
+                             }).Select(p => p.nhanvien).ToList();
+                ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.QuanHuyenID == quanHuyenIdLoggedInUser);
                 ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.QuanhuyenID == quanHuyenIdLoggedInUser);
             }
 
@@ -86,7 +87,7 @@ namespace HoaDonNuocHaDong.Controllers
                 nhanViens = (from i in db.Nhanviens
                              join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
                              join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
-                             where i.IsDelete == false && s.QuanhuyenID == selectedQuan 
+                             where i.IsDelete == false && s.QuanhuyenID == selectedQuan
                              select new
                              {
                                  nhanvien = i,
@@ -97,7 +98,7 @@ namespace HoaDonNuocHaDong.Controllers
                 nhanViens = (from i in db.Nhanviens
                              join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
                              join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
-                             where i.IsDelete == false 
+                             where i.IsDelete == false
                              select new
                              {
                                  nhanvien = i,
@@ -124,7 +125,7 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     ViewBag.ToQuanHuyen = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == selectedQuan);
                 }
-                ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false );                
+                ViewBag.chiNhanh = db.Quanhuyens.Where(p => p.IsDelete == false);
             }
             else
             {
@@ -230,10 +231,8 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Nhanvien/Create
         public ActionResult Create()
         {
-            ViewBag._TuyenKHID = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).ToList();
+
             ViewBag.ChinhanhID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");
-
-
             int loggedInUserRole = getLoggedInUserRole();
             if (loggedInUserRole == 0 || loggedInUserRole == ChucVuHelper.TRUONGPHONG)
             {
@@ -256,6 +255,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.PhongBanQuanHuyen = new SelectList(db.Phongbans, "PhongbanID", "Ten");
                 ViewBag.To = db.ToQuanHuyens.Where(p => p.IsDelete == false);
             }
+            ViewBag._TuyenKHID = nhanVienHelper.loadTuyenChuaCoNhanVien();
             return View();
         }
 
@@ -348,9 +348,8 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 tuyenKHIDList = tuyenKHIDList.Remove(tuyenKHIDList.Length - 1);
             }
-            ViewBag.ChinhanhID = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
-            ViewBag.selectedTuyenKHID = tuyenKHIDList;
-            ViewBag._TuyenKHID = db.Tuyenkhachhangs.ToList();
+            String[] tuyenKH = tuyenKHIDList.Split(',');
+
             int loggedInRole = getLoggedInUserRole();
             if (loggedInRole == 0 || loggedInRole == ChucVuHelper.TRUONGPHONG)
             {
@@ -371,8 +370,15 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag._PhongbanID = new SelectList(db.Phongbans.Where(p => p.PhongbanID == phongBanId), "PhongbanID", "Ten", nhanvien.PhongbanID);
             }
 
-            ViewBag.selectedTo = nhanvien.ToQuanHuyenID;
-            ViewBag.selectedQuanHuyen = getQuanHuyenIDFromToID(nhanvien.ToQuanHuyenID);
+            List<Models.TuyenKhachHang.TuyenKhachHang> tuyensChuaCoNhanVien = nhanVienHelper.loadTuyenChuaCoNhanVien();
+            foreach(var item in tuyenKH){
+                Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(Convert.ToInt32(item));
+                Models.TuyenKhachHang.TuyenKhachHang tuyenKhachHang = new Models.TuyenKhachHang.TuyenKhachHang();
+                tuyenKhachHang.TuyenKHID = tuyen.TuyenKHID.ToString();
+                tuyenKhachHang.TenTuyen = tuyen.Ten;
+                tuyenKhachHang.MaTuyenKH = tuyen.Matuyen;
+                tuyensChuaCoNhanVien.Add(tuyenKhachHang);
+            }
             int phongbanId = getPhongBanNguoiDung();
             if (phongbanId == 0)
             {
@@ -383,6 +389,11 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag._To = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == phongbanId);
             }
 
+            ViewBag.selectedTo = nhanvien.ToQuanHuyenID;
+            ViewBag.selectedQuanHuyen = getQuanHuyenIDFromToID(nhanvien.ToQuanHuyenID);
+            ViewBag.ChinhanhID = db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewBag.selectedTuyenKHID = tuyenKHIDList;
+            ViewBag._TuyenKHID = tuyensChuaCoNhanVien.OrderBy(p=>p.MaTuyenKH).ToList();
             return View(nhanvien);
         }
 

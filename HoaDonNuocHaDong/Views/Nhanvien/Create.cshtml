@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Thêm nhân viên mới";
 
-    var tuyenKHID = ViewBag._TuyenKHID;
+    var tuyenKHID = ViewBag._TuyenKHID as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
     var to = ViewBag.To;
     var phongBan = ViewBag.PhongBanQuanHuyen;
 }
@@ -59,8 +59,17 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-4">
                                             <label for="" class="control-label">Quận huyện:</label>&nbsp;&nbsp;
-                                            @Html.DropDownList("Chinhanh", (SelectList)ViewBag.ChinhanhID, "--Chọn một--", new { @class = "dropdown quan" })
+                                            @Html.DropDownList("Chinhanh", (SelectList)ViewBag.ChinhanhID, "--Chọn một--", new { @class = "dropdown nhanvien-quan" })
 
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin: 1% 0 0 0%">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
+                                            @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown nhanvien-phongban " })
+                                            <br />
+                                            @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
                                         </div>
                                     </div>
 
@@ -78,14 +87,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-4">
-                                            <label for="" class="control-label">Phòng ban:</label>&nbsp;&nbsp;
-                                            @Html.DropDownListFor(p => p.PhongbanID, (SelectList)phongBan, new { @class = "dropdown phongban"})
-                                            <br />
-                                            @Html.ValidationMessageFor(model => model.PhongbanID, null, new { @style = "margin-left:17%" })
-                                        </div>
-                                    </div>
+                                   
 
                                     <!-- Chức vụ-->
                                     <div class="row" style="margin: 1% 0 0 0%">
@@ -105,7 +107,7 @@
 
                                                 @foreach (var item in tuyenKHID)
                                                 {
-                                                    <option value="@item.TuyenKHID">@item.Matuyen - @item.Ten</option>
+                                                    <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
                                                 }
                                             </select>
                                             <br />

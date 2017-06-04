@@ -1,7 +1,4 @@
-﻿
-
-
-//hàm để lấy danh sách các item được check và bỏ check
+﻿//hàm để lấy danh sách các item được check và bỏ check
 //check item và push vào arr
 //ẩn các nút yêu cầu lựa chọn như gán nhân viên, gán tuyến
 var triggeredShownElement = $(".assignEmployee").add($(".printSelected").add($(".khachHangSelected")));

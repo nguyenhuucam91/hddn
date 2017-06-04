@@ -1,5 +1,5 @@
 ﻿using HDNHD.Models.DataContexts;
-using HoaDonNuocHaDong.Areas.Admin.Helpers;
+//using HoaDonNuocHaDong.Areas.Admin.Helpers;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using System;
@@ -46,21 +46,19 @@ namespace HoaDonNuocHaDong.Areas.Admin.Controllers
                 var username = connStringBuilder.UserID;
                 var password = connStringBuilder.Password;
 
-
-
                 //DatabaseHelpers.RestoreDatabase("HoaDonHaDong", file.FileName, )
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
 
             }
-            
+
             return View();
         }
-        
+
         public ActionResult Backup()
         {
             var context = uow.GetDataContext();
-
             backupRepository.applyBackupProcess(LoggedInUser.NguoidungID);
             return View();
         }
