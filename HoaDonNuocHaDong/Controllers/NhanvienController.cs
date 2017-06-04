@@ -57,7 +57,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.isAdminVaTruongPhong = isAdminVaTruongPhong;
             ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0";
             ViewBag.chucVu = db.Chucvus;
-            ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewData["Tuyen"] = nhanVienHelper.loadTuyenChuaCoNhanVien();
             ViewBag.selectedQuan = quanHuyenIdLoggedInUser;
             ViewBag.selectedTo = 0;
             ViewBag.phongBan = db.Phongbans.ToList();
@@ -143,7 +143,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.isAdminVaTruongPhong = isAdminVaTruongPhong;
             ViewBag.isAdmin = isAdmin;
             ViewBag.chucVu = db.Chucvus;
-            ViewData["Tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            ViewData["Tuyen"] = nhanVienHelper.loadTuyenChuaCoNhanVien();
             ViewBag.selectedQuan = selectedQuan;
             ViewBag.selectedTo = selectedTo;
             ViewBag.phongBan = db.Phongbans.ToList();
@@ -374,10 +374,13 @@ namespace HoaDonNuocHaDong.Controllers
             foreach(var item in tuyenKH){
                 Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(Convert.ToInt32(item));
                 Models.TuyenKhachHang.TuyenKhachHang tuyenKhachHang = new Models.TuyenKhachHang.TuyenKhachHang();
-                tuyenKhachHang.TuyenKHID = tuyen.TuyenKHID.ToString();
-                tuyenKhachHang.TenTuyen = tuyen.Ten;
-                tuyenKhachHang.MaTuyenKH = tuyen.Matuyen;
-                tuyensChuaCoNhanVien.Add(tuyenKhachHang);
+                if (tuyen != null)
+                {
+                    tuyenKhachHang.TuyenKHID = tuyen.TuyenKHID.ToString();
+                    tuyenKhachHang.TenTuyen = tuyen.Ten;
+                    tuyenKhachHang.MaTuyenKH = tuyen.Matuyen;
+                    tuyensChuaCoNhanVien.Add(tuyenKhachHang);
+                }
             }
             int phongbanId = getPhongBanNguoiDung();
             if (phongbanId == 0)

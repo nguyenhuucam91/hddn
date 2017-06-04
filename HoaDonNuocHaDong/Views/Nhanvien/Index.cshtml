@@ -4,7 +4,7 @@
     ViewBag.Title = "Danh sách nhân viên";
     var chiNhanh = ViewBag.chiNhanh;
     var chucVu = ViewBag.chucVu;
-    List<Tuyenkhachhang> tuyenKH = ViewData["Tuyen"] as List<Tuyenkhachhang>;
+    List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> tuyenKH = ViewData["Tuyen"] as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
     HoaDonNuocHaDong.Helper.NhanVienHelper helper = new HoaDonNuocHaDong.Helper.NhanVienHelper();
     var selectedQuan = ViewBag.selectedQuan;
     var selectedTo = ViewBag.selectedTo;
@@ -54,7 +54,7 @@
                                                                 <!-- Option mặc định -->
                                                                 @foreach (var item in tuyenKH)
                                                                 {
-                                                                    <option value="@item.TuyenKHID">@item.Matuyen - @item.Ten</option>
+                                                                    <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
                                                                 }
                                                             </select>
                                                             <!-- -->

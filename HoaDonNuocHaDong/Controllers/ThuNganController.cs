@@ -10,7 +10,7 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class ThuNganController : BaseController
     {
-        private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        
         //
         // GET: /ThuNgan/
         //hien thi ra danh sach khach hang ma hoa don có trang thai in =1(đã in)
