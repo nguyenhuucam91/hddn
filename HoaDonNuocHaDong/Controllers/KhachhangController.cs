@@ -303,7 +303,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// </summary>
         /// <param name="ChiNhanhID"></param>
         /// <returns>Chuỗi JSON</returns>
-        public JsonResult FillToByQuan(int ChiNhanhID, int PhongBanAjax)
+        public JsonResult FillToByQuan(int ChiNhanhID, int? PhongBanAjax)
         {
             /** congnv - 170403 - trả về list tổ kinh doanh nếu vai trò ng dùng là inhoadon */
             if (HDNHD.Core.Models.RequestScope.UserRole == EUserRole.InHoaDon)

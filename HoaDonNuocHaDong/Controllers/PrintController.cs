@@ -28,7 +28,6 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class PrintController : BaseController
     {
-        private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         private ChiSo cS = new ChiSo();
         private NguoidungHelper ngHelper = new NguoidungHelper();
         private HoaDonNuocHaDong.Helper.Tuyen _tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
@@ -113,7 +112,7 @@ namespace HoaDonNuocHaDong.Controllers
             return hoadons;
         }
 
-        public void updateSoHoaDonBasedOnSituation(String tuyenID, int thangIn, int namIn, String[] hoaDons = null)
+        public void updateSoHoaDonBasedOnSituation(String tuyenID, int thangIn, int namIn, String[] hoaDons = null, int fromReceipt = 0, int toReceipt = 0)
         {
             xoaThongTinThuNganVaCongDon(tuyenID.ToString(), thangIn.ToString(), namIn.ToString());
             switch (printCircumstance)
@@ -124,7 +123,42 @@ namespace HoaDonNuocHaDong.Controllers
                 case (int)PrintModeEnum.PRINT_SELECTED:
                     updateSelectedReceipt(tuyenID, thangIn, namIn, hoaDons);
                     break;
+                case (int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT:
+                    updateFromReceiptToReceipt(tuyenID, thangIn, namIn, fromReceipt, toReceipt);
+                    break;
             }
+        }
+
+        private void updateFromReceiptToReceipt(string tuyenID, int thangIn, int namIn, int fromReceipt, int toReceipt)
+        {            
+            var hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
+            int soHoaDon = 1;
+            double tongTienCongDon = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+
+                foreach (var hoadon in hoadons)
+                {                    
+                    var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
+                    using (SqlCommand command = new SqlCommand("", connection))
+                    {                        
+                        connection.Open();
+                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan,ChiSoCongDon=@chiSo WHERE HoaDonID = @HoaDonID";
+                        command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
+                        if (soHoaDon >= fromReceipt && soHoaDon <= toReceipt)
+                        {
+                            tongTienCongDon += hoadon.TongCong;
+                            command.Parameters.AddWithValue("@chiSo", tongTienCongDon);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("@chiSo", tongTienCongDon);
+                        }
+                        command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    soHoaDon++;
+                }
         }
 
         private void updateSelectedReceipt(string tuyenID, int thangIn, int namIn, String[] hoaDons)
@@ -158,7 +192,8 @@ namespace HoaDonNuocHaDong.Controllers
         private void updateAllHoaDon(String tuyenID, int thangIn, int namIn)
         {
             var hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
-            int soHoaDon = 1; double tongTienCongDon = 0;
+            int soHoaDon = 1; 
+            double tongTienCongDon = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
 
                 foreach (var hoadon in hoadons)
@@ -393,15 +428,15 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]        
         public ActionResult PrintPreviewFrom(FormCollection form, int TuyenID, int month, int year)
         {
-            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            //here;
-            updateAllHoaDon(TuyenID.ToString(), month, year);
+            setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
+           
 
             Report report = new Report();
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
             int fromSoHoaDon = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
             int toSoHoaDon = String.IsNullOrEmpty(form["to"]) ? count : Convert.ToInt16(form["to"]);
+            updateFromReceiptToReceipt(TuyenID.ToString(), month, year, fromSoHoaDon, toSoHoaDon);
 
             List<LichSuHoaDon> danhSachHoaDons = GetDanhSachHoaDons(TuyenID, month, year);
 
@@ -490,15 +525,14 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult PrintFromTo(FormCollection form, int TuyenID, int month, int year)
         {
-            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            //here;
-            updateAllHoaDon(TuyenID.ToString(), month, year);
+            setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);               
 
             Report report = new Report();
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
             int fromSoHoaDon = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
             int toSoHoaDon = String.IsNullOrEmpty(form["to"]) ? count : Convert.ToInt16(form["to"]);
+            updateFromReceiptToReceipt(TuyenID.ToString(), month, year, fromSoHoaDon, toSoHoaDon);
 
             List<LichSuHoaDon> danhSachHoaDons = GetDanhSachHoaDons(TuyenID, month, year);
 
@@ -728,6 +762,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult XemChiTiet(String tuyen, String month, String year)
         {
+            int tuyenKHID = Convert.ToInt32(tuyen);
             //Cập nhật trạng thái tính tiền
             int tuyenInt = Convert.ToInt32(tuyen);
             int monthInt = Convert.ToInt32(month);
