@@ -39,8 +39,7 @@ namespace HoaDonNuocHaDong.Controllers
             else
             {
                 nhanViens = (from i in db.Nhanviens
-                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
-                             join t in db.Quanhuyens on r.QuanHuyenID equals quanHuyenId
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID                             
                              select new
                              {
                                  nhanvien = i
