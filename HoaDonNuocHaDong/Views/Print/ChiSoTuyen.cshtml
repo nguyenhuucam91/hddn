@@ -119,12 +119,11 @@
                                             //số lượng hóa đơn thực của tuyến đó
                                             var soLuongHoaDonThuc = (from i in db.Hoadonnuocs
                                                                      join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                                                                     where i.ThangHoaDon == monthInt && i.NamHoaDon == yearInt &&
-                                                                           r.TuyenKHID == item.TuyenKHID &&
-                                                                           (i.Trangthaixoa == false || i.Trangthaixoa == null) &&
+                                                                     where i.ThangHoaDon == monthInt && i.NamHoaDon == yearInt && r.TuyenKHID == item.TuyenKHID &&
+                                                                           (i.Trangthaixoa == false || i.Trangthaixoa == null) && i.Trangthaichot == true &&
                                                                            ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) ||
-                                                                           (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
-                                                                           i.Tongsotieuthu > 0
+                                                                           (r.Ngaycapnuoclai.Value <= DateTime.Now)) && i.Tongsotieuthu > 0
+
                                                                      select new
                                                                      {
                                                                          TTIn = i.Trangthaiin,
@@ -137,19 +136,19 @@
                                                                    join hd in db.Hoadonnuocs on lshd.HoaDonID equals hd.HoadonnuocID
                                                                    join r in db.Khachhangs on hd.KhachhangID equals r.KhachhangID
                                                                    where r.TuyenKHID == item.TuyenKHID && hd.ThangHoaDon == monthInt && hd.NamHoaDon == yearInt &&
-                                                                         r.TuyenKHID == item.TuyenKHID &&
                                                                          (hd.Trangthaixoa == false || hd.Trangthaixoa == null) && hd.Trangthaichot == true &&
-                                                                         ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) 
-                                                                         
+                                                                         ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null)
+                                                                         || (r.Ngaycapnuoclai.Value <= DateTime.Now)) && hd.Tongsotieuthu > 0
+
                                                                    group lshd by lshd.TuyenKHID into tongCongCongDon
                                                                    select new
                                                                    {
-                                                                       tongTien = tongCongCongDon.Sum(p=>p.TongCong)
+                                                                       tongTien = tongCongCongDon.Sum(p => p.TongCong),
                                                                    }).FirstOrDefault();
                                             
                                             tongSoHoaDonChuyenIn += soLuongHoaDonThuc.Count();
                                             tongSoHoaDonDaIn += soLuongHoaDonDaIn.Count();
-                                            
+
                                             if (tongSoTienTuyen != null)
                                             {
                                                 tongSoTien += tongSoTienTuyen.tongTien;
@@ -180,13 +179,13 @@
                                                     }
                                                     else
                                                     {
-                                                        <td></td>
+                                                    <td></td>
                                                     }
                                                     @if (tongSoTienTuyen != null)
                                                     {
                                                         <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
-                                                </tr>                                                   
+                                                </tr>
                                             }
                                             //nếu chưa in xong
                                             else
@@ -210,7 +209,7 @@
                                                         <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", tongSoTienTuyen.tongTien)</td>
                                                     }
                                                 </tr>
-                                                    
+
                                             }
                                             STT++;
                                         }

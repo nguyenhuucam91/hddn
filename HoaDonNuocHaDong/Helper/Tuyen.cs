@@ -113,5 +113,20 @@ namespace HoaDonNuocHaDong.Helper
             }
             return "";
         }
+
+        public String translateTuyenIDToMaTuyen(String tuyenIdsInput)
+        {
+            String maTuyens = "";
+            String[] maTuyensAsArray = tuyenIdsInput.Split(',');
+            foreach (var item in maTuyensAsArray)
+            {
+                int tuyenId = Convert.ToInt32(item);
+                Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(tuyenId);
+                if (tuyen != null) {
+                    maTuyens += tuyen.Matuyen+",";
+                }
+            }
+            return maTuyens.Trim(',');
+        }     
     }
 }

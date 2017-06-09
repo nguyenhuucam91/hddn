@@ -14,21 +14,28 @@
 
     .ten {
         font-size: 29px;
-        font-weight: bold;       
+        font-weight: bold;
     }
 
     .loc {
-        font-size: 13px;
-        font-weight: bold;    
+        font-size: 20px;
+        font-weight: bold;
     }
-   tr:last-child,td:last-child{
-        font-weight:bold;
+
+    .tuyens {
+        font-size: 16px;
+    }
+
+    tr:last-child, td:last-child {
+        font-weight: bold;
     }
 </style>
 
 <div class="ten center">Báo cáo sản lượng doanh thu</div>
-<br/>
+<br />
 <div class="loc center">Tháng @month năm @year</div>
+<br />
+<div class="tuyens center">@ViewBag.selectedTuyens</div>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -132,16 +139,16 @@
             </tr>
         </tbody>
     </table>
-<p style="float:right">Hà đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</p>
-<div class="clearfix"></div>
-<div class="span3 center">
-    Người lập biểu
-</div>
+    <p style="float:right">Hà đông, ngày @DateTime.Now.Day tháng @DateTime.Now.Month năm @DateTime.Now.Year</p>
+    <div class="clearfix"></div>
+    <div class="span3 center">
+        Người lập biểu
+    </div>
 
-<div class="span3 center">
-   Kế toán trưởng
-</div>
+    <div class="span3 center">
+        Kế toán trưởng
+    </div>
 
-<div class="span4 center">
-    Tổng giám đốc
-</div>
+    <div class="span4 center">
+        Tổng giám đốc
+    </div>

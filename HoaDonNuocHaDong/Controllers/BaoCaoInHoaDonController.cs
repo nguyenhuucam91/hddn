@@ -28,6 +28,7 @@ namespace HoaDonNuocHaDong.Controllers
        
         NguoidungHelper ngDungHelper = new NguoidungHelper();
         BaoCaoSanLuongDoanhThu baoCaoSanLuongDoanhThu = new BaoCaoSanLuongDoanhThu();
+        Tuyen tuyenHelper = new Tuyen();
         // GET: BaoCaoInHoaDon
         public ActionResult Index()
         {
@@ -83,6 +84,7 @@ namespace HoaDonNuocHaDong.Controllers
 
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
                 ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
+                ViewBag.selectedTuyens = "Tuyến "+ tuyenHelper.translateTuyenIDToMaTuyen(dsTuyen);
             }
 
             ViewBag.selectedMonth = month.ToString();
@@ -310,6 +312,7 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
                 ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
+                ViewBag.selectedTuyens = "Tuyến " + tuyenHelper.translateTuyenIDToMaTuyen(tuyens);
             }
 
             ViewBag.selectedMonth = "Quý "+quy;
@@ -354,6 +357,7 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
                 ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
+                ViewBag.selectedTuyens = "Tuyến " + tuyenHelper.translateTuyenIDToMaTuyen(tuyens);
             }
 
             ViewBag.selectedMonth = "";
@@ -403,5 +407,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             return 0;
         }
+
+        
     }
 }
