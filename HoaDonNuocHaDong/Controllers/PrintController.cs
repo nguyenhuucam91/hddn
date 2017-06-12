@@ -72,7 +72,7 @@ namespace HoaDonNuocHaDong.Controllers
                                                            join r in db.Khachhangs on j.KhachhangID equals r.KhachhangID
                                                            where i.ThangHoaDon == thangIn && i.NamHoaDon == namIn &&
                                                                   r.TuyenKHID.ToString() == tuyenID &&
-                                                                  (j.Trangthaixoa == false || j.Trangthaixoa == null) &&
+                                                                  (j.Trangthaixoa == false || j.Trangthaixoa == null) && j.Trangthaichot == true &&
                                                                   ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
                                                                   j.Tongsotieuthu > 0
                                                            orderby i.TTDoc
@@ -278,8 +278,12 @@ namespace HoaDonNuocHaDong.Controllers
         {
             var lichsuhoadons = (from p in db.Lichsuhoadons
                                  join r in db.Hoadonnuocs on p.HoaDonID equals r.HoadonnuocID
-                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month &&
-                                 p.NamHoaDon == year && p.SanLuongTieuThu > 0
+                                 join k in db.Khachhangs on r.KhachhangID equals k.KhachhangID
+                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year &&
+                                        (r.Trangthaixoa == false || r.Trangthaixoa == null) && r.Trangthaichot == true &&
+                                        ((k.Ngayngungcapnuoc == null && k.Ngaycapnuoclai == null) || (k.Ngaycapnuoclai.Value <= DateTime.Now)) &&
+                                        p.SanLuongTieuThu > 0
+                                
                                  orderby p.TTDoc
                                  select new HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon
                                  {

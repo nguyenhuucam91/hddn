@@ -323,5 +323,6 @@ namespace HoaDonNuocHaDong.Factory
                 throw new Exception(ex.ToString());
             }
         }
+         
     }
 }

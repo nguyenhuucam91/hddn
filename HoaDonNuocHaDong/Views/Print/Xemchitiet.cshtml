@@ -201,14 +201,25 @@
                                         Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);
                                         String ttHoaDonBiHuyCssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);
                                         String cssClass = "";
-                                        if (ttHoaDonBiHuyCssClass != "")
+                                        if (ttHoaDonBiHuyCssClass == "hoadonbihuy")
                                         {
                                             cssClass = ttHoaDonBiHuyCssClass;
                                         }
-                                        else
+                                        else if (ttHoaDonBiHuyCssClass == "hoadonduoccapnhat")
                                         {
-                                            cssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";
+                                            if(hoaDonObj.Trangthaiin.GetValueOrDefault() == true) {
+                                                   cssClass = "hoadonprinted";
+                                            }
+                                            else
+                                            {
+                                                cssClass = "hoadonduoccapnhat";
+                                            }
                                         }
+                                        
+                                        if (hoaDonObj.Trangthaiin.GetValueOrDefault() == true)
+                                        {
+                                            cssClass = "hoadonprinted";
+                                        }                               
                                         
                                         <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
