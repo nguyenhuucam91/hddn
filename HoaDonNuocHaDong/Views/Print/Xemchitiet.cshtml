@@ -200,9 +200,16 @@
                                         int hoaDonNuocID = item.HoaDonNuoc;
                                         Hoadonnuoc hoaDonObj = db.Hoadonnuocs.Find(hoaDonNuocID);
                                         String ttHoaDonBiHuyCssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonNuocID);
-                                        String ttInCssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";
-
-                                        String cssClass = String.Join(" ", new String[] { ttHoaDonBiHuyCssClass, ttInCssClass });
+                                        String cssClass = "";
+                                        if (ttHoaDonBiHuyCssClass != "")
+                                        {
+                                            cssClass = ttHoaDonBiHuyCssClass;
+                                        }
+                                        else
+                                        {
+                                            cssClass = hoaDonObj.Trangthaiin.GetValueOrDefault() == true ? "hoadonprinted" : "";
+                                        }
+                                        
                                         <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
                                             <td>@i</td>
