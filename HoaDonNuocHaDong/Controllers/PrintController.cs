@@ -443,7 +443,6 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-
         public ActionResult ChiSoTuyen()
         {
             ViewBag.beforeFiltered = true;
