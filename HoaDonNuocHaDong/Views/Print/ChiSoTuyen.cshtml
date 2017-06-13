@@ -192,7 +192,7 @@
                                                     }
                                                     @if (tongSoTienTungTuyen != null)
                                                     {
-                                                        <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n2}", tongSoTienTungTuyen)</td>
+                                                          <td>@String.Format("{0:#,##0.##}", tongSoTienTungTuyen)</td>
                                                     }
                                                 </tr>
                                             }
@@ -215,7 +215,7 @@
                                                     <td></td>
                                                     @if (tongSoTienTungTuyen != null)
                                                     {
-                                                        <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", tongSoTienTungTuyen)</td>
+                                                        <td>@String.Format("{0:#,##0.##}", tongSoTienTungTuyen)</td>
                                                     }
                                                 </tr>
 
@@ -228,7 +228,7 @@
                                             <td colspan="3" style="text-align: right;">Tổng số hóa đơn đã in / tổng số hóa đơn chuyển in</td>
                                             <td>@tongSoHoaDonDaIn / @tongSoHoaDonChuyenIn</td>
                                             <td colspan="1" style="text-align: right;">Tổng số tiền</td>
-                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n2}", tongSoTien)</td>
+                                            <td>@String.Format("{0:#,##0.##}", tongSoTien)</td>
                                         </tr>
                                     </tfoot>
                                 </table>
