@@ -1,4 +1,5 @@
-﻿using HoaDonNuocHaDong.Controllers;
+﻿using CrystalDecisions.CrystalReports.Engine;
+using HoaDonNuocHaDong.Controllers;
 using HoaDonNuocHaDong.Factory.Interface;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,10 @@ namespace HoaDonNuocHaDong.Factory
 
         public ReportLX2170()
         {
-            report.Load(Path.Combine(HttpContext.Current.Server.MapPath("~/Reports/Report.rpt")));
+            report.Load(Path.Combine(HttpContext.Current.Server.MapPath("~/Reports/Report.rpt")));            
         }
+
+
 
         public override Stream generateReportPrintAllPreview(int TuyenID, int month, int year)
         {
@@ -189,7 +192,7 @@ namespace HoaDonNuocHaDong.Factory
             catch (Exception ex)
             {
                 throw new Exception(ex.ToString());
-            } 
+            }
         }
 
         public override Stream generateReportPrintFromToPreview(int fromSoHoaDon, int toSoHoaDon, int TuyenID, int month, int year, Tuyenkhachhang tuyenKH)

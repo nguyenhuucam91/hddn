@@ -10,7 +10,6 @@ namespace HoaDonNuocHaDong.Factory.Interface
     public abstract class IReportInHoaDon
     {
         protected PrintController printCtl = new PrintController();
-
         protected HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
         public abstract Stream generateReportPrintAllPreview(int TuyenID, int month, int year);

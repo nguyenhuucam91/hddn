@@ -20,6 +20,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Table;
 using System.Data.Entity.Validation;
 using HoaDonNuocHaDong.Base;
+using HDNHD.Models.Constants;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -129,7 +130,6 @@ namespace HoaDonNuocHaDong.Controllers
                 ).ToList();
 
             ViewData["bc"] = bc;
-
             return View();
         }
 
@@ -273,7 +273,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult BaoCaoSanLuongDoanhThuTheoQuy()
         {
-            int quyHienTai = getQuyHienTai(DateTime.Now.Month);
+            int quyHienTai = TimeHelper.getQuyHienTai(DateTime.Now.Month);
             #region data
             ViewBag.selectedQuy = quyHienTai;
             ViewBag.selectedYear = DateTime.Now.Year;
@@ -289,7 +289,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int quy = !String.IsNullOrEmpty(form["q1"]) ? Convert.ToInt32(form["q1"]) : 0;
             int nam = !String.IsNullOrEmpty(form["y1"]) ? Convert.ToInt32(form["y1"]) : 0;            
-            String thangTrongQuy = getThangTrongQuy(quy);
+            String thangTrongQuy = TimeHelper.getThangTrongQuy(quy);
             ControllerBase<BaoCaoSanLuongDoanhThu> cB = new ControllerBase<BaoCaoSanLuongDoanhThu>();
             if (type == 0)
             {
@@ -365,49 +365,5 @@ namespace HoaDonNuocHaDong.Controllers
             return View("XuliBaoCaoSanLuongDoanhThu");
         }
 
-        public String getThangTrongQuy(int quy)
-        {
-            if (quy < 0)
-            {
-                throw new Exception("Quý không được âm");
-            }
-            else
-            {
-                switch (quy)
-                {
-                    case 1: return "1,2,3";
-                    case 2: return "4,5,6";
-                    case 3: return "7,8,9";
-                    case 4: return "10,11,12";
-                    default: return "0";
-                }
-            }
-        }
-
-        public int getQuyHienTai(int thang)
-        {
-            switch (thang)
-            {
-                case 1:
-                case 2:
-                case 3:
-                    return 1;
-                case 4:
-                case 5:
-                case 6:
-                    return 2;
-                case 7:
-                case 8:
-                case 9:
-                    return 3;
-                case 10:
-                case 11:
-                case 12:
-                    return 4;
-            }
-            return 0;
-        }
-
-        
     }
 }
