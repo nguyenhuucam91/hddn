@@ -243,10 +243,10 @@
                                         double Sum = item.SH1Price * item.SH1 + item.SH2Price * item.SH2 + item.SH3Price * item.SH3 + item.SH4Price * item.SH4 +
                                             item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
                                             }
-                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", Sum)</td>
-                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.PhiVAT)</td>
-                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.PhiBVMT)</td>
-                                            <td style="color:blue">@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n0}", item.TongCong)</td>
+                                            <td>@Sum</td>
+                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n2}", item.PhiVAT)</td>
+                                            <td>@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n2}", item.PhiBVMT)</td>
+                                            <td style="color:blue">@String.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:n2}", item.TongCong)</td>
                                         </tr>
                                         i++;
                                     }

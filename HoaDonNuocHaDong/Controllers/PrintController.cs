@@ -99,11 +99,22 @@ namespace HoaDonNuocHaDong.Controllers
                                                                SXPrice = i.SXPrice,
                                                                KD = i.KD,
                                                                KDPrice = i.KDPrice,
-                                                               PhiVAT = i.ThueSuatPrice,
-                                                               PhiBVMT = i.PhiBVMT,
+                                                               PhiVAT = (i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
+                                                               + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * 0.05,
+                                                               PhiBVMT = (i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
+                                                               + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * (i.TileBVMT/100),
                                                                TTDoc = i.TTDoc.Value,
                                                                SanLuong = i.SanLuongTieuThu,
-                                                               TongCong = i.TongCong,
+                                                               TongCong = (i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
+                                                                          + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) +
+                                                               
+                                                                          ((i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
+                                                                          + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * 0.05) +
+
+                                                                          ((i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
+                                                               + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * (i.TileBVMT / 100)),
+
+                                                                          
                                                                TTThuNgan = i.TTThungan,
                                                                TuyenKHID = i.TuyenKHID,
                                                            }).ToList();
