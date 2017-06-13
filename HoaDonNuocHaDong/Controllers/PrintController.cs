@@ -228,6 +228,11 @@ namespace HoaDonNuocHaDong.Controllers
                 Factory.ReportLP2190 report = new Factory.ReportLP2190();
                 str = report.generateReportPrintSelectedPreview(selectedForm, TuyenID, month, year);
             }
+            else if (formPrintMachine == "TalliGenicom")
+            {
+                Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
+                str = report.generateReportPrintSelectedPreview(selectedForm, TuyenID, month, year);
+            }
             else
             {
                 Factory.ReportLX2170 report = new Factory.ReportLX2170();
@@ -249,6 +254,11 @@ namespace HoaDonNuocHaDong.Controllers
             if (formPrintMachine == "LQ2190")
             {
                 Factory.ReportLP2190 report = new Factory.ReportLP2190();
+                str = report.generateReportPrintSelected(selectedForm, TuyenID, month, year);
+            }
+            else if (formPrintMachine == "TalliGenicom")
+            {
+                Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintSelected(selectedForm, TuyenID, month, year);
             }
             else
@@ -352,6 +362,11 @@ namespace HoaDonNuocHaDong.Controllers
                 Factory.ReportLP2190 report = new Factory.ReportLP2190();
                 str = report.generateReportPrintFromToPreview(fromSoHoaDon, toSoHoaDon, TuyenID, month, year, tuyenKH);
             }
+            else if (formPrintMachine == "TalliGenicom")
+            {
+                Factory.ReportLP2190 report = new Factory.ReportLP2190();
+                str = report.generateReportPrintFromToPreview(fromSoHoaDon, toSoHoaDon, TuyenID, month, year, tuyenKH);
+            }
             else
             {
                 Factory.ReportLX2170 report = new Factory.ReportLX2170();
@@ -397,6 +412,11 @@ namespace HoaDonNuocHaDong.Controllers
                 Factory.ReportLP2190 report = new Factory.ReportLP2190();
                 str = report.generateReportPrintFromTo(fromSoHoaDon, toSoHoaDon, TuyenID, month, year, tuyenKH);
             }
+            else if (formPrintMachine == "TalliGenicom")
+            {
+                Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
+                str = report.generateReportPrintFromTo(fromSoHoaDon, toSoHoaDon, TuyenID, month, year, tuyenKH);
+            }
             else
             {
                 Factory.ReportLX2170 report = new Factory.ReportLX2170();
@@ -415,6 +435,11 @@ namespace HoaDonNuocHaDong.Controllers
             if (formPrintMachine == "LQ2190")
             {
                 Factory.ReportLP2190 report = new Factory.ReportLP2190();
+                str = report.generateReportPrintAllPreview(TuyenID, month, year);
+            }
+            else if (formPrintMachine == "TalliGenicom")
+            {
+                Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintAllPreview(TuyenID, month, year);
             }
             else
@@ -436,6 +461,11 @@ namespace HoaDonNuocHaDong.Controllers
             if (formPrintMachine == "LQ2190")
             {
                 Factory.ReportLP2190 report = new Factory.ReportLP2190();
+                str = report.generateReportPrintAll(TuyenID, month, year);
+            }
+            else if (formPrintMachine == "TalliGenicom")
+            {
+                Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintAll(TuyenID, month, year);
             }
             else
