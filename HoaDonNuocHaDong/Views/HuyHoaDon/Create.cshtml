@@ -23,7 +23,7 @@
                         </div>
                         <!-- /widget-header -->
                         <div class="widget-content">
-                            @using (Html.BeginForm("HuyHoaDon", "Print", FormMethod.Post))
+                            @using (Html.BeginForm("create", "huyhoadon", FormMethod.Post))
                             {
                                 <div class="form-group">
                                     Mã khách hàng:
@@ -40,7 +40,7 @@
                             <!-- Bảng kê chi tiết thông tin hủy hóa đơn-->
                             @if (hasMaKhachHang != null && hasMaKhachHang == true)
                             {
-                                using (Html.BeginForm("Xacnhanhuy", "Print", FormMethod.Post))
+                                using (Html.BeginForm("xacnhanhuy", "huyhoadon", FormMethod.Post))
                                 {
                                     <hr />
                                     <div>
