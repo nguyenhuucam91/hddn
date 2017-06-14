@@ -136,8 +136,9 @@
                                                 <h4 class="modal-title" id="myModalLabel">Chọn máy in</h4>
                                             </div>
 
-                                            <div class="modal-body">                                                
-                                                <p><input type="radio" name="printMachine" value="TalliGenicom" checked/> TalliGenicom / LX2170</p>
+                                            <div class="modal-body">                       
+                                                <p><input type="radio" name="printMachine" value="LX2170" checked /> LX-2170 </p>                       
+                                                <p><input type="radio" name="printMachine" value="TalliGenicom"/> TalliGenicom </p>
                                                 <p><input type="radio" name="printMachine" value="LQ2190" /> LQ-2190 </p>                                               
                                             </div>
 
@@ -244,8 +245,8 @@
                                             item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
                                             }
                                             <td>@String.Format("{0:#,##0.##}", Sum)</td>
-                                            <td>@String.Format("{0:#,##0.##}", item.PhiVAT)</td>
-                                            <td>@String.Format("{0:#,##0.##}", item.PhiBVMT)</td>
+                                            <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiVAT, 0))</td>
+                                            <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiBVMT, 0))</td>
                                             <td style="color:blue">@String.Format("{0:#,##0.##}", item.TongCong)</td>
                                         </tr>
                                         i++;

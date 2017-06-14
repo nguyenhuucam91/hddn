@@ -192,7 +192,7 @@
                                                     }
                                                     @if (tongSoTienTungTuyen != null)
                                                     {
-                                                          <td>@String.Format("{0:#,##0.##}", tongSoTienTungTuyen)</td>
+                                                          <td>@String.Format("{0:#,##0.##}", Math.Round(tongSoTienTungTuyen, 0))</td>
                                                     }
                                                 </tr>
                                             }
@@ -215,7 +215,7 @@
                                                     <td></td>
                                                     @if (tongSoTienTungTuyen != null)
                                                     {
-                                                        <td>@String.Format("{0:#,##0.##}", tongSoTienTungTuyen)</td>
+                                                        <td>@String.Format("{0:#,##0.##}", Math.Round(tongSoTienTungTuyen,0))</td>
                                                     }
                                                 </tr>
 
