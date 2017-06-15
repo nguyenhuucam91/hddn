@@ -12,14 +12,12 @@ namespace HoaDonNuocHaDong.Factory
 {
     class ReportLX2170 : IReportInHoaDon
     {
-        Reports.Report report = new Reports.Report();
+        Reports.ReportSample report = new Reports.ReportSample();
 
         public ReportLX2170()
         {
-            report.Load(Path.Combine(HttpContext.Current.Server.MapPath("~/Reports/Report.rpt")));            
+            report.Load(Path.Combine(HttpContext.Current.Server.MapPath("~/Reports/ReportSample.rpt")));            
         }
-
-
 
         public override Stream generateReportPrintAllPreview(int TuyenID, int month, int year)
         {
