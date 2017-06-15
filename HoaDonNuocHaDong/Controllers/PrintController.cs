@@ -494,30 +494,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         public ActionResult ChiSoTuyen()
-        {
-            
-            double truocThue = 0;
-            var hoadons = db.Lichsuhoadons.ToList();
-            //run first time update script
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                foreach (var hoadon in hoadons)
-                {                    
-                    truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
-                        + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));                   
-                    using (SqlCommand command = new SqlCommand("", connection))
-                    {
-                        command.CommandText = "Update Lichsuhoadon SET TruocThue = @truocThue WHERE HoaDonID = @HoaDonID";                        
-                        command.Parameters.AddWithValue("@truocThue", truocThue);                        
-                        command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonID);
-                        command.ExecuteNonQuery();
-                    }                   
-                }
-                connection.Close();
-            }
-
-
+        {                     
             ViewBag.beforeFiltered = true;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewData["tuyen"] = new List<Tuyenkhachhang>();
