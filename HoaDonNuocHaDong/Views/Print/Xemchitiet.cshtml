@@ -240,7 +240,7 @@
                                         double Sum = item.SH1Price * item.SH1 + item.SH2Price * item.SH2 + item.SH3Price * item.SH3 + item.SH4Price * item.SH4 +
                                             item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
                                             }
-                                            <td>@String.Format("{0:#,##0.##}", Sum)</td>
+                                            <td>@String.Format("{0:#,##0.##}", Math.Floor(Sum))</td>
                                             <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiVAT, 0))</td>
                                             <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiBVMT, 0))</td>
                                             <td style="color:blue">@String.Format("{0:#,##0.##}", item.TongCong)</td>

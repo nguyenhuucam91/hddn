@@ -143,20 +143,12 @@
                                                                          (hd.Trangthaixoa == false || hd.Trangthaixoa == null) && hd.Trangthaichot == true &&
                                                                          ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null)
                                                                          || (r.Ngaycapnuoclai.Value <= DateTime.Now)) && hd.Tongsotieuthu > 0
-                                                                
+                                                                 
                                                                    select new
                                                                    {
-                                                                       tongTien = lshd.SH1 * lshd.SH1Price + lshd.SH2 * lshd.SH2Price + lshd.SH3 * lshd.SH3Price + lshd.SH4 * lshd.SH4Price
-                                                                       + lshd.CC * lshd.CCPrice + lshd.HC * lshd.HCPrice + lshd.SX * lshd.SXPrice + lshd.KD * lshd.KDPrice +
-
-                                                                       ((lshd.SH1 * lshd.SH1Price + lshd.SH2 * lshd.SH2Price + lshd.SH3 * lshd.SH3Price + lshd.SH4 * lshd.SH4Price
-                                                                       + lshd.CC * lshd.CCPrice + lshd.HC * lshd.HCPrice + lshd.SX * lshd.SXPrice + lshd.KD * lshd.KDPrice) * 0.05) + 
-                                                                       
-                                                                       ((lshd.SH1 * lshd.SH1Price + lshd.SH2 * lshd.SH2Price + lshd.SH3 * lshd.SH3Price + lshd.SH4 * lshd.SH4Price
-                                                                       +lshd.CC*lshd.CCPrice + lshd.HC * lshd.HCPrice + lshd.SX * lshd.SXPrice + lshd.KD * lshd.KDPrice) * lshd.TileBVMT/100 ) ,
+                                                                       tongTien = lshd.TongCong
                                                                    });
-                                           
-                                          
+                                                                                                             
 
                                             foreach (var tongSoTienTuyen in tongSoTienTuyens)
                                             {
