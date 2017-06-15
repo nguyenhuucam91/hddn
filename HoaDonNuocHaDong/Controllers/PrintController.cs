@@ -99,22 +99,11 @@ namespace HoaDonNuocHaDong.Controllers
                                                                SXPrice = i.SXPrice,
                                                                KD = i.KD,
                                                                KDPrice = i.KDPrice,
-                                                               PhiVAT = (i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
-                                                               + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * 0.05,
-                                                               PhiBVMT = (i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
-                                                               + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * (i.TileBVMT/100),
+                                                               PhiVAT = i.ThueSuatPrice ,
+                                                               PhiBVMT = i.PhiBVMT,
                                                                TTDoc = i.TTDoc.Value,
                                                                SanLuong = i.SanLuongTieuThu,
-                                                               TongCong = (i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
-                                                                          + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) +
-                                                               
-                                                                          ((i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
-                                                                          + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * 0.05) +
-
-                                                                          ((i.SH1 * i.SH1Price + i.SH2 * i.SH2Price + i.SH3 * i.SH3Price + i.SH4 * i.SH4Price
-                                                               + i.HC * i.HCPrice + i.CC * i.CCPrice + i.SX * i.SXPrice + i.KD * i.KDPrice) * (i.TileBVMT / 100)),
-
-                                                                          
+                                                               TongCong = i.TongCong,                                                                          
                                                                TTThuNgan = i.TTThungan,
                                                                TuyenKHID = i.TuyenKHID,
                                                            }).ToList();
@@ -205,23 +194,25 @@ namespace HoaDonNuocHaDong.Controllers
             int soHoaDon = 1;
             double tongTienCongDon = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
-
+            {
+                connection.Open();
                 foreach (var hoadon in hoadons)
                 {
                     tongTienCongDon += hoadon.TongCong;
                     var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                     using (SqlCommand command = new SqlCommand("", connection))
                     {
-                        connection.Open();
+
                         command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan,ChiSoCongDon=@chiSo WHERE HoaDonID = @HoaDonID";
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                         command.Parameters.AddWithValue("@chiSo", tongTienCongDon);
                         command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
-                        command.ExecuteNonQuery();
-                        connection.Close();
+                        command.ExecuteNonQuery();                       
                     }
                     soHoaDon++;
                 }
+                connection.Close();
+            }
         }
 
         [HttpPost]
