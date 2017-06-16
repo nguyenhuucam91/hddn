@@ -44,6 +44,7 @@ namespace HoaDonNuocHaDong
         public double KDPrice { get; set; }
         public double ThueSuat { get; set; }
         public double ThueSuatPrice { get; set; }
+        public Nullable<double> TruocThue { get; set; }
         public double TileBVMT { get; set; }
         public double PhiBVMT { get; set; }
         public double TongCong { get; set; }

@@ -100,6 +100,7 @@ namespace HoaDonNuocHaDong.Controllers
                                                                KD = i.KD,
                                                                KDPrice = i.KDPrice,
                                                                PhiVAT = i.ThueSuatPrice ,
+                                                               TileBVMT = i.TileBVMT,
                                                                PhiBVMT = i.PhiBVMT,
                                                                TTDoc = i.TTDoc.Value,
                                                                SanLuong = i.SanLuongTieuThu,
@@ -132,20 +133,25 @@ namespace HoaDonNuocHaDong.Controllers
         {
             var hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
             int soHoaDon = 1;
-            double tongTienCongDon = 0; double truocThue = 0;
+            double tongTienCongDon = 0;
+            double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
 
                 foreach (var hoadon in hoadons)
                 {
+                    truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
+                     + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));
+                    thueVAT = Math.Floor(truocThue * 0.05);
+                    phiBVMT = Math.Round(truocThue * (hoadon.TileBVMT / 100), 0);
+                    soTienHoaDon = truocThue + thueVAT + phiBVMT;
                     var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
 
                     using (SqlCommand command = new SqlCommand("", connection))
                     {
                         connection.Open();
-                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ChiSoCongDon=@chiSo "+
+                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi,BangChu=@chu, ChiSoCongDon=@chiSo " +
                             "WHERE HoaDonID = @HoaDonID";
-                        truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
-                       + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));
+                      
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                         if (soHoaDon >= fromReceipt && soHoaDon <= toReceipt)
                         {
@@ -158,6 +164,9 @@ namespace HoaDonNuocHaDong.Controllers
                         }
                         command.Parameters.AddWithValue("@truocThue", truocThue);
                         command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
+                        command.Parameters.AddWithValue("@thueVAT", thueVAT);
+                        command.Parameters.AddWithValue("@phi", phiBVMT);
+                        command.Parameters.AddWithValue("@chu", ConvertMoney.So_chu(soTienHoaDon));
                         command.ExecuteNonQuery();
                         connection.Close();
                     }
@@ -167,7 +176,9 @@ namespace HoaDonNuocHaDong.Controllers
 
         private void updateSelectedReceipt(string tuyenID, int thangIn, int namIn, String[] hoaDons)
         {
-            int soHoaDon = 1; double tongTienCongDon = 0; double truocThue = 0;
+            int soHoaDon = 1; double tongTienCongDon = 0;
+            double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
+
             using (SqlConnection connection = new SqlConnection(connectionString))
 
                 foreach (var hoaDon in hoaDons)
@@ -179,14 +190,20 @@ namespace HoaDonNuocHaDong.Controllers
                         tongTienCongDon += hoadon.TongCong;
                         truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
                        + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));
+                        thueVAT = Math.Floor(truocThue * 0.05);
+                        phiBVMT = Math.Round(truocThue * (hoadon.TileBVMT / 100), 0);
+                        soTienHoaDon = truocThue + thueVAT + phiBVMT;
                         var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                         using (SqlCommand command = new SqlCommand("", connection))
                         {
                             connection.Open();
-                            command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ChiSoCongDon=@chiSo "+
-                                "WHERE HoaDonID = @HoaDonID";
+                            command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi,BangChu=@chu, ChiSoCongDon=@chiSo " +
+                            "WHERE HoaDonID = @HoaDonID";
                             command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                             command.Parameters.AddWithValue("@truocThue", truocThue);
+                            command.Parameters.AddWithValue("@thueVAT", thueVAT);
+                            command.Parameters.AddWithValue("@phi", phiBVMT);
+                            command.Parameters.AddWithValue("@chu", ConvertMoney.So_chu(soTienHoaDon));
                             command.Parameters.AddWithValue("@chiSo", tongTienCongDon);
                             command.Parameters.AddWithValue("@HoaDonID", hoaDonID);
                             command.ExecuteNonQuery();
@@ -201,8 +218,8 @@ namespace HoaDonNuocHaDong.Controllers
         {
             var hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
             int soHoaDon = 1;
-            double tongTienCongDon = 0; 
-            double truocThue = 0;
+            double tongTienCongDon = 0;
+            double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -211,14 +228,20 @@ namespace HoaDonNuocHaDong.Controllers
                     tongTienCongDon += hoadon.TongCong;
                     truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
                         + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));
+                    thueVAT = Math.Floor(truocThue * 0.05);
+                    phiBVMT = Math.Round(truocThue * (hoadon.TileBVMT/100),0);
+                    soTienHoaDon = truocThue + thueVAT + phiBVMT;
                     var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                     using (SqlCommand command = new SqlCommand("", connection))
                     {
 
-                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ChiSoCongDon=@chiSo "+
+                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi,BangChu=@chu, ChiSoCongDon=@chiSo "+
                             "WHERE HoaDonID = @HoaDonID";
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                         command.Parameters.AddWithValue("@truocThue", truocThue);
+                        command.Parameters.AddWithValue("@thueVAT", thueVAT);
+                        command.Parameters.AddWithValue("@phi", phiBVMT);
+                        command.Parameters.AddWithValue("@chu", ConvertMoney.So_chu(soTienHoaDon));
                         command.Parameters.AddWithValue("@chiSo", tongTienCongDon);
                         command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
                         command.ExecuteNonQuery();                       
@@ -494,7 +517,48 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         public ActionResult ChiSoTuyen()
-        {                     
+        {
+
+            //double truocThue = 0; double thue = 0; double thueBVMT = 0; double tong = 0; double chiSoCongDon = 0;
+            //int tuyenKHID = 0; int thangHoaDon = 0; int namHoaDon = 0;
+            //var hoadons = db.Lichsuhoadons.OrderBy(p=>p.TuyenKHID).OrderBy(p=>p.ThangHoaDon).OrderBy(p=>p.NamHoaDon).OrderBy(p=>p.TTDoc).ToList();
+            ////run first time update script
+            //using (SqlConnection connection = new SqlConnection(connectionString))
+            //{
+            //    connection.Open();
+            //    foreach (var hoadon in hoadons)
+            //    {
+            //        if ((hoadon.TuyenKHID != tuyenKHID) || (hoadon.ThangHoaDon != thangHoaDon) || (hoadon.NamHoaDon != namHoaDon))
+            //        {
+            //            chiSoCongDon = 0;
+            //            thangHoaDon = hoadon.ThangHoaDon;
+            //            namHoaDon = hoadon.NamHoaDon;
+            //            tuyenKHID = hoadon.TuyenKHID;
+            //        }
+
+            //        truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
+            //            + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));    
+            //        thue = Math.Round(truocThue*0.05);
+            //        thueBVMT = Math.Round(truocThue * (hoadon.TileBVMT / 100));
+            //        tong = truocThue + thue + thueBVMT;
+            //        chiSoCongDon += tong;
+            //        using (SqlCommand command = new SqlCommand("", connection))
+            //        {
+            //            command.CommandText = "Update Lichsuhoadon SET TruocThue = @truocThue,ThueSuatPrice=@thue,PhiBVMT=@phi,TongCong=@tong,BangChu=@bc,ChiSoCongDon=@cs WHERE HoaDonID = @HoaDonID ";                        
+            //            command.Parameters.AddWithValue("@truocThue", truocThue);
+            //            command.Parameters.AddWithValue("@thue", truocThue);
+            //            command.Parameters.AddWithValue("@phi", thueBVMT);
+            //            command.Parameters.AddWithValue("@tong", tong);
+            //            command.Parameters.AddWithValue("@bc", ConvertMoney.So_chu(tong));
+            //            command.Parameters.AddWithValue("@cs", chiSoCongDon);
+            //            command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonID);
+            //            command.ExecuteNonQuery();
+            //        }                   
+            //    }
+            //    connection.Close();
+            //}
+
+
             ViewBag.beforeFiltered = true;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewData["tuyen"] = new List<Tuyenkhachhang>();

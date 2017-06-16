@@ -30,6 +30,7 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public double KD { get; set; }
         public double KDPrice { get; set; }
         public double PhiVAT { get; set; }
+        public double TileBVMT { get; set; }
         public double PhiBVMT { get; set; }
         public int TTDoc { get; set; }
         public int SanLuong { get; set; }
