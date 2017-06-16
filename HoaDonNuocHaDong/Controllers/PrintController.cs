@@ -649,11 +649,15 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult XemChiTiet(String tuyen, String month, String year)
         {
+            //update tuyen tinh tien            
             int tuyenKHID = Convert.ToInt32(tuyen);
             //Cập nhật trạng thái tính tiền
             int tuyenInt = Convert.ToInt32(tuyen);
             int monthInt = Convert.ToInt32(month);
             int yearInt = Convert.ToInt32(year);
+
+            updateAllHoaDon(tuyen, monthInt, yearInt);
+
             TuyenDuocChot chotTuyen = db.TuyenDuocChots.FirstOrDefault(p => p.TuyenKHID == tuyenInt && p.Thang == monthInt && p.Nam == yearInt);
             if (chotTuyen != null)
             {
