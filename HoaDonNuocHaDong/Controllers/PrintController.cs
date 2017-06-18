@@ -520,51 +520,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult ChiSoTuyen()
         {
-            double truocThue = 0; double thue = 0; double thueBVMT = 0; double tong = 0; double chiSoCongDon = 0;
-            int tuyenKHID = 0; int thangHoaDon = 0; int namHoaDon = 0;
-            var hoadons = db.Lichsuhoadons.OrderBy(p => p.TuyenKHID).OrderBy(p => p.ThangHoaDon).OrderBy(p => p.NamHoaDon).OrderBy(p => p.TTDoc).ToList();
-            //run first time update script
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                foreach (var hoadon in hoadons)
-                {
-                    if ((hoadon.TuyenKHID != tuyenKHID) || (hoadon.ThangHoaDon != thangHoaDon) || (hoadon.NamHoaDon != namHoaDon))
-                    {
-                        chiSoCongDon = 0;
-                        thangHoaDon = hoadon.ThangHoaDon;
-                        namHoaDon = hoadon.NamHoaDon;
-                        tuyenKHID = hoadon.TuyenKHID;
-                        List<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> _hoadons = GetDanhSachHoaDons(tuyenKHID, thangHoaDon, namHoaDon);
-                        foreach (var item in _hoadons)
-                        {
-                            truocThue = Math.Floor((item.SH1 * item.SH1Price) + (item.SH2 * item.SH2Price) + (item.SH3 * item.SH3Price) + (item.SH4 * item.SH4Price)
-                        + (item.CC * item.CCPrice) + (item.HC * item.HCPrice) + (item.SX * item.SXPrice) + (item.KD * item.KDPrice));
-                            thue = Math.Round(truocThue * 0.05);
-                            thueBVMT = Math.Round(truocThue * (item.TileBVMT / 100));
-                            tong = truocThue + thue + thueBVMT;
-                            if (tong > 0)
-                            {
-                                chiSoCongDon += tong;
-                                using (SqlCommand command = new SqlCommand("", connection))
-                                {
-                                    command.CommandText = "Update Lichsuhoadon SET TruocThue = @truocThue,ThueSuatPrice=@thue,PhiBVMT=@phi,TongCong=@tong,BangChu=@bc,ChiSoCongDon=@cs WHERE HoaDonID = @HoaDonID ";
-                                    command.Parameters.AddWithValue("@truocThue", truocThue);
-                                    command.Parameters.AddWithValue("@thue", truocThue);
-                                    command.Parameters.AddWithValue("@phi", thueBVMT);
-                                    command.Parameters.AddWithValue("@tong", tong);
-                                    command.Parameters.AddWithValue("@bc", ConvertMoney.So_chu(tong));
-                                    command.Parameters.AddWithValue("@cs", chiSoCongDon);
-                                    command.Parameters.AddWithValue("@HoaDonID", item.HoaDonID);
-                                    command.ExecuteNonQuery();
-                                }
-                            }
-                        }
-                    }                    
-                }
-                connection.Close();
-            }
-
+           
 
             ViewBag.beforeFiltered = true;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
