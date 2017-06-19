@@ -40,7 +40,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedMonth = DateTime.Now.Month;
             ViewBag.selectedYear = DateTime.Now.Year;
             ViewData["quan"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
-            ViewData["tuyen"] = db.Tuyenkhachhangs.Where(p => p.IsDelete == false).OrderBy(p=>p.Matuyen).ToList();
+            ViewData["tuyen"] = db.Tuyenkhachhangs.OrderBy(p=>p.Matuyen).ToList();
             return View();
         }
 
