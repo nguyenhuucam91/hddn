@@ -28,26 +28,7 @@ namespace HoaDonNuocHaDong.Controllers
             filterContext.HttpContext.Response.Cache.SetNoStore();
             base.OnActionExecuting(filterContext);
 
-            var countDB = db.Nguoidungs.Count();
-            //set up tài khoản admin nếu hệ thống chưa có ai
-            if (countDB == 0)
-            {
-                String firstHash = String.Concat(UserInfo.CreateMD5("123456").ToLower(), "123456");
-                String md5MatKhau = UserInfo.CreateMD5(firstHash);
-
-                Nguoidung _ngDung = new Nguoidung();
-                _ngDung.Taikhoan = "admin";
-                _ngDung.Matkhau = md5MatKhau.ToLower();
-                _ngDung.Isadmin = true;
-                db.Nguoidungs.Add(_ngDung);
-                db.SaveChanges();
-
-                Dangnhap _dangNhap = new Dangnhap();
-                _dangNhap.NguoidungID = _ngDung.NguoidungID;
-                _dangNhap.Solandangnhapsai = 0;
-                db.Dangnhaps.Add(_dangNhap);
-                db.SaveChanges();
-            }
+            
         }
 
         public ActionResult Index()

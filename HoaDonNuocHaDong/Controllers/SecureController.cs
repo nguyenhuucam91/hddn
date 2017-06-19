@@ -1,5 +1,6 @@
 ﻿using HDNHD.Core.Helpers;
 using HDNHD.Models.Constants;
+using HoaDonNuocHaDong.Helper;
 using HoaDonNuocHaDong.Repositories;
 using HoaDonNuocHaDong.Repositories.Interfaces;
 using System;
@@ -16,6 +17,7 @@ namespace HoaDonNuocHaDong.Controllers
         protected INguoiDungRepository nguoiDungRepository;
         protected IDangNhapRepository dangNhapRepository;
         protected BackupRepository backupRepository = new BackupRepository();
+        protected HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
         public SecureController()
         {
@@ -26,6 +28,26 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult Login()
         {
+            var countDB = db.Nguoidungs.Count();
+            //set up tài khoản admin nếu hệ thống chưa có ai
+            if (countDB == 0)
+            {
+                String firstHash = String.Concat(UserInfo.CreateMD5("123456").ToLower(), "123456");
+                String md5MatKhau = UserInfo.CreateMD5(firstHash);
+
+                Nguoidung _ngDung = new Nguoidung();
+                _ngDung.Taikhoan = "admin";
+                _ngDung.Matkhau = md5MatKhau.ToLower();
+                _ngDung.Isadmin = true;
+                db.Nguoidungs.Add(_ngDung);
+                db.SaveChanges();
+
+                Dangnhap _dangNhap = new Dangnhap();
+                _dangNhap.NguoidungID = _ngDung.NguoidungID;
+                _dangNhap.Solandangnhapsai = 0;
+                db.Dangnhaps.Add(_dangNhap);
+                db.SaveChanges();
+            }
             return View();
         }
 
