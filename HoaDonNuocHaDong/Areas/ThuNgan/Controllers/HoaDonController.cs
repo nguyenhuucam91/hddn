@@ -64,11 +64,11 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
 
             items = filter.ApplyFilter(items);
 
-            ViewBag.TongSoTienTrenHoaDon = items.Sum(m => m.SoTienNopTheoThang.SoTienTrenHoaDon);
+            ViewBag.TongSoTienTrenHoaDon = items.Sum(m => m.SoTienTrenHoaDon) ?? 0;
             ViewBag.TongSoTienPhaiNop = items.Sum(m => m.SoTienNopTheoThang.SoTienPhaiNop) ?? 0;
             ViewBag.TongSoTienDaNop = items.Sum(m => m.SoTienNopTheoThang.SoTienDaThu) ?? 0;
-            ViewBag.TongDuNo = items.Where(m => m.DuCo != null).Sum(m => m.DuCo.SoTienDu) ?? 0;
-            ViewBag.TongDuCo = items.Where(m => m.HoaDon.Trangthaithu == null || m.HoaDon.Trangthaithu == false).Sum(m => m.SoTienNopTheoThang.SoTienPhaiNop - m.SoTienNopTheoThang.SoTienDaThu);
+            ViewBag.TongDuCo = items.Where(m => m.DuCo != null).Sum(m => m.DuCo.SoTienDu) ?? 0;
+            ViewBag.TongDuNo = items.Sum(m => m.DuNo) ?? 0;
 
             if (viewMode == ViewMode.Excel)
                 return ExcelResult("IndexExport", items.ToList());

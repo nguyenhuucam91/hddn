@@ -47,7 +47,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                             SoTienNopTheoThang = stntt,
                             DuCo = dco,
                             CoDuNoQuaHan = cnt > 0,
-                            HoaDonTiepTheo = hdTiepTheo
+                            HoaDonTiepTheo = hdTiepTheo,
+                            SoTienTrenHoaDon = stntt.SoTienTrenHoaDon,
+                            DuNo = (long)((hd.Trangthaithu == true) ? 0 : (stntt.SoTienPhaiNop - stntt.SoTienDaThu))
                         };
 
             if (trangThaiIn != null)

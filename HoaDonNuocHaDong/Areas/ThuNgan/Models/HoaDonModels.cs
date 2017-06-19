@@ -10,6 +10,8 @@
         public HDNHD.Models.DataContexts.DuCo DuCo { get; set; } // optional
         public bool CoDuNoQuaHan { get; set; }
         public HDNHD.Models.DataContexts.Hoadonnuoc HoaDonTiepTheo { get; set; }
+        public long? SoTienTrenHoaDon { get; set; }
+        public long? DuNo { get; set; }
     }
 
     public class DuCoModel
