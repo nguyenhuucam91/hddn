@@ -17,32 +17,7 @@
                             <h3>Quản lý loại áp giá</h3>
                         </div>
                         <div class="widget-content">
-                            <!-- Thêm mới loại áp giá sử dụng modal box-->
-                            <div class="controls">
-                                <!-- Button to trigger modal -->
-                                <a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal">Thêm mới loại áp giá</a>
 
-                                <!-- Modal -->
-                                @using (Html.BeginForm("Create", "Loaiapgia"))
-                                {
-                                    @Html.AntiForgeryToken()
-
-                                    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h3 id="myModalLabel">Thêm mới loại áp giá</h3>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Tên loại áp giá</p>
-                                            <p><input class="text-box single-line" id="Ten" required="required" name="Ten" value="" type="text" style="width:98%"></p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-primary">Thêm mới</button>
-                                            <button class="btn" data-dismiss="modal" aria-hidden="true">Hủy</button>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
                             <!-- Bảng loại áp giá -->
                             <table class="example table table-striped table-bordered">
                                 <thead>
@@ -50,10 +25,6 @@
                                         <th>STT</th>
                                         <th>
                                             Loại áp giá
-                                        </th>
-
-                                        <th>
-                                            Hành động
                                         </th>
                                     </tr>
                                 </thead>
@@ -66,13 +37,7 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Ten)
                                             </td>
-                                            <td>
-                                                @Html.ActionLink("Sửa", "Edit", new { id = item.LoaiapgiaID }) |
-                                                @Html.ActionLink("Xóa", "Delete", new { id = item.LoaiapgiaID }, new
-                                           {
-                                               @onclick = "return confirm('Bạn có muốn xóa loại áp giá này không.')"
-                                           })
-                                            </td>
+
                                         </tr>
                                         i++;
                                     }
