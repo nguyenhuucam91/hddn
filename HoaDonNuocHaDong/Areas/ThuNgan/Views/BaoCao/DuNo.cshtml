@@ -91,5 +91,13 @@
             // loadNhanVien
             loadNhanVien($(".sl-nhan-vien"), toID, "@ViewBag.Filter.NhanVienID");
         });
+
+        $(".sl-nhan-vien").on("change", function () {
+            // get selected nhanVien
+            var nhanVienID = $(this).val();
+
+            // loadTuyen
+            loadTuyen($(".sl-tuyen-kh"), nhanVienID, "@ViewBag.Filter.TuyenKHID");
+        });
     </script>
 }

@@ -80,7 +80,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                               where gd.TienNopTheoThangID == stntt.ID
                               where gd.NgayGiaoDich.Value.Year < year || (gd.NgayGiaoDich.Value.Year == year && gd.NgayGiaoDich.Value.Month <= month)
                               select gd).FirstOrDefault()
-                   orderby kh.TuyenKHID, kh.TTDoc, hd.HoadonnuocID descending
+                   let ngayHoaDon = new DateTime(hd.NamHoaDon.Value, hd.ThangHoaDon.Value, 1)
+                   orderby ngayHoaDon, kh.TuyenKHID, kh.TTDoc
                    select new DuNoModel()
                    {
                        HoaDon = hd,

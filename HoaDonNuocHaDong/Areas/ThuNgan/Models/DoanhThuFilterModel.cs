@@ -14,5 +14,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public int? NhanVienID { get; set; }
         public int? TuyenKHID { get; set; }
         public ELoaiKhachHang? LoaiKhachHang { get; set; }
+        public EHinhThucThanhToan? HinhThucThanhToan { get; set; }
     }
 }

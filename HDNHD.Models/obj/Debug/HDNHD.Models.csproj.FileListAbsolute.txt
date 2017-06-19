@@ -14,4 +14,3 @@ F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Models\bin\HDN
 F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Models\bin\HDNHD.Models.pdb
 F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Models\obj\Debug\HDNHD.Models.dll
 F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Models\obj\Debug\HDNHD.Models.pdb
-F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Models\obj\Debug\HDNHD.Models.csprojResolveAssemblyReference.cache

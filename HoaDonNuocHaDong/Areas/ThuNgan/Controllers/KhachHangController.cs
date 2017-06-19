@@ -1,4 +1,5 @@
-﻿using HDNHD.Core.Models;
+﻿using HDNHD.Core.Constants;
+using HDNHD.Core.Models;
 using HDNHD.Models.Constants;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
 using HoaDonNuocHaDong.Areas.ThuNgan.Repositories;
@@ -23,7 +24,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
         /// <summary>
         ///     view list KhachHang with filter 
         /// </summary>
-        public ActionResult Index(KhachHangFilterModel filter, Pager pager)
+        public ActionResult Index(KhachHangFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
         {
             title = "Quản lý Khách hàng";
 
@@ -47,6 +48,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             var items = khachHangRepository.GetAllKhachHangModel();
 
             items = filter.ApplyFilter(items);
+
+            if (viewMode == ViewMode.Excel)
+            {
+                return ExcelResult("IndexExport", items.ToList());
+            }
+
             items = pager.ApplyPager(items);
             
             #region view data

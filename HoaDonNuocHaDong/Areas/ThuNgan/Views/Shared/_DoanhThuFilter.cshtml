@@ -1,4 +1,5 @@
-﻿@using HDNHD.Models.Constants;
+﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.DoanhThuFilterModel
+@using HDNHD.Models.Constants;
 <form method="get" action="">
     <div class="form-horizontal form-filter text-center">
         <div class="form-group">
@@ -6,10 +7,6 @@
             Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Year" style="text-align: center" min="1970" />
         </div>
         <div class="form-group">
-            <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
-            <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
-            <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
-            <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
             <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
                 <option></option>
                 <option value="@ELoaiKhachHang.CoQuanToChuc" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc ? "selected" : "")>= Cơ quan, tổ chức =</option>
@@ -18,6 +15,17 @@
                 <option value="@ELoaiKhachHang.CoQuanDoanhNghiep" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanDoanhNghiep ? "selected" : "")>Cơ quan doanh nghiệp</option>
                 <option value="@ELoaiKhachHang.KhuTapThe" @(Model.LoaiKhachHang == ELoaiKhachHang.KhuTapThe ? "selected" : "")>Khu tập thể (hợp đồng tổng)</option>
             </select>
+            <select class="select2" name="HinhThucThanhToan" data-placeholder="Hình thức thanh toán" data-allow-clear="true">
+                <option></option>
+                <option value="@EHinhThucThanhToan.TienMat" @(Model.HinhThucThanhToan == EHinhThucThanhToan.TienMat ? "selected" : "")>Tiền mặt</option>
+                <option value="@EHinhThucThanhToan.ChuyenKhoan" @(Model.HinhThucThanhToan == EHinhThucThanhToan.ChuyenKhoan ? "selected" : "")>Chuyển khoản</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
+            <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
+            <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
+            <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
         </div>
         <div class="form-group">
             <input type="hidden" name="Mode" value="search" />

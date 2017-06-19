@@ -139,9 +139,11 @@
                                 }
                                 <tfoot>
                                     <tr style="font-weight: bold;">
-                                        <td style="text-align: right;" colspan="6">Tổng số tiền phải nộp</td>
+                                        <td style="text-align: right;" colspan="5">Tổng</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienTrenHoaDon)</td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienPhaiNop)</td>
-                                        <td style="text-align: right;" colspan="3">Tổng số tiền đã thu</td>
+                                        <td style="text-align: right;"><span class="text-error">@CurrencyHelpers.FormatVN(ViewBag.TongDuNo)</span> / <span class="text-success">@CurrencyHelpers.FormatVN(ViewBag.TongDuCo)</span></td>
+                                        <td colspan="2"></td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.TongSoTienDaNop)</td>
                                     </tr>
                                 </tfoot>

@@ -13,6 +13,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public int? TuyenKHID { get; set; }
 
         public ELoaiKhachHang? LoaiKhachHang { get; set; }
+        public EHinhThucThanhToan? HinhThucThanhToan { get; set; }
 
         public override void ApplyFilter(ref IQueryable<DuCoModel> items)
         {
@@ -57,6 +58,11 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 {
                     items = items.Where(m => m.KhachHang.LoaiKHID == (int)LoaiKhachHang.Value);
                 }
+            }
+
+            if (HinhThucThanhToan != null)
+            {
+                items = items.Where(m => m.KhachHang.HinhthucttID == (int)HinhThucThanhToan.Value);
             }
         }
     }

@@ -1,9 +1,7 @@
 ﻿using HDNHD.Core.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using HDNHD.Models.DataContexts;
+using HDNHD.Models.Constants;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {
@@ -13,6 +11,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public int? ToID { get; set; }
         public int? NhanVienID { get; set; }
         public int? TuyenKHID { get; set; }
+
+        public ELoaiKhachHang? LoaiKhachHang { get; set; }
+        public EHinhThucThanhToan? HinhThucThanhToan { get; set; }
 
         public override void ApplyFilter(ref IQueryable<SoTienNopTheoThangModel> items)
         {
@@ -48,6 +49,24 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
             else if (QuanHuyenID != null)
             {
                 query = query.Where(m => m.KhachHang.QuanhuyenID == QuanHuyenID);
+            }
+
+            // loai kh
+            if (LoaiKhachHang != null)
+            {
+                if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
+                {
+                    query = query.Where(m => m.KhachHang.LoaiKHID != (int)ELoaiKhachHang.HoGiaDinh);
+                }
+                else
+                {
+                    query = query.Where(m => m.KhachHang.LoaiKHID == (int)LoaiKhachHang.Value);
+                }
+            }
+
+            if (HinhThucThanhToan != null)
+            {
+                query = query.Where(m => m.KhachHang.HinhthucttID == (int)HinhThucThanhToan.Value);
             }
 
             items = from item in query

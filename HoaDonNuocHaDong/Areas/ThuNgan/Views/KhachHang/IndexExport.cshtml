@@ -1,0 +1,32 @@
+﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangModel>
+@using HDNHD.Core.Extensions;
+@{
+    Layout = null;
+}
+<meta charset="utf-8" />
+<table border="1">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Mã khách hàng</th>
+            <th>Tên khách hàng</th>
+            <th>Địa chỉ</th>
+            <th>Số điện thoại</th>
+            <th>Hình thức thanh toán</th>
+            <th>Thứ tự đọc</th>
+        </tr>
+    </thead>
+    @{ var i = 0; }
+    @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangModel item in Model)
+    {
+        <tr>
+            <td>@(++i)</td>
+            <td>@item.KhachHang.MaKhachHang</td>
+            <td>@item.KhachHang.Ten</td>
+            <td>@item.KhachHang.Diachi</td>
+            <td>@item.KhachHang.Dienthoai</td>
+            <td width="8%" style="text-align: center;">@(((HDNHD.Models.Constants.EHinhThucThanhToan)@item.KhachHang.HinhthucttID).GetDescription())</td>
+            <td width="5%" style="text-align: right;">@item.KhachHang.TTDoc</td>
+        </tr>
+    }
+</table>
