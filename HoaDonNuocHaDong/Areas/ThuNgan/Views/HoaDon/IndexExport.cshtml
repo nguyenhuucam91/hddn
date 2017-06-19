@@ -50,7 +50,13 @@
                 @(item.HoaDon.Trangthaithu == true ? "x" : "")
             </td>
             <td style="mso-number-format:dd\/mm\/yyyy">
-                @(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")
+                @if (item.HoaDon.Trangthaithu == true && item.SoTienNopTheoThang.SoTienDaThu == 0)
+                {
+                }
+                else
+                {
+                    @(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")
+                }
             </td>
             <td style="text-align: right">
                 @item.SoTienNopTheoThang.SoTienDaThu.Value

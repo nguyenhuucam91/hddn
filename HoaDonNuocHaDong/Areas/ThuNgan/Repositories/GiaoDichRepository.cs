@@ -20,10 +20,14 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         {
             return from gd in dc.GiaoDiches
                    where gd.NgayGiaoDich.Value.Month == month && gd.NgayGiaoDich.Value.Year == year
+                   join stntt in dc.SoTienNopTheoThangs on gd.TienNopTheoThangID equals stntt.ID
+                   join hd in dc.Hoadonnuocs on stntt.HoaDonNuocID equals hd.HoadonnuocID
+                   join kh in dc.Khachhangs on hd.KhachhangID equals kh.KhachhangID
                    select new GiaoDichSumModel()
                    {
                        GiaoDich = gd,
-                       SoTien = gd.SoTien
+                       SoTien = gd.SoTien,
+                       IsChuyenKhoan = kh.HinhthucttID == (int) HDNHD.Models.Constants.EHinhThucThanhToan.ChuyenKhoan
                    };
         }
 

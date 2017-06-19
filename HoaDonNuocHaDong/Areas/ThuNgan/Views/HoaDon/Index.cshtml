@@ -108,7 +108,14 @@
                                             }
                                         </td>
                                         <td style="width: 8%">
-                                            <input type="text" class="tbx-ngay-thu" autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
+                                            @if (item.HoaDon.Trangthaithu == true && item.SoTienNopTheoThang.SoTienDaThu == 0)
+                                            {
+                                                <input type="text" class="tbx-ngay-thu" disabled autocomplete="off" style="width: 70px;" />
+                                            }
+                                            else
+                                            {
+                                                <input type="text" class="tbx-ngay-thu" autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
+                                            }
                                         </td>
                                         <td style="text-align: right; width: 12%">
                                             <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu > item.SoTienNopTheoThang.SoTienPhaiNop ? "text-success" : "")">

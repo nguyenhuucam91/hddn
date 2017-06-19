@@ -221,6 +221,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             var giaoDich = giaoDichRepository.GetAllByMonthYear(month.Value, year.Value);
             giaoDich = giaoDichFilter.ApplyFilter(giaoDich);
             ViewBag.SoTienDaThu = giaoDich.Sum(m => m.SoTien) ?? 0;
+            ViewBag.SoTienDaThuChuyenKhoan = giaoDich.Where(m => m.IsChuyenKhoan).Sum(m => m.SoTien) ?? 0;
+            ViewBag.SoTienDaThuTienMat = ViewBag.SoTienDaThu - ViewBag.SoTienDaThuChuyenKhoan;
 
             // dư nợ cuối kỳ
             var duNoCuoiKy = hoaDonRepository.GetAllDuNoModel(month.Value, year.Value);
@@ -237,7 +239,10 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             ViewBag.Year = year.Value;
             ViewBag.Filter = filter;
             #endregion
-            
+
+            if (viewMode == ViewMode.Excel)
+                return ExcelResult("DoanhThuExport");
+
             return View();
         }
     }

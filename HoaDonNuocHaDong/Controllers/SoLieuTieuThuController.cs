@@ -880,12 +880,13 @@ namespace HoaDonNuocHaDong.Controllers
 
             /* congnv 170515 */
             var stntt = db.SoTienNopTheoThangs.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
-            var ducoTruoc = db.DuCoes.FirstOrDefault(m => m.KhachhangID == hoaDon.KhachhangID // dư có trước đó chưa trừ hết
-                && (
-                    m.TrangThaiTruHet == false || // chưa trừ hoặc đã trừ hết cho hóa đơn này trước đó (trong TH cập nhật)
-                    (m.TrangThaiTruHet == true && m.NgayTruHet.Value.Month == hoaDon.ThangHoaDon && m.NgayTruHet.Value.Year == hoaDon.NamHoaDon)
-                )
-            );
+            var ducoTruoc = db.DuCoes.FirstOrDefault(m => m.KhachhangID == hoaDon.KhachhangID && m.TienNopTheoThangID < hoaDon.SoTienNopTheoThangID);
+            //var ducoTruoc = db.DuCoes.FirstOrDefault(m => m.KhachhangID == hoaDon.KhachhangID // dư có trước đó chưa trừ hết
+            //    && (
+            //        m.TrangThaiTruHet == false || // chưa trừ hoặc đã trừ hết cho hóa đơn này trước đó (trong TH cập nhật)
+            //        (m.TrangThaiTruHet == true && m.NgayTruHet.Value.Month == hoaDon.ThangHoaDon && m.NgayTruHet.Value.Year == hoaDon.NamHoaDon)
+            //    )
+            //);
             DuCo duCo = null; // dư có tháng này (trong TH cập nhật)
 
             if (stntt == null)

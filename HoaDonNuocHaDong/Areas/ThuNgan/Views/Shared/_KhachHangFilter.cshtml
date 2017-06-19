@@ -1,4 +1,5 @@
 ﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel
+@using HDNHD.Models.Constants;
 <div class="form-horizontal form-filter text-center">
     <ul class="nav nav-tabs">
         <li class="@(Model.Mode == HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByManagementInfo ? "active": "")"><a data-toggle="tab" href="#tab1">Lọc theo thông tin quản lý</a></li>
@@ -13,6 +14,14 @@
                     <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
                     <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
                     <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
+                    <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
+                        <option></option>
+                        <option value="@ELoaiKhachHang.CoQuanToChuc" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc ? "selected" : "")>= Cơ quan, tổ chức =</option>
+                        <option value="@ELoaiKhachHang.HoGiaDinh" @(Model.LoaiKhachHang == ELoaiKhachHang.HoGiaDinh ? "selected" : "")>Hộ gia đình</option>
+                        <option value="@ELoaiKhachHang.HoKinhDoanhDichVu" @(Model.LoaiKhachHang == ELoaiKhachHang.HoKinhDoanhDichVu ? "selected" : "")>Hộ kinh doanh dịch vụ</option>
+                        <option value="@ELoaiKhachHang.CoQuanDoanhNghiep" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanDoanhNghiep ? "selected" : "")>Cơ quan doanh nghiệp</option>
+                        <option value="@ELoaiKhachHang.KhuTapThe" @(Model.LoaiKhachHang == ELoaiKhachHang.KhuTapThe ? "selected" : "")>Khu tập thể (hợp đồng tổng)</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <input type="hidden" name="Mode" value="@HoaDonNuocHaDong.Areas.ThuNgan.Models.KhachHangFilterModel.FilterByManagementInfo" />

@@ -1,9 +1,7 @@
 ﻿using HDNHD.Core.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using HDNHD.Models.DataContexts;
+using HDNHD.Models.Constants;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {
@@ -13,6 +11,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
         public const string FilterByUserInfo = "FilterByUserInfo";
 
         // filter by management info
+        public ELoaiKhachHang? LoaiKhachHang { get; set; }
         public int? QuanHuyenID { get; set; }
         public int? ToID { get; set; }
         public int? NhanVienID { get; set; }
@@ -56,6 +55,18 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
                 else if (QuanHuyenID != null) // find by QuanHuyenID
                 {
                     items = items.Where(m => m.KhachHang.QuanhuyenID == QuanHuyenID);
+                }
+
+                if (LoaiKhachHang != null)
+                {
+                    if (LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc)
+                    {
+                        items = items.Where(m => m.KhachHang.LoaiKHID != (int)ELoaiKhachHang.HoGiaDinh);
+                    }
+                    else
+                    {
+                        items = items.Where(m => m.KhachHang.LoaiKHID == (int)LoaiKhachHang.Value);
+                    }
                 }
             } 
             

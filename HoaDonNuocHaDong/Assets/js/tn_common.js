@@ -23,7 +23,8 @@
         "bLengthChange": false,
         "bFilter": false,
         "bInfo": false,
-        "bAutoWidth": false
+        "bAutoWidth": false,
+        "ScrollX": "100%"
     });
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]'

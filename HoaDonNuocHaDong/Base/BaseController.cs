@@ -143,7 +143,7 @@ namespace HoaDonNuocHaDong.Base
             base.Dispose(disposing);
         }
 
-        public ViewResult ExcelResult(String view, object data)
+        public ViewResult ExcelResult(String view, object data = null)
         {
             Response.Clear();
             //Response.Buffer = true;

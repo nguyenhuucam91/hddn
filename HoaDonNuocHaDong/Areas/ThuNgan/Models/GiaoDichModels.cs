@@ -17,5 +17,6 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
     {
         public HDNHD.Models.DataContexts.GiaoDich GiaoDich { get; set; }
         public long? SoTien { get; set; }
+        public bool IsChuyenKhoan { get; set; }
     }
 }

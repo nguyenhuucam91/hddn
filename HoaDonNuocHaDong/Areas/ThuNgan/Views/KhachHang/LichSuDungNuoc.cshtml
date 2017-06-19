@@ -19,155 +19,156 @@
                             <li class="active"><a href="@Url.Action("LichSuDungNuoc", new { id = ViewBag.KhachHangModel.KhachHang.KhachhangID})">Lịch sử dùng nước</a></li>
                             <li><a href="@Url.Action("LichSuGiaoDich", new { id = ViewBag.KhachHangModel.KhachHang.KhachhangID})">Lịch sử giao dịch</a></li>
                         </ul>
-                        <div class="tab-content">
-                            <div class="col-md-12">
-                                <h4 class="header-title">Khách hàng: <span class="big">@ViewBag.KhachHangModel.KhachHang.MaKhachHang - @ViewBag.KhachHangModel.KhachHang.Ten</span></h4>
-                                <p>
-                                    <strong>Địa chỉ: </strong>@ViewBag.KhachHangModel.KhachHang.Diachi 
-                                    <br/>
-                                    <strong>Tuyến khách hàng: </strong>@ViewBag.KhachHangModel.TuyenKH.Ten
-                                </p>
-                                <table class="table table-striped table-bordered data-table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Tháng</th>
-                                            <th>CS cũ</th>
-                                            <th>CS mới</th>
-                                            <th>SH1</th>
-                                            <th>SH2</th>
-                                            <th>SH3</th>
-                                            <th>SH4</th>
-                                            <th>HCCC</th>
-                                            <th>SXVC</th>
-                                            <th>KD</th>
-                                            <th>Tổng SL</th>
-                                            <th>Số tiền trên hóa đơn</th>
-                                            <th>Số tiền phải nộp</th>
-                                            <th>Trạng thái thu</th>
-                                            <th>Ngày thu</th>
-                                            <th>Số tiền đã nộp</th>
-                                            <th>Dư nợ</th>
-                                            <th>Dư có</th>
-                                        </tr>
-                                    </thead>
-                                    @{ var stt = 0; long tongDuNo = 0; long tongDuCo = 0; }
-                                    @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
-                                    {
-                                        <tr>
-                                            <td style="text-align: right">@(++stt)</td>
-                                            <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
-                                            <td>@item.LichSuHoaDon.ChiSoCu</td>
-                                            <td>@item.LichSuHoaDon.ChiSoMoi</td>
-                                            <td>@item.LichSuHoaDon.SH1</td>
-                                            <td>@item.LichSuHoaDon.SH2</td>
-                                            <td>@item.LichSuHoaDon.SH3</td>
-                                            <td>@item.LichSuHoaDon.SH4</td>
-                                            <td>@item.LichSuHoaDon.HC</td>
-                                            <td>@item.LichSuHoaDon.SX</td>
-                                            <td>@item.LichSuHoaDon.KD</td>
-                                            <td>@item.LichSuHoaDon.SanLuongTieuThu</td>
-                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.LichSuHoaDon.TongCong)</td>
-                                            <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
-                                            <td style="text-align: center;">
-                                                @if (item.HoaDon.Trangthaithu == true)
+                        <div class="col-md-12">
+                            <h4 class="header-title">Khách hàng: <span class="big">@ViewBag.KhachHangModel.KhachHang.MaKhachHang - @ViewBag.KhachHangModel.KhachHang.Ten</span></h4>
+                            <p>
+                                <strong>Địa chỉ: </strong>@ViewBag.KhachHangModel.KhachHang.Diachi
+                                <br />
+                                <strong>Tuyến khách hàng: </strong>@ViewBag.KhachHangModel.TuyenKH.Ten
+                            </p>
+                            <table class="table table-striped table-bordered data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tháng</th>
+                                        <th>CS cũ</th>
+                                        <th>CS mới</th>
+                                        <th>SH1</th>
+                                        <th>SH2</th>
+                                        <th>SH3</th>
+                                        <th>SH4</th>
+                                        <th>HCCC</th>
+                                        <th>SXVC</th>
+                                        <th>KD</th>
+                                        <th>Tổng SL</th>
+                                        <th>Số tiền trên hóa đơn</th>
+                                        <th>Số tiền phải nộp</th>
+                                        <th>Trạng thái thu</th>
+                                        <th>Ngày thu</th>
+                                        <th>Số tiền đã nộp</th>
+                                        <th>Dư nợ</th>
+                                        <th>Dư có</th>
+                                    </tr>
+                                </thead>
+                                @{ var stt = 0; long tongDuNo = 0; long tongDuCo = 0; }
+                                @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.HoaDonModel item in Model)
+                                {
+                                    <tr>
+                                        <td style="text-align: right">@(++stt)</td>
+                                        <td>@item.HoaDon.ThangHoaDon/@item.HoaDon.NamHoaDon</td>
+                                        <td>@item.LichSuHoaDon.ChiSoCu</td>
+                                        <td>@item.LichSuHoaDon.ChiSoMoi</td>
+                                        <td>@item.LichSuHoaDon.SH1</td>
+                                        <td>@item.LichSuHoaDon.SH2</td>
+                                        <td>@item.LichSuHoaDon.SH3</td>
+                                        <td>@item.LichSuHoaDon.SH4</td>
+                                        <td>@item.LichSuHoaDon.HC</td>
+                                        <td>@item.LichSuHoaDon.SX</td>
+                                        <td>@item.LichSuHoaDon.KD</td>
+                                        <td>@item.LichSuHoaDon.SanLuongTieuThu</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.LichSuHoaDon.TongCong)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienPhaiNop)</td>
+                                        <td style="text-align: center;">
+                                            @if (item.HoaDon.Trangthaithu == true)
+                                            {
+                                                if (item.SoTienNopTheoThang.SoTienDaThu == 0)
                                                 {
-                                                    if (item.SoTienNopTheoThang.SoTienDaThu == 0)
-                                                    {
-                                                        <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                    <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
                                                         <a href="#" data-toggle="tooltip" title="Khách hàng thanh toán trừ dư có." class="text-info"><i class="icon-info-sign"></i></a>
-                                                    }
-                                                    else if (item.KhachHang.HinhthucttID == (int)HDNHD.Models.Constants.EHinhThucThanhToan.ChuyenKhoan)
-                                                    {
-                                                        <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                }
+                                                else if (item.KhachHang.HinhthucttID == (int)HDNHD.Models.Constants.EHinhThucThanhToan.ChuyenKhoan)
+                                                {
+                                                    <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
                                                         <a href="#" data-toggle="tooltip" title="Khách hàng thanh toán qua chuyển khoản. Chuyển khách hàng sang Hình thức thanh toán 'Tiền mặt' để cập nhật." class="text-info"><i class="icon-info-sign"></i></a>
-                                                    }
-                                                    else if (item.HoaDonTiepTheo != null && item.HoaDonTiepTheo.Trangthaithu == true
-                                                        && (item.HoaDon.ThangHoaDon != current.Month || item.HoaDon.NamHoaDon != current.Year))
-                                                    {
-                                                        <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                }
+                                                else if (item.HoaDonTiepTheo != null && item.HoaDonTiepTheo.Trangthaithu == true
+                                                    && (item.HoaDon.ThangHoaDon != current.Month || item.HoaDon.NamHoaDon != current.Year))
+                                                {
+                                                    <input type="checkbox" checked disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
                                                         <a href="#" data-toggle="tooltip" title="Khách hàng đã thanh toán hóa đơn tiếp theo." class="text-info"><i class="icon-info-sign"></i></a>
-                                                    }
-                                                    else if (item.HoaDon.NgayNopTien.Value.Month != DateTime.Now.Month || item.HoaDon.NgayNopTien.Value.Year != DateTime.Now.Year)
-                                                    {
-                                                        <input type="checkbox" checked class="chk-thanh-toan thanh-toan" autocomplete="off" data-confirm="Hóa đơn KHÔNG được thanh toán trong tháng này. Xác nhận hủy?" value="@item.HoaDon.HoadonnuocID" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input type="checkbox" checked class="chk-thanh-toan thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
-                                                    }
+                                                }
+                                                else if (item.HoaDon.NgayNopTien.Value.Month != DateTime.Now.Month || item.HoaDon.NgayNopTien.Value.Year != DateTime.Now.Year)
+                                                {
+                                                    <input type="checkbox" checked class="chk-thanh-toan thanh-toan" autocomplete="off" data-confirm="Hóa đơn KHÔNG được thanh toán trong tháng này. Xác nhận hủy?" value="@item.HoaDon.HoadonnuocID" />
                                                 }
                                                 else
                                                 {
-                                                    if (item.CoDuNoQuaHan)
-                                                    {
-                                                        <input type="checkbox" disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
+                                                    <input type="checkbox" checked class="chk-thanh-toan thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (item.CoDuNoQuaHan)
+                                                {
+                                                    <input type="checkbox" disabled class="thanh-toan" value="@item.HoaDon.HoadonnuocID" />
                                                         <a href="#" data-toggle="tooltip" title="Khách hàng có dư nợ quá hạn cần thanh toán trước." class="text-warning"><i class="icon-info-sign"></i></a>
-                                                    }
-                                                    else
-                                                    {
-                                                        <input type="checkbox" class="chk-thanh-toan thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
-                                                    }
-                                                }
-                                            </td>
-                                            <td width=10%>
-                                                @if (item.HoaDon.Trangthaithu == true && item.SoTienNopTheoThang.SoTienDaThu == 0) {
-                                                    <input type="text" class="tbx-ngay-thu" disabled autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
-                                                } else {
-                                                    <input type="text" class="tbx-ngay-thu" autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
-                                                }
-                                            </td>
-                                            <td style="text-align: right; width: 12%">
-                                                <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu > item.SoTienNopTheoThang.SoTienPhaiNop ? "text-success" : "")">
-                                                    @CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienDaThu)
-                                                </span>
-                                                @if (!item.CoDuNoQuaHan && // không có dư nợ & (tháng hiện tại || (< tháng hiện tại & chưa thu))
-                                                    ((item.HoaDon.ThangHoaDon == current.Month && item.HoaDon.NamHoaDon == current.Year) ||
-                                                    ((item.HoaDon.NamHoaDon < current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon < current.Month))
-                                                        && (item.HoaDon.Trangthaithu == false || item.HoaDon.Trangthaithu == null))))
-                                                {
-                                                    <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm giao dịch">
-                                                        +
-                                                    </a>
                                                 }
                                                 else
                                                 {
-                                                    <span style="display:inline-block; min-width:27px;"></span>
+                                                    <input type="checkbox" class="chk-thanh-toan thanh-toan" autocomplete="off" value="@item.HoaDon.HoadonnuocID" />
                                                 }
-                                            </td>
+                                            }
+                                        </td>
+                                        <td width=10%>
+                                            @if (item.HoaDon.Trangthaithu == true && item.SoTienNopTheoThang.SoTienDaThu == 0)
+                                            {
+                                                <input type="text" class="tbx-ngay-thu" disabled autocomplete="off" style="width: 70px;" />
+                                            }
+                                            else
+                                            {
+                                                <input type="text" class="tbx-ngay-thu" autocomplete="off" value="@(item.HoaDon.NgayNopTien != null ? item.HoaDon.NgayNopTien.Value.ToString("dd/MM/yyyy") : "")" style="width: 70px;" />
+                                            }
+                                        </td>
+                                        <td style="text-align: right; width: 12%">
+                                            <span class="txt-so-tien-da-nop @(item.SoTienNopTheoThang.SoTienDaThu > item.SoTienNopTheoThang.SoTienPhaiNop ? "text-success" : "")">
+                                                @CurrencyHelpers.FormatVN(item.SoTienNopTheoThang.SoTienDaThu)
+                                            </span>
+                                            @if (!item.CoDuNoQuaHan && // không có dư nợ & (tháng hiện tại || (< tháng hiện tại & chưa thu))
+                        ((item.HoaDon.ThangHoaDon == current.Month && item.HoaDon.NamHoaDon == current.Year) ||
+                        ((item.HoaDon.NamHoaDon < current.Year || (item.HoaDon.NamHoaDon == current.Year && item.HoaDon.ThangHoaDon < current.Month))
+                            && (item.HoaDon.Trangthaithu == false || item.HoaDon.Trangthaithu == null))))
+                                            {
+                                                <a href="@Url.Action("ThemGiaoDich", "HoaDon", new { area = "ThuNgan", hoaDonID = @item.HoaDon.HoadonnuocID })" class="btn btn-small btn-them-giao-dich" style="margin-bottom: 8px" title="Thêm giao dịch">
+                                                    +
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span style="display:inline-block; min-width:27px;"></span>
+                                            }
+                                        </td>
 
-                                            <td style="text-align: right;">
-                                                @{ 
-                                                    int duNo = (int)(item.SoTienNopTheoThang.SoTienPhaiNop - item.SoTienNopTheoThang.SoTienDaThu);
+                                        <td style="text-align: right;">
+                                            @{
+                                                int duNo = (int)(item.SoTienNopTheoThang.SoTienPhaiNop - item.SoTienNopTheoThang.SoTienDaThu);
 
-                                                    if (item.HoaDon.Trangthaithu == true)
-                                                    {
-                                                        duNo = 0;
-                                                    }
-
-                                                    tongDuNo += duNo;
+                                                if (item.HoaDon.Trangthaithu == true)
+                                                {
+                                                    duNo = 0;
                                                 }
-                                                @CurrencyHelpers.FormatVN(duNo)
-                                            </td>
-                                            <td style="text-align: right;">
-                                                @{
-                                                    var duCo = item.DuCo != null ? item.DuCo.SoTienDu : 0;
-                                                    tongDuCo += (long) duCo;
+
+                                                tongDuNo += duNo;
+                                            }
+                                            @CurrencyHelpers.FormatVN(duNo)
+                                        </td>
+                                        <td style="text-align: right;">
+                                            @{
+                                                var duCo = item.DuCo != null ? item.DuCo.SoTienDu : 0;
+                                                tongDuCo += (long)duCo;
+                                            }
+                                            @CurrencyHelpers.FormatVN(duCo)
+                                        </td>
+                                    </tr>
                                                 }
-                                                @CurrencyHelpers.FormatVN(duCo)
-                                            </td>
-                                        </tr>
-                                    }
-                                    <tfoot>
-                                        <tr style="font-weight: bold;">
-                                            <td colspan="17" style="text-align:right;">Tổng hiển thị</td>
-                                            <td style="text-align: right">@CurrencyHelpers.FormatVN(tongDuNo)</td>
-                                            <td style="text-align: right">@CurrencyHelpers.FormatVN(tongDuCo)</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                                @Html.Partial("_Pager", (object)ViewBag.Pager)
-                            </div>
+                                <tfoot>
+                                    <tr style="font-weight: bold;">
+                                        <td colspan="17" style="text-align:right;">Tổng hiển thị</td>
+                                        <td style="text-align: right">@CurrencyHelpers.FormatVN(tongDuNo)</td>
+                                        <td style="text-align: right">@CurrencyHelpers.FormatVN(tongDuCo)</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            @Html.Partial("_Pager", (object)ViewBag.Pager)
                         </div>
                     </div>
                 </div>
@@ -219,7 +220,7 @@
             });
 
             /* cập nhật ngày thu */
-            $(".disabled").click(function(e){
+            $(".disabled").click(function (e) {
                 e.preventDefault();
             });
 
