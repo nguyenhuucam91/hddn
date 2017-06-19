@@ -69,7 +69,7 @@ namespace HoaDonNuocHaDong.Repositories
               CC, CCPrice, SX, SXPrice, KD, KDPrice, Thue, TienThueVAT, TileBVMT,
               BVMTPrice, TongCong, bangChu, TTVoOng, ThuNgan, tuyen, TTDoc, chiSoCongDon, ngayBatDau, ngayKetThuc);
             }
-           
+
             try
             {
                 SaveChanges();
@@ -83,7 +83,7 @@ namespace HoaDonNuocHaDong.Repositories
                     {
                         err += validationError.PropertyName + "" + validationError.ErrorMessage;
                     }
-                }                
+                }
             }
         }
 

@@ -69,9 +69,14 @@ $(".dropdown.toAllowClear").select2({
 $(".dropdown.toes").select2({
     placeholder: "Chọn tổ",
 });
+
 $(".dropdown.nhanvien").select2({
     placeholder: "Chọn nhân viên",
+});
 
+$(".dropdown.nhanvienAllowClear").select2({
+    placeholder: "Chọn nhân viên",
+    allowClear: true,
 });
 
 $(".dropdown.tuyen").select2({
@@ -166,7 +171,7 @@ $(".quan").change(function () {
     $.ajax({
         url: '/khachhang/filltobyquan',
         method: "GET",
-        data: { ChiNhanhID: selectedVal},
+        data: { ChiNhanhID: selectedVal },
         success: function (result) {
             $.each(result, function (key, value) {
                 $(".to").append("<option value=" + value.ToID + ">" + (value.ToID + " - " + value.Ten) + "</option>");
@@ -214,6 +219,8 @@ $(".quanAllowClear").change(function () {
             $.each(result, function (key, value) {
                 $(".toAllowClear").append("<option value=" + value.ToID + ">" + (value.ToID + " - " + value.Ten) + "</option>");
             });
+
+            $(".to").change();
         }
     });
 });
@@ -280,34 +287,68 @@ $(".to").change(function () {
     $(".nhanvien").find("option").remove().end();
     $(".tuyen").find("option").remove().end();
     var selectedVal = $(this).val();
-    var nhanVienFirst = 0;
-    $.ajax({
-        url: '/khachhang/FillNhanVienByTo',
-        method: "GET",
-        data: { ToID: selectedVal },
-        success: function (result) {
-            $.each(result, function (key, value) {
-                if (key == 0) {
-                    nhanVienFirst = value.NhanvienID;
-                    $.ajax({
-                        url: '/khachhang/FillTuyen',
-                        method: "GET",
-                        data: { NhanVienID: nhanVienFirst },
-                        success: function (result) {
-                            $.each(result, function (key, value) {
-                                $(".tuyen").append("<option value=" + value.TuyenID + ">" + (value.Matuyen + "-" + value.Ten) + "</option>");
-                            });
-                        }
-                    });
-                }
-                $(".nhanvien").append("<option value=" + value.NhanvienID + ">" + (value.MaNhanVien + " - " + value.Ten) + "</option>");
-                //ajax thứ 2 để load danh sách tuyến dựa theo người đầu tiên
 
-            });
-        }
-    });
+    if (selectedVal != "") {
+        var nhanVienFirst = 0;
+        $.ajax({
+            url: '/khachhang/FillNhanVienByTo',
+            method: "GET",
+            data: { ToID: selectedVal },
+            success: function (result) {
+                $.each(result, function (key, value) {
+                    if (key == 0) {
+                        nhanVienFirst = value.NhanvienID;
+                        $.ajax({
+                            url: '/khachhang/FillTuyen',
+                            method: "GET",
+                            data: { NhanVienID: nhanVienFirst },
+                            success: function (result) {
+                                $.each(result, function (key, value) {
+                                    $(".tuyen").append("<option value=" + value.TuyenID + ">" + (value.Matuyen + "-" + value.Ten) + "</option>");
+                                });
+                            }
+                        });
+                    }
+                    $(".nhanvien").append("<option value=" + value.NhanvienID + ">" + (value.MaNhanVien + " - " + value.Ten) + "</option>");
+                    //ajax thứ 2 để load danh sách tuyến dựa theo người đầu tiên
 
+                });
+            }
+        });
+    }
 });
+
+//$(".tothungan").change(function () {
+//    $(".nhanvien").find("option").remove().end();
+//    $(".tuyen").find("option").remove().end();
+//    var selectedVal = $(this).val();
+//    var nhanVienFirst = 0;
+//    $.ajax({
+//        url: '/khachhang/FillNhanVienByTo',
+//        method: "GET",
+//        data: { ToID: selectedVal },
+//        success: function (result) {
+//            $.each(result, function (key, value) {
+//                if (key == 0) {
+//                    nhanVienFirst = value.NhanvienID;
+//                    $.ajax({
+//                        url: '/khachhang/FillTuyen',
+//                        method: "GET",
+//                        data: { NhanVienID: nhanVienFirst },
+//                        success: function (result) {
+//                            $.each(result, function (key, value) {
+//                                $(".tuyen").append("<option value=" + value.TuyenID + ">" + (value.Matuyen + "-" + value.Ten) + "</option>");
+//                            });
+//                        }
+//                    });
+//                }
+//                $(".nhanvien").append("<option value=" + value.NhanvienID + ">" + (value.MaNhanVien + " - " + value.Ten) + "</option>");
+//                //ajax thứ 2 để load danh sách tuyến dựa theo người đầu tiên
+
+//            });
+//        }
+//    });
+//});
 
 //Khi nhân viên thay đổi thì tuyến thay đổi theo
 $(".nhanvien").change(function () {

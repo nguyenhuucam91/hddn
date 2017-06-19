@@ -480,7 +480,7 @@ namespace HoaDonNuocHaDong.Controllers
             var nhanViens = getNhanViensByTo(ToID);
             if (isAdminAndTruongPhong != ADMIN && isAdminAndTruongPhong != TRUONG_PHONG) //2: Truong phong
             {
-                nhanViens = nhanViens.Where(p => p.ChucvuID == 1).ToList();
+                nhanViens = nhanViens.Where(p => p.ChucvuID == (int)EChucVu.NHAN_VIEN).ToList();
                 return Json(nhanViens, JsonRequestBehavior.AllowGet);
             }
             return Json(nhanViens, JsonRequestBehavior.AllowGet);

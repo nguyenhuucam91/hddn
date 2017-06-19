@@ -6,10 +6,13 @@
     var selectedYear = ViewBag.selectedYear;
     var selectedQuan = ViewBag.selectedQuan;
     var selectedTo = ViewBag.selectedTo;
+    var isThuNgan = ViewBag.isThuNgan;
     List<Tuyenkhachhang> ls = ViewData["tuyen"] as List<Tuyenkhachhang>;
     String title = ViewBag.hasNumber as String;
     var danhSachTo = ViewData["to"] as List<ToQuanHuyen>;
     var xiNghieps = ViewData["xinghiep"] as List<Quanhuyen>;
+    List<Nhanvien> nhanviens = ViewData["nhanviens"] as List<Nhanvien>;
+    var selectedNhanVien = ViewBag.selectedNhanvien;
 }
 <div class="main">
     <div class="main-inner">
@@ -42,7 +45,7 @@
                                         }
                                     </select>
 
-                                    <select class="dropdown form-control toAllowClear" name="to">
+                                    <select class="dropdown form-control toAllowClear to" name="to">
                                         <option></option>
 
                                         @foreach (var item in danhSachTo)
@@ -58,6 +61,26 @@
                                         }
 
                                     </select>
+
+
+                                    @if (isThuNgan == true)
+                                    {
+                                          <!-- Nhân viên -->
+                                        <select class=" dropdown form-control nhanvien" data-allow-clear="true" style="width: 20%; float: left; margin-right: 3%" name="nhanvien">
+                                            <option></option>
+                                            @foreach (var item in nhanviens)
+                                            {
+                                                if (selectedNhanVien == item.NhanvienID)
+                                                {
+                                                    <option value="@item.NhanvienID" selected>@item.MaNhanVien - @item.Ten</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+                                                }
+                                            }
+                                        </select>
+                                    }
 
                                     <input name="thang" value="@selectedMonth" placeholder="Tháng @DateTime.Now.Month" type="number" min="1" max="12" class="form-control" style="margin-bottom:0px !important" />
 
@@ -102,7 +125,7 @@
                                 int STT = 1;
                                 int tongSoHoaDonDaIn = 0;
                                 int tongSoHoaDonChuyenIn = 0;
-                                double tongSoTien = 0;                              
+                                double tongSoTien = 0;
                                         }
                                         @foreach (var item in ls)
                                         {
@@ -131,29 +154,29 @@
                                                                          NgayIn = i.NgayIn
                                                                      });
                                             var soLuongHoaDonDaIn = soLuongHoaDonThuc.Where(p => p.TTIn == true);
-                                            
+
                                             tongSoHoaDonChuyenIn += soLuongHoaDonThuc.Count();
                                             tongSoHoaDonDaIn += soLuongHoaDonDaIn.Count();
-                                            
+
                                             //tổng số tiền của tuyến
                                             var tongSoTienTuyens = (from lshd in db.Lichsuhoadons
-                                                                   join hd in db.Hoadonnuocs on lshd.HoaDonID equals hd.HoadonnuocID
-                                                                   join r in db.Khachhangs on hd.KhachhangID equals r.KhachhangID
-                                                                   where r.TuyenKHID == item.TuyenKHID && hd.ThangHoaDon == monthInt && hd.NamHoaDon == yearInt &&
-                                                                         (hd.Trangthaixoa == false || hd.Trangthaixoa == null) && hd.Trangthaichot == true &&
-                                                                         ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null)
-                                                                         || (r.Ngaycapnuoclai.Value <= DateTime.Now)) && hd.Tongsotieuthu > 0
-                                                                 
-                                                                   select new
-                                                                   {
-                                                                       tongTien = lshd.TongCong
-                                                                   });
-                                                                                                             
+                                                                    join hd in db.Hoadonnuocs on lshd.HoaDonID equals hd.HoadonnuocID
+                                                                    join r in db.Khachhangs on hd.KhachhangID equals r.KhachhangID
+                                                                    where r.TuyenKHID == item.TuyenKHID && hd.ThangHoaDon == monthInt && hd.NamHoaDon == yearInt &&
+                                                                          (hd.Trangthaixoa == false || hd.Trangthaixoa == null) && hd.Trangthaichot == true &&
+                                                                          ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null)
+                                                                          || (r.Ngaycapnuoclai.Value <= DateTime.Now)) && hd.Tongsotieuthu > 0
+
+                                                                    select new
+                                                                    {
+                                                                        tongTien = lshd.TongCong
+                                                                    });
+
 
                                             foreach (var tongSoTienTuyen in tongSoTienTuyens)
                                             {
-                                                tongSoTienTungTuyen += tongSoTienTuyen.tongTien;                                                
-                                            }                                                                                       
+                                                tongSoTienTungTuyen += tongSoTienTuyen.tongTien;
+                                            }
                                             tongSoTien += tongSoTienTungTuyen;
                                             //nếu số lượng khách hàng đã in xong hóa đơn bằng số lượng khách hàng thực
                                             if (soLuongHoaDonThuc.Count() == soLuongHoaDonDaIn.Count())
@@ -180,11 +203,11 @@
                                                     }
                                                     else
                                                     {
-                                                    <td></td>
+                                                        <td></td>
                                                     }
                                                     @if (tongSoTienTungTuyen != null)
                                                     {
-                                                          <td>@String.Format("{0:#,##0.##}", Math.Round(tongSoTienTungTuyen, 0))</td>
+                                                        <td>@String.Format("{0:#,##0.##}", Math.Round(tongSoTienTungTuyen, 0))</td>
                                                     }
                                                 </tr>
                                             }
@@ -207,7 +230,7 @@
                                                     <td></td>
                                                     @if (tongSoTienTungTuyen != null)
                                                     {
-                                                        <td>@String.Format("{0:#,##0.##}", Math.Round(tongSoTienTungTuyen,0))</td>
+                                                        <td>@String.Format("{0:#,##0.##}", Math.Round(tongSoTienTungTuyen, 0))</td>
                                                     }
                                                 </tr>
 

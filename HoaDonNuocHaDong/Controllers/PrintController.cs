@@ -28,7 +28,7 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class PrintController : BaseController
     {
-        private ChiSo cS = new ChiSo();        
+        private ChiSo cS = new ChiSo();
         private HoaDonNuocHaDong.Helper.Tuyen _tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
         public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
         private int printCircumstance = 0;
@@ -99,12 +99,12 @@ namespace HoaDonNuocHaDong.Controllers
                                                                SXPrice = i.SXPrice,
                                                                KD = i.KD,
                                                                KDPrice = i.KDPrice,
-                                                               PhiVAT = i.ThueSuatPrice ,
+                                                               PhiVAT = i.ThueSuatPrice,
                                                                TileBVMT = i.TileBVMT,
                                                                PhiBVMT = i.PhiBVMT,
                                                                TTDoc = i.TTDoc.Value,
                                                                SanLuong = i.SanLuongTieuThu,
-                                                               TongCong = i.TongCong,                                                                          
+                                                               TongCong = i.TongCong,
                                                                TTThuNgan = i.TTThungan,
                                                                TuyenKHID = i.TuyenKHID,
                                                            }).ToList();
@@ -151,7 +151,7 @@ namespace HoaDonNuocHaDong.Controllers
                         connection.Open();
                         command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi, TongCong=@tong, BangChu=@chu, ChiSoCongDon=@chiSo " +
                             "WHERE HoaDonID = @HoaDonID";
-                      
+
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                         if (soHoaDon >= fromReceipt && soHoaDon <= toReceipt)
                         {
@@ -231,7 +231,7 @@ namespace HoaDonNuocHaDong.Controllers
                     truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
                         + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));
                     thueVAT = Math.Round(truocThue * 0.05, 0);
-                    phiBVMT = Math.Round(truocThue * (hoadon.TileBVMT/100),0);
+                    phiBVMT = Math.Round(truocThue * (hoadon.TileBVMT / 100), 0);
                     soTienHoaDon = truocThue + thueVAT + phiBVMT;
                     var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                     using (SqlCommand command = new SqlCommand("", connection))
@@ -246,7 +246,7 @@ namespace HoaDonNuocHaDong.Controllers
                         command.Parameters.AddWithValue("@chu", ConvertMoney.So_chu(soTienHoaDon));
                         command.Parameters.AddWithValue("@chiSo", tongTienCongDon);
                         command.Parameters.AddWithValue("@HoaDonID", hoadon.HoaDonNuoc);
-                        command.ExecuteNonQuery();                       
+                        command.ExecuteNonQuery();
                     }
                     soHoaDon++;
                 }
@@ -278,7 +278,7 @@ namespace HoaDonNuocHaDong.Controllers
                 Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintSelectedPreview(selectedForm, TuyenID, month, year);
             }
-           
+
             return File(str, "application/pdf");
         }
 
@@ -302,12 +302,12 @@ namespace HoaDonNuocHaDong.Controllers
                 Factory.ReportLX2170 report = new Factory.ReportLX2170();
                 str = report.generateReportPrintSelected(selectedForm, TuyenID, month, year);
             }
-            else 
+            else
             {
                 Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintSelected(selectedForm, TuyenID, month, year);
             }
-           
+
             return File(str, "application/pdf");
 
         }
@@ -334,7 +334,7 @@ namespace HoaDonNuocHaDong.Controllers
                                         (r.Trangthaixoa == false || r.Trangthaixoa == null) && r.Trangthaichot == true &&
                                         ((k.Ngayngungcapnuoc == null && k.Ngaycapnuoclai == null) || (k.Ngaycapnuoclai.Value <= DateTime.Now)) &&
                                         p.SanLuongTieuThu > 0
-                                
+
                                  orderby p.TTDoc
                                  select new HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon
                                  {
@@ -382,7 +382,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult PrintPreviewFrom(FormCollection form, int TuyenID, int month, int year)
         {
-            setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);           
+            setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
             int fromSoHoaDon = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
@@ -413,7 +413,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintFromToPreview(fromSoHoaDon, toSoHoaDon, TuyenID, month, year, tuyenKH);
-            }           
+            }
 
             return File(str, "application/pdf");
         }
@@ -433,7 +433,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult PrintFromTo(FormCollection form, int TuyenID, int month, int year)
         {
-            setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);            
+            setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
             int fromSoHoaDon = String.IsNullOrEmpty(form["from"]) ? 1 : Convert.ToInt16(form["from"]);
@@ -446,7 +446,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 toSoHoaDon = danhSachHoaDons.Count();
             }
-           
+
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -463,7 +463,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintFromTo(fromSoHoaDon, toSoHoaDon, TuyenID, month, year, tuyenKH);
-            }           
+            }
 
             return File(str, "application/pdf");
         }
@@ -488,7 +488,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintAllPreview(TuyenID, month, year);
-            }          
+            }
 
             return File(str, "application/pdf");
         }
@@ -514,14 +514,12 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 Factory.ReportTallyGenicom report = new Factory.ReportTallyGenicom();
                 str = report.generateReportPrintAll(TuyenID, month, year);
-            }            
+            }
             return File(str, "application/pdf");
         }
 
         public ActionResult ChiSoTuyen()
         {
-           
-
             ViewBag.beforeFiltered = true;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewData["tuyen"] = new List<Tuyenkhachhang>();
@@ -536,12 +534,17 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
             }
+            bool loggedInUserIsThuNgan = HDNHD.Core.Models.RequestScope.UserRole == EUserRole.ThuNgan ? true : false;
+            int phongBanId = getPhongBanNguoiDung();
 
             #region ViewBag
+            ViewBag.isThuNgan = loggedInUserIsThuNgan;
+            ViewData["nhanviens"] = new List<Nhanvien>();
             ViewBag.selectedQuan = "";
             ViewBag.selectedTo = "";
             ViewBag.selectedMonth = "";
             ViewBag.selectedYear = "";
+            ViewBag.selectedNhanvien = 0;
             #endregion
 
             return View();
@@ -552,17 +555,25 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult ChiSoTuyen(FormCollection form)
         {
             int quanHuyen = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
+            int selectedNhanVien = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
             ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             //lấy danh sách tổ 
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
-
-            if (soLuongQuanHuyen > 0)
+            bool loggedInUserIsThuNgan = HDNHD.Core.Models.RequestScope.UserRole == EUserRole.ThuNgan ? true : false;
+            if (!loggedInUserIsThuNgan)
             {
-                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyen).ToList();
+                if (soLuongQuanHuyen > 0)
+                {
+                    ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyen).ToList();
+                }
+                else
+                {
+                    ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
+                }
             }
             else
             {
-                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH).ToList();
+                ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.THUNGAN).ToList();
             }
 
             int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
@@ -570,41 +581,97 @@ namespace HoaDonNuocHaDong.Controllers
             int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
             int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
 
-            List<Tuyenkhachhang> tuyensKhachHang = new List<Tuyenkhachhang>();
-            //nếu tổ ko đc chọn
-            if (quanHuyen == 0 && to == 0)
+            // filter
+            var tuyensKhachHang = from tuyenDuocChot in db.TuyenDuocChots
+                                  where tuyenDuocChot.Nam == year && tuyenDuocChot.Thang == month
+                                  join tuyenKH in db.Tuyenkhachhangs on tuyenDuocChot.TuyenKHID equals tuyenKH.TuyenKHID
+                                  where tuyenKH.IsDelete == false
+                                  select tuyenKH;
+
+            if (selectedNhanVien != 0)
             {
-                //lấy toàn bộ danh sách tuyến trong hệ thống không lọc                
-                List<TuyenDuocChot> tuyen = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).ToList();
-                foreach (var item in tuyen)
-                {
-                    Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
-                    tuyensKhachHang.Add(tuyenKH);
-                }
+                tuyensKhachHang = from tuyenKH in tuyensKhachHang
+                                  join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
+                                  where tuyenTheoNhanVien.NhanVienID == selectedNhanVien
+                                  select tuyenKH;
             }
-            else
+            else if (to != 0)
             {
-                //Lấy danh sách tuyến trong hệ thống lọc theo tổ
-                List<int> danhSachTuyenThuocTo = _tuyen.getTuyenByTo(to).Select(p => p.TuyenCuaKH).Distinct().ToList();
-                List<int> danhSachTuyenDaChot = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).Select(p => p.TuyenKHID.Value).ToList();
-                foreach (var r in danhSachTuyenThuocTo.Intersect(danhSachTuyenDaChot))
-                {
-                    Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(r);
-                    tuyensKhachHang.Add(tuyen);
-                }
+                tuyensKhachHang = (from tuyenKH in tuyensKhachHang
+                                   join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
+                                   join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
+                                   where nhanVien.ToQuanHuyenID == to
+                                   select tuyenKH).Distinct();
             }
+            else if (quanHuyen != 0)
+            {
+                tuyensKhachHang = (from tuyenKH in tuyensKhachHang
+                                   join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
+                                   join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
+                                   join toQuanHuyen in db.ToQuanHuyens on nhanVien.ToQuanHuyenID equals toQuanHuyen.ToQuanHuyenID
+                                   where toQuanHuyen.QuanHuyenID == quanHuyen
+                                   select tuyenKH).Distinct();
+            }
+
+
+
+            //List<Tuyenkhachhang> tuyensKhachHang = new List<Tuyenkhachhang>();
+
+            ////nếu tổ ko đc chọn
+            ////thu ngân
+            //if (selectedNhanVien == 0)
+            //{
+            //    if (quanHuyen == 0 && to == 0)
+            //    {
+            //        List<TuyenDuocChot> tuyen = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).ToList();
+            //        foreach (var item in tuyen)
+            //        {
+            //            Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
+            //            tuyensKhachHang.Add(tuyenKH);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //Lấy danh sách tuyến trong hệ thống lọc theo tổ
+            //        List<int> danhSachTuyenThuocTo = _tuyen.getTuyenByTo(to).Select(p => p.TuyenCuaKH).Distinct().ToList();
+            //        List<int> danhSachTuyenDaChot = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).Select(p => p.TuyenKHID.Value).ToList();
+            //        foreach (var r in danhSachTuyenThuocTo.Intersect(danhSachTuyenDaChot))
+            //        {
+            //            Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(r);
+            //            tuyensKhachHang.Add(tuyen);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    List<TuyenDuocChot> tuyen = (from tuyenDuocChot in db.TuyenDuocChots
+            //                                 join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenDuocChot.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
+            //                                 where tuyenDuocChot.Nam == year && tuyenDuocChot.Thang == month && tuyenTheoNhanVien.NhanVienID == selectedNhanVien
+            //                                 select tuyenDuocChot).ToList();
+
+            //    foreach (var item in tuyen)
+            //    {
+            //        Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
+            //        tuyensKhachHang.Add(tuyenKH);
+            //    }
+            //}
 
             ViewBag.beforeFiltered = false;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
 
+            int phongBanId = getPhongBanNguoiDung();
+
             #region ViewBag
+            ViewBag.isThuNgan = loggedInUserIsThuNgan;
             ViewBag.selectedQuan = quanHuyen.ToString();
             ViewBag.selectedTo = to.ToString();
             ViewBag.selectedMonth = month;
             ViewBag.selectedYear = year;
+            ViewBag.selectedNhanvien = selectedNhanVien;
+            ViewData["nhanviens"] = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.ToQuanHuyenID == to).ToList();
             #endregion
 
-            ViewData["tuyen"] = tuyensKhachHang;
+            ViewData["tuyen"] = tuyensKhachHang.ToList();
             return View();
         }
 
