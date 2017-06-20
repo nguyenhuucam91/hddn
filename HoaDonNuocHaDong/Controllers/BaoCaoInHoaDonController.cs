@@ -26,7 +26,6 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class BaoCaoInHoaDonController : BaseController
     {
-       
         NguoidungHelper ngDungHelper = new NguoidungHelper();
         BaoCaoSanLuongDoanhThu baoCaoSanLuongDoanhThu = new BaoCaoSanLuongDoanhThu();
         Tuyen tuyenHelper = new Tuyen();
@@ -75,17 +74,24 @@ namespace HoaDonNuocHaDong.Controllers
             //type = 1 => tuyến
             if (type == 1)
             {
-                String dsTuyen = !String.IsNullOrEmpty(form["tuyen"]) ? form["tuyen"] : "";
+                String dsTuyen = !String.IsNullOrEmpty(form["tuyen"]) ? form["tuyen"] : "";                             
 
                 BaoCaoSanLuongDoanhThu bc = cB.Query("BaoCaoSanLuongKinhDoanhTaiVuTheoTuyen",
-                  new SqlParameter("@thang", month),
-                  new SqlParameter("@nam", year),
-                  new SqlParameter("@d2", 0.05),
-                  new SqlParameter("@list", dsTuyen)).First();
+                     new SqlParameter("@thang", month),
+                     new SqlParameter("@nam", year),
+                     new SqlParameter("@d2", 0.05),
+                     new SqlParameter("@list", dsTuyen)).FirstOrDefault();
 
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
                 ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
-                ViewBag.selectedTuyens = "Tuyến "+ tuyenHelper.translateTuyenIDToMaTuyen(dsTuyen);
+                if (String.IsNullOrEmpty(dsTuyen))
+                {
+                    ViewBag.selectedTuyens = "Tất cả các tuyến";
+                }
+                else
+                {
+                    ViewBag.selectedTuyens = "Tuyến " + tuyenHelper.translateTuyenIDToMaTuyen(dsTuyen);
+                }
             }
 
             ViewBag.selectedMonth = month.ToString();
@@ -312,7 +318,14 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
                 ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
-                ViewBag.selectedTuyens = "Tuyến " + tuyenHelper.translateTuyenIDToMaTuyen(tuyens);
+                if (String.IsNullOrEmpty(tuyens))
+                {
+                    ViewBag.selectedTuyens = "Tất cả các tuyến";
+                }
+                else
+                {
+                    ViewBag.selectedTuyens = "Tuyến " + tuyenHelper.translateTuyenIDToMaTuyen(tuyens);
+                }
             }
 
             ViewBag.selectedMonth = "Quý "+quy;
@@ -357,7 +370,14 @@ namespace HoaDonNuocHaDong.Controllers
                            new SqlParameter("@listTuyen", tuyens)).First();
                 ViewData["baoCaoSanLuongDoanhThu"] = bc;
                 ViewBag.tenQuanHuyen = baoCaoSanLuongDoanhThu.getTieuDeSanLuongDoanhThu(0);
-                ViewBag.selectedTuyens = "Tuyến " + tuyenHelper.translateTuyenIDToMaTuyen(tuyens);
+                if (String.IsNullOrEmpty(tuyens))
+                {
+                    ViewBag.selectedTuyens = "Tất cả các tuyến";
+                }
+                else
+                {
+                    ViewBag.selectedTuyens = "Tuyến " + tuyenHelper.translateTuyenIDToMaTuyen(tuyens);
+                }
             }
 
             ViewBag.selectedMonth = "";
