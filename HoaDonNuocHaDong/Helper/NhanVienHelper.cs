@@ -111,7 +111,8 @@ namespace HoaDonNuocHaDong.Helper
             //return tuyensKhachHang;
 
             var tuyens = (from i in _db.Tuyenkhachhangs
-                          select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang
+                          where i.IsDelete == false
+                          select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang                         
                           {
                               MaTuyenKH = i.Matuyen,
                               TenTuyen = i.Ten,

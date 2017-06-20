@@ -28,7 +28,6 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 nhanviens = (from i in db.Nhanviens
                              join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
-                             join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
                              where i.IsDelete == false
                              select new
                              {
@@ -207,7 +206,6 @@ namespace HoaDonNuocHaDong.Controllers
                     tuyenTheoNhanVienMoi.TuyenKHID = selectedTuyen;
                     db.Tuyentheonhanviens.Add(tuyenTheoNhanVienMoi);
                     db.SaveChanges();
-
                 }
             }
             return RedirectToAction("Index");
@@ -328,6 +326,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Edit(int? id)
         {
             String tuyenKHIDList = "";
+            String[] tuyenKH = new String[0];
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -339,16 +338,21 @@ namespace HoaDonNuocHaDong.Controllers
             }
             //lấy tuyến khách hàng của nhân viên
             List<Tuyentheonhanvien> kH = db.Tuyentheonhanviens.Where(p => p.NhanVienID == id).ToList();
-            foreach (var item in kH)
+            if (kH.Count > 0)
             {
-                tuyenKHIDList = tuyenKHIDList + item.TuyenKHID + ",";
+                foreach (var item in kH)
+                {
+                    tuyenKHIDList = tuyenKHIDList + item.TuyenKHID + ",";
+                }
+
+                //Bỏ dấu phẩy ở cuối string
+                if (!String.IsNullOrEmpty(tuyenKHIDList))
+                {
+                    tuyenKHIDList = tuyenKHIDList.Remove(tuyenKHIDList.Length - 1);
+                    tuyenKH = tuyenKHIDList.Split(',');
+                }
             }
-            //Bỏ dấu phẩy ở cuối string
-            if (!String.IsNullOrEmpty(tuyenKHIDList))
-            {
-                tuyenKHIDList = tuyenKHIDList.Remove(tuyenKHIDList.Length - 1);
-            }
-            String[] tuyenKH = tuyenKHIDList.Split(',');
+
 
             int loggedInRole = getLoggedInUserRole();
             if (loggedInRole == 0 || loggedInRole == ChucVuHelper.TRUONGPHONG)
@@ -370,19 +374,24 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag._PhongbanID = new SelectList(db.Phongbans.Where(p => p.PhongbanID == phongBanId), "PhongbanID", "Ten", nhanvien.PhongbanID);
             }
 
+
             List<Models.TuyenKhachHang.TuyenKhachHang> tuyensChuaCoNhanVien = nhanVienHelper.loadTuyenChuaCoNhanVien(phongBanId);
-            foreach (var item in tuyenKH)
-            {
-                Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(Convert.ToInt32(item));
-                Models.TuyenKhachHang.TuyenKhachHang tuyenKhachHang = new Models.TuyenKhachHang.TuyenKhachHang();
-                if (tuyen != null)
-                {
-                    tuyenKhachHang.TuyenKHID = tuyen.TuyenKHID.ToString();
-                    tuyenKhachHang.TenTuyen = tuyen.Ten;
-                    tuyenKhachHang.MaTuyenKH = tuyen.Matuyen;
-                    tuyensChuaCoNhanVien.Add(tuyenKhachHang);
-                }
-            }
+            List<Models.TuyenKhachHang.TuyenKhachHang> dsTuyenDuocLoad = new List<Models.TuyenKhachHang.TuyenKhachHang>();
+            //if (tuyenKH.Count() > 0)
+            //{
+            //    foreach (var item in tuyenKH)
+            //    {
+            //        Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(Convert.ToInt32(item));
+            //        Models.TuyenKhachHang.TuyenKhachHang tuyenKhachHang = new Models.TuyenKhachHang.TuyenKhachHang();
+            //        if (tuyen != null)
+            //        {
+            //            tuyenKhachHang.TuyenKHID = tuyen.TuyenKHID.ToString();
+            //            tuyenKhachHang.TenTuyen = tuyen.Ten;
+            //            tuyenKhachHang.MaTuyenKH = tuyen.Matuyen;
+            //            dsTuyenDuocLoad.Add(tuyenKhachHang);
+            //        }
+            //    }
+            //}
             int phongbanId = getPhongBanNguoiDung();
             if (phongbanId == 0)
             {
@@ -497,6 +506,30 @@ namespace HoaDonNuocHaDong.Controllers
             nhanvien.IsDelete = true;
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult quickAssignNhanvienChoTuyen()
+        {
+            return View("QuickAssign");
+        }
+
+        [HttpPost]
+        public ActionResult quickAssign(FormCollection form)
+        {
+            int nhanVienId = String.IsNullOrEmpty(form["nhanvienid"]) ? 0 : Convert.ToInt32(form["nhanvienid"]);
+            String[] tuyens = form["tuyen"].Split(',');
+            List<Tuyentheonhanvien> tuyenTheoNhanViens = db.Tuyentheonhanviens.Where(p=>p.NhanVienID == nhanVienId).ToList();
+            db.Tuyentheonhanviens.RemoveRange(tuyenTheoNhanViens);
+            foreach(var tuyen in tuyens)
+            {
+                int tuyenKHID = Convert.ToInt32(tuyen);                
+                Tuyentheonhanvien tuyenNhanVien = new Tuyentheonhanvien();
+                tuyenNhanVien.TuyenKHID = tuyenKHID;
+                tuyenNhanVien.NhanVienID = nhanVienId;
+                db.Tuyentheonhanviens.Add(tuyenNhanVien);
+                db.SaveChanges();
+            }
+            return RedirectToAction("quickAssignNhanvienChoTuyen");
         }
 
         protected override void Dispose(bool disposing)
