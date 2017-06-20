@@ -6,7 +6,7 @@
             Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Month" style="text-align: center" min="1" max="12" />
             Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Year" style="text-align: center" min="1970" />
         </div>
-        <div class="form-group">
+        @*<div class="form-group">
             <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
                 <option></option>
                 <option value="@ELoaiKhachHang.CoQuanToChuc" @(Model.LoaiKhachHang == ELoaiKhachHang.CoQuanToChuc ? "selected" : "")>= Cơ quan, tổ chức =</option>
@@ -20,7 +20,7 @@
                 <option value="@EHinhThucThanhToan.TienMat" @(Model.HinhThucThanhToan == EHinhThucThanhToan.TienMat ? "selected" : "")>Tiền mặt</option>
                 <option value="@EHinhThucThanhToan.ChuyenKhoan" @(Model.HinhThucThanhToan == EHinhThucThanhToan.ChuyenKhoan ? "selected" : "")>Chuyển khoản</option>
             </select>
-        </div>
+        </div>*@
         <div class="form-group">
             <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
             <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>

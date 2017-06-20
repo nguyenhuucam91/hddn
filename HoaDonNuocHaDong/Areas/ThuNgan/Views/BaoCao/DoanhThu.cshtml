@@ -15,6 +15,7 @@
                             <table class="table table-striped table-bordered data-table">
                                 <thead>
                                     <tr>
+                                        <th rowspan="2" width="12%"></th>
                                         <th rowspan="2">Dư nợ đầu kỳ</th>
                                         <th rowspan="2">Dư có đầu kỳ</th>
                                         <th rowspan="2">HĐ in trong tháng</th>
@@ -31,13 +32,38 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td><strong>Hộ GĐ</strong></td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoDauKyHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoDauKyHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienTrenHoaDonHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienPhaiThuHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuChuyenKhoanHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuTienMatHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoCuoiKyHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoCuoiKyHoGD)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cơ quan tổ chức</strong></td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoDauKy - ViewBag.DuNoDauKyHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoDauKy - ViewBag.DuCoDauKyHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienTrenHoaDon - ViewBag.SoTienTrenHoaDonHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienPhaiThu - ViewBag.SoTienPhaiThuHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuChuyenKhoan - ViewBag.SoTienDaThuChuyenKhoanHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuTienMat - ViewBag.SoTienDaThuTienMatHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThu - ViewBag.SoTienDaThuHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoCuoiKy - ViewBag.DuNoCuoiKyHoGD)</td>
+                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoCuoiKy - ViewBag.DuCoCuoiKyHoGD)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tổng cộng</strong></td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoDauKy)</td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoDauKy)</td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienTrenHoaDon)</td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienPhaiThu)</td>
-                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuChuyenKhoan)</td>
-                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuTienMat)</td>
-                                        <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThu)</td>
+                                        <td style="text-align: right;"><strong>@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuChuyenKhoan)</strong></td>
+                                        <td style="text-align: right;"><strong>@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThuTienMat)</strong></td>
+                                        <td style="text-align: right;"><strong>@CurrencyHelpers.FormatVN(ViewBag.SoTienDaThu)</strong></td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuNoCuoiKy)</td>
                                         <td style="text-align: right;">@CurrencyHelpers.FormatVN(ViewBag.DuCoCuoiKy)</td>
                                     </tr>

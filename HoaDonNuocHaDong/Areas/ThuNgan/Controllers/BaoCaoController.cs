@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using HDNHD.Core.Repositories.Interfaces;
+using HDNHD.Models.Constants;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
 {
@@ -198,7 +199,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
                 prevMonth = 12;
                 prevYear--;
             }
-            
+
+            #region Tổng
             // dư nợ đầu kỳ
             var duNoDauKy = hoaDonRepository.GetAllDuNoModel(prevMonth.Value, prevYear.Value);
             duNoDauKy = duNoFilter.ApplyFilter(duNoDauKy);
@@ -233,6 +235,43 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             var duCoCuoiKy = duCoRepository.GetAllDuCoModel(month.Value, year.Value);
             duCoCuoiKy = duCoFilter.ApplyFilter(duCoCuoiKy);
             ViewBag.DuCoCuoiKy = duCoCuoiKy.Sum(m => m.SoTien) ?? 0;
+            #endregion
+
+            #region Hộ gia đình
+            duNoFilter.LoaiKhachHang = ELoaiKhachHang.HoGiaDinh;
+            duCoFilter.LoaiKhachHang = ELoaiKhachHang.HoGiaDinh;
+            soTienNopTheoThangFilter.LoaiKhachHang = ELoaiKhachHang.HoGiaDinh;
+            giaoDichFilter.LoaiKhachHang = ELoaiKhachHang.HoGiaDinh;
+            
+            // dư nợ đầu kỳ
+            duNoDauKy = duNoFilter.ApplyFilter(duNoDauKy);
+            ViewBag.DuNoDauKyHoGD = duNoDauKy.Sum(m => m.SoTienNo) ?? 0;
+
+            // dư có đầu kỳ
+            duCoDauKy = duCoFilter.ApplyFilter(duCoDauKy);
+            ViewBag.DuCoDauKyHoGD = duCoDauKy.Sum(m => m.SoTien) ?? 0;
+
+            // hóa đơn in trong tháng (tháng hóa đơn - 1)
+            soTienNopTheoThang = soTienNopTheoThangFilter.ApplyFilter(soTienNopTheoThang);
+            ViewBag.SoTienTrenHoaDonHoGD = soTienNopTheoThang.Sum(m => m.SoTienTrenHoaDon) ?? 0;
+
+            // số tiền phải thu
+            ViewBag.SoTienPhaiThuHoGD = soTienNopTheoThang.Sum(m => m.SoTienPhaiNop) ?? 0;
+
+            // số tiền đã thu 
+            giaoDich = giaoDichFilter.ApplyFilter(giaoDich);
+            ViewBag.SoTienDaThuHoGD = giaoDich.Sum(m => m.SoTien) ?? 0;
+            ViewBag.SoTienDaThuChuyenKhoanHoGD = giaoDich.Where(m => m.IsChuyenKhoan).Sum(m => m.SoTien) ?? 0;
+            ViewBag.SoTienDaThuTienMatHoGD = ViewBag.SoTienDaThu - ViewBag.SoTienDaThuChuyenKhoan;
+
+            // dư nợ cuối kỳ
+            duNoCuoiKy = duNoFilter.ApplyFilter(duNoCuoiKy);
+            ViewBag.DuNoCuoiKyHGD = duNoCuoiKy.Sum(m => m.SoTienNo) ?? 0;
+
+            // dư có cuối kỳ
+            duCoCuoiKy = duCoFilter.ApplyFilter(duCoCuoiKy);
+            ViewBag.DuCoCuoiKyHoGD = duCoCuoiKy.Sum(m => m.SoTien) ?? 0;
+            #endregion
 
             #region viewdata
             ViewBag.Month = month.Value;
