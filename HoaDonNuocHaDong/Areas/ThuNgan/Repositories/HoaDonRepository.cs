@@ -65,7 +65,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         /// </summary>
         public IQueryable<DuNoModel> GetAllDuNoModel(int month, int year)
         {
-            var hds = GetAll();
+            var hds = GetAll().Where(m => m.Trangthaiin == true);
 
             var dtHoaDon = new DateTime(year, month, 1).AddMonths(-1);
 
