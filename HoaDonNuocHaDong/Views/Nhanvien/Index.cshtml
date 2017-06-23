@@ -79,9 +79,8 @@
                                             @{
                                         String cssClassQuan = isAdmin == "1" ? "quanAllowClear" : "quan";
                                             }
-                                            <select class="dropdown form-control @cssClassQuan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
+                                            <select class="dropdown form-control @cssClassQuan nhanvien-quan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
                                                 <!-- Option mặc định -->
-                                                <option selected disabled></option>
                                                 @foreach (var item in chiNhanh)
                                                 {
                                                     if (item.QuanhuyenID == selectedQuan)
@@ -95,28 +94,11 @@
                                                 }
                                             </select>
 
-                                            <!-- To quan huyen -->
-                                            <select class="dropdown form-control toAllowClear" style="width: 20%; float: left; margin-right: 3%" name="to">
-                                                <option selected disabled></option>
-                                                @foreach (var item in toQuanHuyens)
-                                                {
-                                                    if (item.ToQuanHuyenID == selectedTo)
-                                                    {
-                                                        <option value="@item.ToQuanHuyenID" selected>@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
-                                                    }
-                                                }
-                                            </select>
-
-
                                             @if (isAdmin == "1")
                                             {
                                             <!-- Phòng ban-->
-                                                <select class="dropdown form-control phongBan" style="width: 20%; float: left; margin-right: 3%" name="phongban">
-                                                    <option selected disabled></option>
+                                                <select class="dropdown nhanvien-phongban" style="width: 20%; float: left; margin-right: 3%" name="phongban">
+
                                                     @foreach (var phongBan in phongBans)
                                                     {
                                                         if (phongBan.PhongbanID == selectedPhongBan)
@@ -130,6 +112,23 @@
                                                     }
                                                 </select>
                                             }
+
+                                            <!-- To quan huyen -->
+                                            <select class="dropdown form-control to" style="width: 20%; float: left; margin-right: 3%" name="to">
+
+                                                @foreach (var item in toQuanHuyens)
+                                                {
+                                                    if (item.ToQuanHuyenID == selectedTo)
+                                                    {
+                                                        <option value="@item.ToQuanHuyenID" selected>@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                                    }
+                                                }
+                                            </select>
+
                                             <button class="btn btn-default">Tìm kiếm</button>
 
                                         </div>
@@ -205,7 +204,7 @@
         $("input[type='checkbox']").change(function () {
             var highlightColor = "#eca45a ";
             if ($(this).is(':checked')) {
-                
+
                 $(this).closest('tr').css('background-color', highlightColor);
                 $("input[type='checkbox']").hide();
                 $(this).show();

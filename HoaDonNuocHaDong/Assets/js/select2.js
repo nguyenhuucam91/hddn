@@ -17,6 +17,10 @@ $(".dropdown.nhanvien-quan").select2({
     placeholder: "Chọn quận",
 });
 
+$(".dropdown.nhanvien-phongban").select2({
+    placeholder: "Chọn phòng ban",    
+});
+
 $('.allowClear').select2({
     placeholder: "Chọn một",
     allowClear: true,

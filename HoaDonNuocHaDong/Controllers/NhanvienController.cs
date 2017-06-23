@@ -26,8 +26,7 @@ namespace HoaDonNuocHaDong.Controllers
             List<Nhanvien> nhanviens = new List<Nhanvien>();
             if (phongBanId == 0)
             {
-                nhanviens = (from i in db.Nhanviens
-                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                nhanviens = (from i in db.Nhanviens                             
                              where i.IsDelete == false
                              select new
                              {

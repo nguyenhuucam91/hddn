@@ -97,30 +97,30 @@ namespace HoaDonNuocHaDong.Controllers
 
         // GET: /Tuyen/Details/5
         public ActionResult Details(int? id)
-        {
-            if (id == null)
+        {           
+            Tuyenkhachhang tuyenkhachhang = db.Tuyenkhachhangs.Find(id);
+            int loggedInUserDepartment = getPhongBanNguoiDung();
+            if (tuyenkhachhang == null || id == null)
             {
                 return HttpNotFound();
             }
-            Tuyenkhachhang tuyenkhachhang = db.Tuyenkhachhangs.Find(id);
-            Tuyentheonhanvien tuyenTheoNhanVien = db.Tuyentheonhanviens.FirstOrDefault(p => p.TuyenKHID == id);
+
+            var tuyenTheoNhanVien = (from i in db.Tuyentheonhanviens
+                                                   join r in db.Nhanviens on i.NhanVienID equals r.NhanvienID
+                                                   where i.TuyenKHID == id && r.PhongbanID == loggedInUserDepartment
+                                                   select new { 
+                                                   NhanVienID = i.NhanVienID,
+                                                   }).FirstOrDefault();
             if (tuyenTheoNhanVien != null)
-            {
-                ViewBag.selectedNhanVien = tuyenTheoNhanVien.NhanVienID;
-                ViewBag._nhanVien = db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+            {               
+                ViewBag.nhanVien = db.Nhanviens.Where(p=>p.NhanvienID == tuyenTheoNhanVien.NhanVienID).First();
             }
-            //nếu ko có thì load tất cả ra
+            //nếu ko có thì load ds nhân viên có trong hệ thống ra
             else
             {
-                ViewBag._nhanVien = db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
-            }
-            if (tuyenkhachhang == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false || p.IsDelete == null), "CumdancuID", "Ten", tuyenkhachhang.CumdancuID);
-
-            ViewBag.ToID = new SelectList(db.Toes, "ToID", "Ten", tuyenkhachhang.ToID);
+                ViewBag.nhanVien = null;
+            }                      
+            
             return View(tuyenkhachhang);
         }
 

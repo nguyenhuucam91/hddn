@@ -16,7 +16,6 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class BaoCaoKinhDoanhController : BaseController
     {
-        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         HoaDonNuocHaDong.Helper.ApGiaHelper apGia = new HoaDonNuocHaDong.Helper.ApGiaHelper();
         HoaDonHaDong.Helper.ChiSo chiSo = new HoaDonHaDong.Helper.ChiSo();
 

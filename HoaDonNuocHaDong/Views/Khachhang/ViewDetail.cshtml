@@ -3,7 +3,7 @@
     ViewBag.Title = "Xem chi tiết thông tin khách hàng";
 
     var kiemDinh = ViewBag.kiemDinh as List<HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel>;
-    var ttChiSo = ViewBag.ttChiSo;
+    var ttChiSo = ViewData["ttChiSo"] as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
 }
 
 <div class="main">
@@ -274,6 +274,7 @@
                                         <table class="table table-striped example" border="0" style="width:100%">
                                             <thead>
                                                 <tr>
+                                                    <th>STT</th>
                                                     <th>Ngày hóa đơn</th>
                                                     <th>Chỉ số cũ</th>
                                                     <th>Chỉ số mới</th>
@@ -291,33 +292,27 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @i = 1;
                                                 @foreach (var item in ttChiSo)
                                                 {
-                                                   
-                                                    int HoaDonNuocID = Convert.ToInt32(item.GetType().GetProperty("HoaDonID").GetValue(item, null));
-                                                    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-                                                    var lichSuHoaDon = db.Lichsuhoadons.Where(p => p.HoaDonID == HoaDonNuocID).FirstOrDefault();
-                                                    double tongCong = 0;
-                                                    if (lichSuHoaDon != null)
-                                                    {
-                                                        tongCong = lichSuHoaDon.TongCong;
-                                                    }
-                                                    
+                                                                                        
                                                     <tr>
-                                                        <td>@item.GetType().GetProperty("NgayHoaDon").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("ChiSoCu").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("ChiSoMoi").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("SanLuong").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("SH1").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("SH2").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("SH3").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("SH4").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("HC").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("CC").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("KDDV").GetValue(item, null)</td>
-                                                        <td>@item.GetType().GetProperty("SXXD").GetValue(item, null)</td>
-                                                        <td>@String.Format("{0:n0}",tongCong)</td>
+                                                        <td>@i</td>
+                                                        <td>@item.ThangNamHoaDon</td>
+                                                        <td>@item.ChiSoCu</td>
+                                                        <td>@item.ChiSoMoi</td>
+                                                        <td>@item.SanLuong</td>
+                                                        <td>@item.SH1</td>
+                                                        <td>@item.SH2</td>
+                                                        <td>@item.SH3</td>
+                                                        <td>@item.SH4</td>
+                                                        <td>@item.HC</td>
+                                                        <td>@item.CC</td>
+                                                        <td>@item.KDDV</td>
+                                                        <td>@item.SXXD</td>
+                                                        <td>@String.Format("{0:n0}", item.TongCong)</td>
                                                     </tr>
+                                                    i++;
                                                 }
                                             </tbody>
                                         </table>

@@ -31,6 +31,7 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
         public String KDDV { get; set; }
         public int Thang { get; set; }
         public int Nam { get; set; }
+        public String ThangNamHoaDon { get; set; }
         public int KHID { get; set; }
         public String SoHoaDon { get; set; }
 
@@ -39,5 +40,7 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
 
         public DateTime? NgayNgungCapNuoc { get; set; }
         public DateTime? NgayCapNuocLai { get; set; }
+
+        public double TongCong { get; set; }
     }
 }

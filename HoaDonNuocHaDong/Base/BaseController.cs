@@ -33,7 +33,7 @@ namespace HoaDonNuocHaDong.Base
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
+            
             INhanVienRepository nhanVienRepository = uow.Repository<NhanVienRepository>();
             IPhongBanRepository phongBanRepository = uow.Repository<PhongBanRepository>();
 
