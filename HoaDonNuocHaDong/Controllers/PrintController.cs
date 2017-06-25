@@ -598,7 +598,7 @@ namespace HoaDonNuocHaDong.Controllers
                 tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thang, nam);
             }
 
-            if (String.IsNullOrEmpty(tuKhoaTimKiem))
+            if (!String.IsNullOrEmpty(tuKhoaTimKiem))
             {
                 tuyens = tuyens.Where(p => p.MaTuyenKH == tuKhoaTimKiem || p.TenTuyen.Contains(tuKhoaTimKiem));
             }
@@ -611,19 +611,20 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewBag.isThuNgan = loggedInUserIsThuNgan;
             ViewBag.selectedQuan = quan;
-            ViewBag.selectedTo = to.ToString();
+            ViewBag.selectedTo = to;
             ViewBag.selectedMonth = thang;
             ViewBag.selectedYear = nam;
             ViewBag.selectedNhanvien = nhanvien;
             ViewData["nhanviens"] = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.ToQuanHuyenID == to).ToList();
             ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
-            #endregion
+            
             int pageSize = 1;
             int pageNumber = page != 0 ? page : 0;
-
-            return View();
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            #endregion
+            return View(tuyens.ToPagedList(pageNumber, pageSize));            
         }
-
 
 
         public ActionResult XemChiTiet(String tuyen, String month, String year)

@@ -1,4 +1,30 @@
 ﻿$(document).ready(function () {
+
+    $('.reset-default-datatable').DataTable({
+        /*"dom": 'lBfrtip',
+        "buttons": [
+            {
+                extend: 'collection',
+                text: 'Export',
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    'pdf',
+                    'print'
+                ]
+            }
+        ],   */
+        "language": {
+            
+            "info": "Hiển thị trang _PAGE_ / _PAGES_",
+            "infoEmpty": "Không có bản ghi",
+            "search": "Tìm kiếm",            
+            "emptyTable": "Không có dữ liệu trong bảng"
+        },        
+
+    });
+
     $('.example').DataTable({
         /*"dom": 'lBfrtip',
         "buttons": [
