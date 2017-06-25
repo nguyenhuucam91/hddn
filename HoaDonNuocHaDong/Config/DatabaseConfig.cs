@@ -9,7 +9,7 @@ namespace HoaDonNuocHaDong.Config
 {
     public class DatabaseConfig
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+        private static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
         public string getCurrentDatabaseInitialCatalog()
         {
             System.Data.SqlClient.SqlConnectionStringBuilder builder = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
@@ -19,6 +19,10 @@ namespace HoaDonNuocHaDong.Config
                 return databaseInitialDialog;
             }
             return "";
+        }
+
+        public static String getConnectionString(){
+            return connectionString;
         }
     }
 }

@@ -23,6 +23,10 @@ using System.Configuration;
 using HoaDonNuocHaDong.Models.InHoaDon;
 using HDNHD.Models.Constants;
 using System.Runtime.Serialization;
+using PagedList;
+using HvitFramework;
+using HoaDonNuocHaDong.Models.SoLieuTieuThu;
+using HoaDonNuocHaDong.Models.TuyenKhachHang;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -99,6 +103,7 @@ namespace HoaDonNuocHaDong.Controllers
                                                                SXPrice = i.SXPrice,
                                                                KD = i.KD,
                                                                KDPrice = i.KDPrice,
+                                                               TruocThue = i.TruocThue.Value,
                                                                PhiVAT = i.ThueSuatPrice,
                                                                TileBVMT = i.TileBVMT,
                                                                PhiBVMT = i.PhiBVMT,
@@ -493,7 +498,7 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult PrintCrystalReport(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult printAll(FormCollection form, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
             updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, null);
@@ -518,13 +523,12 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult ChiSoTuyen()
+        public ActionResult ChiSoTuyen(int? quan, int? to, int? thang , int? nam , int page = 1)
         {
-            ViewBag.beforeFiltered = true;
-            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
-            ViewData["tuyen"] = new List<Tuyenkhachhang>();
-            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            int thangDuocChon = thang == null ? DateTime.Now.Month : thang.Value;
+            int namDuocChon = nam == null ? DateTime.Now.Year : nam.Value;
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+            IEnumerable<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> tuyens = new List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot>();
             if (soLuongQuanHuyen > 0)
             {
                 Quanhuyen quanHuyenDauTien = db.Quanhuyens.FirstOrDefault(p => p.IsDelete == false);
@@ -537,34 +541,47 @@ namespace HoaDonNuocHaDong.Controllers
             bool loggedInUserIsThuNgan = HDNHD.Core.Models.RequestScope.UserRole == EUserRole.ThuNgan ? true : false;
             int phongBanId = getPhongBanNguoiDung();
 
+            if (thang != null)
+            {
+                tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thangDuocChon, namDuocChon);
+            }
+
+            //số lượng hóa đơn thực của tuyến đó          
+
             #region ViewBag
             ViewBag.isThuNgan = loggedInUserIsThuNgan;
             ViewData["nhanviens"] = new List<Nhanvien>();
-            ViewBag.selectedQuan = "";
-            ViewBag.selectedTo = "";
-            ViewBag.selectedMonth = "";
-            ViewBag.selectedYear = "";
+            ViewBag.selectedQuan = quan;
+            ViewBag.selectedTo = to;
+            ViewBag.selectedMonth = thangDuocChon;
+            ViewBag.selectedYear = namDuocChon;
             ViewBag.selectedNhanvien = 0;
+            ViewBag.beforeFiltered = false;
+            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
+         
+            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             #endregion
-
-            return View();
+            int pageSize = 10;
+            int pageNumber = page != 0 ? page : 0;
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            return View(tuyens.ToPagedList(pageNumber, pageSize));
         }
 
 
         [HttpPost]
-        public ActionResult ChiSoTuyen(FormCollection form)
-        {
-            int quanHuyen = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
-            int selectedNhanVien = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
-            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+        public ActionResult ChiSoTuyen(FormCollection form, int? quan, int? to, int? nhanvien, int? thang, int? nam, int page = 1)
+        {            
+            String tuKhoaTimKiem = form["tukhoa"];
             //lấy danh sách tổ 
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+            IEnumerable<TuyenKhachHangDuocChot> tuyens = new List<TuyenKhachHangDuocChot>();
             bool loggedInUserIsThuNgan = HDNHD.Core.Models.RequestScope.UserRole == EUserRole.ThuNgan ? true : false;
             if (!loggedInUserIsThuNgan)
             {
                 if (soLuongQuanHuyen > 0)
                 {
-                    ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyen).ToList();
+                    ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quan).ToList();
                 }
                 else
                 {
@@ -576,102 +593,34 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.THUNGAN).ToList();
             }
 
-            int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-            //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
-            int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
-            int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
-
-            // filter
-            var tuyensKhachHang = from tuyenDuocChot in db.TuyenDuocChots
-                                  where tuyenDuocChot.Nam == year && tuyenDuocChot.Thang == month
-                                  join tuyenKH in db.Tuyenkhachhangs on tuyenDuocChot.TuyenKHID equals tuyenKH.TuyenKHID
-                                  where tuyenKH.IsDelete == false
-                                  select tuyenKH;
-
-            if (selectedNhanVien != 0)
+            if (thang != null)
             {
-                tuyensKhachHang = from tuyenKH in tuyensKhachHang
-                                  join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                  where tuyenTheoNhanVien.NhanVienID == selectedNhanVien
-                                  select tuyenKH;
-            }
-            else if (to != 0)
-            {
-                tuyensKhachHang = (from tuyenKH in tuyensKhachHang
-                                   join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                   join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
-                                   where nhanVien.ToQuanHuyenID == to
-                                   select tuyenKH).Distinct();
-            }
-            else if (quanHuyen != 0)
-            {
-                tuyensKhachHang = (from tuyenKH in tuyensKhachHang
-                                   join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                   join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
-                                   join toQuanHuyen in db.ToQuanHuyens on nhanVien.ToQuanHuyenID equals toQuanHuyen.ToQuanHuyenID
-                                   where toQuanHuyen.QuanHuyenID == quanHuyen
-                                   select tuyenKH).Distinct();
+                tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thang, nam);
             }
 
+            if (String.IsNullOrEmpty(tuKhoaTimKiem))
+            {
+                tuyens = tuyens.Where(p => p.MaTuyenKH == tuKhoaTimKiem || p.TenTuyen.Contains(tuKhoaTimKiem));
+            }
 
-
-            //List<Tuyenkhachhang> tuyensKhachHang = new List<Tuyenkhachhang>();
-
-            ////nếu tổ ko đc chọn
-            ////thu ngân
-            //if (selectedNhanVien == 0)
-            //{
-            //    if (quanHuyen == 0 && to == 0)
-            //    {
-            //        List<TuyenDuocChot> tuyen = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).ToList();
-            //        foreach (var item in tuyen)
-            //        {
-            //            Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
-            //            tuyensKhachHang.Add(tuyenKH);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        //Lấy danh sách tuyến trong hệ thống lọc theo tổ
-            //        List<int> danhSachTuyenThuocTo = _tuyen.getTuyenByTo(to).Select(p => p.TuyenCuaKH).Distinct().ToList();
-            //        List<int> danhSachTuyenDaChot = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).Select(p => p.TuyenKHID.Value).ToList();
-            //        foreach (var r in danhSachTuyenThuocTo.Intersect(danhSachTuyenDaChot))
-            //        {
-            //            Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(r);
-            //            tuyensKhachHang.Add(tuyen);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    List<TuyenDuocChot> tuyen = (from tuyenDuocChot in db.TuyenDuocChots
-            //                                 join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenDuocChot.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-            //                                 where tuyenDuocChot.Nam == year && tuyenDuocChot.Thang == month && tuyenTheoNhanVien.NhanVienID == selectedNhanVien
-            //                                 select tuyenDuocChot).ToList();
-
-            //    foreach (var item in tuyen)
-            //    {
-            //        Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
-            //        tuyensKhachHang.Add(tuyenKH);
-            //    }
-            //}
-
-            ViewBag.beforeFiltered = false;
-            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
 
             int phongBanId = getPhongBanNguoiDung();
 
             #region ViewBag
+            ViewBag.beforeFiltered = false;
+            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewBag.isThuNgan = loggedInUserIsThuNgan;
-            ViewBag.selectedQuan = quanHuyen.ToString();
+            ViewBag.selectedQuan = quan;
             ViewBag.selectedTo = to.ToString();
-            ViewBag.selectedMonth = month;
-            ViewBag.selectedYear = year;
-            ViewBag.selectedNhanvien = selectedNhanVien;
+            ViewBag.selectedMonth = thang;
+            ViewBag.selectedYear = nam;
+            ViewBag.selectedNhanvien = nhanvien;
             ViewData["nhanviens"] = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.ToQuanHuyenID == to).ToList();
+            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             #endregion
+            int pageSize = 1;
+            int pageNumber = page != 0 ? page : 0;
 
-            ViewData["tuyen"] = tuyensKhachHang.ToList();
             return View();
         }
 

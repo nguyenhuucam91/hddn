@@ -29,6 +29,7 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public double SXPrice { get; set; }
         public double KD { get; set; }
         public double KDPrice { get; set; }
+        public double TruocThue { get; set; }
         public double PhiVAT { get; set; }
         public double TileBVMT { get; set; }
         public double PhiBVMT { get; set; }

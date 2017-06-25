@@ -153,7 +153,7 @@
                                 </tbody>
                             </table>
 
-                            @Html.PagedListPager(Model, page => Url.Action("Index",
+                             @Html.PagedListPager(Model, page => Url.Action("Index",
     new {nhanvien = selectedNhanvien, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
                         </div>

@@ -1,6 +1,10 @@
 ﻿using HoaDonNuocHaDong;
+using HoaDonNuocHaDong.Config;
+using HoaDonNuocHaDong.Models.TuyenKhachHang;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -10,6 +14,7 @@ namespace HoaDonNuocHaDong.Helper
     {
         static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
+
 
         /// <summary>
         /// Lấy tên nhân viên theo tuyến ID
@@ -70,14 +75,14 @@ namespace HoaDonNuocHaDong.Helper
                 tuyensKhachHang = tuyenTheoNhanVien.Select(p => p.TuyenKhachHang);
             }
             //nếu không sẽ tiến hành lọc tuyến theo chi nhánh
-            if(nhanVienId == null || nhanVienId == 0)
+            if (nhanVienId == null || nhanVienId == 0)
             {
                 tuyensKhachHang = _db.Tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID);
             }
             return tuyensKhachHang;
         }
 
-       
+
 
         public int getNhanVienIDTuTuyen(int tuyenID)
         {
@@ -103,7 +108,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public List<Models.TuyenKhachHang.TuyenKhachHang> getTuyenByTo(int ToID)
         {
-          
+
             var dsTuyen = (from i in _db.Tuyentheonhanviens
                            join r in _db.Nhanviens on i.NhanVienID equals r.NhanvienID
                            join t in _db.Tuyenkhachhangs on i.TuyenKHID equals t.TuyenKHID
@@ -120,7 +125,7 @@ namespace HoaDonNuocHaDong.Helper
         }
 
         public string getMaTuyenById(int TuyenKHID)
-        {            
+        {
             Tuyenkhachhang tuyen = _db.Tuyenkhachhangs.Find(TuyenKHID);
             if (tuyen != null)
             {
@@ -137,11 +142,54 @@ namespace HoaDonNuocHaDong.Helper
             {
                 int tuyenId = Convert.ToInt32(item);
                 Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(tuyenId);
-                if (tuyen != null) {
-                    maTuyens += tuyen.Matuyen+",";
+                if (tuyen != null)
+                {
+                    maTuyens += tuyen.Matuyen + ",";
                 }
             }
             return maTuyens.Trim(',');
-        }     
+        }
+
+        public IEnumerable<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> getDanhSachTuyensDuocChot(int? quanHuyen, int? to, int? selectedNhanVien, int? month, int? year)
+        {
+
+            var tuyensKhachHangDuocChot = (from i in db.TuyenDuocChots
+                                           join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
+                                           where r.IsDelete == false && i.Thang == month && i.Nam == year
+                                           select new TuyenKhachHangDuocChot
+                                           {
+                                               TuyenKHID = i.TuyenKHID.Value,
+                                               MaTuyenKH = r.Matuyen,
+                                               TenTuyen = r.Ten,
+                                               TrangThaiTinhTien = true,
+                                           }).ToList();
+
+            if (quanHuyen != 0)
+            {
+                tuyensKhachHangDuocChot = (from tuyenKH in tuyensKhachHangDuocChot
+                                           join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
+                                           join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
+                                           join toQuanHuyen in db.ToQuanHuyens on nhanVien.ToQuanHuyenID equals toQuanHuyen.ToQuanHuyenID
+                                           where toQuanHuyen.QuanHuyenID == quanHuyen
+                                           select tuyenKH).ToList();
+            }
+            if (to != 0)
+            {
+                tuyensKhachHangDuocChot = (from tuyenKH in tuyensKhachHangDuocChot
+                                           join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
+                                           join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
+                                           where nhanVien.ToQuanHuyenID == to
+                                           select tuyenKH).ToList();
+            }
+            if (selectedNhanVien != null)
+            {
+                tuyensKhachHangDuocChot = (from tuyenKH in tuyensKhachHangDuocChot
+                                           join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
+                                           where tuyenTheoNhanVien.NhanVienID == selectedNhanVien
+                                           select tuyenKH).ToList();
+            }
+
+            return tuyensKhachHangDuocChot.AsEnumerable();
+        }
     }
 }

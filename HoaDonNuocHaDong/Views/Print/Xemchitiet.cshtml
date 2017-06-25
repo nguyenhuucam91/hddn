@@ -17,6 +17,7 @@
     var selectedYear = Request.QueryString["year"];
     //danh sách khách hàng tính tiền
     var dsKH = ViewBag.dsachKH as List<HoaDonNuocHaDong.Models.InHoaDon.TuyenTinhTien>;
+    var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");    
 }
 
 <div class="main">
@@ -45,7 +46,7 @@
 
                                     <!-- Print all -->
                                     <div class="tab-content tab-pane active" id="printAll">
-                                        <form action="/Print/ChiSoTuyen" method="post">
+                                        <form action="/Print/ChiSoTuyen" method="get">
                                             <input type="hidden" value="@Request.QueryString["quan"]" name="quan" />
                                             <input type="hidden" value="@Request.QueryString["to"]" name="to" />
                                             <input type="hidden" value="@Request.QueryString["month"]" name="thang" />
@@ -61,7 +62,7 @@
                                             </button>
                                         </form>
 
-                                        <form action="@Url.Action("PrintCrystalReport", "Print", new {
+                                        <form action="@Url.Action("PrintAll", "Print", new {
                                                                                                    @TuyenID = ViewBag.selectedTuyen,
                                                                                                    @month = selectedMonth,
                                                                                                    @year = selectedYear })" method="post">
@@ -74,7 +75,7 @@
 
                                     <!-- Print selected -->
                                     <div class="tab-content tab-pane" id="printSelected">
-                                        <form action="/Print/ChiSoTuyen" method="post">
+                                        <form action="/Print/ChiSoTuyen" method="get">
                                             <input type="hidden" value="@Request.QueryString["quan"]" name="quan" />
                                             <input type="hidden" value="@Request.QueryString["to"]" name="to" />
                                             <input type="hidden" value="@Request.QueryString["month"]" name="thang" />
@@ -102,7 +103,7 @@
                                     <!-- Print from receipt to receipt -->
                                     <div class="tab-content tab-pane choose-print-machine" id="printFromReceiptToReceipt">
 
-                                        <form action="/Print/ChiSoTuyen" method="post">
+                                        <form action="/Print/ChiSoTuyen" method="get">
                                             <input type="hidden" value="@Request.QueryString["quan"]" name="quan" />
                                             <input type="hidden" value="@Request.QueryString["to"]" name="to" />
                                             <input type="hidden" value="@Request.QueryString["month"]" name="thang" />
@@ -235,15 +236,11 @@
                                             <td>@item.NgayBatDau</td>
                                             <td>@item.NgayKetThuc</td>
                                             <td>@item.TTDoc</td>
-                                            <td>@item.SanLuong</td>
-                                            @{
-                                        double Sum = item.SH1Price * item.SH1 + item.SH2Price * item.SH2 + item.SH3Price * item.SH3 + item.SH4Price * item.SH4 +
-                                            item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
-                                            }
-                                            <td>@String.Format("{0:#,##0.##}", Math.Floor(Sum))</td>
-                                            <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiVAT, 0))</td>
-                                            <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiBVMT, 0))</td>
-                                            <td style="color:blue">@String.Format("{0:#,##0.##}", item.TongCong)</td>
+                                            <td>@item.SanLuong</td>                                            
+                                            <td>@item.TruocThue.ToString("0,000", brazilianCulture)</td>
+                                            <td>@item.PhiVAT.ToString("0,000", brazilianCulture)</td>
+                                            <td>@item.PhiBVMT.ToString("0,000", brazilianCulture)</td>
+                                            <td style="color:blue">@item.TongCong.ToString("0,000", brazilianCulture)</td>
                                         </tr>
                                         i++;
                                     }

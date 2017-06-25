@@ -1,5 +1,8 @@
-﻿using System;
+﻿using HoaDonNuocHaDong.Config;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -37,10 +40,13 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
 
         public DateTime? NgayKiHopDong { get; set; }
         public bool TrangThaiChot { get; set; }
+        public bool TrangThaiIn { get; set; }
+        public DateTime ngayIn { get; set; }
 
         public DateTime? NgayNgungCapNuoc { get; set; }
         public DateTime? NgayCapNuocLai { get; set; }
 
-        public double TongCong { get; set; }
+        public double TongCong { get; set; }       
+
     }
 }
