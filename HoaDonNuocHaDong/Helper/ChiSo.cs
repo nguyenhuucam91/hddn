@@ -114,8 +114,7 @@ namespace HoaDonHaDong.Helper
                                join m in _db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
                                where i.ThangHoaDon == month && i.NamHoaDon == year && 
                                      r.TuyenKHID == tuyenKHID.Value && 
-                                      (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != month && r.Ngaythanhly.Value.Year != year))&&
-                                     
+                                      (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != month && r.Ngaythanhly.Value.Year != year))&&                                     
                                      (i.Trangthaixoa == false || i.Trangthaixoa == null) 
                                orderby r.TTDoc
                                select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc

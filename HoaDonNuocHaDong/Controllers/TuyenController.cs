@@ -12,20 +12,22 @@ using System.Data.Entity.Validation;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using HDNHD.Models.Constants;
+using System.Diagnostics;
+using PagedList;
 
 namespace HoaDonNuocHaDong.Controllers
 {
     public class TuyenController : BaseController
     {
-
+        HoaDonNuocHaDong.Helper.Tuyen tuyenHelper = new HoaDonNuocHaDong.Helper.Tuyen();
         // GET: /Tuyen/
-        public ActionResult Index()
+        public ActionResult Index(int? nhanvien, int page = 1)
         {
             int quanHuyenId = getQuanHuyenOfLoggedInUser();
             int phongBanId = getPhongBanNguoiDung();
-            var isAdmin = LoggedInUser.Isadmin;
-            List<Nhanvien> nhanViens = new List<Nhanvien>();
-            if (!isAdmin.Value)
+           
+            var nhanViens = new List<Nhanvien>();
+            if (!LoggedInUser.Isadmin.Value)
             {
                 nhanViens = (from i in db.Nhanviens
                              join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
@@ -38,66 +40,58 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                nhanViens = (from i in db.Nhanviens
-                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID                             
-                             select new
-                             {
-                                 nhanvien = i
-                             }).Select(p => p.nhanvien).ToList();
+                nhanViens = db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             }
-            var tuyenkhachhangs = db.Tuyenkhachhangs.Where(p => p.IsDelete == false || p.IsDelete == null).Include(t => t.Cumdancu).Include(t => t.To);
-            ViewBag._nhanVien = nhanViens;
-            return View(tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID).ToList());
+
+            int pageSize = 50;
+            int pageNumber = page != 0 ? page : 0;
+            IEnumerable<Tuyenkhachhang> tuyensKhachHang = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien);
+
+
+            ViewData["nhanVien"] = nhanViens;
+            ViewBag.pageSize = pageSize;
+            ViewBag.selectedNhanvien = nhanvien;
+
+            return View(tuyensKhachHang.OrderByDescending(p=>p.TuyenKHID).ToPagedList(page, pageSize));
         }
 
 
         [HttpPost]
-        public ActionResult Index(FormCollection form)
-        {
-
-            String nhanVien = form["nhanvien"];
+        public ActionResult Index(FormCollection form, int? nhanvien, int page = 1)
+        {           
+            String tuKhoaTimKiem = form["tukhoa"];
 
             IEnumerable<Tuyenkhachhang> tuyenkhachhangs = null;
+            var nhanVienFilter = new List<Nhanvien>();
             int phongBanId = getPhongBanNguoiDung();
             //nếu trống thì chọn tất cả
             if (LoggedInUser.Isadmin.Value)
             {
-                var nhanVienFilter = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
-                ViewBag._nhanVien = nhanVienFilter;
+                nhanVienFilter = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
+                ViewData["nhanVien"] = nhanVienFilter;
             }
             else
             {
-                var nhanVienFilter = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId).ToList();
-                ViewBag._nhanVien = nhanVienFilter;
+                nhanVienFilter = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId).ToList();
+                ViewData["nhanVien"] = nhanVienFilter;
             }
 
-            if (String.IsNullOrEmpty(nhanVien))
+            tuyenkhachhangs = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien);
+
+            if (!String.IsNullOrEmpty(tuKhoaTimKiem))
             {
-                tuyenkhachhangs = db.Tuyenkhachhangs.Include(t => t.Cumdancu).Include(t => t.To).OrderByDescending(p => p.TuyenKHID);
-                ViewBag.chiNhanh = db.Chinhanhs;
-                return View(tuyenkhachhangs.ToList());
+                tuyenkhachhangs = tuyenkhachhangs.Where(p => p.Matuyen == tuKhoaTimKiem || p.Ten.Contains(tuKhoaTimKiem));
             }
-            //nếu không sẽ tiến hành lọc tuyến theo chi nhánh
-            else
-            {
-                int nhanVienID = Convert.ToInt32(nhanVien);
-                var tuyenTheoNhanVien = (from p in db.Tuyentheonhanviens
-                                         join r in db.Tuyenkhachhangs on p.TuyenKHID equals r.TuyenKHID
-                                         join s in db.Nhanviens on p.NhanVienID equals s.NhanvienID
-                                         where p.NhanVienID == nhanVienID
-                                         select new
-                                         {
-                                             TuyenKhachHang = r
-                                         });
-                tuyenkhachhangs = tuyenTheoNhanVien.Select(p => p.TuyenKhachHang);
-                //nếu để trống thì chọn tất cả                
-                return View(tuyenkhachhangs.ToList());
-            }
+            int pageSize = 50;
+            int pageNumber = page != 0 ? page : 0;
+            ViewBag.pageSize = pageSize;
+            ViewBag.selectedNhanvien = nhanvien;
+            return View(tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: /Tuyen/Details/5
         public ActionResult Details(int? id)
-        {           
+        {
             Tuyenkhachhang tuyenkhachhang = db.Tuyenkhachhangs.Find(id);
             int loggedInUserDepartment = getPhongBanNguoiDung();
             if (tuyenkhachhang == null || id == null)
@@ -106,21 +100,22 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             var tuyenTheoNhanVien = (from i in db.Tuyentheonhanviens
-                                                   join r in db.Nhanviens on i.NhanVienID equals r.NhanvienID
-                                                   where i.TuyenKHID == id && r.PhongbanID == loggedInUserDepartment
-                                                   select new { 
-                                                   NhanVienID = i.NhanVienID,
-                                                   }).FirstOrDefault();
+                                     join r in db.Nhanviens on i.NhanVienID equals r.NhanvienID
+                                     where i.TuyenKHID == id && r.PhongbanID == loggedInUserDepartment
+                                     select new
+                                     {
+                                         NhanVienID = i.NhanVienID,
+                                     }).FirstOrDefault();
             if (tuyenTheoNhanVien != null)
-            {               
-                ViewBag.nhanVien = db.Nhanviens.Where(p=>p.NhanvienID == tuyenTheoNhanVien.NhanVienID).First();
+            {
+                ViewBag.nhanVien = db.Nhanviens.Where(p => p.NhanvienID == tuyenTheoNhanVien.NhanVienID).First();
             }
             //nếu ko có thì load ds nhân viên có trong hệ thống ra
             else
             {
                 ViewBag.nhanVien = null;
-            }                      
-            
+            }
+
             return View(tuyenkhachhang);
         }
 

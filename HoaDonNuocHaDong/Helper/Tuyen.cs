@@ -54,15 +54,30 @@ namespace HoaDonNuocHaDong.Helper
             return "";
         }
 
-        public IQueryable<Tuyenkhachhang> getDanhSachTuyenByNhanVien(int nhanVienID)
+        public IEnumerable<Tuyenkhachhang> getDanhSachTuyensByNhanVien(int? nhanVienId)
         {
-            var tuyenTheoNhanVien = from i in _db.Tuyentheonhanviens
-                                    join r in _db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                                    join s in _db.Nhanviens on i.NhanVienID equals s.NhanvienID
-                                    where i.NhanVienID == nhanVienID
-                                    select r;
-            return tuyenTheoNhanVien;
+            IEnumerable<Tuyenkhachhang> tuyensKhachHang = null;
+            if (nhanVienId != 0)
+            {
+                var tuyenTheoNhanVien = (from p in _db.Tuyentheonhanviens
+                                         join r in _db.Tuyenkhachhangs on p.TuyenKHID equals r.TuyenKHID
+                                         join s in _db.Nhanviens on p.NhanVienID equals s.NhanvienID
+                                         where p.NhanVienID == nhanVienId
+                                         select new
+                                         {
+                                             TuyenKhachHang = r
+                                         });
+                tuyensKhachHang = tuyenTheoNhanVien.Select(p => p.TuyenKhachHang);
+            }
+            //nếu không sẽ tiến hành lọc tuyến theo chi nhánh
+            if(nhanVienId == null || nhanVienId == 0)
+            {
+                tuyensKhachHang = _db.Tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID);
+            }
+            return tuyensKhachHang;
         }
+
+       
 
         public int getNhanVienIDTuTuyen(int tuyenID)
         {

@@ -1,6 +1,7 @@
 ﻿using HoaDonNuocHaDong.Base;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -12,7 +13,7 @@ namespace HoaDonNuocHaDong.Controllers
     {
         public ActionResult Index()
         {
-            title = "Công ty TNHH một thành viên nước sạch Hà Đông";
+            title = "Công ty TNHH một thành viên nước sạch Hà Đông";            
             return View();
         }
 

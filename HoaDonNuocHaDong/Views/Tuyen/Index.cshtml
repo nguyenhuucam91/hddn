@@ -1,10 +1,12 @@
-﻿@model IEnumerable<HoaDonNuocHaDong.Tuyenkhachhang>
-
+﻿@model PagedList.IPagedList<Tuyenkhachhang>
+@using PagedList;
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Danh sách tuyến khách hàng";
-
-    var nhanVien = ViewBag._nhanVien;
+    var nhanVien = ViewData["nhanVien"] as List<Nhanvien>;
     HoaDonNuocHaDong.Helper.Tuyen tuyenHelper = new HoaDonNuocHaDong.Helper.Tuyen();
+    int pageSize = ViewBag.pageSize;
+    var selectedNhanvien = ViewBag.selectedNhanvien;
 }
 
 <div class="main">
@@ -63,7 +65,7 @@
 
                             <!-- Bộ lọc để lọc dữ liệu -->
                             <div style="margin:2% 0 2% 0">
-                                @using (Html.BeginForm("Index", "Tuyen", FormMethod.Post))
+                                @using (Html.BeginForm("Index", "Tuyen", FormMethod.Get))
                                 {
                                     <div class="form-group">
                                         <!-- Nhân viên -->
@@ -72,7 +74,14 @@
                                             <!-- Option mặc định -->
                                             @foreach (var item in nhanVien)
                                             {
-                                                <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+                                                if (item.NhanvienID == selectedNhanvien)
+                                                {
+                                                     <option value="@item.NhanvienID" selected>@item.MaNhanVien - @item.Ten</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.NhanvienID">@item.MaNhanVien - @item.Ten</option>
+                                                }
                                             }
                                         </select>
 
@@ -84,8 +93,18 @@
                                     </div>
                                 }
                             </div>
+
+                            <div class="pull-right">                                
+                                    @using (Html.BeginForm("Index", "Tuyen", new { nhanvien = selectedNhanvien}, FormMethod.Post, new { @class = "form-inline" }))
+                                    {
+                                        <div class="form-group pull-left">
+                                            <input type="text" class="form-control" placeholder="Nhập tên tuyến hoặc mã tuyến" name="tukhoa" />
+                                        </div>
+                                        <button type="submit" class="btn btn-warning" style="margin-left:12px">Tìm kiếm</button>
+                                    }                               
+                            </div>
                             <!-- Bảng tuyến -->
-                            <table class="example table table-striped table-bordered">
+                            <table class="table table-bordered reset-default-datatable">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -94,19 +113,21 @@
                                         <th>
                                             Tên tuyến
                                         </th>
-
                                         <th>
                                             Hành động
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @{int i = 1;}
+                                    @{
+                                        int i = 1;
+                                        int currentPage = String.IsNullOrEmpty(Request.QueryString["page"]) ? 1 : Convert.ToInt32(Request.QueryString["page"]);
+                                    }
                                     @foreach (var item in Model)
                                     {
                                         <tr>
                                             <td><input type="checkbox" name="check" data-page="1" value="@item.TuyenKHID" /></td>
-                                            <td>@i</td>
+                                            <td>@((currentPage - 1) * pageSize + i)</td>
                                             <td>@Html.DisplayFor(modelItem => item.Matuyen)</td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Ten)
@@ -131,6 +152,10 @@
                                     }
                                 </tbody>
                             </table>
+
+                            @Html.PagedListPager(Model, page => Url.Action("Index",
+    new {nhanvien = selectedNhanvien, page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
                         </div>
                     </div>
                 </div>
