@@ -15,8 +15,7 @@ namespace HoaDonNuocHaDong.Controllers
     {
         protected AdminUnitOfWork adminUow;
         protected INguoiDungRepository nguoiDungRepository;
-        protected IDangNhapRepository dangNhapRepository;
-        protected BackupRepository backupRepository = new BackupRepository();
+        protected IDangNhapRepository dangNhapRepository;        
         protected HoaDonHaDongEntities db = new HoaDonHaDongEntities();
 
         public SecureController()
@@ -97,9 +96,7 @@ namespace HoaDonNuocHaDong.Controllers
                             var cookie = new HttpCookie(Cookies.B_ADMIN_LOGIN_TOKEN, AuthHelpers.MD5(nguoiDung.NguoidungID.ToString()));
                             cookie.Expires = DateTime.Now.AddDays(31);
                             cookie.Path = "/"; // make cookie available across applications
-                            Response.Cookies.Add(cookie);
-
-                            backupRepository.applyBackupProcess(nguoiDung.NguoidungID);
+                            Response.Cookies.Add(cookie);                           
 
                             // redirect
                             if (prevUrl != null)

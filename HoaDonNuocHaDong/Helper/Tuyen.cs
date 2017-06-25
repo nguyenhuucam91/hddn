@@ -152,7 +152,6 @@ namespace HoaDonNuocHaDong.Helper
 
         public IEnumerable<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> getDanhSachTuyensDuocChot(int? quanHuyen, int? to, int? selectedNhanVien, int? month, int? year)
         {
-
             var tuyensKhachHangDuocChot = (from i in db.TuyenDuocChots
                                            join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
                                            where r.IsDelete == false && i.Thang == month && i.Nam == year
@@ -161,7 +160,7 @@ namespace HoaDonNuocHaDong.Helper
                                                TuyenKHID = i.TuyenKHID.Value,
                                                MaTuyenKH = r.Matuyen,
                                                TenTuyen = r.Ten,
-                                               TrangThaiTinhTien = true,
+                                               TrangThaiTinhTien = i.TrangThaiTinhTien.Value,
                                            }).ToList();
 
             if (quanHuyen != 0)
