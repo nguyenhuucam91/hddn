@@ -59,7 +59,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Index(FormCollection form, int? nhanvien, int page = 1)
         {           
-            String tuKhoaTimKiem = form["tukhoa"];
+            String tuKhoaTimKiem = form["tukhoa"].ToLower();
 
             IEnumerable<Tuyenkhachhang> tuyenkhachhangs = null;
             var nhanVienFilter = new List<Nhanvien>();
