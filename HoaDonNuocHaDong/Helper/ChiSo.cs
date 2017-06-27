@@ -108,8 +108,7 @@ namespace HoaDonHaDong.Helper
         /// <param name="year"></param>
         /// <returns></returns>
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> filterChiSo(int month, int year, int? tuyenKHID)
-        {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
+        {            
             ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> cb = new ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
             List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> _hoaDonNuoc = cb.Query("DanhSachHoaDonsTheoThangNam",
                        new SqlParameter("@d1", month),

@@ -168,7 +168,7 @@
                             </div>
 
                             <!-- Bảng xem chỉ số -->
-                            <table class="unlimited table-bordered">
+                            <table class="table table-bordered hoaDonNuoc">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -205,20 +205,21 @@
                                         }
                                         else if (ttHoaDonBiHuyCssClass == "hoadonduoccapnhat")
                                         {
-                                            if(hoaDonObj.Trangthaiin.GetValueOrDefault() == true) {
-                                                   cssClass = "hoadonprinted";
+                                            if (hoaDonObj.Trangthaiin.GetValueOrDefault() == true)
+                                            {
+                                                cssClass = "hoadonprinted";
                                             }
                                             else
                                             {
                                                 cssClass = "hoadonduoccapnhat";
                                             }
                                         }
-                                        
+
                                         if (hoaDonObj.Trangthaiin.GetValueOrDefault() == true)
                                         {
                                             cssClass = "hoadonprinted";
-                                        }                               
-                                        
+                                        }
+
                                         <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
                                             <td>@i</td>
@@ -236,13 +237,13 @@
                                             <td>@item.NgayBatDau</td>
                                             <td>@item.NgayKetThuc</td>
                                             <td>@item.TTDoc</td>
-                                            <td>@item.SanLuong</td>                                            
+                                            <td>@item.SanLuong</td>
                                             <td>@item.TruocThue.ToString("0,000", brazilianCulture)</td>
                                             <td>@item.PhiVAT.ToString("0,000", brazilianCulture)</td>
                                             <td>@item.PhiBVMT.ToString("0,000", brazilianCulture)</td>
                                             <td style="color:blue">@item.TongCong.ToString("0,000", brazilianCulture)</td>
                                         </tr>
-                                        i++;
+                                            i++;
                                     }
 
                                 </tbody>

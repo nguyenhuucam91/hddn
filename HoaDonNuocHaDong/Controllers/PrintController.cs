@@ -70,51 +70,14 @@ namespace HoaDonNuocHaDong.Controllers
 
         public List<Models.InHoaDon.TuyenTinhTien> getDanhSachHoaDonDuocIn(String tuyenID, int thangIn, int namIn)
         {
-            List<Models.InHoaDon.TuyenTinhTien> hoadons = (from i in db.Lichsuhoadons
-                                                           join j in db.Hoadonnuocs on i.HoaDonID equals j.HoadonnuocID
-                                                           join r in db.Khachhangs on j.KhachhangID equals r.KhachhangID
-                                                           where i.ThangHoaDon == thangIn && i.NamHoaDon == namIn &&
-                                                                  r.TuyenKHID.ToString() == tuyenID &&
-                                                                  (j.Trangthaixoa == false || j.Trangthaixoa == null) && j.Trangthaichot == true &&
-                                                                  ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
-                                                                  j.Tongsotieuthu > 0
-                                                           orderby i.TTDoc
-                                                           select new Models.InHoaDon.TuyenTinhTien
-                                                           {
-                                                               HoaDonNuoc = i.HoaDonID,
-                                                               MaKH = i.MaKH,
-                                                               TenKH = i.TenKH,
-                                                               DiaChi = i.Diachi,
-                                                               NgayBatDau = i.NgayBatDau,
-                                                               NgayKetThuc = i.NgayKetThuc,
-                                                               SH1 = i.SH1,
-                                                               SH1Price = i.SH1Price,
-                                                               SH2 = i.SH2,
-                                                               SH2Price = i.SH2Price,
-                                                               SH3 = i.SH3,
-                                                               SH3Price = i.SH3Price,
-                                                               SH4 = i.SH4,
-                                                               SH4Price = i.SH4Price,
-                                                               HC = i.HC,
-                                                               HCPrice = i.HCPrice,
-                                                               CC = i.CC,
-                                                               CCPrice = i.CCPrice,
-                                                               SX = i.SX,
-                                                               SXPrice = i.SXPrice,
-                                                               KD = i.KD,
-                                                               KDPrice = i.KDPrice,
-                                                               TruocThue = i.TruocThue.Value,
-                                                               PhiVAT = i.ThueSuatPrice,
-                                                               TileBVMT = i.TileBVMT,
-                                                               PhiBVMT = i.PhiBVMT,
-                                                               TTDoc = i.TTDoc.Value,
-                                                               SanLuong = i.SanLuongTieuThu,
-                                                               TongCong = i.TongCong,
-                                                               TTThuNgan = i.TTThungan,
-                                                               TuyenKHID = i.TuyenKHID,
-                                                           }).ToList();
-
-            return hoadons;
+            ControllerBase<Models.InHoaDon.TuyenTinhTien> cb = new ControllerBase<Models.InHoaDon.TuyenTinhTien>();
+            List<Models.InHoaDon.TuyenTinhTien> hoaDons = cb.Query("DanhSachKhachHangDuocInTheoTuyenThangNam",
+                       new SqlParameter("@d1", thangIn),
+                       new SqlParameter("@d2", namIn),
+                       new SqlParameter("@d3", tuyenID)
+                       );
+          
+            return hoaDons;
         }
 
         public void updateSoHoaDonBasedOnSituation(String tuyenID, int thangIn, int namIn, String[] hoaDons = null, int fromReceipt = 0, int toReceipt = 0)
@@ -221,9 +184,9 @@ namespace HoaDonNuocHaDong.Controllers
                 }
         }
 
-        private void updateAllHoaDon(String tuyenID, int thangIn, int namIn)
+        private List<TuyenTinhTien> updateAllHoaDon(String tuyenID, int thangIn, int namIn)
         {
-            var hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
+            List<TuyenTinhTien> hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
             int soHoaDon = 1;
             double tongTienCongDon = 0;
             double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
@@ -257,6 +220,7 @@ namespace HoaDonNuocHaDong.Controllers
                 }
                 connection.Close();
             }
+            return hoadons;
         }
 
         [HttpPost]
@@ -561,7 +525,7 @@ namespace HoaDonNuocHaDong.Controllers
          
             ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
             #endregion
-            int pageSize = 10;
+            int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -617,8 +581,8 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedNhanvien = nhanvien;
             ViewData["nhanviens"] = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.ToQuanHuyenID == to).ToList();
             ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
-            
-            int pageSize = 1;
+
+            int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -634,9 +598,7 @@ namespace HoaDonNuocHaDong.Controllers
             //Cập nhật trạng thái tính tiền
             int tuyenInt = Convert.ToInt32(tuyen);
             int monthInt = Convert.ToInt32(month);
-            int yearInt = Convert.ToInt32(year);
-
-            updateAllHoaDon(tuyen, monthInt, yearInt);
+            int yearInt = Convert.ToInt32(year);            
 
             TuyenDuocChot chotTuyen = db.TuyenDuocChots.FirstOrDefault(p => p.TuyenKHID == tuyenInt && p.Thang == monthInt && p.Nam == yearInt);
             if (chotTuyen != null)
@@ -644,11 +606,9 @@ namespace HoaDonNuocHaDong.Controllers
                 chotTuyen.TrangThaiTinhTien = true;
                 db.Entry(chotTuyen).State = EntityState.Modified;
                 db.SaveChanges();
-            }
-            String tuyenID = Request.QueryString["tuyen"];
-            #region ViewBag
-            var danhSach = getDanhSachHoaDonDuocIn(tuyenID, monthInt, yearInt);
-            ViewBag.dsachKH = danhSach.OrderBy(p => p.TTDoc).ToList();
+            }            
+            #region ViewBag            
+            ViewBag.dsachKH = getDanhSachHoaDonDuocIn(tuyen, monthInt, yearInt);
             ViewBag.selectedTuyen = tuyen;
             #endregion
             return View();
