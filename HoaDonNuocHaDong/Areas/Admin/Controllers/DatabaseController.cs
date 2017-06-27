@@ -19,8 +19,6 @@ namespace HoaDonNuocHaDong.Areas.Admin.Controllers
         public ActionResult Restore()
         {
             title = "Khôi phục dữ liệu";
-
-
             return View();
         }
 

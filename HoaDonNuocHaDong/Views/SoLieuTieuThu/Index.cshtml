@@ -182,18 +182,19 @@
                                                                             <td style="width:5px">@item.SoHo</td>
                                                                             <td>@item.SoKhau</td>
                                                                             <!-- Bắt đầu -->
-                                                                            @{
+                                                                            @*@{
                                                     Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangIDRow && p.ThangHoaDon == month && p.NamHoaDon == year);
                                                     var khachHangData = db.Khachhangs.Find(thisMonthReceipt.KhachhangID);
-                                                                            }
+                                                                            }*@
 
                                                                             <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
-                                                                            @if (thisMonthReceipt.Ngaybatdausudung != null)
+                                                                            @if (item.NgayBatDauSuDung != null)
                                                                             {
-                                                                                DateTime ngayBatDauHoaDon = thisMonthReceipt.Ngaybatdausudung.GetValueOrDefault();
-                                                                                if (khachHangData.Ngaycapnuoclai != null)
+                                                                                //DateTime ngayBatDauHoaDon = thisMonthReceipt.Ngaybatdausudung.GetValueOrDefault();
+                                                                                DateTime ngayBatDauHoaDon = item.NgayBatDauSuDung.GetValueOrDefault();
+                                                                                if (item.NgayCapNuocLai != null)
                                                                                 {
-                                                                                    ngayBatDauHoaDon = hoaDonNuoc.compareNgayCapNuocLaiVoiNgayBatDauHoaDon(khachHangData.Ngaycapnuoclai.Value, ngayBatDauHoaDon);
+                                                                                    ngayBatDauHoaDon = hoaDonNuoc.compareNgayCapNuocLaiVoiNgayBatDauHoaDon(item.NgayCapNuocLai.Value, ngayBatDauHoaDon);
                                                                                 }
                                                                                 <td class="startDate">
                                                                                     <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
@@ -205,10 +206,10 @@
 
                                                                             else
                                                                             {
-                                                                                DateTime ngayBatDauHoaDon = khachHangData.Ngaykyhopdong.GetValueOrDefault();
-                                                                                if (khachHangData.Ngaycapnuoclai != null)
+                                                                                DateTime ngayBatDauHoaDon = item.NgayKiHopDong.GetValueOrDefault();
+                                                                                if (item.NgayCapNuocLai != null)
                                                                                 {
-                                                                                    ngayBatDauHoaDon = hoaDonNuoc.compareNgayCapNuocLaiVoiNgayBatDauHoaDon(khachHangData.Ngaycapnuoclai.Value, ngayBatDauHoaDon);
+                                                                                    ngayBatDauHoaDon = hoaDonNuoc.compareNgayCapNuocLaiVoiNgayBatDauHoaDon(item.NgayCapNuocLai.Value, ngayBatDauHoaDon);
                                                                                 }
 
                                                                                 <td class="startDate">
@@ -223,13 +224,13 @@
                                                                                 @if (!cS.isChotHoaDon(hoaDonID))
                                                                                 {
                                                                                     <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                                           value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung)"
                                                                                            data-hoadonid="@item.HoaDonNuocID" class="endDate[@i]" />
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                                           value="@String.Format("{0:dd/MM/yyyy}", thisMonthReceipt.Ngayketthucsudung)"
+                                                                                           value="@String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung)"
                                                                                            data-hoadonid="@item.HoaDonNuocID" />
                                                                                 }
 
@@ -346,7 +347,9 @@
                                 </div>
                               <!-- Operation -->
                                 <div class="form-actions">
-                                    <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", new { toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"' class="btn btn-default" style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
+                                    <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", 
+                                    new { toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"'
+                                            style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
                                 </div> <!-- /form-actions -->
 
                             }

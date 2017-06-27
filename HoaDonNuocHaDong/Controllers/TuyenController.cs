@@ -43,7 +43,7 @@ namespace HoaDonNuocHaDong.Controllers
                 nhanViens = db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
             }
 
-            int pageSize = 50;
+            int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
             IEnumerable<Tuyenkhachhang> tuyensKhachHang = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien);
 
@@ -82,7 +82,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 tuyenkhachhangs = tuyenkhachhangs.Where(p => p.Matuyen == tuKhoaTimKiem || p.Ten.Contains(tuKhoaTimKiem));
             }
-            int pageSize = 50;
+            int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
             ViewBag.pageSize = pageSize;
             ViewBag.selectedNhanvien = nhanvien;
