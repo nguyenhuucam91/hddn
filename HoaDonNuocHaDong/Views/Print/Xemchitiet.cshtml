@@ -54,7 +54,9 @@
                                             <button type="submit" class="btn btn-default">Quay lại</button>
                                         </form>
 
-                                        <form action="@Url.Action("PrintAllPreview", "Print", new {@TuyenID = ViewBag.selectedTuyen,
+                                        <form action="@Url.Action("PrintAllPreview", "Print", new {
+                                                                                                   @quan = @Request.QueryString["quan"],
+                                                                                                   @TuyenID = ViewBag.selectedTuyen,
                                                                                                    @month = selectedMonth,
                                                                                                    @year = selectedYear })" method="post">
                                             <button type="submit" class="btn btn-warning choose-print-machine" data-toggle="modal" data-target=".set-print-machine">
@@ -63,6 +65,7 @@
                                         </form>
 
                                         <form action="@Url.Action("PrintAll", "Print", new {
+                                                                                                   @quan = @Request.QueryString["quan"],
                                                                                                    @TuyenID = ViewBag.selectedTuyen,
                                                                                                    @month = selectedMonth,
                                                                                                    @year = selectedYear })" method="post">
@@ -83,7 +86,7 @@
                                             <button type="submit" class="btn btn-default">Quay lại</button>
                                         </form>
 
-                                        <form action="/Print/PrintPreviewSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                        <form action="/Print/PrintPreviewSelected?quan=@Request.QueryString["quan"]&TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                             <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />
                                             <button type="submit" class="btn btn-success printSelected choose-print-machine"
                                                     data-toggle="modal" data-target=".set-print-machine">
@@ -91,7 +94,7 @@
                                             </button>
                                         </form>
 
-                                        <form action="/Print/PrintSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                        <form action="/Print/PrintSelected?quan=@Request.QueryString["quan"]&TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                             <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />
                                             <button type="submit" data-toggle="modal" data-target=".set-print-machine"
                                                     class="btn btn-success printSelected choose-print-machine">
@@ -111,14 +114,13 @@
                                             <button type="submit" class="btn btn-default">Quay lại</button>
                                         </form>
 
-                                        <form action="/Print/PrintFrom?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                        <form action="/Print/PrintFrom?quan=@Request.QueryString["quan"]&TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                             <input type="number" placeholder="Từ số hóa đơn" name="printFromNumber" class="negNumber" />
                                             <input type="number" placeholder="đến số hóa đơn" name="printToNumber" class="negNumber" />
                                             <input type="submit" value="Xem trước in danh sách theo số hóa đơn" name="printFrom" class="choose-print-machine"
                                                    data-toggle="modal" data-target=".set-print-machine" />
                                             <input type="submit" class="choose-print-machine"
-                                                   value="In danh sách theo số hóa đơn" name="printFrom" data-toggle="modal" data-target=".set-print-machine" 
-                                                   />
+                                                   value="In danh sách theo số hóa đơn" name="printFrom" data-toggle="modal" data-target=".set-print-machine" />
                                         </form>
                                     </div>
                                 </div>

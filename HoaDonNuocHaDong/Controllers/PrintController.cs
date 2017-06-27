@@ -36,6 +36,8 @@ namespace HoaDonNuocHaDong.Controllers
         private HoaDonNuocHaDong.Helper.Tuyen _tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
         public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
         private int printCircumstance = 0;
+        QuanHuyenHelper qHHelper = new QuanHuyenHelper();
+        Lichsuhoadon lichSuHoaDon = new Lichsuhoadon();
 
         public void setPrintCircumstance(int printCircumstance)
         {
@@ -80,13 +82,13 @@ namespace HoaDonNuocHaDong.Controllers
             return hoaDons;
         }
 
-        public void updateSoHoaDonBasedOnSituation(String tuyenID, int thangIn, int namIn, String[] hoaDons = null, int fromReceipt = 0, int toReceipt = 0)
+        public void updateSoHoaDonBasedOnSituation(int? quan, String tuyenID, int thangIn, int namIn, String[] hoaDons = null, int fromReceipt = 0, int toReceipt = 0)
         {
             xoaThongTinThuNganVaCongDon(tuyenID.ToString(), thangIn.ToString(), namIn.ToString());
             switch (printCircumstance)
             {
                 case (int)PrintModeEnum.PRINT_ALL:
-                    updateAllHoaDon(tuyenID, thangIn, namIn);
+                    updateAllHoaDon(quan, tuyenID, thangIn, namIn);
                     break;
                 case (int)PrintModeEnum.PRINT_SELECTED:
                     updateSelectedReceipt(tuyenID, thangIn, namIn, hoaDons);
@@ -146,8 +148,7 @@ namespace HoaDonNuocHaDong.Controllers
         private void updateSelectedReceipt(string tuyenID, int thangIn, int namIn, String[] hoaDons)
         {
             int soHoaDon = 1; double tongTienCongDon = 0;
-            double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
-
+            double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;            
             using (SqlConnection connection = new SqlConnection(connectionString))
 
                 foreach (var hoaDon in hoaDons)
@@ -167,7 +168,7 @@ namespace HoaDonNuocHaDong.Controllers
                         {
                             connection.Open();
                             command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi, TongCong=@tong, BangChu=@chu, ChiSoCongDon=@chiSo " +
-                            "WHERE HoaDonID = @HoaDonID";
+                            "WHERE HoaDonID = @HoaDonID";                            
                             command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                             command.Parameters.AddWithValue("@truocThue", truocThue);
                             command.Parameters.AddWithValue("@thueVAT", thueVAT);
@@ -184,12 +185,13 @@ namespace HoaDonNuocHaDong.Controllers
                 }
         }
 
-        private List<TuyenTinhTien> updateAllHoaDon(String tuyenID, int thangIn, int namIn)
+        private List<TuyenTinhTien> updateAllHoaDon(int? quanHuyenID, String tuyenID, int thangIn, int namIn)
         {
             List<TuyenTinhTien> hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
             int soHoaDon = 1;
             double tongTienCongDon = 0;
             double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
+            String ttVoOng = qHHelper.getTTVoOng(quanHuyenID);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -204,8 +206,9 @@ namespace HoaDonNuocHaDong.Controllers
                     var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                     using (SqlCommand command = new SqlCommand("", connection))
                     {
-                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi,TongCong=@tong,BangChu=@chu, ChiSoCongDon=@chiSo " +
+                        command.CommandText = "Update Lichsuhoadon set TTVoOng = @ttVoOng, TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi,TongCong=@tong,BangChu=@chu, ChiSoCongDon=@chiSo " +
                             "WHERE HoaDonID = @HoaDonID";
+                        command.Parameters.AddWithValue("@ttVoOng", ttVoOng);
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                         command.Parameters.AddWithValue("@truocThue", truocThue);
                         command.Parameters.AddWithValue("@thueVAT", thueVAT);
@@ -224,12 +227,12 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintPreviewSelected(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintPreviewSelected(FormCollection form,int quan, int TuyenID, int month, int year)
         {
-            String[] selectedForm = form["printSelectedHidden"].Split(',');
-            Array.Sort(selectedForm);
+            String[] selectedReceipt = form["printSelectedHidden"].Split(',');
+            String[] selectedForm = LichSuHoaDon.sortLichSuHoaDonByTTDoc(selectedReceipt);
             setPrintCircumstance((int)PrintModeEnum.PRINT_SELECTED);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, selectedForm);
+            updateSoHoaDonBasedOnSituation(quan,TuyenID.ToString(), month, year, selectedForm);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -252,13 +255,13 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintSelected(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintSelected(FormCollection form, int quan, int TuyenID, int month, int year)
         {
 
-            String[] selectedForm = form["printSelectedHidden"].Split(',');
-            Array.Sort(selectedForm);
+            String[] selectedReceipt = form["printSelectedHidden"].Split(',');
+            String[] selectedForm = LichSuHoaDon.sortLichSuHoaDonByTTDoc(selectedReceipt);
             setPrintCircumstance((int)PrintModeEnum.PRINT_SELECTED);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, selectedForm);
+            updateSoHoaDonBasedOnSituation(quan,TuyenID.ToString(), month, year, selectedForm);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -296,60 +299,18 @@ namespace HoaDonNuocHaDong.Controllers
 
         public List<LichSuHoaDon> GetDanhSachHoaDons(int TuyenID, int month, int year)
         {
-            var lichsuhoadons = (from p in db.Lichsuhoadons
-                                 join r in db.Hoadonnuocs on p.HoaDonID equals r.HoadonnuocID
-                                 join k in db.Khachhangs on r.KhachhangID equals k.KhachhangID
-                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year &&
-                                        (r.Trangthaixoa == false || r.Trangthaixoa == null) && r.Trangthaichot == true &&
-                                        ((k.Ngayngungcapnuoc == null && k.Ngaycapnuoclai == null) || (k.Ngaycapnuoclai.Value <= DateTime.Now)) &&
-                                        p.SanLuongTieuThu > 0
+            ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> cb = new ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon>();
+            List<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> hoaDons = cb.Query("LichSuHoaDonStoredProc",
+                       new SqlParameter("@d1", month),
+                       new SqlParameter("@d2", year),
+                       new SqlParameter("@d3", TuyenID)
+                       );
 
-                                 orderby p.TTDoc
-                                 select new HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon
-                                 {
-                                     HoaDonID = p.HoaDonID,
-                                     ThangHoaDon = p.ThangHoaDon,
-                                     NamHoaDon = p.NamHoaDon,
-                                     TenKH = p.TenKH,
-                                     DiaChi = p.Diachi,
-                                     MST = p.MST,
-                                     MaKH = p.MaKH,
-                                     SoHopDong = p.SoHopDong,
-                                     SanLuongTieuThu = p.SanLuongTieuThu,
-                                     ChiSoCu = p.ChiSoCu,
-                                     ChiSoMoi = p.ChiSoMoi,
-                                     SH1 = p.SH1,
-                                     SH2 = p.SH2,
-                                     SH3 = p.SH3,
-                                     SH4 = p.SH4,
-                                     SH1Price = p.SH1Price,
-                                     SH2Price = p.SH2Price,
-                                     SH3Price = p.SH3Price,
-                                     SH4Price = p.SH4Price,
-                                     HC = p.HC,
-                                     CC = p.CC,
-                                     SX = p.SX,
-                                     KD = p.KD,
-                                     HCPrice = p.HCPrice,
-                                     CCPrice = p.CCPrice,
-                                     SXPrice = p.SXPrice,
-                                     KDPrice = p.KDPrice,
-                                     ThueSuatPrice = p.ThueSuatPrice,
-                                     TileBVMT = p.TileBVMT,
-                                     PhiBVMT = p.PhiBVMT,
-                                     TongCong = p.TongCong,
-                                     BangChu = p.BangChu,
-                                     TTVoOng = p.TTVoOng,
-                                     TTThungan = p.TTThungan,
-                                     NgayBatDau = p.NgayBatDau,
-                                     NgayKetThuc = p.NgayKetThuc,
-                                     ChiSoCongDon = p.ChiSoCongDon,
-                                 });
-            return lichsuhoadons.ToList();
+            return hoaDons;           
         }
 
         [HttpPost]
-        public ActionResult PrintPreviewFrom(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintPreviewFrom(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
@@ -388,19 +349,19 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintFrom(String printFrom, FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintFrom(String printFrom, FormCollection form, int quan, int TuyenID, int month, int year)
         {
             switch (printFrom)
             {
                 case "Xem trước in danh sách theo số hóa đơn":
-                    return PrintPreviewFrom(form, TuyenID, month, year);
+                    return PrintPreviewFrom(form, quan, TuyenID, month, year);
                 case "In danh sách theo số hóa đơn":
-                    return PrintFromTo(form, TuyenID, month, year);
+                    return PrintFromTo(form, quan, TuyenID, month, year);
             }
             return View();
         }
 
-        public ActionResult PrintFromTo(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintFromTo(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
@@ -437,10 +398,10 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult PrintAllPreview(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintAllPreview(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, null);
+            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -462,11 +423,10 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult printAll(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult printAll(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, null);
-
+            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -591,15 +551,15 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
 
-        public ActionResult XemChiTiet(String tuyen, String month, String year)
-        {
+        public ActionResult XemChiTiet(int quan, String tuyen, String month, String year)
+        {           
             //update tuyen tinh tien            
             int tuyenKHID = Convert.ToInt32(tuyen);
             //Cập nhật trạng thái tính tiền
             int tuyenInt = Convert.ToInt32(tuyen);
             int monthInt = Convert.ToInt32(month);
-            int yearInt = Convert.ToInt32(year);            
-
+            int yearInt = Convert.ToInt32(year);
+            List<TuyenTinhTien> hoadons = getDanhSachHoaDonDuocIn(tuyen, monthInt, yearInt);
             TuyenDuocChot chotTuyen = db.TuyenDuocChots.FirstOrDefault(p => p.TuyenKHID == tuyenInt && p.Thang == monthInt && p.Nam == yearInt);
             if (chotTuyen != null)
             {
@@ -608,7 +568,7 @@ namespace HoaDonNuocHaDong.Controllers
                 db.SaveChanges();
             }            
             #region ViewBag            
-            ViewBag.dsachKH = getDanhSachHoaDonDuocIn(tuyen, monthInt, yearInt);
+            ViewBag.dsachKH = hoadons;
             ViewBag.selectedTuyen = tuyen;
             #endregion
             return View();
