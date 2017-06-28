@@ -14,18 +14,21 @@ using HoaDonNuocHaDong.Repositories;
 using HDNHD.Models.Constants;
 using System.Diagnostics;
 using PagedList;
+using HoaDonNuocHaDong.Helper;
 
 namespace HoaDonNuocHaDong.Controllers
 {
     public class TuyenController : BaseController
     {
         HoaDonNuocHaDong.Helper.Tuyen tuyenHelper = new HoaDonNuocHaDong.Helper.Tuyen();
+        NguoidungHelper ngDungHelper = new NguoidungHelper();
         // GET: /Tuyen/
         public ActionResult Index(int? nhanvien, int page = 1)
         {
             int quanHuyenId = getQuanHuyenOfLoggedInUser();
             int phongBanId = getPhongBanNguoiDung();
-           
+            bool isOnlyTruongPhong = ngDungHelper.isNguoiDungLaTruongPhong(LoggedInUser.NhanvienID);
+
             var nhanViens = new List<Nhanvien>();
             if (!LoggedInUser.Isadmin.Value)
             {
@@ -47,23 +50,27 @@ namespace HoaDonNuocHaDong.Controllers
             int pageNumber = page != 0 ? page : 0;
             IEnumerable<Tuyenkhachhang> tuyensKhachHang = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien);
 
-
+            #region ViewBag
             ViewData["nhanVien"] = nhanViens;
             ViewBag.pageSize = pageSize;
             ViewBag.selectedNhanvien = nhanvien;
-
-            return View(tuyensKhachHang.OrderByDescending(p=>p.TuyenKHID).ToPagedList(page, pageSize));
+            ViewBag.isOnlyTruongPhong = isOnlyTruongPhong;
+            ViewBag.phongBanId = phongBanId;
+            #endregion
+            return View(tuyensKhachHang.OrderByDescending(p => p.TuyenKHID).ToPagedList(page, pageSize));
         }
 
 
         [HttpPost]
         public ActionResult Index(FormCollection form, int? nhanvien, int page = 1)
-        {           
+        {
             String tuKhoaTimKiem = form["tukhoa"].ToLower();
 
             IEnumerable<Tuyenkhachhang> tuyenkhachhangs = null;
             var nhanVienFilter = new List<Nhanvien>();
             int phongBanId = getPhongBanNguoiDung();
+            bool isOnlyTruongPhong = ngDungHelper.isNguoiDungLaTruongPhong(LoggedInUser.NhanvienID);
+
             //nếu trống thì chọn tất cả
             if (LoggedInUser.Isadmin.Value)
             {
@@ -84,8 +91,14 @@ namespace HoaDonNuocHaDong.Controllers
             }
             int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
+
+            #region ViewBag
             ViewBag.pageSize = pageSize;
             ViewBag.selectedNhanvien = nhanvien;
+            ViewBag.isOnlyTruongPhong = isOnlyTruongPhong;
+            ViewBag.phongBanId = phongBanId;
+            #endregion
+
             return View(tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID).ToPagedList(pageNumber, pageSize));
         }
 

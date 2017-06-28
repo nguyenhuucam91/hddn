@@ -22,6 +22,7 @@ using System.Configuration;
 using HoaDonNuocHaDong.Models;
 using HoaDonHaDong.Helper;
 using HDNHD.Models.DataContexts;
+using HoaDonNuocHaDong.Config;
 
 
 namespace HoaDonNuocHaDong.Controllers
@@ -37,7 +38,7 @@ namespace HoaDonNuocHaDong.Controllers
         private KhachHangModel khachHangModel = new KhachHangModel();
         private LichSuHoaDonRepository lichSuHoaDonRepo = new LichSuHoaDonRepository();
 
-        public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+        public static string connectionString = DatabaseConfig.getConnectionString();
 
         const int ADMIN = 0;
         const int TRUONG_PHONG = 2;

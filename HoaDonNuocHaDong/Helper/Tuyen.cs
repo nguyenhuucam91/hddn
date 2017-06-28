@@ -13,7 +13,6 @@ namespace HoaDonNuocHaDong.Helper
 {
     public class Tuyen
     {
-        static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
 
 
@@ -34,28 +33,6 @@ namespace HoaDonNuocHaDong.Helper
             if (tuyenTheoNhanVienList != null)
             {
                 return tuyenTheoNhanVienList.TenNhanVien;
-            }
-            return "";
-        }
-
-        /// <summary>
-        /// Lấy tuyến của nhân viên quản lí dựa theo nhân viên ID
-        /// </summary>
-        /// <param name="nhanVienID"></param>
-        /// <returns></returns>
-        public static String getTuyenByNhanVienID(int nhanVienID)
-        {
-            var tuyenTheoNhanVienList = (from p in db.Tuyentheonhanviens
-                                         join q in db.Tuyenkhachhangs on p.TuyenKHID equals q.TuyenKHID
-                                         join r in db.Nhanviens on p.NhanVienID equals r.NhanvienID
-                                         where p.NhanVienID == nhanVienID
-                                         select new
-                                         {
-                                             TenTuyen = q.Ten,
-                                         }).FirstOrDefault();
-            if (tuyenTheoNhanVienList != null)
-            {
-                return tuyenTheoNhanVienList.TenTuyen;
             }
             return "";
         }
@@ -87,9 +64,9 @@ namespace HoaDonNuocHaDong.Helper
 
         public int getNhanVienIDTuTuyen(int tuyenID)
         {
-            var tuyenTheoNhanVienList = (from p in db.Tuyentheonhanviens
-                                         join q in db.Tuyenkhachhangs on p.TuyenKHID equals q.TuyenKHID
-                                         join r in db.Nhanviens on p.NhanVienID equals r.NhanvienID
+            var tuyenTheoNhanVienList = (from p in _db.Tuyentheonhanviens
+                                         join q in _db.Tuyenkhachhangs on p.TuyenKHID equals q.TuyenKHID
+                                         join r in _db.Nhanviens on p.NhanVienID equals r.NhanvienID
                                          where p.TuyenKHID == tuyenID
                                          select new
                                          {
@@ -145,6 +122,19 @@ namespace HoaDonNuocHaDong.Helper
             return "";
         }
 
+        public bool tuyenHasNhanVienThuocPhongBanQuanLy(int tuyenId, int phongBanId)
+        {
+            var nhanviens = (from i in _db.Nhanviens
+                             join r in _db.Tuyentheonhanviens on i.NhanvienID equals r.NhanVienID
+                             where i.PhongbanID == phongBanId && r.TuyenKHID == tuyenId
+                             select new { }).Count();
+            if (nhanviens > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public String translateTuyenIDToMaTuyen(String tuyenIdsInput)
         {
             String maTuyens = "";
@@ -152,7 +142,7 @@ namespace HoaDonNuocHaDong.Helper
             foreach (var item in maTuyensAsArray)
             {
                 int tuyenId = Convert.ToInt32(item);
-                Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(tuyenId);
+                Tuyenkhachhang tuyen = _db.Tuyenkhachhangs.Find(tuyenId);
                 if (tuyen != null)
                 {
                     maTuyens += tuyen.Matuyen + ",";

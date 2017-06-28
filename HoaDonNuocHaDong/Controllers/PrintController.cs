@@ -74,7 +74,7 @@ namespace HoaDonNuocHaDong.Controllers
         public List<Models.InHoaDon.TuyenTinhTien> getDanhSachHoaDonDuocIn(String tuyenID, int thangIn, int namIn)
         {
             ControllerBase<Models.InHoaDon.TuyenTinhTien> cb = new ControllerBase<Models.InHoaDon.TuyenTinhTien>();
-            List<Models.InHoaDon.TuyenTinhTien> hoaDons = cb.Query("DanhSachKhachHangDuocInTheoTuyenThangNam",
+            List<Models.InHoaDon.TuyenTinhTien> hoaDons = cb.Query("DanhSachHoaDonDuocInTheoTuyenThangNam",
                        new SqlParameter("@d1", thangIn),
                        new SqlParameter("@d2", namIn),
                        new SqlParameter("@d3", tuyenID)
