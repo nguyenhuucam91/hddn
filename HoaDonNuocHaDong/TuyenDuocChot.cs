@@ -20,6 +20,6 @@ namespace HoaDonNuocHaDong
         public Nullable<int> Nam { get; set; }
         public Nullable<bool> TrangThaiTinhTien { get; set; }
         public Nullable<bool> TrangThaiChot { get; set; }
-        public Nullable<System.DateTime> NgayChot { get; set; }
+        public Nullable<System.DateTime> NgayChot { get; set; }        
     }
 }

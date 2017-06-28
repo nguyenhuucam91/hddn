@@ -1,6 +1,7 @@
 ﻿using HoaDonNuocHaDong;
 using HoaDonNuocHaDong.Config;
 using HoaDonNuocHaDong.Models.TuyenKhachHang;
+using HvitFramework;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -134,6 +135,16 @@ namespace HoaDonNuocHaDong.Helper
             return "";
         }
 
+        public String getTTTuyen(int TuyenKHID)
+        {
+            Tuyenkhachhang tuyen = _db.Tuyenkhachhangs.Find(TuyenKHID);
+            if (tuyen != null)
+            {
+                return tuyen.Matuyen + " - " + tuyen.Ten;
+            }
+            return "";
+        }
+
         public String translateTuyenIDToMaTuyen(String tuyenIdsInput)
         {
             String maTuyens = "";
@@ -152,40 +163,47 @@ namespace HoaDonNuocHaDong.Helper
 
         public IEnumerable<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> getDanhSachTuyensDuocChot(int? quanHuyen, int? to, int? selectedNhanVien, int? month, int? year)
         {
-            var tuyensKhachHangDuocChot = (from i in db.TuyenDuocChots
-                                           join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                                           where r.IsDelete == false && i.Thang == month && i.Nam == year
-                                           select new TuyenKhachHangDuocChot
-                                           {
-                                               TuyenKHID = i.TuyenKHID.Value,
-                                               MaTuyenKH = r.Matuyen,
-                                               TenTuyen = r.Ten,
-                                               TrangThaiTinhTien = i.TrangThaiTinhTien.Value,
-                                           }).ToList();
+            List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> tuyensKhachHangDuocChot = new List<TuyenKhachHangDuocChot>();
+            if (quanHuyen == 0)
+            {
+                ControllerBase<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> cB = new ControllerBase<TuyenKhachHangDuocChot>();
+                tuyensKhachHangDuocChot = cB.Query("DanhSachTuyenThuocToTheoThangNam",
+                            new SqlParameter("@quanhuyen", 0),
+                            new SqlParameter("@to", to),
+                            new SqlParameter("@nhanvien", selectedNhanVien),
+                            new SqlParameter("@month", month),
+                            new SqlParameter("@year", year)).ToList();
+            }
 
-            if (quanHuyen != 0)
+            else if (quanHuyen != 0 && to == null)
             {
-                tuyensKhachHangDuocChot = (from tuyenKH in tuyensKhachHangDuocChot
-                                           join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                           join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
-                                           join toQuanHuyen in db.ToQuanHuyens on nhanVien.ToQuanHuyenID equals toQuanHuyen.ToQuanHuyenID
-                                           where toQuanHuyen.QuanHuyenID == quanHuyen
-                                           select tuyenKH).ToList();
+               ControllerBase<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> cB = new ControllerBase<TuyenKhachHangDuocChot>();
+                tuyensKhachHangDuocChot = cB.Query("DanhSachTuyenThuocToTheoThangNam",
+                             new SqlParameter("@quanhuyen", quanHuyen),
+                             new SqlParameter("@to", 0),
+                             new SqlParameter("@nhanvien", selectedNhanVien),
+                             new SqlParameter("@month", month),
+                             new SqlParameter("@year", year)).ToList();
             }
-            if (to != 0)
+            else if (quanHuyen != 0 && to != 0 && selectedNhanVien == null)
             {
-                tuyensKhachHangDuocChot = (from tuyenKH in tuyensKhachHangDuocChot
-                                           join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                           join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
-                                           where nhanVien.ToQuanHuyenID == to
-                                           select tuyenKH).ToList();
+                ControllerBase<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> cB = new ControllerBase<TuyenKhachHangDuocChot>();
+                tuyensKhachHangDuocChot = cB.Query("DanhSachTuyenThuocToTheoThangNam",
+                            new SqlParameter("@quanhuyen", quanHuyen),
+                            new SqlParameter("@to", to),
+                            new SqlParameter("@nhanvien", 0),
+                            new SqlParameter("@month", month),
+                            new SqlParameter("@year", year)).ToList();
             }
-            if (selectedNhanVien != null)
+            else if (quanHuyen != 0 && to != 0 && selectedNhanVien != 0)
             {
-                tuyensKhachHangDuocChot = (from tuyenKH in tuyensKhachHangDuocChot
-                                           join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                           where tuyenTheoNhanVien.NhanVienID == selectedNhanVien
-                                           select tuyenKH).ToList();
+                ControllerBase<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> cB = new ControllerBase<TuyenKhachHangDuocChot>();
+                tuyensKhachHangDuocChot = cB.Query("DanhSachTuyenThuocToTheoThangNam",
+                             new SqlParameter("@quanhuyen", quanHuyen),
+                             new SqlParameter("@to", to),
+                             new SqlParameter("@nhanvien", selectedNhanVien),
+                             new SqlParameter("@month", month),
+                             new SqlParameter("@year", year)).ToList();
             }
 
             return tuyensKhachHangDuocChot.AsEnumerable();

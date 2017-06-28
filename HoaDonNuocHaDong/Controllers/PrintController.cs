@@ -38,6 +38,7 @@ namespace HoaDonNuocHaDong.Controllers
         private int printCircumstance = 0;
         QuanHuyenHelper qHHelper = new QuanHuyenHelper();
         Lichsuhoadon lichSuHoaDon = new Lichsuhoadon();
+        TuyenKhachHangDuocChot tuyenDuocChot = new TuyenKhachHangDuocChot();
 
         public void setPrintCircumstance(int printCircumstance)
         {
@@ -452,6 +453,8 @@ namespace HoaDonNuocHaDong.Controllers
             int thangDuocChon = thang == null ? DateTime.Now.Month : thang.Value;
             int namDuocChon = nam == null ? DateTime.Now.Year : nam.Value;
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+           
+
             IEnumerable<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> tuyens = new List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot>();
             if (soLuongQuanHuyen > 0)
             {
@@ -469,8 +472,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thangDuocChon, namDuocChon);
             }
-
-            //số lượng hóa đơn thực của tuyến đó          
+                          
 
             #region ViewBag
             ViewBag.isThuNgan = loggedInUserIsThuNgan;
@@ -484,21 +486,23 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
          
             ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            
             #endregion
+
             int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
-            return View(tuyens.ToPagedList(pageNumber, pageSize));
+            return View(tuyens);
         }
 
 
         [HttpPost]
         public ActionResult ChiSoTuyen(FormCollection form, int? quan, int? to, int? nhanvien, int? thang, int? nam, int page = 1)
         {            
-            String tuKhoaTimKiem = form["tukhoa"];
-            //lấy danh sách tổ 
+            String tuKhoaTimKiem = form["tukhoa"];            
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+           
             IEnumerable<TuyenKhachHangDuocChot> tuyens = new List<TuyenKhachHangDuocChot>();
             bool loggedInUserIsThuNgan = HDNHD.Core.Models.RequestScope.UserRole == EUserRole.ThuNgan ? true : false;
             if (!loggedInUserIsThuNgan)
@@ -522,11 +526,12 @@ namespace HoaDonNuocHaDong.Controllers
                 tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thang, nam);
             }
 
+        
+
             if (!String.IsNullOrEmpty(tuKhoaTimKiem))
             {
                 tuyens = tuyens.Where(p => p.MaTuyenKH == tuKhoaTimKiem || p.TenTuyen.Contains(tuKhoaTimKiem));
             }
-
 
             int phongBanId = getPhongBanNguoiDung();
 
@@ -540,7 +545,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedYear = nam;
             ViewBag.selectedNhanvien = nhanvien;
             ViewData["nhanviens"] = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.ToQuanHuyenID == to).ToList();
-            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();            
 
             int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
