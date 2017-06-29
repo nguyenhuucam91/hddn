@@ -730,24 +730,21 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult BaoCaoThatThoat(FormCollection fc)
         {
-            DateTime d1 = new DateTime(int.Parse(fc["y1"]), int.Parse(fc["m1"]), 1);
+            String month = fc["m1"];
+            String year = fc["y1"];
+            String prevMonth = Convert.ToInt32(month) - 1 < 0 ? "12" : (Convert.ToInt32(month) - 1).ToString();
+            String prevYear = Convert.ToInt32(month) - 1 < 0 ? (Convert.ToInt32(year) - 1).ToString() : year;
             ControllerBase<BaoCaoThatThoat> cb = new ControllerBase<BaoCaoThatThoat>();
             List<BaoCaoThatThoat> lst = cb.Query(
-                "BC21",
-                new SqlParameter("@d1", d1));
-            int[] arrSum = new int[6];
-            lst.ForEach(x =>
-            {
-                arrSum[0] += x.SoKH;
-                arrSum[1] += x.SanLuongThangBaoCao;
-                arrSum[2] += x.SanLuongThangTruoc;
-                arrSum[3] += x.SanLuongPhat;
-                arrSum[4] += x.LuongThatThoat;
-                arrSum[5] += x.TiLeThatThoat;
-            });
+                "BaoCaoThatThoatKinhDoanh",
+                new SqlParameter("@thang", month),
+                new SqlParameter("@nam", year),
+                new SqlParameter("@thangTruoc", prevMonth),
+                new SqlParameter("@namTruoc", prevYear));
+           
             ViewData["lst"] = lst;
-            ViewData["tong"] = arrSum;
-            ViewBag.dt1 = d1;
+            ViewBag.month = month;
+            ViewBag.year = year;
             return View();
         }
     }

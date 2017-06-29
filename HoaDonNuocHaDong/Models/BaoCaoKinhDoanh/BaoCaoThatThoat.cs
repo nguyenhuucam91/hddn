@@ -9,8 +9,8 @@ namespace HoaDonNuocHaDong.Models.BaoCaoKinhDoanh
     public class BaoCaoThatThoat:ModelBase
     {
         public int TT { get { return GetINT(0); } set { SetINT(0, value); } }
-        public int KyHieuDongHo { get { return GetINT(1); } set { SetINT(1, value); } }
-        public string Ten { get { return GetSTR(2); } set { SetSTR(2, value); } }
+        public int MaTuyen { get { return GetINT(1); } set { SetINT(1, value); } }
+        public string TenTuyen { get { return GetSTR(2); } set { SetSTR(2, value); } }
         public int SoKH { get { return GetINT(3); } set { SetINT(3, value); } }
         public int SanLuongThangBaoCao { get { return GetINT(4); } set { SetINT(4, value); } }
         public int SanLuongThangTruoc { get { return GetINT(5); } set { SetINT(5, value); } }
