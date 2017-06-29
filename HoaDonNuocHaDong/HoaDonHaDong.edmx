@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="HoaDonHaDongModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HoaDonHaDongModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Apgia">
           <Key>
             <PropertyRef Name="ApgiaID" />
@@ -42,6 +42,15 @@
           <Property Name="SanLuong" Type="float" />
           <Property Name="ThangTongHop" Type="int" />
           <Property Name="NamTongHop" Type="int" />
+        </EntityType>
+        <EntityType Name="Backups">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="backup_filename" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="backup_date" Type="date" Nullable="false" />
+          <Property Name="user_backup_id" Type="int" />
         </EntityType>
         <EntityType Name="Captuyen">
           <Key>
@@ -290,7 +299,7 @@
           <Property Name="Ngayngungcapnuoc" Type="date" />
           <Property Name="Lydongungcapnuoc" Type="nvarchar" MaxLength="255" />
           <Property Name="Ngaycapnuoclai" Type="date" />
-          <Property Name="Lydocapnuoclai" Type="nvarchar" MaxLength="255" />
+          <Property Name="Lydocapnuoclai" Type="ntext" />
           <Property Name="IsDelete" Type="bit" />
           <Property Name="Ngaylapdat" Type="date" />
           <Property Name="Chisolapdat" Type="int" />
@@ -339,6 +348,7 @@
           <Property Name="SXPrice" Type="float" Nullable="false" />
           <Property Name="KD" Type="float" Nullable="false" />
           <Property Name="KDPrice" Type="float" Nullable="false" />
+          <Property Name="TruocThue" Type="float" />
           <Property Name="ThueSuat" Type="float" Nullable="false" />
           <Property Name="ThueSuatPrice" Type="float" Nullable="false" />
           <Property Name="TileBVMT" Type="float" Nullable="false" />
@@ -813,18 +823,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Khachhang_Khachhang">
-          <End Role="Khachhang" Type="Self.Khachhang" Multiplicity="1" />
-          <End Role="Khachhang1" Type="Self.Khachhang" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Khachhang">
-              <PropertyRef Name="KhachhangID" />
-            </Principal>
-            <Dependent Role="Khachhang1">
-              <PropertyRef Name="KhachhangID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Khachhang_Phuongxa">
           <End Role="Phuongxa" Type="Self.Phuongxa" Multiplicity="0..1" />
           <End Role="Khachhang" Type="Self.Khachhang" Multiplicity="*" />
@@ -1081,6 +1079,7 @@
           <EntitySet Name="Apgia" EntityType="Self.Apgia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApGiaDacBiet" EntityType="Self.ApGiaDacBiet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Apgiatonghop" EntityType="Self.Apgiatonghop" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Backups" EntityType="Self.Backups" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Captuyen" EntityType="Self.Captuyen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Chinhanh" EntityType="Self.Chinhanh" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Chisocap" EntityType="Self.Chisocap" Schema="dbo" store:Type="Tables" />
@@ -1205,10 +1204,6 @@
             <End Role="SoTienNopTheoThang" EntitySet="SoTienNopTheoThang" />
             <End Role="Hoadonnuoc" EntitySet="Hoadonnuoc" />
           </AssociationSet>
-          <AssociationSet Name="FK_Khachhang_Khachhang" Association="Self.FK_Khachhang_Khachhang">
-            <End Role="Khachhang" EntitySet="Khachhang" />
-            <End Role="Khachhang1" EntitySet="Khachhang" />
-          </AssociationSet>
           <AssociationSet Name="FK_Khachhang_Phuongxa" Association="Self.FK_Khachhang_Phuongxa">
             <End Role="Phuongxa" EntitySet="Phuongxa" />
             <End Role="Khachhang" EntitySet="Khachhang" />
@@ -1302,6 +1297,7 @@
           <EntitySet Name="Apgias" EntityType="HoaDonHaDongModel.Apgia" />
           <EntitySet Name="ApGiaDacBiets" EntityType="HoaDonHaDongModel.ApGiaDacBiet" />
           <EntitySet Name="Apgiatonghops" EntityType="HoaDonHaDongModel.Apgiatonghop" />
+          <EntitySet Name="Backups" EntityType="HoaDonHaDongModel.Backup" />
           <EntitySet Name="Captuyens" EntityType="HoaDonHaDongModel.Captuyen" />
           <EntitySet Name="Chinhanhs" EntityType="HoaDonHaDongModel.Chinhanh" />
           <EntitySet Name="Chisocaps" EntityType="HoaDonHaDongModel.Chisocap" />
@@ -1322,6 +1318,7 @@
           <EntitySet Name="Hoadonnuocs" EntityType="HoaDonHaDongModel.Hoadonnuoc" />
           <EntitySet Name="Hoadonnuocbihuys" EntityType="HoaDonHaDongModel.Hoadonnuocbihuy" />
           <EntitySet Name="Khachhangs" EntityType="HoaDonHaDongModel.Khachhang" />
+          <EntitySet Name="Kiemdinhs" EntityType="HoaDonHaDongModel.Kiemdinh" />
           <EntitySet Name="Lichsuhoadons" EntityType="HoaDonHaDongModel.Lichsuhoadon" />
           <EntitySet Name="Lichsusudungcts" EntityType="HoaDonHaDongModel.Lichsusudungct" />
           <EntitySet Name="Loaiapgias" EntityType="HoaDonHaDongModel.Loaiapgia" />
@@ -1457,10 +1454,6 @@
             <End Role="Hoadonnuoc" EntitySet="Hoadonnuocs" />
             <End Role="SoTienNopTheoThang" EntitySet="SoTienNopTheoThangs" />
           </AssociationSet>
-          <AssociationSet Name="FK_Khachhang_Khachhang" Association="HoaDonHaDongModel.FK_Khachhang_Khachhang">
-            <End Role="Khachhang" EntitySet="Khachhangs" />
-            <End Role="Khachhang1" EntitySet="Khachhangs" />
-          </AssociationSet>
           <AssociationSet Name="FK_Khachhang_Phuongxa" Association="HoaDonHaDongModel.FK_Khachhang_Phuongxa">
             <End Role="Phuongxa" EntitySet="Phuongxas" />
             <End Role="Khachhang" EntitySet="Khachhangs" />
@@ -1513,7 +1506,6 @@
             <End Role="Tuyenong" EntitySet="Tuyenongs" />
             <End Role="Tuyenong1" EntitySet="Tuyenongs" />
           </AssociationSet>
-          <EntitySet Name="Kiemdinhs" EntityType="HoaDonHaDongModel.Kiemdinh" />
         </EntityContainer>
         <EntityType Name="Apgia">
           <Key>
@@ -1553,6 +1545,15 @@
           <Property Name="SanLuong" Type="Double" />
           <Property Name="ThangTongHop" Type="Int32" />
           <Property Name="NamTongHop" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Backup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="backup_filename" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="backup_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="user_backup_id" Type="Int32" />
         </EntityType>
         <EntityType Name="Captuyen">
           <Key>
@@ -1721,10 +1722,10 @@
           <Property Name="TienNopTheoThangID" Type="Int32" />
           <Property Name="KhachhangID" Type="Int32" />
           <Property Name="SoTienDu" Type="Int32" />
-          <NavigationProperty Name="Khachhang" Relationship="HoaDonHaDongModel.FK_DuCo_Khachhang" FromRole="DuCo" ToRole="Khachhang" />
-          <NavigationProperty Name="SoTienNopTheoThang" Relationship="HoaDonHaDongModel.FK_DuCo_SoTienNopTheoThang" FromRole="DuCo" ToRole="SoTienNopTheoThang" />
           <Property Name="TrangThaiTruHet" Type="Boolean" Nullable="false" />
           <Property Name="NgayTruHet" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Khachhang" Relationship="HoaDonHaDongModel.FK_DuCo_Khachhang" FromRole="DuCo" ToRole="Khachhang" />
+          <NavigationProperty Name="SoTienNopTheoThang" Relationship="HoaDonHaDongModel.FK_DuCo_SoTienNopTheoThang" FromRole="DuCo" ToRole="SoTienNopTheoThang" />
         </EntityType>
         <EntityType Name="GiaoDich">
           <Key>
@@ -1832,7 +1833,7 @@
           <Property Name="Ngayngungcapnuoc" Type="DateTime" Precision="0" />
           <Property Name="Lydongungcapnuoc" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Ngaycapnuoclai" Type="DateTime" Precision="0" />
-          <Property Name="Lydocapnuoclai" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Lydocapnuoclai" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsDelete" Type="Boolean" />
           <Property Name="Ngaylapdat" Type="DateTime" Precision="0" />
           <Property Name="Chisolapdat" Type="Int32" />
@@ -1840,10 +1841,20 @@
           <NavigationProperty Name="Congnoes" Relationship="HoaDonHaDongModel.FK_Congno_Khachhang" FromRole="Khachhang" ToRole="Congno" />
           <NavigationProperty Name="DuCoes" Relationship="HoaDonHaDongModel.FK_DuCo_Khachhang" FromRole="Khachhang" ToRole="DuCo" />
           <NavigationProperty Name="Hoadonnuocs" Relationship="HoaDonHaDongModel.FK_Hoadonnuoc_Khachhang" FromRole="Khachhang" ToRole="Hoadonnuoc" />
-          <NavigationProperty Name="Khachhang1" Relationship="HoaDonHaDongModel.FK_Khachhang_Khachhang" FromRole="Khachhang" ToRole="Khachhang1" />
-          <NavigationProperty Name="Khachhang2" Relationship="HoaDonHaDongModel.FK_Khachhang_Khachhang" FromRole="Khachhang1" ToRole="Khachhang" />
           <NavigationProperty Name="Phuongxa" Relationship="HoaDonHaDongModel.FK_Khachhang_Phuongxa" FromRole="Khachhang" ToRole="Phuongxa" />
           <NavigationProperty Name="Tuyenkhachhang" Relationship="HoaDonHaDongModel.FK_Khachhang_Tuyenkhachhang" FromRole="Khachhang" ToRole="Tuyenkhachhang" />
+        </EntityType>
+        <EntityType Name="Kiemdinh">
+          <Key>
+            <PropertyRef Name="KiemdinhID" />
+          </Key>
+          <Property Name="KiemdinhID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KhachhangID" Type="Int32" />
+          <Property Name="Ngaykiemdinh" Type="DateTime" Precision="0" />
+          <Property Name="Ghichu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Chisoluckiemdinh" Type="Int32" />
+          <Property Name="Chisosaukiemdinh" Type="Int32" />
+          <Property Name="HoaDonId" Type="Int32" />
         </EntityType>
         <EntityType Name="Lichsuhoadon">
           <Key>
@@ -1877,6 +1888,7 @@
           <Property Name="SXPrice" Type="Double" Nullable="false" />
           <Property Name="KD" Type="Double" Nullable="false" />
           <Property Name="KDPrice" Type="Double" Nullable="false" />
+          <Property Name="TruocThue" Type="Double" />
           <Property Name="ThueSuat" Type="Double" Nullable="false" />
           <Property Name="ThueSuatPrice" Type="Double" Nullable="false" />
           <Property Name="TileBVMT" Type="Double" Nullable="false" />
@@ -2039,11 +2051,11 @@
           <Property Name="HoaDonNuocID" Type="Int32" />
           <Property Name="SoTienPhaiNop" Type="Double" />
           <Property Name="SoTienDaThu" Type="Int32" />
+          <Property Name="SoTienTrenHoaDon" Type="Int32" Nullable="false" />
           <NavigationProperty Name="DuCoes" Relationship="HoaDonHaDongModel.FK_DuCo_SoTienNopTheoThang" FromRole="SoTienNopTheoThang" ToRole="DuCo" />
           <NavigationProperty Name="GiaoDiches" Relationship="HoaDonHaDongModel.FK_GiaoDich_TienNopTheoThang" FromRole="SoTienNopTheoThang" ToRole="GiaoDich" />
           <NavigationProperty Name="Hoadonnuocs" Relationship="HoaDonHaDongModel.FK_Hoadonnuoc_SoTienNopTheoThang" FromRole="SoTienNopTheoThang" ToRole="Hoadonnuoc" />
           <NavigationProperty Name="Hoadonnuoc" Relationship="HoaDonHaDongModel.FK_SoTienNopTheoThang_Hoadonnuoc" FromRole="SoTienNopTheoThang" ToRole="Hoadonnuoc" />
-          <Property Name="SoTienTrenHoaDon" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -2491,18 +2503,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Khachhang_Khachhang">
-          <End Type="HoaDonHaDongModel.Khachhang" Role="Khachhang" Multiplicity="1" />
-          <End Type="HoaDonHaDongModel.Khachhang" Role="Khachhang1" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Khachhang">
-              <PropertyRef Name="KhachhangID" />
-            </Principal>
-            <Dependent Role="Khachhang1">
-              <PropertyRef Name="KhachhangID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Khachhang_Phuongxa">
           <End Type="HoaDonHaDongModel.Phuongxa" Role="Phuongxa" Multiplicity="0..1" />
           <End Type="HoaDonHaDongModel.Khachhang" Role="Khachhang" Multiplicity="*" />
@@ -2659,18 +2659,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Kiemdinh">
-          <Key>
-            <PropertyRef Name="KiemdinhID" />
-          </Key>
-          <Property Name="KiemdinhID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="KhachhangID" Type="Int32" />
-          <Property Name="Ngaykiemdinh" Type="DateTime" Precision="0" />
-          <Property Name="Ghichu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Chisoluckiemdinh" Type="Int32" />
-          <Property Name="Chisosaukiemdinh" Type="Int32" />
-          <Property Name="HoaDonId" Type="Int32" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2714,6 +2702,16 @@
                 <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
                 <ScalarProperty Name="KhachhangID" ColumnName="KhachhangID" />
                 <ScalarProperty Name="CachTinh" ColumnName="CachTinh" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Backups">
+            <EntityTypeMapping TypeName="HoaDonHaDongModel.Backup">
+              <MappingFragment StoreEntitySet="Backups">
+                <ScalarProperty Name="user_backup_id" ColumnName="user_backup_id" />
+                <ScalarProperty Name="backup_date" ColumnName="backup_date" />
+                <ScalarProperty Name="backup_filename" ColumnName="backup_filename" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2990,6 +2988,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Kiemdinhs">
+            <EntityTypeMapping TypeName="HoaDonHaDongModel.Kiemdinh">
+              <MappingFragment StoreEntitySet="Kiemdinh">
+                <ScalarProperty Name="HoaDonId" ColumnName="HoaDonId" />
+                <ScalarProperty Name="Chisosaukiemdinh" ColumnName="Chisosaukiemdinh" />
+                <ScalarProperty Name="Chisoluckiemdinh" ColumnName="Chisoluckiemdinh" />
+                <ScalarProperty Name="Ghichu" ColumnName="Ghichu" />
+                <ScalarProperty Name="Ngaykiemdinh" ColumnName="Ngaykiemdinh" />
+                <ScalarProperty Name="KhachhangID" ColumnName="KhachhangID" />
+                <ScalarProperty Name="KiemdinhID" ColumnName="KiemdinhID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Lichsuhoadons">
             <EntityTypeMapping TypeName="HoaDonHaDongModel.Lichsuhoadon">
               <MappingFragment StoreEntitySet="Lichsuhoadon">
@@ -3006,6 +3017,7 @@
                 <ScalarProperty Name="TileBVMT" ColumnName="TileBVMT" />
                 <ScalarProperty Name="ThueSuatPrice" ColumnName="ThueSuatPrice" />
                 <ScalarProperty Name="ThueSuat" ColumnName="ThueSuat" />
+                <ScalarProperty Name="TruocThue" ColumnName="TruocThue" />
                 <ScalarProperty Name="KDPrice" ColumnName="KDPrice" />
                 <ScalarProperty Name="KD" ColumnName="KD" />
                 <ScalarProperty Name="SXPrice" ColumnName="SXPrice" />
@@ -3276,19 +3288,6 @@
                 <ScalarProperty Name="TuyenKHID" ColumnName="TuyenKHID" />
                 <ScalarProperty Name="NhanVienID" ColumnName="NhanVienID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Kiemdinhs">
-            <EntityTypeMapping TypeName="HoaDonHaDongModel.Kiemdinh">
-              <MappingFragment StoreEntitySet="Kiemdinh">
-                <ScalarProperty Name="HoaDonId" ColumnName="HoaDonId" />
-                <ScalarProperty Name="Chisosaukiemdinh" ColumnName="Chisosaukiemdinh" />
-                <ScalarProperty Name="Chisoluckiemdinh" ColumnName="Chisoluckiemdinh" />
-                <ScalarProperty Name="Ghichu" ColumnName="Ghichu" />
-                <ScalarProperty Name="Ngaykiemdinh" ColumnName="Ngaykiemdinh" />
-                <ScalarProperty Name="KhachhangID" ColumnName="KhachhangID" />
-                <ScalarProperty Name="KiemdinhID" ColumnName="KiemdinhID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

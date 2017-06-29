@@ -1,9 +1,9 @@
 ﻿@model HoaDonNuocHaDong.Khachhang
 @{
     ViewBag.Title = "Xem chi tiết thông tin khách hàng";
-
     var kiemDinh = ViewBag.kiemDinh as List<HoaDonNuocHaDong.Models.KhachHang.KiemDinhModel>;
     var ttChiSo = ViewData["ttChiSo"] as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
+    var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");    
 }
 
 <div class="main">
@@ -292,7 +292,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @i = 1;
+                                                @{ i = 1;}
                                                 @foreach (var item in ttChiSo)
                                                 {
                                                                                         
@@ -310,7 +310,7 @@
                                                         <td>@item.CC</td>
                                                         <td>@item.KDDV</td>
                                                         <td>@item.SXXD</td>
-                                                        <td>@String.Format("{0:n0}", item.TongCong)</td>
+                                                        <td>@item.TongCong.ToString("0,000", brazilianCulture)</td>
                                                     </tr>
                                                     i++;
                                                 }

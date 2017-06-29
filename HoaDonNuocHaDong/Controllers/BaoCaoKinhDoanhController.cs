@@ -2,12 +2,16 @@
 using HoaDonNuocHaDong.Helper;
 using HoaDonNuocHaDong.Models.BaoCaoInHoaDon;
 using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+using HoaDonNuocHaDong.Models.KhachHang;
 using HoaDonNuocHaDong.Repositories;
 using HvitFramework;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -22,6 +26,38 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult BaoCaoKinhDoanh()
         {
             return View();
+        }
+        public void XuLyDanhSachKhachHang()
+        {
+            ControllerBase<DanhSachKhachHang> cb = new ControllerBase<DanhSachKhachHang>();
+            List<DanhSachKhachHang> lst = cb.Query(
+                "DanhSachKhachHangXuatExcel"
+                );
+
+            String fileName = "DSKH.xls";
+            System.IO.FileInfo f = new System.IO.FileInfo(fileName);
+            if (f.Exists) f.Delete();
+            ExcelPackage ep = new ExcelPackage(f);
+
+            ExcelWorksheet customerWorkSheet = ep.Workbook.Worksheets.Add("DSKH");
+            customerWorkSheet.Cells[1, 1].Value = "STT"; ;
+            customerWorkSheet.Cells[1, 2].Value = "Mã khách hàng";
+            customerWorkSheet.Cells[1, 3].Value = "Số hợp đồng";
+            customerWorkSheet.Cells[1, 4].Value = "Tên khách hàng";
+            customerWorkSheet.Cells[1, 5].Value = "Địa chỉ";
+            customerWorkSheet.Cells[1, 6].Value = "Số điện thoại";
+            customerWorkSheet.Cells[1, 7].Value = "TTDoc";            
+            customerWorkSheet.Cells[2, 1].LoadFromCollection(lst);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment;  filename=" + fileName);
+                ep.SaveAs(memoryStream);
+                memoryStream.WriteTo(Response.OutputStream);
+                Response.Flush();
+                Response.End();
+            }
         }
         public ActionResult XuLyDanhSachKhanhHangKyHopDongMoi()
         {
@@ -72,17 +108,6 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult XuLyDanhSachKhachHangTheoDonViQuanLy()
         {
             return View();
-        }
-        public int getPhongBanNguoiDung()
-        {
-            var phongBanRepository = uow.Repository<PhongBanRepository>();
-            if (nhanVien != null)
-            {
-                var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
-                int phongBanID = phongBan.PhongbanID;
-                return phongBanID;
-            }
-            return 0;
         }
 
         #region BaoCaoKhachHangApGiaTongHop
@@ -576,7 +601,7 @@ namespace HoaDonNuocHaDong.Controllers
             else if (type == 2)
             {
                 String nhanviens = !String.IsNullOrEmpty(fc["nhanvien"]) ? fc["nhanvien"] : "";
-                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien(monthReceipt, yearReceipt,nhanviens);
+                List<BaoCaoTongHopSanLuong> ls = xemBaoCaoSanLuongTheoNhanvien(monthReceipt, yearReceipt, nhanviens);
                 ViewBag.columnTitle = "Nhân viên";
                 ViewBag.tong = ls;
             }

@@ -62,6 +62,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
@@ -149,6 +155,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\DatabaseController.cs" />
+    <Compile Include="Areas\Admin\Helpers\DatabaseHelpers.cs" />
     <Compile Include="Areas\Services\Controllers\NhanVienController.cs" />
     <Compile Include="Areas\Services\Controllers\QuanHuyenController.cs" />
     <Compile Include="Areas\Services\Controllers\ToController.cs" />
@@ -156,14 +165,37 @@
     <Compile Include="Areas\Services\ServicesAreaRegistration.cs" />
     <Compile Include="Areas\ThuNgan\Controllers\HoaDonController.cs" />
     <Compile Include="Areas\ThuNgan\Controllers\BaoCaoController.cs" />
+    <Compile Include="Areas\ThuNgan\Controllers\KhachHangController.cs" />
     <Compile Include="Areas\ThuNgan\Controllers\TuyenKhachHangController.cs" />
+    <Compile Include="Areas\ThuNgan\Helpers\GiaoDichHelpers.cs" />
+    <Compile Include="Areas\ThuNgan\Helpers\HoaDonHelpers.cs" />
+    <Compile Include="Areas\ThuNgan\Models\DoanhThuFilterModel.cs" />
     <Compile Include="Areas\ThuNgan\Models\DuCoFilterModel.cs" />
-    <Compile Include="Areas\ThuNgan\Models\DuCoModel.cs" />
     <Compile Include="Areas\ThuNgan\Models\DuNoFilterModel.cs" />
-    <Compile Include="Areas\ThuNgan\Models\DuNoModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\GiaoDichFilterModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\GiaoDichModels.cs" />
     <Compile Include="Areas\ThuNgan\Models\HoaDonFilterModel.cs" />
-    <Compile Include="Areas\ThuNgan\Models\HoaDonModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\HoaDonModels.cs" />
+    <Compile Include="Areas\ThuNgan\Models\KhachHangFilterModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\KhachHangModels.cs" />
+    <Compile Include="Areas\ThuNgan\Models\SoTienNopTheoThangFilterModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\SoTienNopTheoThangModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\TuyenKhachHangFilterModel.cs" />
+    <Compile Include="Areas\ThuNgan\Models\TuyenKhachHangModel.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\DuCoRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\GiaoDichRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\HoaDonRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\Interfaces\IDuCoRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\Interfaces\IGiaoDichRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\Interfaces\IHoaDonRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\Interfaces\IKhachHangRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\Interfaces\ISoTienNopTheoThangRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\KhachHangRepository.cs" />
+    <Compile Include="Areas\ThuNgan\Repositories\SoTienNopTheoThangRepository.cs" />
     <Compile Include="Areas\ThuNgan\ThuNganAreaRegistration.cs" />
+    <Compile Include="Backup.cs">
+      <DependentUpon>HoaDonHaDong.tt</DependentUpon>
+    </Compile>
     <Compile Include="Base\SecuredController.cs" />
     <Compile Include="Captuyen.cs">
       <DependentUpon>HoaDonHaDong.tt</DependentUpon>
@@ -192,6 +224,7 @@
     <Compile Include="Chucvu.cs">
       <DependentUpon>HoaDonHaDong.tt</DependentUpon>
     </Compile>
+    <Compile Include="Config\DatabaseConfig.cs" />
     <Compile Include="Congno.cs">
       <DependentUpon>HoaDonHaDong.tt</DependentUpon>
     </Compile>
@@ -208,9 +241,11 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\HoadonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HuyHoaDonController.cs" />
     <Compile Include="Controllers\KhachhangController.cs" />
     <Compile Include="Controllers\KhuvucController.cs" />
     <Compile Include="Controllers\KiemdinhController.cs" />
+    <Compile Include="Controllers\LichSuHoaDonRepository.cs" />
     <Compile Include="Controllers\LoaiApGiaController.cs" />
     <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\NguoidungController.cs" />
@@ -221,7 +256,6 @@
     <Compile Include="Controllers\PrintController.cs" />
     <Compile Include="Controllers\QuanhuyenController.cs" />
     <Compile Include="Controllers\SecureController.cs" />
-    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SoLieuTieuThuController.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -245,6 +279,11 @@
     <Compile Include="DuCo.cs">
       <DependentUpon>HoaDonHaDong.tt</DependentUpon>
     </Compile>
+    <Compile Include="Factory\Interface\IReportInHoaDon.cs" />
+    <Compile Include="Factory\ReportInHoaDonFactory.cs" />
+    <Compile Include="Factory\ReportLP2190.cs" />
+    <Compile Include="Factory\ReportLX2170.cs" />
+    <Compile Include="Factory\ReportTallyGenicom.cs" />
     <Compile Include="GiaoDich.cs">
       <DependentUpon>HoaDonHaDong.tt</DependentUpon>
     </Compile>
@@ -267,6 +306,9 @@
     <Compile Include="Helper\NguoidungHelper.cs" />
     <Compile Include="Helper\NhanVienHelper.cs" />
     <Compile Include="Helper\PhongbanHelper.cs" />
+    <Compile Include="Helper\QuanHuyenHelper.cs" />
+    <Compile Include="Helper\StopWatch.cs" />
+    <Compile Include="Helper\TimeHelper.cs" />
     <Compile Include="Helper\Tuyen.cs" />
     <Compile Include="Helper\TuyenOng.cs" />
     <Compile Include="Helper\UserInfo.cs" />
@@ -324,6 +366,7 @@
     <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoThatThoat.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoTongHopKhachHangQuanLy.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\BaoCaoTongHopSanLuong.cs" />
+    <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHang.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangApGiaChung.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCacLoaiGiaKhac.cs" />
     <Compile Include="Models\BaoCaoKinhDoanh\DanhSachKhachHangCapNuocTroLai.cs" />
@@ -349,15 +392,21 @@
     <Compile Include="Models\DanhSachKhachHangInXongHoaDon.cs" />
     <Compile Include="Models\HoaDonDayDu.cs" />
     <Compile Include="Models\Hoadonnuocbihuy\Hoadonnuocbihuy.cs" />
+    <Compile Include="Models\InHoaDon\LichSuHoaDon.cs" />
     <Compile Include="Models\InHoaDon\TuyenTinhTien.cs" />
     <Compile Include="Models\KhachHang\KhachHangModel.cs" />
+    <Compile Include="Models\KhachHang\KiemDinhModel.cs" />
     <Compile Include="Models\KhachHang\LocChiSo.cs" />
     <Compile Include="Models\KhachHang\ModelKhachHang.cs" />
+    <Compile Include="Models\ModelNhanVien.cs" />
+    <Compile Include="Models\ModelQuanHuyen.cs" />
+    <Compile Include="Models\ModelTuyen.cs" />
     <Compile Include="Models\MTuyenong.cs" />
     <Compile Include="Models\NhapChiSoCap.cs" />
     <Compile Include="Models\SoLieuTieuThu\HoaDonNuoc.cs" />
     <Compile Include="Models\ToQuanHuyen\ToQuanHuyen.cs" />
     <Compile Include="Models\TuyenKhachHang\TuyenKhachHang.cs" />
+    <Compile Include="Models\TuyenKhachHang\TuyenKhachHangDuocChot.cs" />
     <Compile Include="Models\Tuyenong\ChiSoCap.cs" />
     <Compile Include="Nguoidung.cs">
       <DependentUpon>HoaDonHaDong.tt</DependentUpon>
@@ -396,26 +445,37 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Reports\Report.cs">
+    <Compile Include="Reports\ReportLP2190.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Report.rpt</DependentUpon>
+      <DependentUpon>ReportLP2190.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportSample.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportSample.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\TallyGenicom.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TallyGenicom.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Repositories\AdminUnitOfWork.cs" />
+    <Compile Include="Repositories\BackupRepository.cs" />
+    <Compile Include="Repositories\BaoCaoInHoaDonRepository.cs" />
     <Compile Include="Repositories\DangNhapRepository.cs" />
     <Compile Include="Repositories\HDNHDUnitOfWork.cs" />
-    <Compile Include="Repositories\HoaDonRepository.cs" />
-    <Compile Include="Repositories\DuCoRepository.cs" />
     <Compile Include="Repositories\Interfaces\IDangNhapRepository.cs" />
-    <Compile Include="Repositories\Interfaces\IDuCoRepository.cs" />
-    <Compile Include="Repositories\Interfaces\IHoaDonRepository.cs" />
     <Compile Include="Repositories\Interfaces\INguoiDungRepository.cs" />
     <Compile Include="Repositories\Interfaces\INhanVienRepository.cs" />
     <Compile Include="Repositories\Interfaces\IPhongBanRepository.cs" />
     <Compile Include="Repositories\Interfaces\ITuyenKHRepository.cs" />
     <Compile Include="Repositories\Interfaces\IQuanHuyenRepository.cs" />
     <Compile Include="Repositories\Interfaces\IToRepository.cs" />
+    <Compile Include="Repositories\LichSuHoaDonRepository.cs" />
     <Compile Include="Repositories\NguoiDungRepository.cs" />
     <Compile Include="Repositories\NhanVienRepository.cs" />
     <Compile Include="Repositories\PhongBanRepository.cs" />
@@ -1727,6 +1787,7 @@
     <Content Include="bin\WebGrease.dll" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\Style.css" />
     <Content Include="Controllers\doanhthu.txt" />
     <Content Include="Controllers\isChecked.txt" />
@@ -2004,6 +2065,16 @@
     <Content Include="Areas\ThuNgan\Views\BaoCao\DoanhThu.cshtml" />
     <Content Include="Areas\ThuNgan\Views\TuyenKhachHang\Index.cshtml" />
     <Content Include="Areas\ThuNgan\Views\Shared\_BaoCaoFilter.cshtml" />
+    <Content Include="Areas\Admin\Views\Database\Backup.cshtml" />
+    <Content Include="Areas\Admin\Views\Database\Restore.cshtml" />
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\KhachHang\CapNhat.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\KhachHang\ChiTiet.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\KhachHang\Index.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\KhachHang\IndexExport.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\KhachHang\LichSuDungNuoc.cshtml" />
+    <Content Include="Areas\ThuNgan\Views\KhachHang\LichSuGiaoDich.cshtml" />
     <None Include="Reports\DataSet1.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -2259,6 +2330,12 @@
     <Content Include="Views\Shared\_MenuInHoaDon.cshtml" />
     <Content Include="Views\Shared\_MenuKinhDoanh.cshtml" />
     <Content Include="Views\Khachhang\FilterMaKH.cshtml" />
+    <Content Include="Views\Nhanvien\QuickAssign.cshtml" />
+    <Content Include="Views\HuyHoaDon\Create.cshtml" />
+    <Content Include="Views\HuyHoaDon\Index.cshtml" />
+    <Content Include="Views\BaoCaoKinhDoanh\DanhSachKhachHang.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\BaoCaoSanLuongDoanhThuTheoNam.cshtml" />
+    <Content Include="Views\BaoCaoInHoaDon\BaoCaoSanLuongDoanhThuTheoQuy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -2272,9 +2349,17 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Report.rpt">
+    <EmbeddedResource Include="Reports\ReportLP2190.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>Report.cs</LastGenOutput>
+      <LastGenOutput>ReportLP2190.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ReportSample.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ReportSample.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\TallyGenicom.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>TallyGenicom.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

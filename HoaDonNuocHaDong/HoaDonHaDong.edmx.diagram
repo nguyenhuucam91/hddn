@@ -8,49 +8,51 @@
         <EntityTypeShape EntityType="HoaDonHaDongModel.Apgia" Width="1.5" PointX="8" PointY="6.875" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.ApGiaDacBiet" Width="1.5" PointX="7.75" PointY="0.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Apgiatonghop" Width="1.5" PointX="9.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Backup" Width="1.5" PointX="10.75" PointY="4.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Captuyen" Width="1.5" PointX="0.75" PointY="2.375" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Chinhanh" Width="1.5" PointX="3" PointY="24.125" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Chisocap" Width="1.5" PointX="10.75" PointY="4.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Chisonuoctheotuyen" Width="1.5" PointX="14.75" PointY="10.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Chitietchisonuoctheotuyen" Width="1.5" PointX="17" PointY="17.25" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Chitietcongno" Width="1.5" PointX="12" PointY="18.625" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Chitiethoadonnuoc" Width="1.5" PointX="15" PointY="25.125" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Chucnangchuongtrinh" Width="1.5" PointX="7.5" PointY="33.125" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Chisocap" Width="1.5" PointX="5.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Chisonuoctheotuyen" Width="1.5" PointX="12.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Chitietchisonuoctheotuyen" Width="1.5" PointX="15" PointY="18.25" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Chitietcongno" Width="1.5" PointX="12" PointY="32.625" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Chitiethoadonnuoc" Width="1.5" PointX="15" PointY="28.5" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Chucnangchuongtrinh" Width="1.5" PointX="10.5" PointY="48.375" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Chucvu" Width="1.5" PointX="5.25" PointY="24.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Congno" Width="1.5" PointX="9.75" PointY="27.125" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Cumdancu" Width="1.5" PointX="5.25" PointY="21" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Dangnhap" Width="1.5" PointX="12" PointY="44.625" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Dangnhap" Width="1.5" PointX="12" PointY="44.875" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Donghotong" Width="1.5" PointX="5.25" PointY="1" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.DuCo" Width="1.5" PointX="17.25" PointY="21.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.GiaoDich" Width="1.5" PointX="17.25" PointY="32.5" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.DuCo" Width="1.5" PointX="17.25" PointY="20.125" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.GiaoDich" Width="1.5" PointX="17.25" PointY="25.375" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Hangsanxuat" Width="1.5" PointX="3" PointY="9.5" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Hinhthucthanhtoan" Width="1.5" PointX="7.75" PointY="4.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Hoadonnuoc" Width="1.5" PointX="12.75" PointY="25.625" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Hoadonnuocbihuy" Width="1.5" PointX="5.75" PointY="10.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Khachhang" Width="1.5" PointX="14.75" PointY="13.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Lichsuhoadon" Width="1.5" PointX="7.75" PointY="10.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Lichsusudungct" Width="1.5" PointX="12" PointY="37.125" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Hoadonnuocbihuy" Width="1.5" PointX="10.75" PointY="7.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Khachhang" Width="1.5" PointX="12.75" PointY="15" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Kiemdinh" Width="1.5" PointX="7.75" PointY="10.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Lichsuhoadon" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Lichsusudungct" Width="1.5" PointX="12" PointY="39.375" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Loaiapgia" Width="1.5" PointX="5.75" PointY="7.125" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Loaidongho" Width="1.5" PointX="3" PointY="6.25" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.LoaiKH" Width="1.5" PointX="9.75" PointY="10.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Nguoidung" Width="1.5" PointX="9.75" PointY="36.875" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.LoaiKH" Width="1.5" PointX="9.75" PointY="11.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Nguoidung" Width="1.5" PointX="9.75" PointY="37.125" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Nhanvien" Width="1.5" PointX="7.5" PointY="26.625" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Nhomchucnang" Width="1.5" PointX="5.25" PointY="33.5" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Nhomchucnang" Width="1.5" PointX="8.25" PointY="48.625" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Phongban" Width="1.5" PointX="5.25" PointY="27.625" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Phuongxa" Width="1.5" PointX="3" PointY="20.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Quanhuyen" Width="1.5" PointX="0.75" PointY="22.375" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Quyen" Width="1.5" PointX="9.75" PointY="33" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Quyencuanguoidung" Width="1.5" PointX="12" PointY="34.375" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.SoTienNopTheoThang" Width="1.5" PointX="15" PointY="29.375" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.sysdiagram" Width="1.5" PointX="11.75" PointY="0.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Thongbao" Width="1.5" PointX="12" PointY="41.375" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Quyen" Width="1.5" PointX="12.75" PointY="48.125" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Quyencuanguoidung" Width="1.5" PointX="15" PointY="37.625" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.SoTienNopTheoThang" Width="1.5" PointX="15" PointY="25" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.sysdiagram" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Thongbao" Width="1.5" PointX="12" PointY="35.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.To" Width="1.5" PointX="8.25" PointY="22.375" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.ToQuanHuyen" Width="1.5" PointX="11.75" PointY="10.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.TuyenDuocChot" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.ToQuanHuyen" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.TuyenDuocChot" Width="1.5" PointX="4.75" PointY="13.75" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Tuyenkhachhang" Width="1.5" PointX="10.5" PointY="21.375" />
         <EntityTypeShape EntityType="HoaDonHaDongModel.Tuyenong" Width="1.5" PointX="3" PointY="1.375" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Tuyenongkythuat" Width="1.5" PointX="2.75" PointY="12.75" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Tuyentheonhanvien" Width="1.5" PointX="9.75" PointY="42" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Tuyenongkythuat" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="HoaDonHaDongModel.Tuyentheonhanvien" Width="1.5" PointX="9.75" PointY="42.125" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Apgia_Loaiapgia" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Tuyenong_Captuyen" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Chinhanh_Quanhuyen" />
@@ -79,7 +81,6 @@
         <AssociationConnector Association="HoaDonHaDongModel.FK_Hoadonnuoc_Nhanvien" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Hoadonnuoc_SoTienNopTheoThang" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_SoTienNopTheoThang_Hoadonnuoc" />
-        <AssociationConnector Association="HoaDonHaDongModel.FK_Khachhang_Khachhang" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Khachhang_Phuongxa" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Khachhang_Tuyenkhachhang" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Lichsusudungct_Nguoidung" />
@@ -93,7 +94,6 @@
         <AssociationConnector Association="HoaDonHaDongModel.FK_Quyencuanguoidung_Quyen" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Tuyenkhachhang_To" />
         <AssociationConnector Association="HoaDonHaDongModel.FK_Tuyenong_Tuyenong" />
-        <EntityTypeShape EntityType="HoaDonHaDongModel.Kiemdinh" Width="1.5" PointX="13.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
