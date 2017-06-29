@@ -97,4 +97,10 @@ namespace HDNHD.Models.Constants
         NHAN_VIEN = 1,
         TRUONG_PHONG = 2
     }
+
+    public enum EPaginator
+    {
+        PAGESIZE = 50,
+
+    }
 }

@@ -1,0 +1,67 @@
+﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
+@{
+    ViewBag.Title = "DanhSachKhanhHang";
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+}
+<style type="text/css">
+    .xulybc {
+        min-height: 400px;
+        margin: 2% 10%;
+    }
+
+    .ten {
+        font-size: 25px;
+        font-weight: bold;
+        margin-left: 20%;
+    }
+
+    .loc {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 1% 0 4% 34%;
+    }
+
+    .tong {
+        margin: 1% 0 0 60%;
+    }
+</style>
+<div class="ten">Danh sách Khách hàng</div>
+@{
+    List<DanhSachKhachHangKyHopDongMoi> lst = (List<DanhSachKhachHangKyHopDongMoi>)ViewData["khachhangs"];
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>TT</th>
+            <th>Mã tuyến KH</th>
+            <th>TT đọc</th>
+            <th>Mã KH</th>
+            <th>Họ và Tên</th>
+            <th>Địa Chỉ</th>
+            <th>Ngày ký hợp đồng</th>
+            <th>Số hợp đồng</th>
+            @*<th>Ngày lắp đặt</th>*@
+            <th>Chỉ số lắp đặt</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int i = 1;}
+        @foreach (DanhSachKhachHangKyHopDongMoi obj in lst.Distinct())
+        {
+            <tr>
+                <td>@i</td>
+                <td>@obj.MaTuyen</td>
+                <td>@obj.ThuTuDoc</td>
+                <td>@obj.MaKhachHang</td>
+                <td>@obj.Ten</td>
+                <td>@obj.Diachi</td>
+                <td>@String.Format("{0:dd/MM/yyyy}", obj.Ngaykyhopdong)</td>
+                <td>@obj.Sohopdong</td>
+                @*<td>@obj.Ngaylapdat</td>*@
+                <td>@obj.Chisolapdat</td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+<div class="tong"><b>Tổng cộng: @lst.Count khách hàng</b></div>

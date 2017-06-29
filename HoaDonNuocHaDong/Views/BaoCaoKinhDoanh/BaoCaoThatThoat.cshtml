@@ -1,8 +1,7 @@
 ﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
 @{
     ViewBag.Title = "BaoCaoThatThoat";
-Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
-DateTime d1 = ViewBag.dt1;
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
 }
 <style>
     .xulybc {
@@ -13,29 +12,28 @@ DateTime d1 = ViewBag.dt1;
     .ten {
         font-size: 29px;
         font-weight: bold;
-        margin-left:35%;
+        margin-left: 35%;
     }
 
     .loc {
         font-size: 13px;
         font-weight: bold;
-        margin:1% 0 4% 42%;
+        margin: 1% 0 4% 42%;
     }
-
 </style>
 <div class="ten">Báo cáo thất thoát</div>
-<div class="loc">Tháng @d1.Month năm @d1.Year</div>
+<div class="loc">Tháng @ViewBag.month năm @ViewBag.year</div>
 @{
     List<BaoCaoThatThoat> lst = (List<BaoCaoThatThoat>)ViewData["lst"];
-    int[] arrSum = (int[])ViewData["tong"];
+    //int[] arrSum = (int[])ViewData["tong"];
 }
 
-<table class="table table-bordered" >
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>TT</th>
-            <th>Ký hiệu ĐH</th>
-            <th>Tên đồng hồ</th>
+            <th>Mã tuyến ống</th>
+            <th>Tên tuyến ống</th>
             <th>Số KH</th>
             <th>SL báo cáo</th>
             <th>SL tháng trước</th>
@@ -46,31 +44,33 @@ DateTime d1 = ViewBag.dt1;
         </tr>
     </thead>
     <tbody>
+        @{int i = 1;}
         @foreach (BaoCaoThatThoat obj in lst)
         {
             <tr>
-            <td>@obj.TT</td>
-            <td>@obj.KyHieuDongHo</td>
-            <td>@obj.Ten</td>
-            <td>@obj.SoKH</td>
-            <td>@obj.SanLuongThangBaoCao</td>
-            <td>@obj.SanLuongThangTruoc</td>
-            <td>@obj.SanLuongPhat</td>
-            <td>@obj.LuongThatThoat</td>
-            <td>@obj.TiLeThatThoat</td>
-            <td>@obj.GhiChu</td>
-        </tr>
+                <td>@i</td>
+                <td>@obj.MaTuyen</td>
+                <td>@obj.TenTuyen</td>
+                <td>@obj.SoKH</td>
+                <td>@obj.SanLuongThangBaoCao</td>
+                <td>@obj.SanLuongThangTruoc</td>
+                <td>@obj.SanLuongPhat</td>
+                <td>@obj.LuongThatThoat</td>
+                <td>@obj.TiLeThatThoat</td>
+                <td>@obj.GhiChu</td>
+            </tr>
+            i++;
         }
-        
-        <tr>
-            <td colspan="3">Tổng</td>
-            <td>@arrSum[0]</td>
-            <td>@arrSum[1]</td>
-            <td>@arrSum[2]</td>
-            <td>@arrSum[3]</td>
-            <td>@arrSum[4]</td>
-            <td>@arrSum[5]</td>
-            <td></td>
-        </tr>
+
+        @*<tr>
+                <td colspan="3">Tổng</td>
+                <td>@arrSum[0]</td>
+                <td>@arrSum[1]</td>
+                <td>@arrSum[2]</td>
+                <td>@arrSum[3]</td>
+                <td>@arrSum[4]</td>
+                <td>@arrSum[5]</td>
+                <td></td>
+            </tr>*@
     </tbody>
 </table>

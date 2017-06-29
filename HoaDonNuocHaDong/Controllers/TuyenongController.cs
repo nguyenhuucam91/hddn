@@ -14,8 +14,7 @@ using HoaDonNuocHaDong.Models;
 namespace HoaDonNuocHaDong.Controllers
 {
     public class TuyenongController : BaseController
-    {
-        private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+    {        
 
         // GET: /Tuyenong/
         public ActionResult Index()

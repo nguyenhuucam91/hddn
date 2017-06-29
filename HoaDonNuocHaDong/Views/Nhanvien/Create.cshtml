@@ -2,10 +2,12 @@
 
 @{
     ViewBag.Title = "Thêm nhân viên mới";
-
     var tuyenKHID = ViewBag._TuyenKHID as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
     var to = ViewBag.To;
     var phongBan = ViewBag.PhongBanQuanHuyen;
+    var phongBanNguoiDung = ViewBag.phongBanLoggedInUser;
+    HoaDonNuocHaDong.Helper.Tuyen tuyenHelper = new HoaDonNuocHaDong.Helper.Tuyen();
+
 }
 @using (Html.BeginForm("Create", "Nhanvien"))
 {
@@ -107,7 +109,10 @@
 
                                                 @foreach (var item in tuyenKHID)
                                                 {
-                                                    <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
+                                                     if (!tuyenHelper.tuyenHasNhanVienThuocPhongBanQuanLy(Convert.ToInt32(item.TuyenKHID), phongBanNguoiDung))
+                                                    {
+                                                        <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
+                                                    }                                                    
                                                 }
                                             </select>
                                             <br />

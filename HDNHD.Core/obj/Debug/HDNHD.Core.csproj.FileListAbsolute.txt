@@ -26,3 +26,29 @@ F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Core\bin\Syste
 F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Core\obj\Debug\HDNHD.Core.csprojResolveAssemblyReference.cache
 F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Core\obj\Debug\HDNHD.Core.dll
 F:\01. BiHanu\00. BiFiT\03. HanuSoft\05. New Creation\hdnhd\HDNHD.Core\obj\Debug\HDNHD.Core.pdb
+F:\Project\hddn\HDNHD.Core\bin\HDNHD.Core.dll.config
+F:\Project\hddn\HDNHD.Core\bin\HDNHD.Core.dll
+F:\Project\hddn\HDNHD.Core\bin\HDNHD.Core.pdb
+F:\Project\hddn\HDNHD.Core\bin\Antlr3.Runtime.dll
+F:\Project\hddn\HDNHD.Core\bin\HDNHD.Models.dll
+F:\Project\hddn\HDNHD.Core\bin\Microsoft.Web.Infrastructure.dll
+F:\Project\hddn\HDNHD.Core\bin\Newtonsoft.Json.dll
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Helpers.dll
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Optimization.dll
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Razor.dll
+F:\Project\hddn\HDNHD.Core\bin\System.Web.WebPages.Deployment.dll
+F:\Project\hddn\HDNHD.Core\bin\System.Web.WebPages.dll
+F:\Project\hddn\HDNHD.Core\bin\System.Web.WebPages.Razor.dll
+F:\Project\hddn\HDNHD.Core\bin\WebGrease.dll
+F:\Project\hddn\HDNHD.Core\bin\HDNHD.Models.pdb
+F:\Project\hddn\HDNHD.Core\bin\Antlr3.Runtime.pdb
+F:\Project\hddn\HDNHD.Core\bin\Newtonsoft.Json.xml
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Helpers.xml
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Optimization.xml
+F:\Project\hddn\HDNHD.Core\bin\System.Web.Razor.xml
+F:\Project\hddn\HDNHD.Core\bin\System.Web.WebPages.xml
+F:\Project\hddn\HDNHD.Core\bin\System.Web.WebPages.Deployment.xml
+F:\Project\hddn\HDNHD.Core\bin\System.Web.WebPages.Razor.xml
+F:\Project\hddn\HDNHD.Core\obj\Debug\HDNHD.Core.csprojResolveAssemblyReference.cache
+F:\Project\hddn\HDNHD.Core\obj\Debug\HDNHD.Core.dll
+F:\Project\hddn\HDNHD.Core\obj\Debug\HDNHD.Core.pdb

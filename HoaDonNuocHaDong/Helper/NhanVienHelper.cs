@@ -79,39 +79,13 @@ namespace HoaDonNuocHaDong.Helper
             return "Không có";
         }
 
-        public List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> loadTuyenChuaCoNhanVien(int phongBanId)
+        public List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> loadTuyenChuaCoNhanVien()
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
-            //List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> tuyensKhachHang = new List<Models.TuyenKhachHang.TuyenKhachHang>();
-            //if (phongBanId != 0)
-            //{
-            //    List<Nhanvien> nhanViens = _db.Nhanviens.Where(p => p.PhongbanID == phongBanId).ToList();
-            //    var tuyens = (from i in _db.Tuyenkhachhangs
-            //                  join j in _db.Tuyentheonhanviens on i.TuyenKHID equals j.TuyenKHID into j1
-            //                  from j4 in j1.DefaultIfEmpty()
-            //                  join r in _db.Nhanviens on j4.NhanVienID equals r.NhanvienID into j2
-            //                  from j3 in j2.DefaultIfEmpty()
-            //                  where (j4.TuyenKHID == null || j3.PhongbanID != phongBanId) && i.IsDelete == false
-            //                  select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang
-            //                  {
-            //                      MaTuyenKH = i.Matuyen,
-            //                      TenTuyen = i.Ten,
-            //                      TuyenKHID = i.TuyenKHID.ToString(),                                 
-            //                  });
-            //    return tuyens.ToList();
-            //    //foreach (var tuyen in tuyens)
-            //    //{
-            //    //    if (nhanViens.Select(p => p.NhanvienID).Contains(tuyen.NhanVienId))
-            //    //    {
-            //    //        tuyensKhachHang.Add(tuyen);
-            //    //    }
-            //    //}
+            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();           
 
-            //}
-            //return tuyensKhachHang;
-
-            var tuyens = (from i in _db.Tuyenkhachhangs
-                          select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang
+            var tuyens = (from i in _db.Tuyenkhachhangs                         
+                          where i.IsDelete == false 
+                          select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang                         
                           {
                               MaTuyenKH = i.Matuyen,
                               TenTuyen = i.Ten,
@@ -119,6 +93,6 @@ namespace HoaDonNuocHaDong.Helper
                           }
                          ).ToList();
             return tuyens;
-        }
+        }       
     }
 }

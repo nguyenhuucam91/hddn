@@ -23,6 +23,10 @@ using System.Configuration;
 using HoaDonNuocHaDong.Models.InHoaDon;
 using HDNHD.Models.Constants;
 using System.Runtime.Serialization;
+using PagedList;
+using HvitFramework;
+using HoaDonNuocHaDong.Models.SoLieuTieuThu;
+using HoaDonNuocHaDong.Models.TuyenKhachHang;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -32,6 +36,9 @@ namespace HoaDonNuocHaDong.Controllers
         private HoaDonNuocHaDong.Helper.Tuyen _tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
         public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
         private int printCircumstance = 0;
+        QuanHuyenHelper qHHelper = new QuanHuyenHelper();
+        Lichsuhoadon lichSuHoaDon = new Lichsuhoadon();
+        TuyenKhachHangDuocChot tuyenDuocChot = new TuyenKhachHangDuocChot();
 
         public void setPrintCircumstance(int printCircumstance)
         {
@@ -66,59 +73,23 @@ namespace HoaDonNuocHaDong.Controllers
 
         public List<Models.InHoaDon.TuyenTinhTien> getDanhSachHoaDonDuocIn(String tuyenID, int thangIn, int namIn)
         {
-            List<Models.InHoaDon.TuyenTinhTien> hoadons = (from i in db.Lichsuhoadons
-                                                           join j in db.Hoadonnuocs on i.HoaDonID equals j.HoadonnuocID
-                                                           join r in db.Khachhangs on j.KhachhangID equals r.KhachhangID
-                                                           where i.ThangHoaDon == thangIn && i.NamHoaDon == namIn &&
-                                                                  r.TuyenKHID.ToString() == tuyenID &&
-                                                                  (j.Trangthaixoa == false || j.Trangthaixoa == null) && j.Trangthaichot == true &&
-                                                                  ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai.Value <= DateTime.Now)) &&
-                                                                  j.Tongsotieuthu > 0
-                                                           orderby i.TTDoc
-                                                           select new Models.InHoaDon.TuyenTinhTien
-                                                           {
-                                                               HoaDonNuoc = i.HoaDonID,
-                                                               MaKH = i.MaKH,
-                                                               TenKH = i.TenKH,
-                                                               DiaChi = i.Diachi,
-                                                               NgayBatDau = i.NgayBatDau,
-                                                               NgayKetThuc = i.NgayKetThuc,
-                                                               SH1 = i.SH1,
-                                                               SH1Price = i.SH1Price,
-                                                               SH2 = i.SH2,
-                                                               SH2Price = i.SH2Price,
-                                                               SH3 = i.SH3,
-                                                               SH3Price = i.SH3Price,
-                                                               SH4 = i.SH4,
-                                                               SH4Price = i.SH4Price,
-                                                               HC = i.HC,
-                                                               HCPrice = i.HCPrice,
-                                                               CC = i.CC,
-                                                               CCPrice = i.CCPrice,
-                                                               SX = i.SX,
-                                                               SXPrice = i.SXPrice,
-                                                               KD = i.KD,
-                                                               KDPrice = i.KDPrice,
-                                                               PhiVAT = i.ThueSuatPrice,
-                                                               TileBVMT = i.TileBVMT,
-                                                               PhiBVMT = i.PhiBVMT,
-                                                               TTDoc = i.TTDoc.Value,
-                                                               SanLuong = i.SanLuongTieuThu,
-                                                               TongCong = i.TongCong,
-                                                               TTThuNgan = i.TTThungan,
-                                                               TuyenKHID = i.TuyenKHID,
-                                                           }).ToList();
-
-            return hoadons;
+            ControllerBase<Models.InHoaDon.TuyenTinhTien> cb = new ControllerBase<Models.InHoaDon.TuyenTinhTien>();
+            List<Models.InHoaDon.TuyenTinhTien> hoaDons = cb.Query("DanhSachHoaDonDuocInTheoTuyenThangNam",
+                       new SqlParameter("@d1", thangIn),
+                       new SqlParameter("@d2", namIn),
+                       new SqlParameter("@d3", tuyenID)
+                       );
+          
+            return hoaDons;
         }
 
-        public void updateSoHoaDonBasedOnSituation(String tuyenID, int thangIn, int namIn, String[] hoaDons = null, int fromReceipt = 0, int toReceipt = 0)
+        public void updateSoHoaDonBasedOnSituation(int? quan, String tuyenID, int thangIn, int namIn, String[] hoaDons = null, int fromReceipt = 0, int toReceipt = 0)
         {
             xoaThongTinThuNganVaCongDon(tuyenID.ToString(), thangIn.ToString(), namIn.ToString());
             switch (printCircumstance)
             {
                 case (int)PrintModeEnum.PRINT_ALL:
-                    updateAllHoaDon(tuyenID, thangIn, namIn);
+                    updateAllHoaDon(quan, tuyenID, thangIn, namIn);
                     break;
                 case (int)PrintModeEnum.PRINT_SELECTED:
                     updateSelectedReceipt(tuyenID, thangIn, namIn, hoaDons);
@@ -178,8 +149,7 @@ namespace HoaDonNuocHaDong.Controllers
         private void updateSelectedReceipt(string tuyenID, int thangIn, int namIn, String[] hoaDons)
         {
             int soHoaDon = 1; double tongTienCongDon = 0;
-            double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
-
+            double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;            
             using (SqlConnection connection = new SqlConnection(connectionString))
 
                 foreach (var hoaDon in hoaDons)
@@ -199,7 +169,7 @@ namespace HoaDonNuocHaDong.Controllers
                         {
                             connection.Open();
                             command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi, TongCong=@tong, BangChu=@chu, ChiSoCongDon=@chiSo " +
-                            "WHERE HoaDonID = @HoaDonID";
+                            "WHERE HoaDonID = @HoaDonID";                            
                             command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                             command.Parameters.AddWithValue("@truocThue", truocThue);
                             command.Parameters.AddWithValue("@thueVAT", thueVAT);
@@ -216,12 +186,13 @@ namespace HoaDonNuocHaDong.Controllers
                 }
         }
 
-        private void updateAllHoaDon(String tuyenID, int thangIn, int namIn)
+        private List<TuyenTinhTien> updateAllHoaDon(int? quanHuyenID, String tuyenID, int thangIn, int namIn)
         {
-            var hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
+            List<TuyenTinhTien> hoadons = getDanhSachHoaDonDuocIn(tuyenID, thangIn, namIn);
             int soHoaDon = 1;
             double tongTienCongDon = 0;
             double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
+            String ttVoOng = qHHelper.getTTVoOng(quanHuyenID);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -236,8 +207,9 @@ namespace HoaDonNuocHaDong.Controllers
                     var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                     using (SqlCommand command = new SqlCommand("", connection))
                     {
-                        command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi,TongCong=@tong,BangChu=@chu, ChiSoCongDon=@chiSo " +
+                        command.CommandText = "Update Lichsuhoadon set TTVoOng = @ttVoOng, TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi,TongCong=@tong,BangChu=@chu, ChiSoCongDon=@chiSo " +
                             "WHERE HoaDonID = @HoaDonID";
+                        command.Parameters.AddWithValue("@ttVoOng", ttVoOng);
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                         command.Parameters.AddWithValue("@truocThue", truocThue);
                         command.Parameters.AddWithValue("@thueVAT", thueVAT);
@@ -252,15 +224,16 @@ namespace HoaDonNuocHaDong.Controllers
                 }
                 connection.Close();
             }
+            return hoadons;
         }
 
         [HttpPost]
-        public ActionResult PrintPreviewSelected(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintPreviewSelected(FormCollection form,int quan, int TuyenID, int month, int year)
         {
-            String[] selectedForm = form["printSelectedHidden"].Split(',');
-            Array.Sort(selectedForm);
+            String[] selectedReceipt = form["printSelectedHidden"].Split(',');
+            String[] selectedForm = LichSuHoaDon.sortLichSuHoaDonByTTDoc(selectedReceipt);
             setPrintCircumstance((int)PrintModeEnum.PRINT_SELECTED);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, selectedForm);
+            updateSoHoaDonBasedOnSituation(quan,TuyenID.ToString(), month, year, selectedForm);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -283,13 +256,13 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintSelected(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintSelected(FormCollection form, int quan, int TuyenID, int month, int year)
         {
 
-            String[] selectedForm = form["printSelectedHidden"].Split(',');
-            Array.Sort(selectedForm);
+            String[] selectedReceipt = form["printSelectedHidden"].Split(',');
+            String[] selectedForm = LichSuHoaDon.sortLichSuHoaDonByTTDoc(selectedReceipt);
             setPrintCircumstance((int)PrintModeEnum.PRINT_SELECTED);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, selectedForm);
+            updateSoHoaDonBasedOnSituation(quan,TuyenID.ToString(), month, year, selectedForm);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -327,60 +300,18 @@ namespace HoaDonNuocHaDong.Controllers
 
         public List<LichSuHoaDon> GetDanhSachHoaDons(int TuyenID, int month, int year)
         {
-            var lichsuhoadons = (from p in db.Lichsuhoadons
-                                 join r in db.Hoadonnuocs on p.HoaDonID equals r.HoadonnuocID
-                                 join k in db.Khachhangs on r.KhachhangID equals k.KhachhangID
-                                 where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year &&
-                                        (r.Trangthaixoa == false || r.Trangthaixoa == null) && r.Trangthaichot == true &&
-                                        ((k.Ngayngungcapnuoc == null && k.Ngaycapnuoclai == null) || (k.Ngaycapnuoclai.Value <= DateTime.Now)) &&
-                                        p.SanLuongTieuThu > 0
+            ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> cb = new ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon>();
+            List<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> hoaDons = cb.Query("LichSuHoaDonStoredProc",
+                       new SqlParameter("@d1", month),
+                       new SqlParameter("@d2", year),
+                       new SqlParameter("@d3", TuyenID)
+                       );
 
-                                 orderby p.TTDoc
-                                 select new HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon
-                                 {
-                                     HoaDonID = p.HoaDonID,
-                                     ThangHoaDon = p.ThangHoaDon,
-                                     NamHoaDon = p.NamHoaDon,
-                                     TenKH = p.TenKH,
-                                     DiaChi = p.Diachi,
-                                     MST = p.MST,
-                                     MaKH = p.MaKH,
-                                     SoHopDong = p.SoHopDong,
-                                     SanLuongTieuThu = p.SanLuongTieuThu,
-                                     ChiSoCu = p.ChiSoCu,
-                                     ChiSoMoi = p.ChiSoMoi,
-                                     SH1 = p.SH1,
-                                     SH2 = p.SH2,
-                                     SH3 = p.SH3,
-                                     SH4 = p.SH4,
-                                     SH1Price = p.SH1Price,
-                                     SH2Price = p.SH2Price,
-                                     SH3Price = p.SH3Price,
-                                     SH4Price = p.SH4Price,
-                                     HC = p.HC,
-                                     CC = p.CC,
-                                     SX = p.SX,
-                                     KD = p.KD,
-                                     HCPrice = p.HCPrice,
-                                     CCPrice = p.CCPrice,
-                                     SXPrice = p.SXPrice,
-                                     KDPrice = p.KDPrice,
-                                     ThueSuatPrice = p.ThueSuatPrice,
-                                     TileBVMT = p.TileBVMT,
-                                     PhiBVMT = p.PhiBVMT,
-                                     TongCong = p.TongCong,
-                                     BangChu = p.BangChu,
-                                     TTVoOng = p.TTVoOng,
-                                     TTThungan = p.TTThungan,
-                                     NgayBatDau = p.NgayBatDau,
-                                     NgayKetThuc = p.NgayKetThuc,
-                                     ChiSoCongDon = p.ChiSoCongDon,
-                                 });
-            return lichsuhoadons.ToList();
+            return hoaDons;           
         }
 
         [HttpPost]
-        public ActionResult PrintPreviewFrom(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintPreviewFrom(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
@@ -419,19 +350,19 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintFrom(String printFrom, FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintFrom(String printFrom, FormCollection form, int quan, int TuyenID, int month, int year)
         {
             switch (printFrom)
             {
                 case "Xem trước in danh sách theo số hóa đơn":
-                    return PrintPreviewFrom(form, TuyenID, month, year);
+                    return PrintPreviewFrom(form, quan, TuyenID, month, year);
                 case "In danh sách theo số hóa đơn":
-                    return PrintFromTo(form, TuyenID, month, year);
+                    return PrintFromTo(form, quan, TuyenID, month, year);
             }
             return View();
         }
 
-        public ActionResult PrintFromTo(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintFromTo(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
@@ -468,10 +399,10 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult PrintAllPreview(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult PrintAllPreview(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, null);
+            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -493,11 +424,10 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult PrintCrystalReport(FormCollection form, int TuyenID, int month, int year)
+        public ActionResult printAll(FormCollection form, int quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            updateSoHoaDonBasedOnSituation(TuyenID.ToString(), month, year, null);
-
+            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -518,13 +448,14 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult ChiSoTuyen()
+        public ActionResult ChiSoTuyen(int? quan, int? to, int? thang , int? nam , int page = 1)
         {
-            ViewBag.beforeFiltered = true;
-            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
-            ViewData["tuyen"] = new List<Tuyenkhachhang>();
-            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            int thangDuocChon = thang == null ? DateTime.Now.Month : thang.Value;
+            int namDuocChon = nam == null ? DateTime.Now.Year : nam.Value;
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+           
+
+            IEnumerable<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> tuyens = new List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot>();
             if (soLuongQuanHuyen > 0)
             {
                 Quanhuyen quanHuyenDauTien = db.Quanhuyens.FirstOrDefault(p => p.IsDelete == false);
@@ -537,34 +468,48 @@ namespace HoaDonNuocHaDong.Controllers
             bool loggedInUserIsThuNgan = HDNHD.Core.Models.RequestScope.UserRole == EUserRole.ThuNgan ? true : false;
             int phongBanId = getPhongBanNguoiDung();
 
+            if (thang != null)
+            {
+                tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thangDuocChon, namDuocChon);
+            }
+                          
+
             #region ViewBag
             ViewBag.isThuNgan = loggedInUserIsThuNgan;
             ViewData["nhanviens"] = new List<Nhanvien>();
-            ViewBag.selectedQuan = "";
-            ViewBag.selectedTo = "";
-            ViewBag.selectedMonth = "";
-            ViewBag.selectedYear = "";
+            ViewBag.selectedQuan = quan;
+            ViewBag.selectedTo = to;
+            ViewBag.selectedMonth = thangDuocChon;
+            ViewBag.selectedYear = namDuocChon;
             ViewBag.selectedNhanvien = 0;
+            ViewBag.beforeFiltered = false;
+            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
+         
+            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
+            
             #endregion
 
-            return View();
+            int pageSize = (int)EPaginator.PAGESIZE;
+            int pageNumber = page != 0 ? page : 0;
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            return View(tuyens);
         }
 
 
         [HttpPost]
-        public ActionResult ChiSoTuyen(FormCollection form)
-        {
-            int quanHuyen = String.IsNullOrEmpty(form["quan"]) ? 0 : Convert.ToInt32(form["quan"]);
-            int selectedNhanVien = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
-            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();
-            //lấy danh sách tổ 
+        public ActionResult ChiSoTuyen(FormCollection form, int? quan, int? to, int? nhanvien, int? thang, int? nam, int page = 1)
+        {            
+            String tuKhoaTimKiem = form["tukhoa"];            
             int soLuongQuanHuyen = db.Quanhuyens.Where(p => p.IsDelete == false).ToList().Count();
+           
+            IEnumerable<TuyenKhachHangDuocChot> tuyens = new List<TuyenKhachHangDuocChot>();
             bool loggedInUserIsThuNgan = HDNHD.Core.Models.RequestScope.UserRole == EUserRole.ThuNgan ? true : false;
             if (!loggedInUserIsThuNgan)
             {
                 if (soLuongQuanHuyen > 0)
                 {
-                    ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyen).ToList();
+                    ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quan).ToList();
                 }
                 else
                 {
@@ -576,129 +521,59 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.THUNGAN).ToList();
             }
 
-            int to = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-            //một tuyến được nhập xong chỉ số tức là tất cả hóa đơn trong đó đã nhập xong
-            int month = String.IsNullOrEmpty(form["thang"]) ? DateTime.Now.Month : Convert.ToInt32(form["thang"]);
-            int year = String.IsNullOrEmpty(form["nam"]) ? DateTime.Now.Year : Convert.ToInt32(form["nam"]);
-
-            // filter
-            var tuyensKhachHang = from tuyenDuocChot in db.TuyenDuocChots
-                                  where tuyenDuocChot.Nam == year && tuyenDuocChot.Thang == month
-                                  join tuyenKH in db.Tuyenkhachhangs on tuyenDuocChot.TuyenKHID equals tuyenKH.TuyenKHID
-                                  where tuyenKH.IsDelete == false
-                                  select tuyenKH;
-
-            if (selectedNhanVien != 0)
+            if (thang != null)
             {
-                tuyensKhachHang = from tuyenKH in tuyensKhachHang
-                                  join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                  where tuyenTheoNhanVien.NhanVienID == selectedNhanVien
-                                  select tuyenKH;
-            }
-            else if (to != 0)
-            {
-                tuyensKhachHang = (from tuyenKH in tuyensKhachHang
-                                   join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                   join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
-                                   where nhanVien.ToQuanHuyenID == to
-                                   select tuyenKH).Distinct();
-            }
-            else if (quanHuyen != 0)
-            {
-                tuyensKhachHang = (from tuyenKH in tuyensKhachHang
-                                   join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenKH.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-                                   join nhanVien in db.Nhanviens on tuyenTheoNhanVien.NhanVienID equals nhanVien.NhanvienID
-                                   join toQuanHuyen in db.ToQuanHuyens on nhanVien.ToQuanHuyenID equals toQuanHuyen.ToQuanHuyenID
-                                   where toQuanHuyen.QuanHuyenID == quanHuyen
-                                   select tuyenKH).Distinct();
+                tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thang, nam);
             }
 
+        
 
-
-            //List<Tuyenkhachhang> tuyensKhachHang = new List<Tuyenkhachhang>();
-
-            ////nếu tổ ko đc chọn
-            ////thu ngân
-            //if (selectedNhanVien == 0)
-            //{
-            //    if (quanHuyen == 0 && to == 0)
-            //    {
-            //        List<TuyenDuocChot> tuyen = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).ToList();
-            //        foreach (var item in tuyen)
-            //        {
-            //            Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
-            //            tuyensKhachHang.Add(tuyenKH);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        //Lấy danh sách tuyến trong hệ thống lọc theo tổ
-            //        List<int> danhSachTuyenThuocTo = _tuyen.getTuyenByTo(to).Select(p => p.TuyenCuaKH).Distinct().ToList();
-            //        List<int> danhSachTuyenDaChot = db.TuyenDuocChots.Where(p => p.Nam == year && p.Thang == month).Select(p => p.TuyenKHID.Value).ToList();
-            //        foreach (var r in danhSachTuyenThuocTo.Intersect(danhSachTuyenDaChot))
-            //        {
-            //            Tuyenkhachhang tuyen = db.Tuyenkhachhangs.Find(r);
-            //            tuyensKhachHang.Add(tuyen);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    List<TuyenDuocChot> tuyen = (from tuyenDuocChot in db.TuyenDuocChots
-            //                                 join tuyenTheoNhanVien in db.Tuyentheonhanviens on tuyenDuocChot.TuyenKHID equals tuyenTheoNhanVien.TuyenKHID
-            //                                 where tuyenDuocChot.Nam == year && tuyenDuocChot.Thang == month && tuyenTheoNhanVien.NhanVienID == selectedNhanVien
-            //                                 select tuyenDuocChot).ToList();
-
-            //    foreach (var item in tuyen)
-            //    {
-            //        Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(item.TuyenKHID);
-            //        tuyensKhachHang.Add(tuyenKH);
-            //    }
-            //}
-
-            ViewBag.beforeFiltered = false;
-            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
+            if (!String.IsNullOrEmpty(tuKhoaTimKiem))
+            {
+                tuyens = tuyens.Where(p => p.MaTuyenKH == tuKhoaTimKiem || p.TenTuyen.Contains(tuKhoaTimKiem));
+            }
 
             int phongBanId = getPhongBanNguoiDung();
 
             #region ViewBag
+            ViewBag.beforeFiltered = false;
+            ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
             ViewBag.isThuNgan = loggedInUserIsThuNgan;
-            ViewBag.selectedQuan = quanHuyen.ToString();
-            ViewBag.selectedTo = to.ToString();
-            ViewBag.selectedMonth = month;
-            ViewBag.selectedYear = year;
-            ViewBag.selectedNhanvien = selectedNhanVien;
+            ViewBag.selectedQuan = quan;
+            ViewBag.selectedTo = to;
+            ViewBag.selectedMonth = thang;
+            ViewBag.selectedYear = nam;
+            ViewBag.selectedNhanvien = nhanvien;
             ViewData["nhanviens"] = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanId && p.ToQuanHuyenID == to).ToList();
-            #endregion
+            ViewData["xinghiep"] = db.Quanhuyens.Where(p => p.IsDelete == false).ToList();            
 
-            ViewData["tuyen"] = tuyensKhachHang.ToList();
-            return View();
+            int pageSize = (int)EPaginator.PAGESIZE;
+            int pageNumber = page != 0 ? page : 0;
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            #endregion
+            return View(tuyens.ToPagedList(pageNumber, pageSize));            
         }
 
 
-
-        public ActionResult XemChiTiet(String tuyen, String month, String year)
-        {
+        public ActionResult XemChiTiet(int quan, String tuyen, String month, String year)
+        {           
             //update tuyen tinh tien            
             int tuyenKHID = Convert.ToInt32(tuyen);
             //Cập nhật trạng thái tính tiền
             int tuyenInt = Convert.ToInt32(tuyen);
             int monthInt = Convert.ToInt32(month);
             int yearInt = Convert.ToInt32(year);
-
-            updateAllHoaDon(tuyen, monthInt, yearInt);
-
+            List<TuyenTinhTien> hoadons = getDanhSachHoaDonDuocIn(tuyen, monthInt, yearInt);
             TuyenDuocChot chotTuyen = db.TuyenDuocChots.FirstOrDefault(p => p.TuyenKHID == tuyenInt && p.Thang == monthInt && p.Nam == yearInt);
             if (chotTuyen != null)
             {
                 chotTuyen.TrangThaiTinhTien = true;
                 db.Entry(chotTuyen).State = EntityState.Modified;
                 db.SaveChanges();
-            }
-            String tuyenID = Request.QueryString["tuyen"];
-            #region ViewBag
-            var danhSach = getDanhSachHoaDonDuocIn(tuyenID, monthInt, yearInt);
-            ViewBag.dsachKH = danhSach.OrderBy(p => p.TTDoc).ToList();
+            }            
+            #region ViewBag            
+            ViewBag.dsachKH = hoadons;
             ViewBag.selectedTuyen = tuyen;
             #endregion
             return View();

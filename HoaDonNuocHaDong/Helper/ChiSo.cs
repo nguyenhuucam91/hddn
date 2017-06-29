@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -107,62 +108,17 @@ namespace HoaDonHaDong.Helper
         /// <param name="year"></param>
         /// <returns></returns>
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> filterChiSo(int month, int year, int? tuyenKHID)
-        {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
-            var _hoaDonNuoc = (from i in _db.Hoadonnuocs
-                               join r in _db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                               join m in _db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
-                               where i.ThangHoaDon == month && i.NamHoaDon == year && 
-                                     r.TuyenKHID == tuyenKHID.Value && 
-                                      (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != month && r.Ngaythanhly.Value.Year != year))&&
-                                     
-                                     (i.Trangthaixoa == false || i.Trangthaixoa == null) 
-                               orderby r.TTDoc
-                               select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
-                               {
-                                   HoaDonNuocID = i.HoadonnuocID,
-                                   KhachHangID = r.KhachhangID,
-                                   MaKhachHang = r.MaKhachHang,
-                                   NgayNgungCapNuoc = r.Ngayngungcapnuoc,
-                                   NgayCapNuocLai = r.Ngaycapnuoclai,
-                                   TenKhachHang = r.Ten,
-                                   SoHo = r.Soho,
-                                   SoKhau = r.Sonhankhau,
-                                   ChiSoCu = m.Chisocu,
-                                   ChiSoMoi = m.Chisomoi,
-                                   SanLuong = i.Tongsotieuthu,
-                                   ThuTuDoc = r.TTDoc,
-                                   SoKhoan = i.SoKhoan,
-                                   NgayKiHopDong = r.Ngaykyhopdong
-                               }).ToList();
-            return _hoaDonNuoc;
-        }
-
-
-        public static int filterChiSoCount(int month, int year, int? tuyenKHID)
-        {
-            ControllerBase<HoaDonNuocHaDong.Models.KhachHang.LocChiSo> cb = new ControllerBase<HoaDonNuocHaDong.Models.KhachHang.LocChiSo>();
-            List<HoaDonNuocHaDong.Models.KhachHang.LocChiSo> khachHangModel = cb.Query("locChiSo",
+        {            
+            ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> cb = new ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
+            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> _hoaDonNuoc = cb.Query("DanhSachHoaDonsTheoThangNam",
                        new SqlParameter("@d1", month),
                        new SqlParameter("@d2", year),
                        new SqlParameter("@d3", tuyenKHID.Value)
                        );
-            var _hoaDonNuoc = khachHangModel[0].count;
+          
             return _hoaDonNuoc;
         }
-
-        public static int filterTongSanLuongKhacNull(int month, int year, int? tuyenKHID)
-        {
-
-            ControllerBase<HoaDonNuocHaDong.Models.KhachHang.LocChiSo> cb = new ControllerBase<HoaDonNuocHaDong.Models.KhachHang.LocChiSo>();
-            List<HoaDonNuocHaDong.Models.KhachHang.LocChiSo> khachHangModel = cb.Query("locChiSoKhacNull",
-                       new SqlParameter("@d1", month),
-                       new SqlParameter("@d2", year),
-                       new SqlParameter("@d3", tuyenKHID.Value)
-                       );
-            int _hoaDonNuoc = khachHangModel[0].count;
-            return _hoaDonNuoc;
-        }
+       
 
         /// <summary>
         /// Kiểm tra xem chỉ số có NULL hay ko, nếu null thì trả về 0

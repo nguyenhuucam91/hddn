@@ -33,6 +33,7 @@ namespace HoaDonNuocHaDong.Repositories
 
             var cmd = String.Format("BACKUP DATABASE {0} TO DISK='{1}' WITH FORMAT, MEDIANAME='{2}', MEDIADESCRIPTION='Media set for {0} database';"
                 , databaseIntialCatalog, dbPath, fileName);
+            db.Database.CommandTimeout = 0;
             db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, cmd);
         }
 

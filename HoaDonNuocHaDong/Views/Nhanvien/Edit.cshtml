@@ -11,6 +11,8 @@
     var phongBan = ViewBag._PhongbanID;
     int selectedQuanHuyen = ViewBag.selectedQuanHuyen;
     List<Quanhuyen> quanHuyens = ViewBag.ChinhanhID as List<Quanhuyen>;
+    HoaDonNuocHaDong.Helper.Tuyen tuyenHelper = new HoaDonNuocHaDong.Helper.Tuyen();
+    var phongBanId = ViewBag.phongBanId;
 }
 
 @using (Html.BeginForm("Edit", "Nhanvien"))
@@ -136,8 +138,12 @@
                                                 }
                                                 else
                                                 {
-                                                    <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
+                                                    if (!tuyenHelper.tuyenHasNhanVienThuocPhongBanQuanLy(Convert.ToInt32(item.TuyenKHID), phongBanId))
+                                                    {
+                                                        <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
+                                                    }
                                                 }
+
                                             }
 
 

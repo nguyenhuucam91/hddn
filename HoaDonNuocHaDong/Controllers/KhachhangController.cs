@@ -22,12 +22,13 @@ using System.Configuration;
 using HoaDonNuocHaDong.Models;
 using HoaDonHaDong.Helper;
 using HDNHD.Models.DataContexts;
+using HoaDonNuocHaDong.Config;
 
 
 namespace HoaDonNuocHaDong.Controllers
 {
     public class KhachhangController : BaseController
-    {
+    {       
         private Tuyen tuyenHelper = new Tuyen();
         private KhachHang khachHangHelper = new KhachHang();
         private SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
@@ -37,7 +38,7 @@ namespace HoaDonNuocHaDong.Controllers
         private KhachHangModel khachHangModel = new KhachHangModel();
         private LichSuHoaDonRepository lichSuHoaDonRepo = new LichSuHoaDonRepository();
 
-        public static string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+        public static string connectionString = DatabaseConfig.getConnectionString();
 
         const int ADMIN = 0;
         const int TRUONG_PHONG = 2;
@@ -1384,6 +1385,27 @@ namespace HoaDonNuocHaDong.Controllers
             Khachhang khachhang = db.Khachhangs.Where(p => p.KhachhangID == id).FirstOrDefault();
             if (khachhang != null)
             {
+                var thongTinChiSo = (from i in db.Hoadonnuocs
+                                     join r in db.Lichsuhoadons on i.HoadonnuocID equals r.HoaDonID                                    
+                                     where i.KhachhangID == id                                     
+                                     select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc                                    
+                                     {
+                                         HoaDonNuocID = i.HoadonnuocID,
+                                         SH1 = r.SH1.ToString(),
+                                         SH2 = r.SH2.ToString(),
+                                         SH3 = r.SH3.ToString(),
+                                         SH4 = r.SH4.ToString(),
+                                         HC = r.HC.ToString(),
+                                         CC = r.CC.ToString(),
+                                         SXXD = r.SX.ToString(),
+                                         KDDV = r.KD.ToString(),
+                                         ThangNamHoaDon = r.ThangHoaDon + "/" + r.NamHoaDon,
+                                         ChiSoCu = r.ChiSoCu,
+                                         ChiSoMoi = r.ChiSoMoi,
+                                         SanLuong = r.SanLuongTieuThu,
+                                         TongCong = r.TongCong,
+                                     }).OrderBy(p=>p.HoaDonNuocID).ToList();
+
                 ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
                 ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
                 ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias, "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
@@ -1392,30 +1414,9 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens, "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
                 ViewBag._TuyenKHID = new SelectList(db.Tuyenkhachhangs, "TuyenKHID", "Ten", khachhang.TuyenKHID);
                 ViewBag._TuyenongkythuatID = new SelectList(db.Tuyenongs, "TuyenongID", "Tentuyen", khachhang.TuyenongkythuatID);
-
+                ViewData["ttChiSo"] = thongTinChiSo;
                 //thông tin kiểm định
-                ViewBag.kiemDinh = kiemDinhHelper.getDanhSachKiemDinhCuaKhachHang(id.Value);
-                //thông tin chỉ số
-                ViewBag.ttChiSo = (from i in db.Hoadonnuocs
-                                   join r in db.Chitiethoadonnuocs on i.HoadonnuocID equals r.HoadonnuocID
-                                   where i.KhachhangID == id.Value
-                                   select new
-                                   {
-                                       HoaDonID = i.HoadonnuocID,
-                                       NgayHoaDon = i.ThangHoaDon + "/" + i.NamHoaDon,
-                                       ChiSoCu = r.Chisocu,
-                                       ChiSoMoi = r.Chisomoi,
-                                       SanLuong = i.Tongsotieuthu,
-                                       GhiChu = i.Ghichu,
-                                       SH1 = r.SH1,
-                                       SH2 = r.SH2,
-                                       SH3 = r.SH3,
-                                       SH4 = r.SH4,
-                                       HC = r.HC,
-                                       CC = r.CC,
-                                       SXXD = r.SXXD,
-                                       KDDV = r.KDDV,
-                                   });
+                ViewBag.kiemDinh = kiemDinhHelper.getDanhSachKiemDinhCuaKhachHang(id.Value);                       
                 return View(khachhang);
             }
             return View();

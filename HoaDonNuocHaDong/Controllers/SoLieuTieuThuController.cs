@@ -30,10 +30,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns></returns>
         public ActionResult Index(int? to, int? nhanvien, int? tuyen, int? thang, int? nam)
         {
-            int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-            ViewBag.selectedChiNhanh = quanHuyenID;
-            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-
+            int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));           
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
@@ -73,13 +70,14 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.tuyen = tuyensLs;
                 //lấy danh sách khách hàng thuộc tuyến đó
                 List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cS.filterChiSo(thang.Value, nam.Value, tuyen.Value);
-                ViewBag.khachHang = chiSoTieuThu;
+                ViewData["ChiSoTieuThu"] = chiSoTieuThu;
                 ViewBag.showHoaDon = true;
                 ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyen);
                 Nhanvien nhanVienObj = db.Nhanviens.Find(nhanvien);
                 ViewData["nhanVienObj"] = nhanVienObj;
             }
 
+            #region ViewBag
             //load viewBag ngày bắt đầu            
             ViewBag.month = thang == null ? DateTime.Now.Month : thang;
             ViewBag.year = nam == null ? DateTime.Now.Year : nam;
@@ -93,6 +91,9 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.selectedTo = to;
             ViewBag.selectedTuyen = tuyen;
             ViewBag.selectedNhanVien = nhanvien;
+            ViewBag.selectedChiNhanh = quanHuyenID;
+            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
+            #endregion
             return View();
         }
 
@@ -181,7 +182,7 @@ namespace HoaDonNuocHaDong.Controllers
                         //sao chép ds khách hàng không sản lượng vào tháng hiện tại                       
                         ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenInt);
                         List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cS.filterChiSo(_month, _year, tuyenInt);
-                        ViewBag.khachHang = chiSoTieuThu;
+                        ViewData["ChiSoTieuThu"] = chiSoTieuThu;
                         ViewBag.selectedNhanvien = Session["solieuTieuThuNhanvien"];
                         ViewBag.selectedTuyen = tuyenInt;
                         ViewBag.selectedTo = toForm;

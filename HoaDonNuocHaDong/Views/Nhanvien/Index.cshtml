@@ -4,7 +4,6 @@
     ViewBag.Title = "Danh sách nhân viên";
     var chiNhanh = ViewBag.chiNhanh;
     var chucVu = ViewBag.chucVu;
-    List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> tuyenKH = ViewData["Tuyen"] as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
     HoaDonNuocHaDong.Helper.NhanVienHelper helper = new HoaDonNuocHaDong.Helper.NhanVienHelper();
     var selectedQuan = ViewBag.selectedQuan;
     var selectedTo = ViewBag.selectedTo;
@@ -13,6 +12,7 @@
     var selectedPhongBan = ViewBag.selectedPhongban;
     var isAdminVaTruongPhong = ViewBag.isAdminVaTruongPhong;
     var isAdmin = ViewBag.isAdmin;
+    var isOnlyTruongPhong = ViewBag.isOnlyTruongPhong;
 }
 
 
@@ -31,43 +31,7 @@
                             <div class="tabbable">
                                 <div class="tab-content">
                                     <div class="form-group">
-                                        <a class="btn btn-primary" href="@Url.Action("Create", "Nhanvien")" role="button">Thêm mới nhân viên</a>
-                                        <!--Gán tuyến cho nhân viên-->
-                                        <button type="button" class="btn btn-info btn-lg assignEmployee" data-toggle="modal" data-target="#myModal">Gán tuyến cho nhân viên</button>
-                                        <!-- Modal box để gán nhân viên cho tuyến được chọn-->
-                                        <div id="myModal" class="modal fade" role="dialog">
-                                            <div class="modal-dialog">
-
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h4 class="modal-title">Chọn tuyến gán cho nhân viên</h4>
-                                                    </div>
-                                                    @using (Html.BeginForm("AssignTuyen", "Nhanvien"))
-                                                    {
-                                                        <input type="hidden" name="selectedTuyen" class="selectedTuyen" />
-                                                        <div class="modal-body">
-                                                            <p>Chọn tuyến</p>
-                                                            <!-- Nhân viên -->
-                                                            <select class="dropdown form-control nhanvien" style="width:80%;float:left;margin-right:3%" name="nhanvien">
-                                                                <option disabled="disabled" selected="selected">--Tìm tuyến theo nhân viên--</option>
-                                                                <!-- Option mặc định -->
-                                                                @foreach (var item in tuyenKH)
-                                                                {
-                                                                    <option value="@item.TuyenKHID">@item.MaTuyenKH - @item.TenTuyen</option>
-                                                                }
-                                                            </select>
-                                                            <!-- -->
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-default">Lưu</button>
-                                                        </div>
-                                                    }
-                                                </div>
-
-                                            </div>
-                                        </div>
+                                        <a class="btn btn-primary" href="@Url.Action("Create", "Nhanvien")" role="button">Thêm mới nhân viên</a>                                        
                                     </div>
 
                                     <br />
@@ -79,9 +43,8 @@
                                             @{
                                         String cssClassQuan = isAdmin == "1" ? "quanAllowClear" : "quan";
                                             }
-                                            <select class="dropdown form-control @cssClassQuan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
+                                            <select class="dropdown form-control @cssClassQuan nhanvien-quan" style="width:20%;float:left;margin-right:3%" name="chinhanh">
                                                 <!-- Option mặc định -->
-                                                <option selected disabled></option>
                                                 @foreach (var item in chiNhanh)
                                                 {
                                                     if (item.QuanhuyenID == selectedQuan)
@@ -95,28 +58,11 @@
                                                 }
                                             </select>
 
-                                            <!-- To quan huyen -->
-                                            <select class="dropdown form-control toAllowClear" style="width: 20%; float: left; margin-right: 3%" name="to">
-                                                <option selected disabled></option>
-                                                @foreach (var item in toQuanHuyens)
-                                                {
-                                                    if (item.ToQuanHuyenID == selectedTo)
-                                                    {
-                                                        <option value="@item.ToQuanHuyenID" selected>@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
-                                                    }
-                                                }
-                                            </select>
-
-
                                             @if (isAdmin == "1")
                                             {
                                             <!-- Phòng ban-->
-                                                <select class="dropdown form-control phongBan" style="width: 20%; float: left; margin-right: 3%" name="phongban">
-                                                    <option selected disabled></option>
+                                                <select class="dropdown nhanvien-phongban" style="width: 20%; float: left; margin-right: 3%" name="phongban">
+
                                                     @foreach (var phongBan in phongBans)
                                                     {
                                                         if (phongBan.PhongbanID == selectedPhongBan)
@@ -130,6 +76,23 @@
                                                     }
                                                 </select>
                                             }
+
+                                            <!-- To quan huyen -->
+                                            <select class="dropdown form-control to" style="width: 20%; float: left; margin-right: 3%" name="to">
+
+                                                @foreach (var item in toQuanHuyens)
+                                                {
+                                                    if (item.ToQuanHuyenID == selectedTo)
+                                                    {
+                                                        <option value="@item.ToQuanHuyenID" selected>@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.ToQuanHuyenID">@HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                                    }
+                                                }
+                                            </select>
+
                                             <button class="btn btn-default">Tìm kiếm</button>
 
                                         </div>
@@ -138,7 +101,7 @@
                                     <table class="example table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th></th>
+                                                
                                                 <th>STT</th>
                                                 <th>Mã nhân viên</th>
                                                 <th>Tên nhân viên</th>
@@ -154,8 +117,7 @@
                                             @{int i = 1;}
                                             @foreach (var item in Model)
                                             {
-                                                <tr>
-                                                    <td><input type="checkbox" name="check" value="@item.NhanvienID" /></td>
+                                                <tr>                                                    
                                                     <td>@i</td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.MaNhanVien)
@@ -205,7 +167,7 @@
         $("input[type='checkbox']").change(function () {
             var highlightColor = "#eca45a ";
             if ($(this).is(':checked')) {
-                
+
                 $(this).closest('tr').css('background-color', highlightColor);
                 $("input[type='checkbox']").hide();
                 $(this).show();

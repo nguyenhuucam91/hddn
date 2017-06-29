@@ -17,6 +17,7 @@
     var selectedYear = Request.QueryString["year"];
     //danh sách khách hàng tính tiền
     var dsKH = ViewBag.dsachKH as List<HoaDonNuocHaDong.Models.InHoaDon.TuyenTinhTien>;
+    var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");    
 }
 
 <div class="main">
@@ -45,7 +46,7 @@
 
                                     <!-- Print all -->
                                     <div class="tab-content tab-pane active" id="printAll">
-                                        <form action="/Print/ChiSoTuyen" method="post">
+                                        <form action="/Print/ChiSoTuyen" method="get">
                                             <input type="hidden" value="@Request.QueryString["quan"]" name="quan" />
                                             <input type="hidden" value="@Request.QueryString["to"]" name="to" />
                                             <input type="hidden" value="@Request.QueryString["month"]" name="thang" />
@@ -53,7 +54,9 @@
                                             <button type="submit" class="btn btn-default">Quay lại</button>
                                         </form>
 
-                                        <form action="@Url.Action("PrintAllPreview", "Print", new {@TuyenID = ViewBag.selectedTuyen,
+                                        <form action="@Url.Action("PrintAllPreview", "Print", new {
+                                                                                                   @quan = @Request.QueryString["quan"],
+                                                                                                   @TuyenID = ViewBag.selectedTuyen,
                                                                                                    @month = selectedMonth,
                                                                                                    @year = selectedYear })" method="post">
                                             <button type="submit" class="btn btn-warning choose-print-machine" data-toggle="modal" data-target=".set-print-machine">
@@ -61,7 +64,8 @@
                                             </button>
                                         </form>
 
-                                        <form action="@Url.Action("PrintCrystalReport", "Print", new {
+                                        <form action="@Url.Action("PrintAll", "Print", new {
+                                                                                                   @quan = @Request.QueryString["quan"],
                                                                                                    @TuyenID = ViewBag.selectedTuyen,
                                                                                                    @month = selectedMonth,
                                                                                                    @year = selectedYear })" method="post">
@@ -74,7 +78,7 @@
 
                                     <!-- Print selected -->
                                     <div class="tab-content tab-pane" id="printSelected">
-                                        <form action="/Print/ChiSoTuyen" method="post">
+                                        <form action="/Print/ChiSoTuyen" method="get">
                                             <input type="hidden" value="@Request.QueryString["quan"]" name="quan" />
                                             <input type="hidden" value="@Request.QueryString["to"]" name="to" />
                                             <input type="hidden" value="@Request.QueryString["month"]" name="thang" />
@@ -82,7 +86,7 @@
                                             <button type="submit" class="btn btn-default">Quay lại</button>
                                         </form>
 
-                                        <form action="/Print/PrintPreviewSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                        <form action="/Print/PrintPreviewSelected?quan=@Request.QueryString["quan"]&TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                             <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />
                                             <button type="submit" class="btn btn-success printSelected choose-print-machine"
                                                     data-toggle="modal" data-target=".set-print-machine">
@@ -90,7 +94,7 @@
                                             </button>
                                         </form>
 
-                                        <form action="/Print/PrintSelected?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                        <form action="/Print/PrintSelected?quan=@Request.QueryString["quan"]&TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                             <input type="hidden" class="printSelectedHidden" name="printSelectedHidden" />
                                             <button type="submit" data-toggle="modal" data-target=".set-print-machine"
                                                     class="btn btn-success printSelected choose-print-machine">
@@ -102,7 +106,7 @@
                                     <!-- Print from receipt to receipt -->
                                     <div class="tab-content tab-pane choose-print-machine" id="printFromReceiptToReceipt">
 
-                                        <form action="/Print/ChiSoTuyen" method="post">
+                                        <form action="/Print/ChiSoTuyen" method="get">
                                             <input type="hidden" value="@Request.QueryString["quan"]" name="quan" />
                                             <input type="hidden" value="@Request.QueryString["to"]" name="to" />
                                             <input type="hidden" value="@Request.QueryString["month"]" name="thang" />
@@ -110,14 +114,13 @@
                                             <button type="submit" class="btn btn-default">Quay lại</button>
                                         </form>
 
-                                        <form action="/Print/PrintFrom?TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
+                                        <form action="/Print/PrintFrom?quan=@Request.QueryString["quan"]&TuyenID=@Request.QueryString["tuyen"]&month=@selectedMonth&year=@selectedYear" method="post">
                                             <input type="number" placeholder="Từ số hóa đơn" name="printFromNumber" class="negNumber" />
                                             <input type="number" placeholder="đến số hóa đơn" name="printToNumber" class="negNumber" />
                                             <input type="submit" value="Xem trước in danh sách theo số hóa đơn" name="printFrom" class="choose-print-machine"
                                                    data-toggle="modal" data-target=".set-print-machine" />
                                             <input type="submit" class="choose-print-machine"
-                                                   value="In danh sách theo số hóa đơn" name="printFrom" data-toggle="modal" data-target=".set-print-machine" 
-                                                   />
+                                                   value="In danh sách theo số hóa đơn" name="printFrom" data-toggle="modal" data-target=".set-print-machine" />
                                         </form>
                                     </div>
                                 </div>
@@ -167,7 +170,7 @@
                             </div>
 
                             <!-- Bảng xem chỉ số -->
-                            <table class="unlimited table-bordered">
+                            <table class="table table-bordered hoaDonNuoc">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -204,20 +207,21 @@
                                         }
                                         else if (ttHoaDonBiHuyCssClass == "hoadonduoccapnhat")
                                         {
-                                            if(hoaDonObj.Trangthaiin.GetValueOrDefault() == true) {
-                                                   cssClass = "hoadonprinted";
+                                            if (hoaDonObj.Trangthaiin.GetValueOrDefault() == true)
+                                            {
+                                                cssClass = "hoadonprinted";
                                             }
                                             else
                                             {
                                                 cssClass = "hoadonduoccapnhat";
                                             }
                                         }
-                                        
+
                                         if (hoaDonObj.Trangthaiin.GetValueOrDefault() == true)
                                         {
                                             cssClass = "hoadonprinted";
-                                        }                               
-                                        
+                                        }
+
                                         <tr class="@cssClass">
                                             <td><input type="checkbox" name="check" value="@hoaDonNuocID" /></td>
                                             <td>@i</td>
@@ -236,16 +240,12 @@
                                             <td>@item.NgayKetThuc</td>
                                             <td>@item.TTDoc</td>
                                             <td>@item.SanLuong</td>
-                                            @{
-                                        double Sum = item.SH1Price * item.SH1 + item.SH2Price * item.SH2 + item.SH3Price * item.SH3 + item.SH4Price * item.SH4 +
-                                            item.CCPrice * item.CC + item.HCPrice * item.HC + item.SXPrice * item.SX + item.KDPrice * item.KD;
-                                            }
-                                            <td>@String.Format("{0:#,##0.##}", Math.Floor(Sum))</td>
-                                            <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiVAT, 0))</td>
-                                            <td>@String.Format("{0:#,##0.##}", Math.Round(item.PhiBVMT, 0))</td>
-                                            <td style="color:blue">@String.Format("{0:#,##0.##}", item.TongCong)</td>
+                                            <td>@item.TruocThue.ToString("0,000", brazilianCulture)</td>
+                                            <td>@item.PhiVAT.ToString("0,000", brazilianCulture)</td>
+                                            <td>@item.PhiBVMT.ToString("0,000", brazilianCulture)</td>
+                                            <td style="color:blue">@item.TongCong.ToString("0,000", brazilianCulture)</td>
                                         </tr>
-                                        i++;
+                                            i++;
                                     }
 
                                 </tbody>

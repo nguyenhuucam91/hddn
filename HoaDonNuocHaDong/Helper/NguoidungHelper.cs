@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HDNHD.Models.Constants;
+using HoaDonNuocHaDong.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,7 +11,7 @@ namespace HoaDonNuocHaDong.Helper
     public class NguoidungHelper
     {
         static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-
+        BaseController baseCtl = new BaseController();
         /// <summary>
         /// Lấy tên nhân viên từ nhân viên ID
         /// </summary>
@@ -212,6 +214,21 @@ namespace HoaDonNuocHaDong.Helper
                 return ngDungObj.NhanvienID.Value;
             }
             return 0;
+        }
+
+
+        public bool isNguoiDungLaTruongPhong(int? nhanVienId)
+        {
+            bool isOnlyTruongPhong = false;
+            if (nhanVienId != null)
+            {
+                int userRole = baseCtl.getUserRole(nhanVienId);
+                if (userRole == (int)EChucVu.TRUONG_PHONG)
+                {
+                    isOnlyTruongPhong = true;
+                }
+            }
+            return isOnlyTruongPhong;
         }
     }
 }
