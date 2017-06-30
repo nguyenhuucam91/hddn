@@ -29,7 +29,7 @@ namespace HoaDonNuocHaDong.Config
 
         public static String getSubPath()
         {
-            return "~/DBBackups/";
+            return "~/Backups/";
         }
         
     }
