@@ -7,13 +7,15 @@ using System.Web;
 using HDNHD.Models.Constants;
 using System.IO;
 using System.Web.Mvc;
+using Ionic.Zip;
+using HoaDonNuocHaDong.Config;
 
 namespace HoaDonNuocHaDong.Repositories
 {
     public class BackupRepository
     {
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-        private Config.DatabaseConfig databaseConfig = new Config.DatabaseConfig();
+        private Config.DatabaseConfig databaseConfig = new Config.DatabaseConfig();        
 
         public String setupBackupFileName()
         {
@@ -78,6 +80,7 @@ namespace HoaDonNuocHaDong.Repositories
 
         public void deleteOldBackupFiles()
         {
+            deleteBakFile();
             int backupNumber = db.Backups.Count();
             if (backupNumber > (int)EBackupThreshold.MAX_ALLOWED_FILES)
             {
@@ -86,7 +89,8 @@ namespace HoaDonNuocHaDong.Repositories
                 {
                     try
                     {
-                        string pathName = HttpContext.Current.Server.MapPath("/DBBackups/" + oldestFile.backup_filename + ".bak");
+                        String subPath = DatabaseConfig.getSubPath();
+                        string pathName = HttpContext.Current.Server.MapPath(subPath + oldestFile.backup_filename + ".zip");
                         if (File.Exists(pathName))
                         {
                             File.Delete(pathName);
@@ -99,6 +103,19 @@ namespace HoaDonNuocHaDong.Repositories
                     }
                 }
 
+            }
+        }
+
+        private void deleteBakFile()
+        {
+            string pathName = getDbBackupPath();
+            try
+            {
+                File.Delete(pathName);
+            }
+            catch (Exception e)
+            {
+                e.ToString();
             }
         }
 
@@ -115,10 +132,16 @@ namespace HoaDonNuocHaDong.Repositories
         internal string getDbBackupPath()
         {
             String dbFileName = setupBackupFileName();
-            String subPath = "~/DBBackups/";
+            String subPath = setSubPath();
             String pathBuilder = subPath + dbFileName + ".bak";
             string dbPath = HttpContext.Current.Server.MapPath(pathBuilder);
             return dbPath;
+        }
+
+        internal string setSubPath()
+        {
+            String subPath = DatabaseConfig.getSubPath();
+            return subPath;
         }
 
         public void applyBackupProcess(int nguoiDungId)
@@ -126,9 +149,21 @@ namespace HoaDonNuocHaDong.Repositories
             String dbFileName = setupBackupFileName();
             String dbPath = getDbBackupPath();
             executeBackupTransaction(dbFileName);
+            zipBackupFile(dbFileName, dbPath);
             updateOrCreateBackupRecord(nguoiDungId);
             deleteOldBackupFiles();
-           // new FilePathResult(dbPath, "application/octet-stream");
+            // new FilePathResult(dbPath, "application/octet-stream");
+            
+        }
+
+        private void zipBackupFile(String fileName, String dbPath)
+        {
+            ZipFile zip = new ZipFile();
+            zip.AddFile(dbPath);
+            String subPath = setSubPath();
+            String pathBuilder = subPath + fileName + ".zip";
+            String destZipFile = HttpContext.Current.Server.MapPath(pathBuilder);
+            zip.Save(destZipFile);
         }
     }
 }

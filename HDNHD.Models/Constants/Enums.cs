@@ -101,6 +101,6 @@ namespace HDNHD.Models.Constants
     public enum EPaginator
     {
         PAGESIZE = 50,
-
     }
+   
 }

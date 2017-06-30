@@ -2,10 +2,14 @@
 using HoaDonHaDong.Helper;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Helper;
+using HoaDonNuocHaDong.Models.SoLieuTieuThu;
 using HoaDonNuocHaDong.Repositories;
+using HvitFramework;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity.Validation;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -17,7 +21,7 @@ namespace HoaDonNuocHaDong.Controllers
     public class SoLieuTieuThuController : BaseController
     {
         private ChiSo cS = new ChiSo();
-        private HoaDonNuoc hD = new HoaDonNuoc();
+
         private KhachHang kHHelper = new KhachHang();
         private NguoidungHelper ngDungHelper = new NguoidungHelper();
         private KiemDinh kiemDinh = new KiemDinh();
@@ -30,7 +34,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// <returns></returns>
         public ActionResult Index(int? to, int? nhanvien, int? tuyen, int? thang, int? nam)
         {
-            int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));           
+            int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
@@ -286,7 +290,7 @@ namespace HoaDonNuocHaDong.Controllers
             tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu, SoKhoan, KHID);
 
             //thêm 1 records số tiền phải nộp vào tháng sau với ngày kết thúc của tháng này là ngày bắt đầu của tháng sau
-            HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
+            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
 
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
@@ -512,7 +516,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             //Cập nhật lại SH1...
             tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value, SoKhoan, KHID);
-            HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
+            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
             //thêm vào bảng lịch sử sử dụng nước
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
@@ -1503,6 +1507,25 @@ namespace HoaDonNuocHaDong.Controllers
                                     LoaiApGia = i.IDLoaiApGia
                                 }).ToList();
             return Json(apGiaTongHop, JsonRequestBehavior.AllowGet);
+        }
+
+        public void assignChiSoMoi(int prevMonth, int prevYear, int curMonth, int curYear)
+        {
+            SqlConnection conn = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
+            conn.Open();
+            ControllerBase<ChiTietHoaDonNuocModel> cB = new ControllerBase<ChiTietHoaDonNuocModel>();
+            List<ChiTietHoaDonNuocModel> hdN = cB.Query("LayChiSoMoi", new SqlParameter("@month", prevMonth), new SqlParameter("@year", prevYear)).ToList();
+            foreach (var item in hdN)
+            {
+                var command = new SqlCommand("UpdateChiSoMoiThangSau", conn);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@thang", curMonth);
+                command.Parameters.AddWithValue("@nam", curYear);
+                command.Parameters.AddWithValue("@chisocu", item.ChiSoMoi);
+                command.Parameters.AddWithValue("@khid",item.KhachHangId);
+                command.ExecuteNonQuery();
+            }
+            conn.Close();
         }
 
     }//end class

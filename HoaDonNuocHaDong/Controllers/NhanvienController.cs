@@ -505,6 +505,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             return View("QuickAssign");
         }
+        
 
         [HttpPost]
         public ActionResult quickAssign(FormCollection form)

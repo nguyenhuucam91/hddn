@@ -26,6 +26,11 @@ namespace HoaDonNuocHaDong.Config
         public static String getConnectionString(){
             return connectionString;
         }
+
+        public static String getSubPath()
+        {
+            return "~/DBBackups/";
+        }
         
     }
 }

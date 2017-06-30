@@ -556,10 +556,8 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
 
-        public ActionResult XemChiTiet(int quan, String tuyen, String month, String year)
-        {           
-            //update tuyen tinh tien            
-            int tuyenKHID = Convert.ToInt32(tuyen);
+        public ActionResult XemChiTiet(int? quan, String tuyen, String month, String year)
+        {                     
             //Cập nhật trạng thái tính tiền
             int tuyenInt = Convert.ToInt32(tuyen);
             int monthInt = Convert.ToInt32(month);
