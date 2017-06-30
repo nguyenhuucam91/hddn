@@ -60,7 +60,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             }
             
             // query items
-            var items = hoaDonRepository.GetAllHoaDonModel();
+            var items = hoaDonRepository.GetAllHoaDonModel(true); // đã in
 
             items = filter.ApplyFilter(items);
 
@@ -76,6 +76,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             items = pager.ApplyPager(items);
 
             #region view data
+            ViewBag.NhanVien = nhanVien;
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             ViewBag.ToDo = todo; // actions

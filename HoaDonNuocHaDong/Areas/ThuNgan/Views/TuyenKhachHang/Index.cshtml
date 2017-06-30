@@ -1,60 +1,33 @@
-﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.TuyenKhachHangModel>
-
+﻿@model List<HDNHD.Models.DataContexts.Tuyenkhachhang>
 <div class="main">
     <div class="main-inner">
         <div class="container">
             <div class="row">
                 <div class="widget">
-                    <div class="widget">
-                        <div class="widget-header">
-                            <i class="icon-th-list"></i>
-                            <h3>Danh sách tuyến khách hàng đã có chỉ số</h3>
-                        </div>
-                        <!-- /widget-header -->
-                        <div class="widget-content">
-                            <form method="get" action="" class="form-inline">
-                                <center>
-                                    <div class="form-group">
-                                        <label for="month">Tháng:</label>
-                                        <input name="month" id="month" class="form-control text-center" type="number" min="1" max="12" value="@ViewBag.Filter.Month" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="year">Năm:</label>
-                                        <input name="year" id="year" class="form-control text-center" type="number" min="1970" value="@ViewBag.Filter.Year" />
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Lọc</button>
-                                </center>
-                            </form>
-
-                            <!-- Hướng dẫn -->
-                            <div class="well">
-                                <ul class="helper">
-                                    <li>Những tuyến đã in hết khách hàng thì hiển thị màu xanh lam</li>
-                                    <li>Những tuyến đã tính tiền thì trạng thái tính tiền hiển thị màu xanh lam</li>
-                                    <li>Những tuyến khách hàng chưa được chốt sẽ không xuất hiện trong danh sách này</li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered data-table">
+                    <div class="widget-header">
+                        <i class="icon-th-list"></i>
+                        <h3>Báo cáo danh sách tuyến khách hàng</h3>
+                    </div>
+                    <div class="widget-content">
+                        @Html.Partial("_TuyenKHFilter", (object)ViewBag.Filter)
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered data-table">
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>Tuyến</th>
-                                        <th>Trạng thái tính tiền</th>
-                                        <th>Trạng thái in</th>
+                                        <th>Mã tuyến</th>
+                                        <th>Tên tuyến</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @{ int i = 1; }
-                                    @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.TuyenKhachHangModel item in Model)
-                                    {
-                                        <tr style="@(item.SoHoaDonDaIn == item.SoHoaDon ? "background-color: #d6f8ff;" : "")">
-                                            <td>@(i++)</td>
-                                            <td>@item.TuyenKhachHang.Ten</td>
-                                            <td><a href="@Url.Action("XemChiTiet", "Print", new { area="", tuyen = item.TuyenKhachHang.TuyenKHID,month = ViewBag.Filter.Month,year = ViewBag.Filter.Year})" style="@(item.TuyenDuocChot.TrangThaiTinhTien == true ? "color:green" : "color:red")">Xem chi tiết</a></td>
-                                            <td style="@(item.SoHoaDonDaIn == item.SoHoaDon ? "color:green" : "color:red")"> Đã in (@item.SoHoaDonDaIn / @item.SoHoaDon hóa đơn) </td>
-                                        </tr>
-                                    }
-                                </tbody>
+                                @{ int i = 1; }
+                                @foreach (HDNHD.Models.DataContexts.Tuyenkhachhang item in Model)
+                                {
+                                    <tr>
+                                        <td style="text-align: right;">@(i++)</td>
+                                        <td>@item.Matuyen</td>
+                                        <td>@item.Ten</td>
+                                    </tr>
+                                }
                             </table>
                             @Html.Partial("_Pager", (object)ViewBag.Pager)
                         </div>
@@ -64,3 +37,29 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // onInit:
+            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+
+        });
+
+        // load data onChange
+        $(".sl-quan-huyen").on("change", function () {
+            // get selected quanHuyenID
+            var quanHuyenID = $(this).val();
+
+            // loadTo
+            loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID", true);
+        });
+
+        $(".sl-to").on("change", function () {
+            // get selected toID
+            var toID = $(this).val();
+
+            // loadNhanVien
+            loadNhanVien($(".sl-nhan-vien"), toID, "@ViewBag.Filter.NhanVienID");
+        });
+    </script>
+}

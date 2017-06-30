@@ -1,0 +1,23 @@
+﻿@model List<HDNHD.Models.DataContexts.Tuyenkhachhang>
+@{
+    Layout = null;
+}
+<meta charset="utf-8" />
+<table border="1">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Mã tuyến</th>
+            <th>Tên tuyến</th>
+        </tr>
+    </thead>
+    @{ int i = 1; }
+    @foreach (HDNHD.Models.DataContexts.Tuyenkhachhang item in Model)
+    {
+        <tr>
+            <td style="text-align: right;">@(i++)</td>
+            <td>@item.Matuyen</td>
+            <td>@item.Ten</td>
+        </tr>
+    }
+</table>

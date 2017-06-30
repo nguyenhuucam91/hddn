@@ -5,35 +5,43 @@ using System.Linq;
 
 namespace HoaDonNuocHaDong.Areas.ThuNgan.Models
 {
-    public class TuyenKhachHangFilterModel : BaseFilterModel<TuyenKhachHangModel>
+    public class TuyenKhachHangFilterModel : BaseFilterModel<HDNHD.Models.DataContexts.Tuyenkhachhang>
     {
-        public int? Month { get; set; }
-        public int? Year { get; set; }
-
-        public TuyenKhachHangFilterModel()
-        {
-            Month = DateTime.Now.Month;
-            Year = DateTime.Now.Year;
-        }
-
-        public override void ApplyFilter(ref IQueryable<TuyenKhachHangModel> items)
+        public int? QuanHuyenID { get; set; }
+        public int? ToID { get; set; }
+        public int? NhanVienID { get; set; }
+        
+        public override void ApplyFilter(ref IQueryable<HDNHD.Models.DataContexts.Tuyenkhachhang> items)
         {
             HDNHDDataContext context = (HDNHDDataContext)GetDataContext(items);
+            
+            if (NhanVienID != null) // nhan vien
+            {
+                items = from item in items
+                        join ttnv in context.Tuyentheonhanviens on item.TuyenKHID equals ttnv.TuyenKHID
+                        where ttnv.NhanVienID == NhanVienID
+                        select item;
+            } // to
+            else if (ToID != null)
+            {
+                items = from item in items
+                        join ttnv in context.Tuyentheonhanviens on item.TuyenKHID equals ttnv.TuyenKHID
+                        join nv in context.Nhanviens on ttnv.NhanVienID equals nv.NhanvienID
+                        where nv.ToQuanHuyenID == ToID
+                        select item;
+            } // quan huyen
+            else if (QuanHuyenID != null)
+            {
+                items = from item in items
+                        join ttnv in context.Tuyentheonhanviens on item.TuyenKHID equals ttnv.TuyenKHID
+                        join nv in context.Nhanviens on ttnv.NhanVienID equals nv.NhanvienID
+                        join to in context.ToQuanHuyens on nv.ToQuanHuyenID equals to.ToQuanHuyenID
+                        where to.QuanHuyenID == QuanHuyenID
+                        select item;
+            }
 
-            items = from item in items
-                    join tdc in context.TuyenDuocChots on item.TuyenKhachHang.TuyenKHID equals tdc.TuyenKHID
-                    where tdc.Nam == Year && tdc.Thang == Month
-                    join kh in context.Khachhangs on item.TuyenKhachHang.TuyenKHID equals kh.TuyenKHID
-                    join hd in context.Hoadonnuocs on kh.KhachhangID equals hd.KhachhangID
-                    where hd.NamHoaDon == Year && hd.ThangHoaDon == Month
-                    group new { item, tdc, hd } by tdc.TuyenKHID into g
-                    select new TuyenKhachHangModel()
-                    {
-                        TuyenKhachHang = g.Select(m => m.item.TuyenKhachHang).FirstOrDefault(),
-                        TuyenDuocChot = g.Select(m => m.tdc).FirstOrDefault(),
-                        SoHoaDon = g.Select(m => m.hd).Count(),
-                        SoHoaDonDaIn = g.Count(m => m.hd.Trangthaiin == true)
-                    };
+            // select distinct result if duplicate on TuyenTheoNhanVien
+            items = items.Distinct();
         }
     }
 }

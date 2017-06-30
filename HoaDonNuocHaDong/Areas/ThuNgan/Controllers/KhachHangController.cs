@@ -55,8 +55,9 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
             }
 
             items = pager.ApplyPager(items);
-            
+
             #region view data
+            ViewBag.NhanVien = nhanVien;
             ViewBag.Filter = filter;
             ViewBag.Pager = pager;
             #endregion

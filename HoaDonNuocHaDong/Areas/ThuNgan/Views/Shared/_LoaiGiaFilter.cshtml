@@ -1,0 +1,25 @@
+﻿@model HoaDonNuocHaDong.Areas.ThuNgan.Models.LoaiGiaFilterModel
+
+<form method="get" action="">
+    <div class="form-horizontal form-filter text-center">
+        <div class="form-group">
+            Tháng: <input type="number" name="Month" placeholder="Tháng" value="@ViewBag.Month" style="text-align: center" min="1" max="12" />
+            Năm: <input type="number" name="Year" placeholder="Năm" value="@ViewBag.Year" style="text-align: center" min="1970" />
+        </div>
+        <div class="form-group">
+            <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="true"></select>
+            <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
+            <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
+            <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
+        </div>
+        <div class="form-group">
+            <input type="hidden" name="Mode" value="search" />
+            <input type="hidden" name="PageSize" value="@(ViewBag.Pager != null ? ViewBag.Pager.PageSize : 0)" />
+            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+        </div>
+    </div>
+    <div class="center form-group">
+        <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Excel" class="btn btn-default">Xuất excel</button>
+        <button type="submit" name="ViewMode" value="@HDNHD.Core.Constants.ViewMode.Print" class="btn btn-default" onclick="$(this).closest('form').attr('target', '_blank');">Xem & in</button>
+    </div>
+</form>

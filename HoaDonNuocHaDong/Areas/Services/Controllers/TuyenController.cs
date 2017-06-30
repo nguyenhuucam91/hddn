@@ -1,4 +1,5 @@
 ﻿using HDNHD.Core.Models;
+using HDNHD.Models.Constants;
 using HoaDonNuocHaDong.Base;
 using HoaDonNuocHaDong.Repositories;
 using HoaDonNuocHaDong.Repositories.Interfaces;
@@ -17,15 +18,27 @@ namespace HoaDonNuocHaDong.Areas.Services.Controllers
 
         public AjaxResult GetByNhanVienID(int nhanVienID)
         {
-            var models = tuyenKHRepository.GetByNhanVienID(nhanVienID).Select(m => new { 
+            IQueryable<HDNHD.Models.DataContexts.Tuyenkhachhang> items;
+            INhanVienRepository nhanVienRepository = uow.Repository<NhanVienRepository>();
+
+            var nhanVien = nhanVienRepository.GetByID(nhanVienID);
+
+            if (nhanVien != null && nhanVien.ChucvuID == (int)EChucVu.TRUONG_PHONG)
+                items = tuyenKHRepository.GetByToID(nhanVien.ToQuanHuyenID.Value);
+            else
+                items = tuyenKHRepository.GetByNhanVienID(nhanVienID);
+
+            var models = items.Select(m => new
+            {
                 TuyenKHID = m.TuyenKHID,
                 MaTuyen = m.Matuyen,
                 Ten = m.Ten
             });
+
             return new AjaxResult()
             {
                 Data = models.ToList()
             };
         }
-	}
+    }
 }

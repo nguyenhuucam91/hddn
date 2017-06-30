@@ -12,8 +12,8 @@
                 <div class="form-filter text-center">
                     <div class="form-group">
                         <select class="form-control select2 sl-quan-huyen" name="QuanHuyenID" data-placeholder="Chọn quận" data-allow-clear="false"></select>
-                        <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" data-allow-clear="true"></select>
-                        <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" data-allow-clear="true"></select>
+                        <select class="form-control select2 sl-to" name="ToID" data-placeholder="Chọn tổ" @(ViewBag.NhanVien.ChucvuID == (int)EChucVu.TRUONG_PHONG ? "data-allow-clear=\"true\"" : "")></select>
+                        <select class="form-control select2 sl-nhan-vien" name="NhanVienID" data-placeholder="Chọn nhân viên" @(ViewBag.NhanVien.ChucvuID == (int)EChucVu.TRUONG_PHONG ? "data-allow-clear=\"true\"" : "")></select>
                         <select class="form-control select2 sl-tuyen-kh" name="TuyenKHID" data-placeholder="Chọn tuyến KH" data-allow-clear="true"></select>
                         <select class="select2" name="LoaiKhachHang" data-placeholder="Loại khách hàng" data-allow-clear="true">
                             <option></option>

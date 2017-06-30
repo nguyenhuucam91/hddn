@@ -35,4 +35,21 @@
         public long? SoTienDaNop { get; set; }
         public long? SoTienNo { get; set; }
     }
+
+    public class KhongSanLuongModel
+    {
+        public HDNHD.Models.DataContexts.Hoadonnuoc HoaDon { get; set; }
+        public HDNHD.Models.DataContexts.Khachhang KhachHang { get; set; }
+        public HDNHD.Models.DataContexts.Tuyenkhachhang TuyenKH { get; set; }
+    }
+
+
+    public class LoaiGiaModel
+    {
+        public HDNHD.Models.DataContexts.Hoadonnuoc HoaDon { get; set; }
+        public HDNHD.Models.DataContexts.Khachhang KhachHang { get; set; }
+        public HDNHD.Models.DataContexts.Lichsuhoadon LichSuHoaDon { get; set; } // mandatory
+        public HDNHD.Models.DataContexts.Tuyenkhachhang TuyenKH { get; set; }
+        public long? SoTien { get; set; }
+    }
 }

@@ -284,5 +284,86 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Controllers
 
             return View();
         }
+
+        /// <summary>
+        /// Báo cáo KH ko có sl chọn theo tháng / khu vực / tổ / nhân viên / tuyến
+        /// </summary>
+        public ActionResult KhongSanLuong(int? month, int? year, KhongSanLuongFilterModel filter, Pager pager, ViewMode viewMode =ViewMode.Default)
+        {
+            title = "Báo cáo KH không sản lượng";
+
+            IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
+
+            // default values: xem báo cáo tháng trước
+            var dtBaoCao = DateTime.Now.AddMonths(-1);
+            if (month == null)
+                month = dtBaoCao.Month;
+            if (year == null)
+                year = dtBaoCao.Year;
+            
+            var items = hoaDonRepository.GetAllKhongSanLuongModel(month.Value, year.Value);
+            items = filter.ApplyFilter(items);
+
+            ViewBag.Month = month.Value;
+            ViewBag.Year = year.Value;
+
+            if (viewMode == ViewMode.Excel)
+                return ExcelResult("KhongSanLuongExport", items.ToList());
+            if (viewMode == ViewMode.Print)
+                return View("KhongSanLuongPrint", items.ToList());
+
+            items = pager.ApplyPager(items);
+
+            #region view data
+            ViewBag.Filter = filter;
+            ViewBag.Pager = pager;
+            #endregion
+
+            return View(items.ToList());
+        }
+
+        public ActionResult LoaiGia(int? month, int? year, LoaiGiaFilterModel filter, Pager pager, ViewMode viewMode = ViewMode.Default)
+        {
+            title = "Báo cáo khách hàng theo các loại giá";
+
+            IHoaDonRepository hoaDonRepository = uow.Repository<HoaDonRepository>();
+
+            // default values: xem báo cáo tháng trước
+            var dtBaoCao = DateTime.Now.AddMonths(-1);
+            if (month == null)
+                month = dtBaoCao.Month;
+            if (year == null)
+                year = dtBaoCao.Year;
+
+            var items = hoaDonRepository.GetAllLoaiGiaModel(month.Value, year.Value);
+            items = filter.ApplyFilter(items);
+
+            ViewBag.Month = month.Value;
+            ViewBag.Year = year.Value;
+
+            ViewBag.TongSH1 = items.Sum(m => m.LichSuHoaDon.SH1);
+            ViewBag.TongSH2 = items.Sum(m => m.LichSuHoaDon.SH2);
+            ViewBag.TongSH3 = items.Sum(m => m.LichSuHoaDon.SH3);
+            ViewBag.TongSH4 = items.Sum(m => m.LichSuHoaDon.SH4);
+            ViewBag.TongHC = items.Sum(m => m.LichSuHoaDon.HC);
+            ViewBag.TongSX = items.Sum(m => m.LichSuHoaDon.SX);
+            ViewBag.TongKD = items.Sum(m => m.LichSuHoaDon.KD);
+            ViewBag.TongSL = items.Sum(m => m.LichSuHoaDon.SanLuongTieuThu);
+            ViewBag.TongSoTienTrenHoaDon = items.Sum(m => m.SoTien) ?? 0;
+
+            if (viewMode == ViewMode.Excel)
+                return ExcelResult("LoaiGiaExport", items.ToList());
+            if (viewMode == ViewMode.Print)
+                return View("LoaiGiaPrint", items.ToList());
+
+            items = pager.ApplyPager(items);
+
+            #region view data
+            ViewBag.Filter = filter;
+            ViewBag.Pager = pager;
+            #endregion
+
+            return View(items.ToList());
+        }
     }
 }

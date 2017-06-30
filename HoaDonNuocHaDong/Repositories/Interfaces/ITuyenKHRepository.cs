@@ -10,5 +10,6 @@ namespace HoaDonNuocHaDong.Repositories.Interfaces
     interface ITuyenKHRepository : IRepository<HDNHD.Models.DataContexts.Tuyenkhachhang>
     {
         IQueryable<HDNHD.Models.DataContexts.Tuyenkhachhang> GetByNhanVienID(int nhanVienID);
+        IQueryable<HDNHD.Models.DataContexts.Tuyenkhachhang> GetByToID(int toID);
     }
 }

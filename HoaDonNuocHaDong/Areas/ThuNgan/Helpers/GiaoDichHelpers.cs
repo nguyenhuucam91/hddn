@@ -107,7 +107,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
 
             if (model.HoaDonTiepTheo != null && model.DuCo != null && model.HoaDonTiepTheo.Tongsotieuthu > 0) // đã nhập số liệu
             {
-                var _model = hoaDonRepository.GetHoaDonModelByID(model.HoaDonTiepTheo.HoadonnuocID, null);
+                var _model = hoaDonRepository.GetHoaDonModelByID(model.HoaDonTiepTheo.HoadonnuocID);
 
                 // cap nhat trang thai du co
                 model.DuCo.TrangThaiTruHet = true;
@@ -245,7 +245,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Helpers
 
             if (model.HoaDonTiepTheo != null && model.HoaDonTiepTheo.Tongsotieuthu > 0)
             {
-                var _model = hoaDonRepository.GetHoaDonModelByID(model.HoaDonTiepTheo.HoadonnuocID, null);
+                var _model = hoaDonRepository.GetHoaDonModelByID(model.HoaDonTiepTheo.HoadonnuocID);
 
                 _model.SoTienNopTheoThang.SoTienPhaiNop = _model.SoTienNopTheoThang.SoTienTrenHoaDon;
                 _model.HoaDon.Trangthaithu = false;

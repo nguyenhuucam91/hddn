@@ -1,0 +1,85 @@
+﻿@model List<HoaDonNuocHaDong.Areas.ThuNgan.Models.KhongSanLuongModel>
+@using HDNHD.Core.Helpers;
+<div class="main">
+    <div class="main-inner">
+        <div class="container">
+            <div class="row">
+                <div class="widget">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <i class="icon-th-list"></i>
+                            <h3>Báo cáo KH không có sản lượng</h3>
+                        </div>
+                        <div class="widget-content">
+                            @Html.Partial("_KhongSanLuongFilter", (object)ViewBag.Filter)
+                            <div>
+                                <table class="table table-striped table-bordered data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>ID khách hàng</th>
+                                            <th>Mã khách hàng</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Tuyến</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ int stt = 1; }
+                                        @foreach (HoaDonNuocHaDong.Areas.ThuNgan.Models.KhongSanLuongModel item in Model)
+                                        {
+                                            <tr>
+                                                <td style="text-align: right">@(stt++)</td>
+                                                <td style="text-align: center">@item.KhachHang.KhachhangID</td>
+                                                <td style="text-align: center">@item.KhachHang.MaKhachHang</td>
+                                                <td><a href="@Url.Action("ChiTiet", "KhachHang", new { area="ThuNgan", id=item.KhachHang.KhachhangID})" target="_blank">@item.KhachHang.Ten</a></td>
+                                                <td>@item.KhachHang.Diachi</td>
+                                                <td>@item.TuyenKH.Ten</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                @Html.Partial("_Pager", (object)ViewBag.Pager)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // onInit:
+            loadQuanHuyen($(".sl-quan-huyen"), "@ViewBag.Filter.QuanHuyenID");
+
+        });
+
+        // load data onChange
+        $(".sl-quan-huyen").on("change", function () {
+            // get selected quanHuyenID
+            var quanHuyenID = $(this).val();
+
+            // loadTo
+            loadTo($(".sl-to"), quanHuyenID, "@ViewBag.Filter.ToID", true);
+        });
+
+        $(".sl-to").on("change", function () {
+            // get selected toID
+            var toID = $(this).val();
+
+            // loadNhanVien
+            loadNhanVien($(".sl-nhan-vien"), toID, "@ViewBag.Filter.NhanVienID");
+        });
+
+        $(".sl-nhan-vien").on("change", function () {
+            // get selected nhanVien
+            var nhanVienID = $(this).val();
+
+            // loadTuyen
+            loadTuyen($(".sl-tuyen-kh"), nhanVienID, "@ViewBag.Filter.TuyenKHID");
+        });
+    </script>
+}
