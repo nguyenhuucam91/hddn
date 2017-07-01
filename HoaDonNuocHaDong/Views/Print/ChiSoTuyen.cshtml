@@ -200,7 +200,12 @@
                                                 <!-- Ngày in xong hóa đơn -->
                                                 @if (item.ngayInXong != null)
                                                 {
-                                                    <td>@String.Format("{0:dd/MM/yyyy}", item.ngayInXong)</td>
+                                                    String ngayInXong = "";
+                                                    if (item.ngayInXong != new DateTime(1, 1, 1))
+                                                    {
+                                                        ngayInXong = item.ngayInXong.ToString();
+                                                    }
+                                                    <td>@String.Format("{0:dd/MM/yyyy}", ngayInXong)</td>
                                                 }
                                                 else
                                                 {

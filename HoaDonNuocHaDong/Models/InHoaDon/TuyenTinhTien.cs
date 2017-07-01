@@ -12,8 +12,8 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public String MaKH { get { return GetSTR(1); } set { SetSTR(1, value); } }
         public String TenKH { get { return GetSTR(2); } set { SetSTR(2, value); } }
         public String DiaChi { get { return GetSTR(3); } set { SetSTR(3, value); } }
-        public String NgayBatDau { get { return GetSTR(4); } set { SetSTR(4, value); } }
-        public String NgayKetThuc { get { return GetSTR(5); } set { SetINT(5, value); } }
+        public DateTime NgayBatDau { get { return GetDT(4); } set { SetDT(4, value); } }
+        public DateTime NgayKetThuc { get { return GetDT(5); } set { SetDT(5, value); } }
         public double SH1 { get { return GetD(6); } set { SetD(6, value); } }
         public double SH1Price { get { return GetD(7); } set { SetD(7, value); } }
         public double SH2 { get { return GetD(8); } set { SetD(8, value); } }
