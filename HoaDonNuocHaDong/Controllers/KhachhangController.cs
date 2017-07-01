@@ -1073,6 +1073,7 @@ namespace HoaDonNuocHaDong.Controllers
                            cT.CC.Value, chiSo.getSoTienTheoApGia("CC").Value,
                            cT.SXXD.Value, chiSo.getSoTienTheoApGia("SXXD").Value,
                            cT.KDDV.Value, chiSo.getSoTienTheoApGia("KDDV").Value,
+                           dinhMuc,
                            5, VAT, khachhang.Tilephimoitruong.Value, thueBVMT, tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
                            db.Quanhuyens.Find(khachhang.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(khachhang.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(khachhang.QuanhuyenID).DienThoai3,
                            thuNgan, khachhang.TuyenKHID.Value, khachhang.TTDoc.Value, 0, ngayBatDauSuDung,

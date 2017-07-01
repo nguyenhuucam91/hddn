@@ -217,17 +217,22 @@
                                                                             }
 
                                                                             <td class="endDate">
-
+                                                                                @{String ngayKetThucSuDungAsString = "";
+                                                                                if (item.NgayKetThucSuDung != new DateTime(1,1,1))
+                                                                                {
+                                                                                    ngayKetThucSuDungAsString = String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung);
+                                                                                }
+                                                                                }
                                                                                 @if (!cS.isChotHoaDon(hoaDonID))
                                                                                 {
                                                                                     <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                                           value="@String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung)"
+                                                                                           value="@ngayKetThucSuDungAsString"
                                                                                            data-hoadonid="@item.HoaDonNuocID" class="endDate[@i]" />
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                                                           value="@String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung)"
+                                                                                           value="@ngayKetThucSuDungAsString"
                                                                                            data-hoadonid="@item.HoaDonNuocID" />
                                                                                 }
 
@@ -257,7 +262,7 @@
                                                                                 }
                                                                             }
 
-                                                                          
+
                                                                             <td>
                                                                                 <input type="text" style="width:55px" name="sanLuong" disabled value="@item.SanLuong" />
                                                                             </td>

@@ -344,6 +344,7 @@ namespace HoaDonNuocHaDong.Controllers
             cT.CC.Value, cS.getSoTienTheoApGia("CC").Value,
             cT.SXXD.Value, cS.getSoTienTheoApGia("SX-XD").Value,
             cT.KDDV.Value, cS.getSoTienTheoApGia("KDDV").Value,
+            dinhMuc,
             5, VAT,
             obj.Tilephimoitruong.Value, thueBVMT, tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
             db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3,
@@ -566,7 +567,7 @@ namespace HoaDonNuocHaDong.Controllers
             lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value, cT.SH1.Value,
             cS.getSoTienTheoApGia("SH1").Value, cT.SH2.Value, cS.getSoTienTheoApGia("SH2").Value, cT.SH3.Value, cS.getSoTienTheoApGia("SH3").Value, cT.SH4.Value, cS.getSoTienTheoApGia("SH4").Value,
             cT.HC.Value, cS.getSoTienTheoApGia("HC").Value, cT.CC.Value, cS.getSoTienTheoApGia("CC").Value, cT.SXXD.Value, cS.getSoTienTheoApGia("SX-XD").Value, cT.KDDV.Value, cS.getSoTienTheoApGia("KDDV").Value,
-            5, VAT,
+            dinhMuc,5, VAT,
             obj.Tilephimoitruong.Value, thueBVMT,
             tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
             db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3, thuNgan, obj.TuyenKHID.Value,
@@ -794,10 +795,10 @@ namespace HoaDonNuocHaDong.Controllers
             int ChiSoCuoi = chiTiet.Chisomoi.Value;
             //Giá 
             double dinhMuc = cS.tinhTongTienTheoDinhMuc(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value);
-            double thue = cS.tinhThue(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value, obj.Tilephimoitruong.Value);
+            double thueBVMT = cS.tinhThue(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value, obj.Tilephimoitruong.Value);
             double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
             //chỉ số cộng dồn
-            double tongTienHoaDon = dinhMuc + thue + VAT;
+            double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
             double congDonHDTruoc = 0;
             //kiểm tra, nếu là record đầu tiên
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc);
@@ -824,7 +825,8 @@ namespace HoaDonNuocHaDong.Controllers
               CC, cS.getSoTienTheoApGia("CC").Value,
               SX, cS.getSoTienTheoApGia("SX-XD").Value,
               KD, cS.getSoTienTheoApGia("KDDV").Value,
-              5, VAT, obj.Tilephimoitruong.Value, thue,
+              dinhMuc,
+              5, VAT, obj.Tilephimoitruong.Value, thueBVMT,
               tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
               db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3,
               thuNgan, obj.TuyenKHID.Value, obj.TTDoc.Value, tongCongCongDon, startDate, endDate);

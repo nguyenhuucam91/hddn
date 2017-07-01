@@ -13,7 +13,7 @@ namespace HoaDonNuocHaDong.Repositories
         protected HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         public void updateLichSuHoaDon(int HoaDonID, int thangHoaDon, int namHoaDon, String tenKH, String diaChi, String MST, String maKH, int TuyenKHID, String soHD,
             int chiSoCu, int ChiSoMoi, int TongTieuThu, double SH1, double SH1Price, double SH2, double SH2Price, double SH3, double SH3Price, double SH4, double SH4Price, double HC, double HCPrice,
-            double CC, double CCPrice, double SX, double SXPrice, double KD, double KDPrice, double Thue, double TienThueVAT, double TileBVMT,
+            double CC, double CCPrice, double SX, double SXPrice, double KD, double KDPrice, double DinhMuc, double Thue, double TienThueVAT, double TileBVMT,
             double BVMTPrice, double TongCong, String bangChu, String TTVoOng, String ThuNgan, int tuyen, int TTDoc, double chiSoCongDon, string ngayBatDau, string ngayKetThuc)
         {
             Lichsuhoadon lichSuHoaDon = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == HoaDonID);
@@ -47,6 +47,7 @@ namespace HoaDonNuocHaDong.Repositories
                 lichSuHoaDon.SXPrice = SXPrice;
                 lichSuHoaDon.KD = KD;
                 lichSuHoaDon.KDPrice = KDPrice;
+                lichSuHoaDon.TruocThue = DinhMuc;
                 lichSuHoaDon.ThueSuat = Thue;
                 lichSuHoaDon.ThueSuatPrice = TienThueVAT;
                 lichSuHoaDon.TileBVMT = TileBVMT;
@@ -61,35 +62,22 @@ namespace HoaDonNuocHaDong.Repositories
                 lichSuHoaDon.NgayBatDau = ngayBatDau;
                 lichSuHoaDon.NgayKetThuc = ngayKetThuc;
                 db.Entry(lichSuHoaDon).State = EntityState.Modified;
+                db.SaveChanges();
             }
             else
             {
                 addLichSuHoaDon(HoaDonID, thangHoaDon, namHoaDon, tenKH, diaChi, MST, maKH, TuyenKHID, soHD,
               chiSoCu, ChiSoMoi, TongTieuThu, SH1, SH1Price, SH2, SH2Price, SH3, SH3Price, SH4, SH4Price, HC, HCPrice,
-              CC, CCPrice, SX, SXPrice, KD, KDPrice, Thue, TienThueVAT, TileBVMT,
+              CC, CCPrice, SX, SXPrice, KD, KDPrice, DinhMuc, Thue, TienThueVAT, TileBVMT,
               BVMTPrice, TongCong, bangChu, TTVoOng, ThuNgan, tuyen, TTDoc, chiSoCongDon, ngayBatDau, ngayKetThuc);
             }
 
-            try
-            {
-                SaveChanges();
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                String err = "";
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        err += validationError.PropertyName + "" + validationError.ErrorMessage;
-                    }
-                }
-            }
+            
         }
 
         public void addLichSuHoaDon(int HoaDonID, int thangHoaDon, int namHoaDon, String tenKH, String diaChi, String MST, String maKH, int TuyenKHID, String soHD,
             int chiSoCu, int ChiSoMoi, int TongTieuThu, double SH1, double SH1Price, double SH2, double SH2Price, double SH3, double SH3Price, double SH4, double SH4Price, double HC, double doubleHCPrice,
-            double CC, double CCPrice, double SX, double SXPrice, double KD, double KDPrice, double Thue, double TienThueVAT, double TileBVMT,
+            double CC, double CCPrice, double SX, double SXPrice, double KD, double KDPrice, double DinhMuc, double Thue, double TienThueVAT, double TileBVMT,
             double BVMTPrice, double TongCong, String bangChu, String TTVoOng, String ThuNgan, int tuyen, int TTDoc, double chiSoCongDon, string ngayBatDau, string ngayKetThuc)
         {
             Lichsuhoadon history = new Lichsuhoadon();
@@ -121,6 +109,7 @@ namespace HoaDonNuocHaDong.Repositories
             history.SXPrice = SXPrice;
             history.KD = KD;
             history.KDPrice = KDPrice;
+            history.TruocThue = DinhMuc;
             history.ThueSuat = Thue;
             history.ThueSuatPrice = TienThueVAT;
             history.TileBVMT = TileBVMT;
