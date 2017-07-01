@@ -296,7 +296,14 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 hoaDonObj.Trangthaiin = true;
                 //thêm ngày in vào hóa đơn
-                hoaDonObj.NgayIn = DateTime.Now;
+                if (DateTime.Now > new DateTime(hoaDonObj.NamHoaDon.Value, hoaDonObj.ThangHoaDon.Value, 28))
+                {
+                    hoaDonObj.NgayIn = new DateTime(hoaDonObj.NamHoaDon.Value, hoaDonObj.ThangHoaDon.Value, 28);
+                }
+                else
+                {
+                    hoaDonObj.NgayIn = DateTime.Now;
+                }
                 db.Entry(hoaDonObj).State = EntityState.Modified;
                 db.SaveChanges();
             }
