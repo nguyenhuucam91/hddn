@@ -1,4 +1,5 @@
 ﻿@{
+    HoaDonHaDongEntities db = new HoaDonHaDongEntities();
     ViewBag.Title = "Nhập số liệu tiêu thụ";
     var chiSoTieuThus = ViewData["ChiSoTieuThu"] as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
     int year = ViewBag.year;
@@ -158,7 +159,6 @@
                                         <tbody>
                                             @{
                                 int i = 1;
-                                HoaDonHaDongEntities db = new HoaDonHaDongEntities();
                                             }
                                             @foreach (var item in chiSoTieuThus)
                                             {
@@ -218,7 +218,7 @@
 
                                                                             <td class="endDate">
                                                                                 @{String ngayKetThucSuDungAsString = "";
-                                                                                if (item.NgayKetThucSuDung != new DateTime(1,1,1))
+                                                                                if (item.NgayKetThucSuDung != new DateTime(1, 1, 1))
                                                                                 {
                                                                                     ngayKetThucSuDungAsString = String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung);
                                                                                 }
@@ -268,23 +268,23 @@
                                                                             </td>
 
                                                                             <td>
-
+                                                                                @{ String soKhoanAsTxt = item.SoKhoan != 0 ? item.SoKhoan.ToString() : "" ; }
                                                                                 @if (isChot == null || isChot == false)
-                                                                                {
+                                                                                {                                                                                   
                                                                                     <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan"
-                                                                                           style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                                           style="width:35px" placeholder="@soKhoanAsTxt" value="@soKhoanAsTxt" />
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     if (cS.isChotHoaDon(hoaDonID))
                                                                                     {
                                                                                         <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan"
-                                                                                               style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                                               style="width:35px" placeholder="@soKhoanAsTxt" value="@soKhoanAsTxt" />
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan"
-                                                                                               style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                                               style="width:35px" placeholder="@soKhoanAsTxt" value="@soKhoanAsTxt" />
                                                                                     }
                                                                                 }
                                                                             </td>
