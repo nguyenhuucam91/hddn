@@ -1265,19 +1265,14 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int nextMonth = currentMonth + 1 > 12 ? 1 : currentMonth + 1;
             int nextYear = currentMonth + 1 > 12 ? currentYear + 1 : currentYear;
-            var dsKhachHangKoSanLuong = (from i in db.Hoadonnuocs
-                                         join s in db.Khachhangs on i.KhachhangID equals s.KhachhangID
-                                         join c in db.Chitiethoadonnuocs on i.HoadonnuocID equals c.HoadonnuocID
-                                         where i.ThangHoaDon == currentMonth && i.NamHoaDon == currentYear && s.TuyenKHID == tuyenID && i.Tongsotieuthu == null
-                                         select new
-                                         {
-                                             HoaDonID = i.HoadonnuocID,
-                                             ThangHoaDon = i.ThangHoaDon,
-                                             Ngaybatdausudung = i.Ngaybatdausudung,
-                                             KhachHangID = i.KhachhangID,
-                                             ChiSoCu = c.Chisocu
-                                         }).ToList();
-
+           
+            SqlConnection conn = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
+            conn.Open();
+            ControllerBase<DanhSachHoaDonKhongSanLuong> cB = new ControllerBase<DanhSachHoaDonKhongSanLuong>();
+            List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@month", currentMonth), 
+                new SqlParameter("@year", currentYear), new SqlParameter("@tuyen", tuyenID)).ToList();
+           
+          
             foreach (var item in dsKhachHangKoSanLuong)
             {
                 Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
@@ -1287,7 +1282,7 @@ namespace HoaDonNuocHaDong.Controllers
                     Hoadonnuoc khongSanLuong = new Hoadonnuoc();
                     khongSanLuong.ThangHoaDon = nextMonth;
                     khongSanLuong.NamHoaDon = nextYear;
-                    khongSanLuong.Ngaybatdausudung = item.Ngaybatdausudung;
+                    khongSanLuong.Ngaybatdausudung = item.NgayBatDauSuDung;
                     khongSanLuong.KhachhangID = item.KhachHangID;
                     khongSanLuong.NhanvienID = Convert.ToInt32(Session["nhanvien"]);
                     db.Hoadonnuocs.Add(khongSanLuong);
@@ -1299,6 +1294,8 @@ namespace HoaDonNuocHaDong.Controllers
                     db.SaveChanges();
                 }
             }
+
+            conn.Close();
         }
         /// <summary>
         /// load hóa đơn có chỉ số không bình thường lên, giống vs hàm load danh sách hóa đơn, 
@@ -1474,26 +1471,7 @@ namespace HoaDonNuocHaDong.Controllers
                                     LoaiApGia = i.IDLoaiApGia
                                 }).ToList();
             return Json(apGiaTongHop, JsonRequestBehavior.AllowGet);
-        }
-
-        public void assignChiSoMoi(int prevMonth, int prevYear, int curMonth, int curYear)
-        {
-            SqlConnection conn = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
-            conn.Open();
-            ControllerBase<ChiTietHoaDonNuocModel> cB = new ControllerBase<ChiTietHoaDonNuocModel>();
-            List<ChiTietHoaDonNuocModel> hdN = cB.Query("LayChiSoMoi", new SqlParameter("@month", prevMonth), new SqlParameter("@year", prevYear)).ToList();
-            foreach (var item in hdN)
-            {
-                var command = new SqlCommand("UpdateChiSoMoiThangSau", conn);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@thang", curMonth);
-                command.Parameters.AddWithValue("@nam", curYear);
-                command.Parameters.AddWithValue("@chisocu", item.ChiSoMoi);
-                command.Parameters.AddWithValue("@khid",item.KhachHangId);
-                command.ExecuteNonQuery();
-            }
-            conn.Close();
-        }
+        }       
 
     }//end class
 }//end namespace

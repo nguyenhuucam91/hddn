@@ -1,4 +1,5 @@
 ﻿using HoaDonNuocHaDong;
+using HoaDonNuocHaDong.Config;
 using HoaDonNuocHaDong.Helper;
 using HvitFramework;
 using System;
@@ -418,7 +419,7 @@ namespace HoaDonHaDong.Helper
 
         public void capnhatTrangThaiDanhSachHoaDonBiHuyThuocTuyen(int tuyenID, int month, int year)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
+            string connectionString = DatabaseConfig.getConnectionString();
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand("", connection))
             {

@@ -68,8 +68,8 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
         public int SanLuongTieuThu { get { return GetINT(8); } set { SetINT(8, value); } }
         public int ChiSoCu { get { return GetINT(9); } set { SetINT(9, value); } }
         public int ChiSoMoi { get { return GetINT(10); } set { SetINT(10, value); } }
-        public String NgayBatDau { get { return GetSTR(11); } set { SetSTR(11, value); } }
-        public String NgayKetThuc { get { return GetSTR(12); } set { SetSTR(12, value); } }
+        public String NgayBatDau { get { return String.Format("{0:dd/MM/yyyy}", GetSTR(11)); } set { SetSTR(11, value); } }
+        public String NgayKetThuc { get { return String.Format("{0:dd/MM/yyyy}", GetSTR(12)); } set { SetSTR(12, value); } }
         #endregion
 
         #region SinhHoat
