@@ -203,9 +203,9 @@
                                                     String ngayInXong = "";
                                                     if (item.ngayInXong != new DateTime(1, 1, 1))
                                                     {
-                                                        ngayInXong = item.ngayInXong.ToString();
+                                                        ngayInXong = String.Format("{0:dd/MM/yyyy}", item.ngayInXong);
                                                     }
-                                                    <td>@String.Format("{0:dd/MM/yyyy}", ngayInXong)</td>
+                                                    <td>@ngayInXong</td>
                                                 }
                                                 else
                                                 {
