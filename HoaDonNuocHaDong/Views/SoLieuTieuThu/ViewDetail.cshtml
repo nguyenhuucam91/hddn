@@ -141,7 +141,7 @@
                             @foreach (var item in chiSoTieuThu)
                             {
                                 int hoaDonID = item.HoaDonNuocID;
-                                int khachHangIDRow = item.KHID;
+                                int khachHangIDRow = item.KhachHangID;
                                 String SH1 = item.SH1 == "0" ? "": item.SH1;
                                 String SH2 = item.SH2 == "0" ? "" : item.SH2;
                                 String SH3 = item.SH3 == "0" ? "" : item.SH3;
@@ -184,7 +184,7 @@
                                                                             <td><label>@item.SoKhoan</label></td>
                                                                             <!-- Nếu chỉ số sản lượng != chỉ số mới - chỉ số cũ thì hiện chữ màu đỏ-->
                                                                             <td>
-                                                                                <input class="sanLuong" data-khachhangid="@item.KHID"
+                                                                                <input class="sanLuong" data-khachhangid="@item.KhachHangID"
                                                                                        style="color:red;width:80%;font-size:15px" value="@item.SanLuong"
                                                                                        data-month="@item.Thang"
                                                                                        data-year="@item.Nam" />

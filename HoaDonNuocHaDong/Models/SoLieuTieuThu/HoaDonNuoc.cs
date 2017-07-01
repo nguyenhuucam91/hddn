@@ -40,8 +40,7 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
         public int? LoaiApGiaID { get { return GetINT(25); } set { SetINT(25, value); } }
         public int Thang { get; set; }
         public int Nam { get; set; }
-        public String ThangNamHoaDon { get; set; }
-        public int KHID { get; set; }
+        public String ThangNamHoaDon { get; set; }       
         public String SoHoaDon { get; set; }
 
 

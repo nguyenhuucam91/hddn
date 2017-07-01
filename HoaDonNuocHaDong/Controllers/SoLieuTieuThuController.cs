@@ -625,7 +625,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> cB = new ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
             List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cB.Query("ChiaChiSoTieuThuKhachHang", new SqlParameter("@month", _month), new SqlParameter("@year", _year),
-            new SqlParameter("@tuyen", tuyenID));
+            new SqlParameter("@tuyen", tuyenID)).ToList();
             return chiSoTieuThu;
         }
 
