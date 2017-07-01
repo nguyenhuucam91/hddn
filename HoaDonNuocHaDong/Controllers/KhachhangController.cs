@@ -682,6 +682,7 @@ namespace HoaDonNuocHaDong.Controllers
                 hoaDonNuoc.Trangthaixoa = false;
                 hoaDonNuoc.NamHoaDon = namKiHopDong;
                 hoaDonNuoc.ThangHoaDon = thangKiHopDong;
+                hoaDonNuoc.Ngaybatdausudung = khachhang.Ngaykyhopdong;
                 db.Hoadonnuocs.Add(hoaDonNuoc);
                 db.SaveChanges();
 
