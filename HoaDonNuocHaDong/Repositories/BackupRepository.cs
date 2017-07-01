@@ -158,12 +158,12 @@ namespace HoaDonNuocHaDong.Repositories
 
         private void zipBackupFile(String fileName, String dbPath)
         {
-            ZipFile zip = new ZipFile();
-            zip.AddFile(dbPath);
-            String subPath = setSubPath();
-            String pathBuilder = subPath + fileName + ".zip";
-            String destZipFile = HttpContext.Current.Server.MapPath(pathBuilder);
-            zip.Save(destZipFile);
+            //ZipFile zip = new ZipFile();
+            //zip.AddFile(dbPath);
+            //String subPath = setSubPath();
+            //String pathBuilder = subPath + fileName + ".zip";
+            //String destZipFile = HttpContext.Current.Server.MapPath(pathBuilder);
+            //zip.Save(destZipFile);
         }
     }
 }
