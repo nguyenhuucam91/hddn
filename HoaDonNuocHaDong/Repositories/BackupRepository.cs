@@ -32,11 +32,13 @@ namespace HoaDonNuocHaDong.Repositories
         {
             String databaseIntialCatalog = databaseConfig.getCurrentDatabaseInitialCatalog();
             String dbPath = getDbBackupPath();
-
-            var cmd = String.Format("BACKUP DATABASE {0} TO DISK='{1}' WITH FORMAT, MEDIANAME='{2}', MEDIADESCRIPTION='Media set for {0} database';"
-                , databaseIntialCatalog, dbPath, fileName);
-            db.Database.CommandTimeout = 0;
-            db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, cmd);
+            if (!File.Exists(dbPath))
+            {
+                var cmd = String.Format("BACKUP DATABASE {0} TO DISK='{1}' WITH FORMAT, MEDIANAME='{2}', MEDIADESCRIPTION='Media set for {0} database';"
+                    , databaseIntialCatalog, dbPath, fileName);
+                db.Database.CommandTimeout = 0;
+                db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, cmd);
+            }
         }
 
         public Backup checkBackupRecordCurrentDate()
@@ -151,9 +153,7 @@ namespace HoaDonNuocHaDong.Repositories
             executeBackupTransaction(dbFileName);
             zipBackupFile(dbFileName, dbPath);
             updateOrCreateBackupRecord(nguoiDungId);
-            deleteOldBackupFiles();
-            // new FilePathResult(dbPath, "application/octet-stream");
-            
+            deleteOldBackupFiles();            
         }
 
         private void zipBackupFile(String fileName, String dbPath)

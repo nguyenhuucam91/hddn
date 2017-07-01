@@ -1,4 +1,8 @@
+<<<<<<< e91a899d106a244de0128abde9b6fef1e49ec248
 ﻿using HDNHD.Core.Repositories;
+=======
+using HDNHD.Core.Repositories;
+>>>>>>> c7252917acf8a10dc488323e7a680149d908d8d5
 using HoaDonNuocHaDong.Areas.ThuNgan.Repositories.Interfaces;
 using HoaDonNuocHaDong.Areas.ThuNgan.Models;
 using HDNHD.Models.DataContexts;
@@ -19,6 +23,7 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         // override lọc bỏ bản ghi đã xóa
         public override IQueryable<HDNHD.Models.DataContexts.Hoadonnuoc> GetAll()
         {
+<<<<<<< e91a899d106a244de0128abde9b6fef1e49ec248
             return base.GetAll().Where(m => m.Trangthaichot == true).Where(m => m.Trangthaixoa == null || m.Trangthaixoa == false);
         }
 
@@ -107,6 +112,12 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
         }
 
         public IQueryable<KhongSanLuongModel> GetAllKhongSanLuongModel(int month, int year)
+=======
+            return base.GetAll().Where(m => m.Trangthaixoa == null || m.Trangthaixoa == false);
+        }
+
+        public IQueryable<HoaDonModel> GetAllHoaDonModel(bool? trangThaiIn = true)
+>>>>>>> c7252917acf8a10dc488323e7a680149d908d8d5
         {
             var hds = GetAll();
 
@@ -141,4 +152,8 @@ namespace HoaDonNuocHaDong.Areas.ThuNgan.Repositories
                    };
         }
     }
+<<<<<<< e91a899d106a244de0128abde9b6fef1e49ec248
+=======
+
+>>>>>>> c7252917acf8a10dc488323e7a680149d908d8d5
 }

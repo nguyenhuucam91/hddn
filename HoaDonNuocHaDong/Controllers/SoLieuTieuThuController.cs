@@ -603,7 +603,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.tenTuyen = UserInfo.getTenTuyen(tuyenID.Value);
             //load chỉ số và thông tin tách số vào đây
             List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);
-            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == false);
+            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == 0);
             int loggedInRole = getUserRole(LoggedInUser.NhanvienID);
 
             #region ViewBag
@@ -623,44 +623,9 @@ namespace HoaDonNuocHaDong.Controllers
 
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getDanhSachHoaDonTieuThu(int _month, int _year, int tuyenID)
         {
-
-            var chiSoTieuThu = (from i in db.Hoadonnuocs
-                                join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                                join m in db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
-                                join l in db.Loaiapgias on r.LoaiapgiaID equals l.LoaiapgiaID
-                                where i.ThangHoaDon == _month && i.NamHoaDon == _year &&
-                                      r.TuyenKHID == tuyenID &&
-                                      (r.Ngaythanhly == null || (r.Ngaythanhly.Value.Month != _month && r.Ngaythanhly.Value.Year != _year)) &&
-                                      (i.Trangthaixoa == false || i.Trangthaixoa == null)
-                                select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
-                                {
-                                    HoaDonNuocID = i.HoadonnuocID,
-                                    MaKhachHang = r.MaKhachHang,
-                                    ThuTuDoc = r.TTDoc,
-                                    TenKhachHang = r.Ten,
-                                    LoaiApGia = l.Ten,
-                                    LoaiApGiaID = r.LoaiapgiaID,
-                                    SoHo = r.Soho,
-                                    SoKhau = r.Sonhankhau,
-                                    ChiSoCu = m.Chisocu,
-                                    ChiSoMoi = m.Chisomoi,
-                                    SoKhoan = i.SoKhoan,
-                                    SanLuong = i.Tongsotieuthu,
-                                    SH1 = m.SH1 == 0 ? "" : m.SH1.ToString(),
-                                    SH2 = m.SH2 == 0 ? "" : m.SH2.ToString(),
-                                    SH3 = m.SH3 == 0 ? "" : m.SH3.ToString(),
-                                    SH4 = m.SH4 == 0 ? "" : m.SH4.ToString(),
-                                    HC = m.HC == 0 ? "" : m.HC.ToString(),
-                                    CC = m.CC == 0 ? "" : m.CC.ToString(),
-                                    SXXD = m.SXXD == 0 ? "" : m.SXXD.ToString(),
-                                    KDDV = m.KDDV == 0 ? "" : m.KDDV.ToString(),
-                                    Thang = _month,
-                                    Nam = _year,
-                                    KHID = r.KhachhangID,
-                                    TrangThaiChot = i.Trangthaichot == null ? false : i.Trangthaichot.Value,
-                                    NgayNgungCapNuoc = r.Ngayngungcapnuoc,
-                                    NgayCapNuocLai = r.Ngaycapnuoclai
-                                }).OrderBy(p => p.ThuTuDoc).ToList();
+            ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> cB = new ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
+            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cB.Query("ChiaChiSoTieuThuKhachHang", new SqlParameter("@month", _month), new SqlParameter("@year", _year),
+            new SqlParameter("@tuyen", tuyenID));
             return chiSoTieuThu;
         }
 

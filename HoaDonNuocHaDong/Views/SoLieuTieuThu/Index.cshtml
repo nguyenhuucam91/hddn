@@ -379,5 +379,10 @@
                 window.location.href = "/Solieutieuthu/ViewDetail?toID =@toID &tuyenID=@selectedTuyen&month=@month&year=@year&nvquanly=@selectedNhanvien";
             }
         });
+
+        var endDateInputField = $("td.endDate input").val();
+        if (endDateInputField == '01/01/0001') {
+            $("td.endDate input").val("");
+        }
     });
 </script>
