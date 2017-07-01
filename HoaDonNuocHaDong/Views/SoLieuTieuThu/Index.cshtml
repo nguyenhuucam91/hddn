@@ -126,7 +126,7 @@
                                 <div class="clearfix"></div>
 
                                 <div>
-                                   @Html.Partial("_SoLieuTieuThuChuThich")
+                                    @Html.Partial("_SoLieuTieuThuChuThich")
 
                                     <div class="clearfix"></div>
                                 </div>
@@ -165,7 +165,9 @@
                                                 int hoaDonID = item.HoaDonNuocID;
                                                 int khachHangIDRow = item.KhachHangID;
                                                 String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonID);
+                                                String hasSanLuongAmCss = item.SanLuong < 0 ? "hasSanLuongAm" : "";
                                                 cssClass += ((item.NgayNgungCapNuoc == null && item.NgayCapNuocLai == null) || (item.NgayCapNuocLai <= DateTime.Now)) ? "" : "catnuocBackgroundCss";
+                                                cssClass += hasSanLuongAmCss;
                                                 DateTime ngayBatDauHoaDon = DateTime.Now;
                                                 {
                                                     <tr class=@cssClass>
@@ -182,11 +184,10 @@
                                                                             <td>@item.ThuTuDoc</td>
                                                                             <td style="width:5px">@item.SoHo</td>
                                                                             <td>@item.SoKhau</td>
-                                                                            <!-- Bắt đầu -->                                                                         
-
+                                                                            <!-- Bắt đầu -->
                                                                             <!--Nếu có hóa đơn của tháng trước (mới kí hợp đồng) thì lấy [ngayHoaDon] làm ngày bắt đầu, nếu không có hóa đơn tháng trước thì lấy ngày kí hợp đồng làm ngày bắt đầu-->
                                                                             @if (item.NgayBatDauSuDung != null)
-                                                                            {                                                                                
+                                                                            {
                                                                                 ngayBatDauHoaDon = item.NgayBatDauSuDung.GetValueOrDefault();
                                                                                 if (item.NgayCapNuocLai != null)
                                                                                 {
@@ -242,34 +243,42 @@
                                                                             {
                                                                                 if (cS.isChotHoaDon(hoaDonID))
                                                                                 {
-                                                                                    <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" 
-                                                                                               style="width:55px" placeholder="@item.ChiSoMoi" disabled="disabled" value="@chiSoMoi"></td>
+                                                                                    <td>
+                                                                                        <input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID"
+                                                                                               style="width:55px" placeholder="@item.ChiSoMoi" disabled="disabled" value="@chiSoMoi">
+                                                                                    </td>
                                                                                 }
                                                                                 else
                                                                                 {
-                                                                                    <td><input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" 
-                                                                                               style="width:55px" placeholder="@item.ChiSoMoi"></td>
+                                                                                    <td>
+                                                                                        <input type="text" class="negNumber" name="chiSoMoi" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID"
+                                                                                               style="width:55px" placeholder="@item.ChiSoMoi">
+                                                                                    </td>
                                                                                 }
                                                                             }
 
-                                                                            <td><input type="text" style="width:55px" name="sanLuong" disabled value="@item.SanLuong" /></td>
+                                                                          
+                                                                            <td>
+                                                                                <input type="text" style="width:55px" name="sanLuong" disabled value="@item.SanLuong" />
+                                                                            </td>
+
                                                                             <td>
 
                                                                                 @if (isChot == null || isChot == false)
                                                                                 {
                                                                                     <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan"
-                                                                                            style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
+                                                                                           style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     if (cS.isChotHoaDon(hoaDonID))
                                                                                     {
-                                                                                        <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" 
+                                                                                        <input disabled type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan"
                                                                                                style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                                                     }
                                                                                     else
                                                                                     {
-                                                                                        <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" 
+                                                                                        <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan"
                                                                                                style="width:35px" placeholder="@item.SoKhoan" value="@item.SoKhoan" />
                                                                                     }
                                                                                 }
@@ -348,9 +357,11 @@
                                 </div>
                               <!-- Operation -->
                                 <div class="form-actions">
-                                    <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu", 
+                                    <button type="button" class="btn btn-info" onclick='window.location.href="@Url.Action("ViewDetail", "solieutieuthu",
                                     new { toID = toID, tuyenID = Convert.ToInt64(selectedTuyen), month = month, year = year, nvquanly = selectedNhanvien })"'
-                                            style="margin-left: 20px; margin-top: -10px;">Xem chỉ số chi tiết</button>
+                                            style="margin-left: 20px; margin-top: -10px;">
+                                        Xem chỉ số chi tiết
+                                    </button>
                                 </div> <!-- /form-actions -->
 
                             }
@@ -384,5 +395,6 @@
         if (endDateInputField == '01/01/0001') {
             $("td.endDate input").val("");
         }
+
     });
 </script>
