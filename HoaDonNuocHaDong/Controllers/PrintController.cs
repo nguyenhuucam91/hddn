@@ -228,7 +228,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintPreviewSelected(FormCollection form,int quan, int TuyenID, int month, int year)
+        public ActionResult PrintPreviewSelected(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             String[] selectedReceipt = form["printSelectedHidden"].Split(',');
             String[] selectedForm = LichSuHoaDon.sortLichSuHoaDonByTTDoc(selectedReceipt);
@@ -256,7 +256,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintSelected(FormCollection form, int quan, int TuyenID, int month, int year)
+        public ActionResult PrintSelected(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
 
             String[] selectedReceipt = form["printSelectedHidden"].Split(',');
@@ -311,7 +311,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintPreviewFrom(FormCollection form, int quan, int TuyenID, int month, int year)
+        public ActionResult PrintPreviewFrom(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
@@ -350,7 +350,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         [HttpPost]
-        public ActionResult PrintFrom(String printFrom, FormCollection form, int quan, int TuyenID, int month, int year)
+        public ActionResult PrintFrom(String printFrom, FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             switch (printFrom)
             {
@@ -362,7 +362,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        public ActionResult PrintFromTo(FormCollection form, int quan, int TuyenID, int month, int year)
+        public ActionResult PrintFromTo(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
@@ -399,7 +399,7 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult PrintAllPreview(FormCollection form, int quan, int TuyenID, int month, int year)
+        public ActionResult PrintAllPreview(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
             updateAllHoaDon(quan, TuyenID.ToString(), month, year);
@@ -424,7 +424,7 @@ namespace HoaDonNuocHaDong.Controllers
             return File(str, "application/pdf");
         }
 
-        public ActionResult printAll(FormCollection form, int quan, int TuyenID, int month, int year)
+        public ActionResult printAll(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
             updateAllHoaDon(quan, TuyenID.ToString(), month, year);
