@@ -567,7 +567,7 @@ namespace HoaDonNuocHaDong.Controllers
             lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value, cT.SH1.Value,
             cS.getSoTienTheoApGia("SH1").Value, cT.SH2.Value, cS.getSoTienTheoApGia("SH2").Value, cT.SH3.Value, cS.getSoTienTheoApGia("SH3").Value, cT.SH4.Value, cS.getSoTienTheoApGia("SH4").Value,
             cT.HC.Value, cS.getSoTienTheoApGia("HC").Value, cT.CC.Value, cS.getSoTienTheoApGia("CC").Value, cT.SXXD.Value, cS.getSoTienTheoApGia("SX-XD").Value, cT.KDDV.Value, cS.getSoTienTheoApGia("KDDV").Value,
-            dinhMuc,5, VAT,
+            dinhMuc, 5, VAT,
             obj.Tilephimoitruong.Value, thueBVMT,
             tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
             db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3, thuNgan, obj.TuyenKHID.Value,
@@ -1265,33 +1265,52 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int nextMonth = currentMonth + 1 > 12 ? 1 : currentMonth + 1;
             int nextYear = currentMonth + 1 > 12 ? currentYear + 1 : currentYear;
-           
+
             SqlConnection conn = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
             conn.Open();
             ControllerBase<DanhSachHoaDonKhongSanLuong> cB = new ControllerBase<DanhSachHoaDonKhongSanLuong>();
-            List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@month", currentMonth), 
-                new SqlParameter("@year", currentYear), new SqlParameter("@tuyen", tuyenID)).ToList();
-           
-          
+            List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@thang", currentMonth),
+                new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID));
+            SqlCommand addHoaDonNuoc = new SqlCommand();
+            SqlCommand addChiTietHoaDonNuoc = new SqlCommand();
             foreach (var item in dsKhachHangKoSanLuong)
             {
                 Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
                     && i.KhachhangID == item.KhachHangID);
                 if (nextMonthReceipt == null)
                 {
-                    Hoadonnuoc khongSanLuong = new Hoadonnuoc();
-                    khongSanLuong.ThangHoaDon = nextMonth;
-                    khongSanLuong.NamHoaDon = nextYear;
-                    khongSanLuong.Ngaybatdausudung = item.NgayBatDauSuDung;
-                    khongSanLuong.KhachhangID = item.KhachHangID;
-                    khongSanLuong.NhanvienID = Convert.ToInt32(Session["nhanvien"]);
-                    db.Hoadonnuocs.Add(khongSanLuong);
+                    addHoaDonNuoc.CommandText = "INSERT INTO [dbo].[Hoadonnuoc]([KhachhangID],[NhanvienID],[ThangHoaDon],[NamHoaDon],[Ngaybatdausudung]) OUTPUT Inserted.HoadonnuocID " +
+                        "VALUES (@khid, @nvid, @thang, @nam, @ngaybatdausudung)";
+                    addHoaDonNuoc.Connection = conn;
+                    addHoaDonNuoc.Parameters.Clear();
+                    addHoaDonNuoc.Parameters.AddWithValue("@khid", item.KhachHangID);
+                    addHoaDonNuoc.Parameters.AddWithValue("@nvid", LoggedInUser.NhanvienID);
+                    addHoaDonNuoc.Parameters.AddWithValue("@thang", nextMonth);
+                    addHoaDonNuoc.Parameters.AddWithValue("@nam", nextYear);
+                    addHoaDonNuoc.Parameters.AddWithValue("@ngaybatdausudung", item.NgayBatDauSuDung);
+                    int newID = (int)addHoaDonNuoc.ExecuteScalar();
+
+                    //Hoadonnuoc khongSanLuong = new Hoadonnuoc();
+                    //khongSanLuong.ThangHoaDon = nextMonth;
+                    //khongSanLuong.NamHoaDon = nextYear;
+                    //khongSanLuong.Ngaybatdausudung = item.NgayBatDauSuDung;
+                    //khongSanLuong.KhachhangID = item.KhachHangID;
+                    //khongSanLuong.NhanvienID = Convert.ToInt32(Session["nhanvien"]);
+                    //db.Hoadonnuocs.Add(khongSanLuong);
                     //Thêm chi tiết hóa đơn nước tháng sau
-                    Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
-                    chiTiet.HoadonnuocID = khongSanLuong.HoadonnuocID;
-                    chiTiet.Chisocu = item.ChiSoCu;
-                    db.Chitiethoadonnuocs.Add(chiTiet);
-                    db.SaveChanges();
+                    //Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
+                    //chiTiet.HoadonnuocID = newID;
+                    //chiTiet.Chisocu = item.ChiSoCu;
+                    //db.Chitiethoadonnuocs.Add(chiTiet);
+                    //db.SaveChanges();
+
+                    addChiTietHoaDonNuoc.CommandText = "INSERT INTO [dbo].[Chitiethoadonnuoc]([HoadonnuocID],[Chisocu]) VALUES (@hdid, @cscu)";
+                    addChiTietHoaDonNuoc.Connection = conn;
+                    addChiTietHoaDonNuoc.Parameters.Clear();
+                    addChiTietHoaDonNuoc.Parameters.AddWithValue("@hdid", newID);
+                    addChiTietHoaDonNuoc.Parameters.AddWithValue("@cscu", item.ChiSoCu);
+                    addChiTietHoaDonNuoc.ExecuteNonQuery();
+
                 }
             }
 
@@ -1471,7 +1490,7 @@ namespace HoaDonNuocHaDong.Controllers
                                     LoaiApGia = i.IDLoaiApGia
                                 }).ToList();
             return Json(apGiaTongHop, JsonRequestBehavior.AllowGet);
-        }       
+        }
 
     }//end class
 }//end namespace
