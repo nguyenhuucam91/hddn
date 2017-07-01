@@ -20,6 +20,7 @@
     var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");      
     HoaDonNuocHaDong.Helper.Tuyen tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
     var quanHuyenIDParam = Request.QueryString["quan"];
+    HoaDonNuocHaDong.Controllers.PrintController prtCtl = new HoaDonNuocHaDong.Controllers.PrintController();
 }
 <div class="main">
     <div class="main-inner">
@@ -147,7 +148,7 @@
                                             int isTinhTien = item.TrangThaiTinhTien;
 
                                             String ttTuyen = tuyen.getTTTuyen(item.TuyenKHID);
-                                            
+
                                             var soLuongHoaDonThuc = item.tongSoLuongKhachHang;
                                             var soLuongHoaDonDaIn = item.soLuongKhachHangDaIn;                                            
 
