@@ -3,11 +3,11 @@
 @using PagedList.Mvc;
 
 @{
+    HoaDonNuocHaDong.Helper.QuanHuyenHelper qHHelper = new HoaDonNuocHaDong.Helper.QuanHuyenHelper();
     ViewBag.Title = "Danh sách tuyến đã có chỉ số";
     var beforeFiltered = ViewBag.beforeFiltered;
     var selectedMonth = ViewBag.selectedMonth;
-    var selectedYear = ViewBag.selectedYear;
-    var selectedQuan = ViewBag.selectedQuan;
+    var selectedYear = ViewBag.selectedYear;   
     var selectedTo = ViewBag.selectedTo;
     var isThuNgan = ViewBag.isThuNgan;
     String title = ViewBag.hasNumber as String;
@@ -19,6 +19,7 @@
     var pageSize = ViewBag.pageSize;
     var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");      
     HoaDonNuocHaDong.Helper.Tuyen tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
+    var quanHuyenIDParam = Request.QueryString["quan"];
 }
 <div class="main">
     <div class="main-inner">
@@ -40,7 +41,7 @@
                                         <option></option>
                                         @foreach (var item in xiNghieps)
                                         {
-                                            if (item.QuanhuyenID == selectedQuan)
+                                            if (item.QuanhuyenID.ToString() == quanHuyenIDParam)
                                             {
                                                 <option value="@item.QuanhuyenID" selected>@item.QuanhuyenID - @item.Ten</option>
                                             }
@@ -112,25 +113,7 @@
                                 <p> Nếu tháng/năm để trống thì lấy tháng năm hiện tại trong hệ thống</p>
                             </div>
                             <br />
-
-                            <!-- Tìm kiếm khách hàng -->
-
-                            <div class="pull-right">
-                                @using (Html.BeginForm("chisotuyen", "print", new
-                                {
-                                    quan = selectedQuan,
-                                    to = selectedTo,
-                                    nhanvien = selectedNhanVien,
-                                    thang = selectedMonth,
-                                    nam = selectedYear
-                                }, FormMethod.Post, new { @class = "form-inline" }))
-                                {
-                                    <div class="form-group pull-left">
-                                        <input type="text" class="form-control" placeholder="Nhập tên tuyến hoặc mã tuyến" name="tukhoa" />
-                                    </div>
-                                    <button type="submit" class="btn btn-warning" style="margin-left:12px">Tìm kiếm</button>
-                                }
-                            </div>
+                                                        
 
                             <!-- Hết tìm kiếm -->
                             @if (!beforeFiltered)
@@ -157,6 +140,7 @@
 
                                         @foreach (var item in Model)
                                         {
+                                            var selectedQuan = qHHelper.getQuanIDIfQuanParamIsNull(item.TuyenKHID);
                                             String cssStyle = "";
                                             int monthInt = Convert.ToInt32(selectedMonth);
                                             int yearInt = Convert.ToInt32(selectedYear);

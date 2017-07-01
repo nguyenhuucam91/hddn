@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HoaDonNuocHaDong.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,6 +18,15 @@ namespace HoaDonNuocHaDong.Helper
                 return ttVoOng;
             }
             return "";
+        }
+
+        public int? getQuanIDIfQuanParamIsNull(int tuyenID)
+        {
+            HoaDonNuocHaDong.Helper.Tuyen tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
+            HoaDonNuocHaDong.Helper.NhanVienHelper nhanVien = new NhanVienHelper();
+            int nhanvienID = tuyen.getNhanVienIDTuTuyen(tuyenID);
+            int qH = nhanVien.getQuanHuyen(nhanvienID);           
+            return qH;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
 {
     public class LichSuHoaDon : ModelBase
     {
+        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         public void Lichsuhoadon(int HoaDonID, int ThangHoaDon, int NamHoaDon, String MaKH, String TenKH, String diaChi, String MST, String SoHopDong,
             int SanLuongTieuThu, int ChiSoCu, int ChiSoMoi, String NgayBatDau, String NgayKetThuc, double SH1, double SH2, double SH3, double SH4,
             double SH1Price, double SH2Price, double SH3Price, double SH4Price, double HC, double CC, double SX, double KD, double HCPrice,
@@ -125,7 +126,8 @@ namespace HoaDonNuocHaDong.Models.InHoaDon
                 i++;
             }
             return lichSuHoaDonsAsArray;
-        }
+        }      
+
         protected override Type TransferType()
         {
             return this.GetType();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HoaDonNuocHaDong.Models;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -9,7 +10,7 @@ namespace HoaDonNuocHaDong.Helper
 {
     public class NhanVienHelper
     {
-        static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         String connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
         public String getPhongBan(int? nhanVienID)
         {
@@ -30,7 +31,7 @@ namespace HoaDonNuocHaDong.Helper
             return "";
         }
 
-        public static String getToQuanHuyen(int? nhanVienID)
+        public String getToQuanHuyen(int? nhanVienID)
         {
             if (nhanVienID != null)
             {
@@ -44,7 +45,7 @@ namespace HoaDonNuocHaDong.Helper
             return "Không có";
         }
 
-        public static String getChucVu(int? nhanVienID)
+        public String getChucVu(int? nhanVienID)
         {
             if (nhanVienID != null)
             {
@@ -58,7 +59,7 @@ namespace HoaDonNuocHaDong.Helper
             return "Không có";
         }
 
-        public static String getQuanHuyen(int? nhanVienID)
+        public int getQuanHuyen(int? nhanVienID)
         {
             if (nhanVienID != null)
             {
@@ -69,23 +70,24 @@ namespace HoaDonNuocHaDong.Helper
                                      join r in db.ToQuanHuyens on i.QuanhuyenID equals r.QuanHuyenID
                                      join s in db.Nhanviens on r.ToQuanHuyenID equals s.ToQuanHuyenID
                                      where s.NhanvienID == nhanVienID
-                                     select new
+                                     select new ModelQuanHuyen
                                      {
-                                         Ten = i.Ten
-                                     }).FirstOrDefault();
-                    return quanHuyen != null ? quanHuyen.Ten : "Không có";
+                                         QuanHuyenID = i.QuanhuyenID,
+                                     }
+                                     ).FirstOrDefault();
+                    return quanHuyen.QuanHuyenID;
                 }
             }
-            return "Không có";
+            return 0;
         }
 
         public List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> loadTuyenChuaCoNhanVien()
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();           
+            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
 
-            var tuyens = (from i in _db.Tuyenkhachhangs                         
-                          where i.IsDelete == false 
-                          select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang                         
+            var tuyens = (from i in _db.Tuyenkhachhangs
+                          where i.IsDelete == false
+                          select new HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang
                           {
                               MaTuyenKH = i.Matuyen,
                               TenTuyen = i.Ten,
@@ -93,6 +95,6 @@ namespace HoaDonNuocHaDong.Helper
                           }
                          ).ToList();
             return tuyens;
-        }       
+        }
     }
 }

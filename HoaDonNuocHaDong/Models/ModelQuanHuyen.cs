@@ -7,6 +7,9 @@ namespace HoaDonNuocHaDong.Models
 {
     public class ModelQuanHuyen
     {
+        public int QuanHuyenID { get; set; }
+
+        public int TenQuanHuyen { get; set; }
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         public String getTenQuanHuyenFromQuanHuyenId(int quanHuyenID)
         {

@@ -15,7 +15,6 @@ namespace HoaDonNuocHaDong.Helper
     {
         HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
 
-
         /// <summary>
         /// Lấy tên nhân viên theo tuyến ID
         /// </summary>
