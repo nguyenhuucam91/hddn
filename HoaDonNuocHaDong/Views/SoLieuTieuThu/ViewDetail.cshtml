@@ -142,16 +142,14 @@
                             {
                                 int hoaDonID = item.HoaDonNuocID;
                                 int khachHangIDRow = item.KHID;
-
-                                sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
-                                sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
-                                sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
-                                sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
-                                sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
-                                sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
-                                sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
-                                sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
-                                sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
+                                String SH1 = item.SH1 == "0" ? "": item.SH1;
+                                String SH2 = item.SH2 == "0" ? "" : item.SH2;
+                                String SH3 = item.SH3 == "0" ? "" : item.SH3;
+                                String SH4 = item.SH4 == "0" ? "" : item.SH4;
+                                String HC = item.HC == "0" ? "" : item.HC;
+                                String CC = item.CC == "0" ? "" : item.CC;
+                                String SX = item.SXXD == "0" ? "" : item.SXXD;
+                                String KD = item.KDDV == "0" ? "" : item.KDDV;
                                 //kiểm tra áp giá đặc biệt
                                 bool isDacBiet = cS.isDacBiet(hoaDonID, Request.QueryString["month"], Request.QueryString["year"]);
 
@@ -191,16 +189,25 @@
                                                                                        data-month="@item.Thang"
                                                                                        data-year="@item.Nam" />
                                                                             </td>
-                                                                            <td style="color:blue"><label>@item.SH1</label></td>
-                                                                            <td style="color:blue"><label>@item.SH2</label></td>
-                                                                            <td style="color:blue"><label>@item.SH3</label></td>
-                                                                            <td style="color:blue"><label>@item.SH4</label></td>
-                                                                            <td style="color:blue"><label>@item.HC</label></td>
-                                                                            <td style="color:blue"><label>@item.CC</label></td>
-                                                                            <td style="color:blue"><label>@item.SXXD</label></td>
-                                                                            <td style="color:blue"><label>@item.KDDV</label></td>
+                                                                            <td style="color:blue"><label>@SH1</label></td>
+                                                                            <td style="color:blue"><label>@SH2</label></td>
+                                                                            <td style="color:blue"><label>@SH3</label></td>
+                                                                            <td style="color:blue"><label>@SH4</label></td>
+                                                                            <td style="color:blue"><label>@HC</label></td>
+                                                                            <td style="color:blue"><label>@CC</label></td>
+                                                                            <td style="color:blue"><label>@SX</label></td>
+                                                                            <td style="color:blue"><label>@KD</label></td>
                                                                         </tr>
-
+                                
+                                       sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
+                                       sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
+                                       sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
+                                       sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
+                                       sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
+                                       sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
+                                       sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
+                                       sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
+                                       sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
                             }
                         </tbody>
                         <tfoot>
