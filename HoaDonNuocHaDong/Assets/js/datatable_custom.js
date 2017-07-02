@@ -78,7 +78,7 @@
         "pageLength": 100000000000
     });
 
-    //để các bảng datatable có class là unlimited k phân trang
+    //để các bảng datatable có class là unlimited k phân trang, có sorting, có searching
     $('.unlimited').DataTable({
        
         "language": {
@@ -92,7 +92,7 @@
             },
             "emptyTable": "Không có dữ liệu trong bảng"
         },
-        "pageLength": 1000000000,
+        "pageLength": 1000000000000,
         dom: 'Bfrtip',
         buttons: ['excel']
     });
