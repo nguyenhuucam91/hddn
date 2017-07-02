@@ -145,7 +145,7 @@
                                             String cssStyle = "";
                                             int monthInt = Convert.ToInt32(selectedMonth);
                                             int yearInt = Convert.ToInt32(selectedYear);
-                                            int isTinhTien = item.TrangThaiTinhTien;
+                                            bool isTinhTien = Convert.ToBoolean(item.ttTinhTien);
 
                                             String ttTuyen = tuyen.getTTTuyen(item.TuyenKHID);
 
@@ -166,9 +166,9 @@
                                             <tr @cssStyle>
                                                 <td>@((int)pageSize * ((int)currentPage - 1) + STT)</td>
                                                 <td>@ttTuyen</td>
-                                                @if (isTinhTien == 1)
+                                                @if (isTinhTien == true)
                                                 {
-                                                    <td><a href="@Url.Action("XemChiTiet", new {quan = selectedQuan, to = selectedTo, tuyen = item.TuyenKHID, month = selectedMonth, year = selectedYear})" style="color:red">Tính tiền</a></td>
+                                                    <td><a href="@Url.Action("XemChiTiet", new {quan = selectedQuan, to = selectedTo, tuyen = item.TuyenKHID, month = selectedMonth, year = selectedYear})" style="color:red">Đã tính tiền</a></td>
                                                 }
                                                 else
                                                 {

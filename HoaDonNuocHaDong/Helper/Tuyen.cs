@@ -150,10 +150,10 @@ namespace HoaDonNuocHaDong.Helper
             return maTuyens.Trim(',');
         }
 
-        public IEnumerable<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> getDanhSachTuyensDuocChot(int? quanHuyen, int? to, int? selectedNhanVien, int? month, int? year)
+        public List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> getDanhSachTuyensDuocChot(int? quanHuyen, int? to, int? selectedNhanVien, int? month, int? year)
         {
             List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> tuyensKhachHangDuocChot = new List<TuyenKhachHangDuocChot>();
-            if (quanHuyen == 0)
+            if (quanHuyen == 0 || quanHuyen == null)
             {
                 ControllerBase<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHangDuocChot> cB = new ControllerBase<TuyenKhachHangDuocChot>();
                 tuyensKhachHangDuocChot = cB.Query("DanhSachTuyenThuocToTheoThangNam",
@@ -161,7 +161,7 @@ namespace HoaDonNuocHaDong.Helper
                             new SqlParameter("@to", to),
                             new SqlParameter("@nhanvien", selectedNhanVien),
                             new SqlParameter("@month", month),
-                            new SqlParameter("@year", year)).ToList();
+                            new SqlParameter("@year", year));
             }
 
             else if (quanHuyen != 0 && to == null)
@@ -172,7 +172,7 @@ namespace HoaDonNuocHaDong.Helper
                              new SqlParameter("@to", 0),
                              new SqlParameter("@nhanvien", selectedNhanVien),
                              new SqlParameter("@month", month),
-                             new SqlParameter("@year", year)).ToList();
+                             new SqlParameter("@year", year));
             }
             else if (quanHuyen != 0 && to != 0 && selectedNhanVien == null)
             {
@@ -182,7 +182,7 @@ namespace HoaDonNuocHaDong.Helper
                             new SqlParameter("@to", to),
                             new SqlParameter("@nhanvien", 0),
                             new SqlParameter("@month", month),
-                            new SqlParameter("@year", year)).ToList();
+                            new SqlParameter("@year", year));
             }
             else if (quanHuyen != 0 && to != 0 && selectedNhanVien != 0)
             {
@@ -192,10 +192,10 @@ namespace HoaDonNuocHaDong.Helper
                              new SqlParameter("@to", to),
                              new SqlParameter("@nhanvien", selectedNhanVien),
                              new SqlParameter("@month", month),
-                             new SqlParameter("@year", year)).ToList();
+                             new SqlParameter("@year", year));
             }
 
-            return tuyensKhachHangDuocChot.AsEnumerable();
+            return tuyensKhachHangDuocChot;
         }
     }
 }
