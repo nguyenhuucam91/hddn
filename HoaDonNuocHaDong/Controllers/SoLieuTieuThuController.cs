@@ -149,7 +149,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.to = toLs;
 
                 //load danh sách nhân viên thuộc tổ có phòng ban đó, lấy từ form được chọn
-                List<Nhanvien> _nvLs = db.Nhanviens.Where(p => p.ToQuanHuyenID == toForm && (p.IsDelete == false || p.IsDelete == null)).ToList();
+                List<Nhanvien> _nvLs = db.Nhanviens.Where(p => p.ToQuanHuyenID == toForm && p.PhongbanID == phongBanID && p.IsDelete == false).ToList();
                 ViewBag.nhanVien = _nvLs;
                 //nếu tổ không rỗng thì kiểm tra nhân viên xem có rỗng hay không                
                 if (String.IsNullOrEmpty(selectedNhanVien))
@@ -1269,15 +1269,20 @@ namespace HoaDonNuocHaDong.Controllers
             SqlConnection conn = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
             conn.Open();
             ControllerBase<DanhSachHoaDonKhongSanLuong> cB = new ControllerBase<DanhSachHoaDonKhongSanLuong>();
+            ControllerBase<DanhSachHoaDonKhongSanLuong> soLuongKhongSanLuong = new ControllerBase<DanhSachHoaDonKhongSanLuong>();
             List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@thang", currentMonth),
                 new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID));
             SqlCommand addHoaDonNuoc = new SqlCommand();
             SqlCommand addChiTietHoaDonNuoc = new SqlCommand();
+            SqlCommand isExistHoaDonThangSau = new SqlCommand();
             foreach (var item in dsKhachHangKoSanLuong)
             {
-                Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
-                    && i.KhachhangID == item.KhachHangID);
-                if (nextMonthReceipt == null)
+                //Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
+                //    && i.KhachhangID == item.KhachHangID);
+                int isCustomerHasNextMonthReceipt = soLuongKhongSanLuong.Query("SoLuongHoaDonKhongSanLuong", 
+                    new SqlParameter("@month", nextMonth), new SqlParameter("@year", nextYear), new SqlParameter("@khid", item.KhachHangID)).Count;
+
+                if (isCustomerHasNextMonthReceipt == 0)
                 {
                     addHoaDonNuoc.CommandText = "INSERT INTO [dbo].[Hoadonnuoc]([KhachhangID],[NhanvienID],[ThangHoaDon],[NamHoaDon],[Ngaybatdausudung]) OUTPUT Inserted.HoadonnuocID " +
                         "VALUES (@khid, @nvid, @thang, @nam, @ngaybatdausudung)";

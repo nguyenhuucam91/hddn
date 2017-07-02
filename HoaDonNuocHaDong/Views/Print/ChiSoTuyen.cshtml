@@ -7,7 +7,7 @@
     ViewBag.Title = "Danh sách tuyến đã có chỉ số";
     var beforeFiltered = ViewBag.beforeFiltered;
     var selectedMonth = ViewBag.selectedMonth;
-    var selectedYear = ViewBag.selectedYear;   
+    var selectedYear = ViewBag.selectedYear;
     var selectedTo = ViewBag.selectedTo;
     var isThuNgan = ViewBag.isThuNgan;
     String title = ViewBag.hasNumber as String;
@@ -17,7 +17,7 @@
     var selectedNhanVien = ViewBag.selectedNhanvien;
     var currentPage = ViewBag.currentPage;
     var pageSize = ViewBag.pageSize;
-    var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");      
+    var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");
     HoaDonNuocHaDong.Helper.Tuyen tuyen = new HoaDonNuocHaDong.Helper.Tuyen();
     var quanHuyenIDParam = Request.QueryString["quan"];
     HoaDonNuocHaDong.Controllers.PrintController prtCtl = new HoaDonNuocHaDong.Controllers.PrintController();
@@ -114,12 +114,12 @@
                                 <p> Nếu tháng/năm để trống thì lấy tháng năm hiện tại trong hệ thống</p>
                             </div>
                             <br />
-                                                        
+
 
                             <!-- Hết tìm kiếm -->
                             @if (!beforeFiltered)
                             {
-                                <table class="table table-bordered">
+                                <table class="table table-bordered hoaDonNuoc">
                                     <thead>
                                         <tr>
                                             <th>STT</th>
@@ -136,7 +136,7 @@
                                 int STT = 1;
                                 int tongSoHoaDonDuocIn = 0;
                                 int tongSoHoaDonThuc = 0;
-                                double tongSoTien = 0;                           
+                                double tongSoTien = 0;
                                         }
 
                                         @foreach (var item in Model)
@@ -150,13 +150,13 @@
                                             String ttTuyen = tuyen.getTTTuyen(item.TuyenKHID);
 
                                             var soLuongHoaDonThuc = item.tongSoLuongKhachHang;
-                                            var soLuongHoaDonDaIn = item.soLuongKhachHangDaIn;                                            
+                                            var soLuongHoaDonDaIn = item.soLuongKhachHangDaIn;
 
                                             double tongSoTienTungTuyen = item.TongSoTienTuyen;
-                                            
+
                                             tongSoHoaDonDuocIn += soLuongHoaDonDaIn;
                                             tongSoHoaDonThuc += soLuongHoaDonThuc;
-                                            tongSoTien += tongSoTienTungTuyen;                                                                                 
+                                            tongSoTien += tongSoTienTungTuyen;
 
                                             if (soLuongHoaDonThuc == soLuongHoaDonDaIn)
                                             {
@@ -180,7 +180,7 @@
                                                 }
                                                 else
                                                 {
-                                                     <td> In (@soLuongHoaDonDaIn / @soLuongHoaDonThuc) </td>
+                                                    <td> In (@soLuongHoaDonDaIn / @soLuongHoaDonThuc) </td>
                                                 }
                                                 <!-- Ngày in xong hóa đơn -->
                                                 @if (item.ngayInXong != null)
@@ -215,8 +215,6 @@
                                     </tfoot>
                                 </table>
                             }
-
-                            
                         </div>
                     </div>
                 </div>
