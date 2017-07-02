@@ -1269,53 +1269,34 @@ namespace HoaDonNuocHaDong.Controllers
             SqlConnection conn = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
             conn.Open();
             ControllerBase<DanhSachHoaDonKhongSanLuong> cB = new ControllerBase<DanhSachHoaDonKhongSanLuong>();
-            ControllerBase<DanhSachHoaDonKhongSanLuong> soLuongKhongSanLuong = new ControllerBase<DanhSachHoaDonKhongSanLuong>();
             List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@thang", currentMonth),
                 new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID));
-            SqlCommand addHoaDonNuoc = new SqlCommand();
-            SqlCommand addChiTietHoaDonNuoc = new SqlCommand();
-            SqlCommand isExistHoaDonThangSau = new SqlCommand();
+
             foreach (var item in dsKhachHangKoSanLuong)
             {
-                //Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
-                //    && i.KhachhangID == item.KhachHangID);
-                int isCustomerHasNextMonthReceipt = soLuongKhongSanLuong.Query("SoLuongHoaDonKhongSanLuong", 
-                    new SqlParameter("@month", nextMonth), new SqlParameter("@year", nextYear), new SqlParameter("@khid", item.KhachHangID)).Count;
-
-                if (isCustomerHasNextMonthReceipt == 0)
+                Stopwatch sW = new Stopwatch();
+                sW.Start();
+                Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
+                    && i.KhachhangID == item.KhachHangID);
+                
+                sW.Stop();
+                long elapsed = sW.ElapsedMilliseconds;
+                if (nextMonthReceipt == null)
                 {
-                    addHoaDonNuoc.CommandText = "INSERT INTO [dbo].[Hoadonnuoc]([KhachhangID],[NhanvienID],[ThangHoaDon],[NamHoaDon],[Ngaybatdausudung]) OUTPUT Inserted.HoadonnuocID " +
-                        "VALUES (@khid, @nvid, @thang, @nam, @ngaybatdausudung)";
-                    addHoaDonNuoc.Connection = conn;
-                    addHoaDonNuoc.Parameters.Clear();
-                    addHoaDonNuoc.Parameters.AddWithValue("@khid", item.KhachHangID);
-                    addHoaDonNuoc.Parameters.AddWithValue("@nvid", LoggedInUser.NhanvienID);
-                    addHoaDonNuoc.Parameters.AddWithValue("@thang", nextMonth);
-                    addHoaDonNuoc.Parameters.AddWithValue("@nam", nextYear);
-                    addHoaDonNuoc.Parameters.AddWithValue("@ngaybatdausudung", item.NgayBatDauSuDung);
-                    int newID = (int)addHoaDonNuoc.ExecuteScalar();
-
-                    //Hoadonnuoc khongSanLuong = new Hoadonnuoc();
-                    //khongSanLuong.ThangHoaDon = nextMonth;
-                    //khongSanLuong.NamHoaDon = nextYear;
-                    //khongSanLuong.Ngaybatdausudung = item.NgayBatDauSuDung;
-                    //khongSanLuong.KhachhangID = item.KhachHangID;
-                    //khongSanLuong.NhanvienID = Convert.ToInt32(Session["nhanvien"]);
-                    //db.Hoadonnuocs.Add(khongSanLuong);
+                    Hoadonnuoc khongSanLuong = new Hoadonnuoc();
+                    khongSanLuong.ThangHoaDon = nextMonth;
+                    khongSanLuong.NamHoaDon = nextYear;
+                    khongSanLuong.Ngaybatdausudung = item.NgayBatDauSuDung;
+                    khongSanLuong.KhachhangID = item.KhachHangID;
+                    khongSanLuong.NhanvienID = LoggedInUser.NhanvienID;
+                    db.Hoadonnuocs.Add(khongSanLuong);
+                    db.SaveChanges();
                     //Thêm chi tiết hóa đơn nước tháng sau
-                    //Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
-                    //chiTiet.HoadonnuocID = newID;
-                    //chiTiet.Chisocu = item.ChiSoCu;
-                    //db.Chitiethoadonnuocs.Add(chiTiet);
-                    //db.SaveChanges();
-
-                    addChiTietHoaDonNuoc.CommandText = "INSERT INTO [dbo].[Chitiethoadonnuoc]([HoadonnuocID],[Chisocu]) VALUES (@hdid, @cscu)";
-                    addChiTietHoaDonNuoc.Connection = conn;
-                    addChiTietHoaDonNuoc.Parameters.Clear();
-                    addChiTietHoaDonNuoc.Parameters.AddWithValue("@hdid", newID);
-                    addChiTietHoaDonNuoc.Parameters.AddWithValue("@cscu", item.ChiSoCu);
-                    addChiTietHoaDonNuoc.ExecuteNonQuery();
-
+                    Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
+                    chiTiet.HoadonnuocID = khongSanLuong.HoadonnuocID;
+                    chiTiet.Chisocu = item.ChiSoCu;
+                    db.Chitiethoadonnuocs.Add(chiTiet);
+                    db.SaveChanges();
                 }
             }
 
