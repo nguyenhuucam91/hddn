@@ -166,7 +166,9 @@
                                                 int khachHangIDRow = item.KhachHangID;
                                                 String cssClass = hoaDonNuoc.getCssClassTinhTrangHoaDonBiHuy(hoaDonID);
                                                 String hasSanLuongAmCss = item.SanLuong < 0 ? "hasSanLuongAm" : "";
-                                                cssClass += ((item.NgayNgungCapNuoc == null && item.NgayCapNuocLai == null) || (item.NgayCapNuocLai <= DateTime.Now)) ? "" : "catnuocBackgroundCss";
+                                                bool vanDangSuDungNuoc = item.NgayNgungCapNuoc == new DateTime(1, 1, 1) && item.NgayCapNuocLai == new DateTime(1, 1, 1);
+                                                bool isCapNuocLai = item.NgayCapNuocLai != new DateTime(1, 1, 1) && item.NgayCapNuocLai <= DateTime.Now;
+                                                cssClass += (vanDangSuDungNuoc || isCapNuocLai) ? "" : "catnuocBackgroundCss";
                                                 cssClass += hasSanLuongAmCss;
                                                 DateTime ngayBatDauHoaDon = DateTime.Now;
                                                 {
