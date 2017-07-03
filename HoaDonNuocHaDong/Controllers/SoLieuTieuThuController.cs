@@ -1273,14 +1273,10 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID));
 
             foreach (var item in dsKhachHangKoSanLuong)
-            {
-                Stopwatch sW = new Stopwatch();
-                sW.Start();
+            {               
                 Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
                     && i.KhachhangID == item.KhachHangID);
-                
-                sW.Stop();
-                long elapsed = sW.ElapsedMilliseconds;
+                              
                 if (nextMonthReceipt == null)
                 {
                     Hoadonnuoc khongSanLuong = new Hoadonnuoc();
@@ -1297,6 +1293,7 @@ namespace HoaDonNuocHaDong.Controllers
                     chiTiet.Chisocu = item.ChiSoCu;
                     db.Chitiethoadonnuocs.Add(chiTiet);
                     db.SaveChanges();
+                 
                 }
             }
 

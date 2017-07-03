@@ -14,13 +14,13 @@
     .ten {
         font-size: 29px;
         font-weight: bold;
-        margin-left: 14%;
+        text-align: center;
     }
 
     .loc {
         font-size: 13px;
         font-weight: bold;
-        margin: 1% 0 4% 34%;
+        text-align: center;
     }
 
     .tong {
@@ -34,7 +34,7 @@
 
 }
 
-<table class="table table-bordered" >
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>TT</th>
@@ -50,16 +50,16 @@
     <tbody>
         @foreach (DanhSachKhachHangCapNuocTroLai obj in lst)
         {
-        <tr>
-            <td>@obj.TT</td>
-            <td>@obj.Matuyen</td>
-            <td>@obj.MaKhachHang</td>
-            <td>@obj.Ten</td>
-            <td>@obj.Diachi</td>
-            <td>@obj.Lydocapnuoctrolai</td>
-            <td>@String.Format("{0:dd/MM/yyyy}",obj.Ngaycaplai)</td>
-            <td>@obj.Ghichu</td>
-        </tr>
+            <tr>
+                <td>@obj.TT</td>
+                <td>@obj.Matuyen</td>
+                <td>@obj.MaKhachHang</td>
+                <td>@obj.Ten</td>
+                <td>@obj.Diachi</td>
+                <td>@obj.Lydocapnuoctrolai</td>
+                <td>@String.Format("{0:dd/MM/yyyy}", obj.Ngaycaplai)</td>
+                <td>@obj.Ghichu</td>
+            </tr>
         }
     </tbody>
 </table>

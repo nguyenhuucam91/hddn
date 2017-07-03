@@ -13,13 +13,13 @@
     .ten {
         font-size: 25px;
         font-weight: bold;
-        margin-left: 11%;
+        text-align: center;
     }
 
     .loc {
         font-size: 13px;
         font-weight: bold;
-        margin: 1% 0 4% 34%;
+        text-align: center;
     }
 
     .tong {
@@ -48,16 +48,17 @@
         @{
             int i = 1;
         }
-        @foreach (DanhSachKhachHangTheoTuyenOngKyThuat obj in lst) {
-        <tr>
-            <td>@i</td>
-            <td>@obj.TenTuyen</td>
-            <td>@obj.ThuTuDocVaTuyen</td>
-            <td>@obj.MaKhachHang</td>
-            <td>@obj.Ten</td>
-            <td>@obj.Diachi</td>
-            <td>@obj.Ghichu</td>
-        </tr> 
+        @foreach (DanhSachKhachHangTheoTuyenOngKyThuat obj in lst)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@obj.TenTuyen</td>
+                <td>@obj.ThuTuDocVaTuyen</td>
+                <td>@obj.MaKhachHang</td>
+                <td>@obj.Ten</td>
+                <td>@obj.Diachi</td>
+                <td>@obj.Ghichu</td>
+            </tr>
             i++;
         }
     </tbody>
