@@ -250,18 +250,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             return View();
         }
-        public ActionResult XuLyDanhSachKhachHangCoSanLuongDotBien()
-        {
-            DateTime d1 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            ControllerBase<DanhSachKhachHangCoSanLuongDotBien> cb = new ControllerBase<DanhSachKhachHangCoSanLuongDotBien>();
-            List<DanhSachKhachHangCoSanLuongDotBien> lst = cb.Query(
-                "BC17",
-                new SqlParameter("@d1", d1));
-
-            ViewData["lst"] = lst;
-            ViewBag.dt1 = d1;
-            return View("Danhsachkhachhangcosanluongdotbien");
-        }
+       
         public ActionResult XuLyDanhSachKhachHangKhongSanLuong()
         {
             return View();
@@ -539,6 +528,12 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.dt3 = d3;
             return View();
         }
+
+        public ActionResult XuLyDanhSachKhachHangCoSanLuongDotBien()
+        {
+            return View("XuLyDanhSachKhachHangCoSanLuongDotBien");
+        }
+
         [HttpPost]
         public ActionResult DanhSachKhachHangCoSanLuongDotBien(FormCollection fc)
         {

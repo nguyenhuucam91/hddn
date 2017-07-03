@@ -1,8 +1,8 @@
 ﻿@using HoaDonNuocHaDong.Models.BaoCaoKinhDoanh;
 @{
     ViewBag.Title = "DanhSachKhachHangCoSanLuongDotBien";
-Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
-DateTime d1 = ViewBag.dt1;
+    Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
+    DateTime d1 = ViewBag.dt1;
 }
 <style>
     .xulybc {
@@ -13,17 +13,17 @@ DateTime d1 = ViewBag.dt1;
     .ten {
         font-size: 25px;
         font-weight: bold;
-        margin-left: 13%;
+        text-align: center;
     }
 
     .loc {
         font-size: 13px;
         font-weight: bold;
-        margin: 1% 0 4% 38%;
+        text-align: center;
     }
 
     .tong {
-        margin: 1% 0 0 60%;
+        float: right;
     }
 </style>
 <div class="ten">Danh sách Khách hàng sử dụng nước đột biến</div>
@@ -52,22 +52,22 @@ DateTime d1 = ViewBag.dt1;
         @{int i = 1;}
         @foreach (var obj in lst)
         {
-          <tr>
-            <td>@i</td>
-            <td>@obj.Tuyen</td>
-            <td>@obj.ThuTuDoc</td>
-            <td>@obj.MaKhachHang</td>
-            <td>@obj.Ten</td>
-            <td>@obj.Diachi</td>
-            <td>@obj.SanLuongBinhQuan3ThangTruoc</td>
-            <td>@obj.SanLuongThangTruoc</td>
-            <td>@obj.ChiSoDauKy</td>
-            <td>@obj.ChiSoCuoiKy</td>
-            <td>@obj.TongSanLuong</td>
-        </tr>
+            <tr>
+                <td>@i</td>
+                <td>@obj.Tuyen</td>
+                <td>@obj.ThuTuDoc</td>
+                <td>@obj.MaKhachHang</td>
+                <td>@obj.Ten</td>
+                <td>@obj.Diachi</td>
+                <td>@obj.SanLuongBinhQuan3ThangTruoc</td>
+                <td>@obj.SanLuongThangTruoc</td>
+                <td>@obj.ChiSoDauKy</td>
+                <td>@obj.ChiSoCuoiKy</td>
+                <td>@obj.TongSanLuong</td>
+            </tr>
             i++;
         }
-        
+
     </tbody>
 </table>
 <div class="tong"><b>Tổng cộng: @lst.Count khách hàng</b></div>

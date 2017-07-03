@@ -14,17 +14,17 @@ DateTime d2 = ViewBag.dt2;
     .ten {
         font-size: 25px;
         font-weight: bold;
-        margin-left: 18%;
+        text-align:center;
     }
 
     .loc {
         font-size: 13px;
         font-weight: bold;
-        margin: 1% 0 4% 32%;
+        text-align:center;
     }
 
     .tong {
-        margin: 1% 0 0 60%;
+       float:right;
     }
 </style>
 <div class="ten">Danh sách Khách hàng không sản lượng</div>
@@ -52,10 +52,11 @@ DateTime d2 = ViewBag.dt2;
         </tr>
     </thead>
     <tbody>
+        @{int i = 1;}
         @foreach (DanhSachKhachHangKhongSanLuong obj in lst)
         {
          <tr>
-            <td>@obj.TT</td>
+            <td>@i</td>
             <td>@obj.Tuyen</td>
             <td>@obj.ThuTuDoc</td>
             <td>@obj.MaKhachHang</td>
@@ -66,6 +67,7 @@ DateTime d2 = ViewBag.dt2;
             <td>@obj.ChiSo</td>
             <td>@obj.GhiChu</td>
         </tr> 
+            i++;
         }
         
     </tbody>

@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "XuLyDanhSachKhachHangKhongSanLuong";
 
 }
@@ -17,7 +16,14 @@
                 @using (Html.BeginForm("DanhSachKhachHangKhongSanLuong", "BaoCaoKinhDoanh"))
                 {
                     <div class="xulybc">          
-                        @Html.Partial("FormNgayThangNam")
+                        Từ @Html.Partial("FormThangNam")
+                        Đến
+                        <p>
+                            tháng : <input type="number" class="form-control inputd" name="m2" id="m1" min="1" max="12" required>
+                            năm: <input type="number" class="form-control inputd" name="y2" id="y1" min="2000" required>
+                        </p>
+
+
                         <p><input type="submit" class="btn btn-success" value="Xuất báo cáo"></p>
                     </div>
                 }
