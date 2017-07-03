@@ -2,8 +2,9 @@
 @{
     ViewBag.Title = "DanhSachKhachHangCoGhiChu";
     Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
-    DateTime d1 = ViewBag.dt1;
-}
+    var month = ViewBag.month;
+    var year = ViewBag.year;
+    }
 <style>
     .xulybc {
         min-height: 400px;
@@ -19,7 +20,7 @@
     }
 </style>
 <div class="ten center">Danh sách Khách hàng có ghi chú</div>
-<div class="loc center">Tháng @d1.Month năm @d1.Year</div>
+<div class="loc center">Tháng @month năm @year</div>
 @{
     List<DanhSachKhachHangCoGhiChu> lst = (List<DanhSachKhachHangCoGhiChu>)ViewData["lst"];
 

@@ -46,7 +46,7 @@ namespace HoaDonNuocHaDong.Controllers
             customerWorkSheet.Cells[1, 4].Value = "Tên khách hàng";
             customerWorkSheet.Cells[1, 5].Value = "Địa chỉ";
             customerWorkSheet.Cells[1, 6].Value = "Số điện thoại";
-            customerWorkSheet.Cells[1, 7].Value = "TTDoc";            
+            customerWorkSheet.Cells[1, 7].Value = "TTDoc";
             customerWorkSheet.Cells[2, 1].LoadFromCollection(lst);
 
             using (var memoryStream = new MemoryStream())
@@ -223,16 +223,23 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult XuLyDanhSachKhachHangCoGhiChu()
         {
-            DateTime d1 = DateTime.Now;
+            return View("XuLyDanhSachKhachHangCoGhiChu");
+        }
+
+        [HttpPost]
+        public ActionResult DanhSachKhachHangCoGhiChu(FormCollection form)
+        {
             ControllerBase<DanhSachKhachHangCoGhiChu> cb = new ControllerBase<DanhSachKhachHangCoGhiChu>();
             List<DanhSachKhachHangCoGhiChu> lst = cb.Query(
-                "BC14"
+                "BC14",
+                    new SqlParameter("@month", form["m1"]),
+                    new SqlParameter("@year", form["y1"])
                 );
 
             ViewData["lst"] = lst;
-            ViewBag.dt1 = d1;
-            return View("Danhsachkhachhangcoghichu");
-
+            ViewBag.month = form["m1"];
+            ViewBag.year = form["y1"];
+            return View("DanhSachKhachHangCoGhiChu");
         }
 
         public ActionResult XuLyDanhSachKhachHangTheoDinhMuc()
@@ -489,20 +496,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult DanhSachKhachHangCoGhiChu(FormCollection fc)
-        {
-            DateTime d1 = DateTime.Now;
-            ControllerBase<DanhSachKhachHangCoGhiChu> cb = new ControllerBase<DanhSachKhachHangCoGhiChu>();
-            List<DanhSachKhachHangCoGhiChu> lst = cb.Query(
-                "BC14",
-                new SqlParameter("@d1", d1));
-
-            ViewData["lst"] = lst;
-            ViewBag.dt1 = d1;
-            return View();
-        }
-
+       
         [HttpPost]
         public ActionResult DanhSachKhachHangTheoDinhMuc(FormCollection fc)
         {
@@ -741,7 +735,7 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@nam", year),
                 new SqlParameter("@thangTruoc", prevMonth),
                 new SqlParameter("@namTruoc", prevYear));
-           
+
             ViewData["lst"] = lst;
             ViewBag.month = month;
             ViewBag.year = year;
