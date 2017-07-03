@@ -719,21 +719,15 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult BaoCaoThatThoat(FormCollection fc)
         {
-            String month = fc["m1"];
-            String year = fc["y1"];
-            String prevMonth = Convert.ToInt32(month) - 1 < 0 ? "12" : (Convert.ToInt32(month) - 1).ToString();
-            String prevYear = Convert.ToInt32(month) - 1 < 0 ? (Convert.ToInt32(year) - 1).ToString() : year;
-            ControllerBase<BaoCaoThatThoat> cb = new ControllerBase<BaoCaoThatThoat>();
+            DateTime d1 = new DateTime(Convert.ToInt32(fc["y1"]), Convert.ToInt32(fc["m1"]), 1);
+            ControllerBase<BaoCaoThatThoat> cb = new ControllerBase<BaoCaoThatThoat>();           
             List<BaoCaoThatThoat> lst = cb.Query(
                 "BaoCaoThatThoatKinhDoanh",
-                new SqlParameter("@thang", month),
-                new SqlParameter("@nam", year),
-                new SqlParameter("@thangTruoc", prevMonth),
-                new SqlParameter("@namTruoc", prevYear));
+                new SqlParameter("@d1", d1));
 
             ViewData["lst"] = lst;
-            ViewBag.month = month;
-            ViewBag.year = year;
+            ViewBag.month = d1.Month;
+            ViewBag.year = d1.Year;
             return View();
         }
     }

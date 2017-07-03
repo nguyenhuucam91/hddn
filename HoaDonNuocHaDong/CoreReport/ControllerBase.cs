@@ -198,13 +198,14 @@ namespace HvitFramework
                 objT.ActiveReference();
                 con.Open();
                 SqlCommand sc = new SqlCommand(query, con);
+                sc.CommandTimeout = 0;
                 if (query.Contains(" "))
                     sc.CommandType = CommandType.Text;
                 else
                     sc.CommandType = CommandType.StoredProcedure;
                 if(sp!=null && sp.Length>0)
                     sc.Parameters.AddRange(sp);
-                SqlDataReader dreader = sc.ExecuteReader();
+                SqlDataReader dreader = sc.ExecuteReader();                
                 StringBuilder sb = new StringBuilder();
                 if (dreader.HasRows)
                 {

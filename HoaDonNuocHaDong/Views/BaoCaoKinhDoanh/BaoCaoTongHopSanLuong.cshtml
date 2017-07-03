@@ -3,6 +3,7 @@
     Layout = "~/Views/Shared/BaoCaoKinhDoanh.cshtml";
     var tong = ViewBag.tong as List<HoaDonNuocHaDong.Models.BaoCaoKinhDoanh.BaoCaoTongHopSanLuong>;
     var columnTitle = ViewBag.columnTitle;
+    var brazilianCulture = System.Globalization.CultureInfo.CreateSpecificCulture("pt-BR");
 }
 <style>
     .xulybc {
@@ -58,14 +59,14 @@
         {
 
             sumSH1 = sumSH1 + Convert.ToInt32(item.SH1Sum);
-            sumSH2 = sumSH2 + Convert.ToInt32(item.GetType().GetProperty("SH2Sum").GetValue(item, null));
-            sumSH3 = sumSH3 + Convert.ToInt32(item.GetType().GetProperty("SH3Sum").GetValue(item, null));
-            sumSH4 = sumSH4 + Convert.ToInt32(item.GetType().GetProperty("SH4Sum").GetValue(item, null));
-            sumHC = sumHC + Convert.ToInt32(item.GetType().GetProperty("HCSum").GetValue(item, null));
-            sumCC = sumCC + Convert.ToInt32(item.GetType().GetProperty("CCSum").GetValue(item, null));
-            sumSX = sumSX + Convert.ToInt32(item.GetType().GetProperty("SXSum").GetValue(item, null));
-            sumKDDV = sumKDDV + Convert.ToInt32(item.GetType().GetProperty("KDSum").GetValue(item, null));
-            sumTongSL = sumTongSL + Convert.ToInt32(item.GetType().GetProperty("TongSL").GetValue(item, null));
+            sumSH2 = sumSH2 + Convert.ToInt32(item.SH2Sum);
+            sumSH3 = sumSH3 + Convert.ToInt32(item.SH3Sum);
+            sumSH4 = sumSH4 + Convert.ToInt32(item.SH4Sum);
+            sumHC = sumHC + Convert.ToInt32(item.HCSum);
+            sumCC = sumCC + Convert.ToInt32(item.CCSum);
+            sumSX = sumSX + Convert.ToInt32(item.SXSum);
+            sumKDDV = sumKDDV + Convert.ToInt32(item.KDSum);
+            sumTongSL = sumTongSL + Convert.ToInt32(item.TongSL);
             truocThue += item.SLTruocThue;
             VAT += item.TongVAT;
             PhiMT += item.TongBVMT;
@@ -83,10 +84,10 @@
                 <td>@item.SXSum</td>
                 <td>@item.KDSum</td>
                 <td>@item.TongSL</td>
-                <td>@String.Format("{0:n0}", item.SLTruocThue)</td>
-                <td>@String.Format("{0:n0}", item.TongVAT)</td>
-                <td>@String.Format("{0:n0}", item.TongBVMT)</td>
-                <td>@String.Format("{0:n0}", item.TongCong)</td>
+                <td>@item.SLTruocThue.ToString("0,000", brazilianCulture)</td>
+                <td>@item.TongVAT.ToString("0,000",brazilianCulture)</td>
+                <td>@item.TongBVMT.ToString("0,000", brazilianCulture)</td>
+                <td>@item.TongCong.ToString("0,000", brazilianCulture)</td>
             </tr>
             i++;
         }
@@ -103,10 +104,10 @@
             <td>@sumSX</td>
             <td>@sumKDDV</td>
             <td>@sumTongSL</td>
-            <td>@String.Format("{0:n0}", truocThue)</td>
-            <td>@String.Format("{0:n0}", VAT)</td>
-            <td>@String.Format("{0:n0}", PhiMT)</td>
-            <td>@String.Format("{0:n0}", TongCong)</td>
+            <td>@truocThue.ToString("0,000", brazilianCulture)</td>
+            <td>@VAT.ToString("0,000", brazilianCulture)</td>
+            <td>@PhiMT.ToString("0,000", brazilianCulture)</td>
+            <td>@TongCong.ToString("0,000", brazilianCulture)</td>
         </tr>
     </tbody>
 </table>
