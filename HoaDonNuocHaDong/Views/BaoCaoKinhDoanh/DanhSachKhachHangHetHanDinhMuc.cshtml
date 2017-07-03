@@ -16,13 +16,13 @@
     .ten {
         font-size: 24px;
         font-weight: bold;
-        margin-left: 8%;
+        text-align: center;
     }
 
     .loc {
         font-size: 13px;
         font-weight: bold;
-        margin: 1% 0 4% 38%;
+        text-align: center;
     }
 
     .tong {
@@ -64,8 +64,8 @@
                 <td>@obj.Ten</td>
                 <td>@obj.Diachi</td>
                 <td>@obj.SoDinhMuc</td>
-                <td>@String.Format("{0:dd/MM/yyyy}",obj.NgayBatDau)</td>
-                <td>@String.Format("{0:dd/MM/yyyy}",obj.NgayKetThuc)</td>
+                <td>@String.Format("{0:dd/MM/yyyy}", obj.NgayBatDau)</td>
+                <td>@String.Format("{0:dd/MM/yyyy}", obj.NgayKetThuc)</td>
                 <td>@obj.GhiChu</td>
             </tr>
             i++;
