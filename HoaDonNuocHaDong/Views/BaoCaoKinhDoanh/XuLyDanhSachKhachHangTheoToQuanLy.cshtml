@@ -22,7 +22,7 @@
                         <select name="d1" class="dropdown to">
                             @foreach (var item in to)
                             {
-                                <option value="@item.ToQuanHuyenID">@item.SoCN - @HoaDonNuocHaDong.Helper.Converter.TCVN3ToUnicode(item.Ma)</option>
+                                <option value="@item.ToQuanHuyenID">@item.ToQuanHuyenID - @item.Ma</option>
                             }
                         </select>
                         </p>
