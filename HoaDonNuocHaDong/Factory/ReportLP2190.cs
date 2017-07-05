@@ -1,6 +1,8 @@
 ﻿using HoaDonNuocHaDong.Factory.Interface;
+using HvitFramework;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -67,48 +69,14 @@ namespace HoaDonNuocHaDong.Factory
             foreach (var item in selectedFrom)
             {
                 int HoaDonID = Convert.ToInt32(item);
-                var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.HoaDonID == HoaDonID
-                              select new
-                              {
-                                  ThangHoaDon = p.ThangHoaDon,
-                                  NamHoaDon = p.NamHoaDon,
-                                  TenKH = p.TenKH,
-                                  DiaChi = p.Diachi,
-                                  MST = p.MST,
-                                  MaKH = p.MaKH,
-                                  SoHopDong = p.SoHopDong,
-                                  SanLuongTieuThu = p.SanLuongTieuThu,
-                                  ChiSoCu = p.ChiSoCu,
-                                  ChiSoMoi = p.ChiSoMoi,
-                                  SH1 = p.SH1,
-                                  SH2 = p.SH2,
-                                  SH3 = p.SH3,
-                                  SH4 = p.SH4,
-                                  SH1Price = p.SH1Price,
-                                  SH2Price = p.SH2Price,
-                                  SH3Price = p.SH3Price,
-                                  SH4Price = p.SH4Price,
-                                  HC = p.HC,
-                                  CC = p.CC,
-                                  SX = p.SX,
-                                  KD = p.KD,
-                                  HCPrice = p.HCPrice,
-                                  CCPrice = p.CCPrice,
-                                  SXPrice = p.SXPrice,
-                                  KDPrice = p.KDPrice,
-                                  ThueSuatPrice = p.ThueSuatPrice,
-                                  TileBVMT = p.TileBVMT,
-                                  PhiBVMT = p.PhiBVMT,
-                                  TongCong = p.TongCong,
-                                  BangChu = p.BangChu,
-                                  TTVoOng = p.TTVoOng,
-                                  TTThungan = p.TTThungan,
-                                  NgayBatDau = p.NgayBatDau,
-                                  NgayKetThuc = p.NgayKetThuc,
-                                  ChiSoCongDon = p.ChiSoCongDon,
-                              }).FirstOrDefault();
-                ls.Add(source);
+                ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> cb = new ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon>();
+                HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon hoaDon = cb.Query("InHoaDonSelectedAndFromTo",
+                           new SqlParameter("@d1", month),
+                           new SqlParameter("@d2", year),
+                           new SqlParameter("@d3", TuyenID),
+                           new SqlParameter("@hoadonid", HoaDonID)
+                           ).FirstOrDefault();
+                ls.Add(hoaDon);
             }
 
             report.SetDataSource(ls);
@@ -131,48 +99,14 @@ namespace HoaDonNuocHaDong.Factory
             foreach (var item in selectedFrom)
             {
                 int HoaDonID = Convert.ToInt32(item);
-                var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year && p.HoaDonID == HoaDonID
-                              select new
-                              {
-                                  ThangHoaDon = p.ThangHoaDon,
-                                  NamHoaDon = p.NamHoaDon,
-                                  TenKH = p.TenKH,
-                                  DiaChi = p.Diachi,
-                                  MST = p.MST,
-                                  MaKH = p.MaKH,
-                                  SoHopDong = p.SoHopDong,
-                                  SanLuongTieuThu = p.SanLuongTieuThu,
-                                  ChiSoCu = p.ChiSoCu,
-                                  ChiSoMoi = p.ChiSoMoi,
-                                  SH1 = p.SH1,
-                                  SH2 = p.SH2,
-                                  SH3 = p.SH3,
-                                  SH4 = p.SH4,
-                                  SH1Price = p.SH1Price,
-                                  SH2Price = p.SH2Price,
-                                  SH3Price = p.SH3Price,
-                                  SH4Price = p.SH4Price,
-                                  HC = p.HC,
-                                  CC = p.CC,
-                                  SX = p.SX,
-                                  KD = p.KD,
-                                  HCPrice = p.HCPrice,
-                                  CCPrice = p.CCPrice,
-                                  SXPrice = p.SXPrice,
-                                  KDPrice = p.KDPrice,
-                                  ThueSuatPrice = p.ThueSuatPrice,
-                                  TileBVMT = p.TileBVMT,
-                                  PhiBVMT = p.PhiBVMT,
-                                  TongCong = p.TongCong,
-                                  BangChu = p.BangChu,
-                                  TTVoOng = p.TTVoOng,
-                                  TTThungan = p.TTThungan,
-                                  NgayBatDau = p.NgayBatDau,
-                                  NgayKetThuc = p.NgayKetThuc,
-                                  ChiSoCongDon = p.ChiSoCongDon,
-                              }).FirstOrDefault();
-                ls.Add(source);
+                ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> cb = new ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon>();
+                HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon hoaDon = cb.Query("InHoaDonSelectedAndFromTo",
+                           new SqlParameter("@d1", month),
+                           new SqlParameter("@d2", year),
+                           new SqlParameter("@d3", TuyenID),
+                           new SqlParameter("@hoadonid", HoaDonID)
+                           ).FirstOrDefault();
+                ls.Add(hoaDon);
                 printCtl.CapNhatTrangThaiIn(HoaDonID);
             }
 
@@ -195,50 +129,15 @@ namespace HoaDonNuocHaDong.Factory
             List<dynamic> ls = new List<dynamic>();
             for (int i = fromSoHoaDon; i <= toSoHoaDon; i++)
             {
-                var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year
-                                  && p.TTThungan == (p.TTDoc + "/" + tuyenKH.Matuyen + " - " + i)
-                              select new
-                              {
-                                  HoaDonID = p.HoaDonID,
-                                  ThangHoaDon = p.ThangHoaDon,
-                                  NamHoaDon = p.NamHoaDon,
-                                  TenKH = p.TenKH,
-                                  DiaChi = p.Diachi,
-                                  MST = p.MST,
-                                  MaKH = p.MaKH,
-                                  SoHopDong = p.SoHopDong,
-                                  SanLuongTieuThu = p.SanLuongTieuThu,
-                                  ChiSoCu = p.ChiSoCu,
-                                  ChiSoMoi = p.ChiSoMoi,
-                                  SH1 = p.SH1,
-                                  SH2 = p.SH2,
-                                  SH3 = p.SH3,
-                                  SH4 = p.SH4,
-                                  SH1Price = p.SH1Price,
-                                  SH2Price = p.SH2Price,
-                                  SH3Price = p.SH3Price,
-                                  SH4Price = p.SH4Price,
-                                  HC = p.HC,
-                                  CC = p.CC,
-                                  SX = p.SX,
-                                  KD = p.KD,
-                                  HCPrice = p.HCPrice,
-                                  CCPrice = p.CCPrice,
-                                  SXPrice = p.SXPrice,
-                                  KDPrice = p.KDPrice,
-                                  ThueSuatPrice = p.ThueSuatPrice,
-                                  TileBVMT = p.TileBVMT,
-                                  PhiBVMT = p.PhiBVMT,
-                                  TongCong = p.TongCong,
-                                  BangChu = p.BangChu,
-                                  TTVoOng = p.TTVoOng,
-                                  TTThungan = p.TTThungan,
-                                  NgayBatDau = p.NgayBatDau,
-                                  NgayKetThuc = p.NgayKetThuc,
-                                  ChiSoCongDon = p.ChiSoCongDon,
-                              }).FirstOrDefault();
-                ls.Add(source);
+                ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> cb = new ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon>();
+                HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon hoaDon = cb.Query("InHoaDonFromTo",
+                           new SqlParameter("@d1", month),
+                           new SqlParameter("@d2", year),
+                           new SqlParameter("@d3", TuyenID),
+                           new SqlParameter("@matuyen", tuyenKH.Matuyen),
+                           new SqlParameter("@num", i)
+                           ).FirstOrDefault();
+                ls.Add(hoaDon);              
             }
 
             report.SetDataSource(ls);
@@ -260,49 +159,14 @@ namespace HoaDonNuocHaDong.Factory
             List<dynamic> ls = new List<dynamic>();
             for (int i = fromSoHoaDon; i <= toSoHoaDon; i++)
             {
-                var source = (from p in db.Lichsuhoadons
-                              where p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year
-                                  && p.TTThungan == (p.TTDoc + "/" + tuyenKH.Matuyen + " - " + i)
-                              select new
-                              {
-                                  HoaDonID = p.HoaDonID,
-                                  ThangHoaDon = p.ThangHoaDon,
-                                  NamHoaDon = p.NamHoaDon,
-                                  TenKH = p.TenKH,
-                                  DiaChi = p.Diachi,
-                                  MST = p.MST,
-                                  MaKH = p.MaKH,
-                                  SoHopDong = p.SoHopDong,
-                                  SanLuongTieuThu = p.SanLuongTieuThu,
-                                  ChiSoCu = p.ChiSoCu,
-                                  ChiSoMoi = p.ChiSoMoi,
-                                  SH1 = p.SH1,
-                                  SH2 = p.SH2,
-                                  SH3 = p.SH3,
-                                  SH4 = p.SH4,
-                                  SH1Price = p.SH1Price,
-                                  SH2Price = p.SH2Price,
-                                  SH3Price = p.SH3Price,
-                                  SH4Price = p.SH4Price,
-                                  HC = p.HC,
-                                  CC = p.CC,
-                                  SX = p.SX,
-                                  KD = p.KD,
-                                  HCPrice = p.HCPrice,
-                                  CCPrice = p.CCPrice,
-                                  SXPrice = p.SXPrice,
-                                  KDPrice = p.KDPrice,
-                                  ThueSuatPrice = p.ThueSuatPrice,
-                                  TileBVMT = p.TileBVMT,
-                                  PhiBVMT = p.PhiBVMT,
-                                  TongCong = p.TongCong,
-                                  BangChu = p.BangChu,
-                                  TTVoOng = p.TTVoOng,
-                                  TTThungan = p.TTThungan,
-                                  NgayBatDau = p.NgayBatDau,
-                                  NgayKetThuc = p.NgayKetThuc,
-                                  ChiSoCongDon = p.ChiSoCongDon,
-                              }).FirstOrDefault();
+                ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon> cb = new ControllerBase<HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon>();
+                HoaDonNuocHaDong.Models.InHoaDon.LichSuHoaDon source = cb.Query("InHoaDonFromTo",
+                           new SqlParameter("@d1", month),
+                           new SqlParameter("@d2", year),
+                           new SqlParameter("@d3", TuyenID),
+                           new SqlParameter("@matuyen", tuyenKH.Matuyen),
+                           new SqlParameter("@num", i)
+                           ).FirstOrDefault();
                 ls.Add(source);
                 //cập nhật trạng thái in cho hóa đơn được in từ số thứ tự (số hóa đơn) từ xx->yy
                 int hoaDonID = source.HoaDonID;

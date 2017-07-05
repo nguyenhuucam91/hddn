@@ -94,7 +94,7 @@ namespace HoaDonNuocHaDong.Controllers
                     updateAllHoaDon(quan, tuyenID, thangIn, namIn);
                     break;
                 case (int)PrintModeEnum.PRINT_SELECTED:
-                    updateSelectedReceipt(quan,tuyenID, thangIn, namIn, hoaDons);
+                    updateSelectedReceipt(quan, tuyenID, thangIn, namIn, hoaDons);
                     break;
                 case (int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT:
                     updateFromReceiptToReceipt(quan, tuyenID, thangIn, namIn, fromReceipt, toReceipt);
@@ -125,7 +125,7 @@ namespace HoaDonNuocHaDong.Controllers
                         connection.Open();
                         command.CommandText = "Update Lichsuhoadon set TTVoOng=@ttVoOng, TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi, TongCong=@tong, BangChu=@chu, ChiSoCongDon=@chiSo " +
                             "WHERE HoaDonID = @HoaDonID";
-                    
+
                         command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                         if (soHoaDon >= fromReceipt && soHoaDon <= toReceipt)
                         {
@@ -376,7 +376,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
 
         public ActionResult PrintFromTo(FormCollection form, int? quan, int TuyenID, int month, int year)
-        {            
+        {
             setPrintCircumstance((int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT);
             int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == TuyenID && p.ThangHoaDon == month && p.NamHoaDon == year);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.Find(TuyenID);
@@ -414,8 +414,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult PrintAllPreview(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
-            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);            
-            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
+            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -439,8 +438,8 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult printAll(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
-            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);            
-            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
+            setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
+
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -549,7 +548,7 @@ namespace HoaDonNuocHaDong.Controllers
             #region ViewBag
             ViewBag.beforeFiltered = false;
             ViewBag.hasNumber = "Danh sách tuyến đã có chỉ số";
-            ViewBag.isThuNgan = loggedInUserIsThuNgan;               
+            ViewBag.isThuNgan = loggedInUserIsThuNgan;
             ViewBag.selectedTo = to;
             ViewBag.selectedMonth = thang;
             ViewBag.selectedYear = nam;
@@ -568,6 +567,22 @@ namespace HoaDonNuocHaDong.Controllers
 
         public ActionResult XemChiTiet(int? quan, String tuyen, String month, String year)
         {
+            TuyenDuocChot duocChot = db.TuyenDuocChots.FirstOrDefault(p => p.Thang.ToString() == month && p.Nam.ToString() == year && p.TuyenKHID.ToString() == tuyen);
+            DateTime prevDatabaseBackupDate = new DateTime(Convert.ToInt32(year), Convert.ToInt32(month), 1);
+            if (prevDatabaseBackupDate < new DateTime(2017, 7, 1))
+            {
+                updateAllHoaDon(quan, tuyen, Convert.ToInt32(month), Convert.ToInt32(year));
+            }
+            else
+            {
+                if (duocChot != null)
+                {
+                    if (duocChot.TrangThaiTinhTien == false)
+                    {
+                        updateAllHoaDon(quan, tuyen, Convert.ToInt32(month), Convert.ToInt32(year));
+                    }
+                }
+            }
             //Cập nhật trạng thái tính tiền
             int tuyenInt = Convert.ToInt32(tuyen);
             int monthInt = Convert.ToInt32(month);
