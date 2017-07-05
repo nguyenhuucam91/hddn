@@ -1405,7 +1405,7 @@ namespace HoaDonNuocHaDong.Controllers
                                          ChiSoCu = r.ChiSoCu,
                                          ChiSoMoi = r.ChiSoMoi,
                                          SanLuong = r.SanLuongTieuThu,
-                                         TongCong = r.TongCong,
+                                         TongCong = r.TongCong.Value,
                                      }).OrderBy(p=>p.HoaDonNuocID).ToList();
 
                 ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);

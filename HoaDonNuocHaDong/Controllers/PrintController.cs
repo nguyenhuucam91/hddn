@@ -162,11 +162,11 @@ namespace HoaDonNuocHaDong.Controllers
                     Lichsuhoadon hoadon = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == hoaDonID);
                     if (hoadon != null)
                     {
-                        tongTienCongDon += hoadon.TongCong;
-                        truocThue = Math.Floor((hoadon.SH1 * hoadon.SH1Price) + (hoadon.SH2 * hoadon.SH2Price) + (hoadon.SH3 * hoadon.SH3Price) + (hoadon.SH4 * hoadon.SH4Price)
-                       + (hoadon.CC * hoadon.CCPrice) + (hoadon.HC * hoadon.HCPrice) + (hoadon.SX * hoadon.SXPrice) + (hoadon.KD * hoadon.KDPrice));
+                        tongTienCongDon += hoadon.TongCong.Value;
+                        truocThue = Math.Floor((hoadon.SH1.Value * hoadon.SH1Price.Value) + (hoadon.SH2.Value * hoadon.SH2Price.Value) + (hoadon.SH3.Value * hoadon.SH3Price.Value) + (hoadon.SH4.Value * hoadon.SH4Price.Value)
+                       + (hoadon.CC.Value * hoadon.CCPrice.Value) + (hoadon.HC.Value * hoadon.HCPrice.Value) + (hoadon.SX.Value * hoadon.SXPrice.Value) + (hoadon.KD.Value * hoadon.KDPrice.Value));
                         thueVAT = Math.Round(truocThue * 0.05, 0);
-                        phiBVMT = Math.Round(truocThue * (hoadon.TileBVMT / 100), 0);
+                        phiBVMT = Math.Round(truocThue * (hoadon.TileBVMT.Value / 100), 0);
                         soTienHoaDon = truocThue + thueVAT + phiBVMT;
                         var tuyenKH = db.Tuyenkhachhangs.Find(hoadon.TuyenKHID);
                         using (SqlCommand command = new SqlCommand("", connection))

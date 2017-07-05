@@ -330,7 +330,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc).Sum(p => p.TongCong);
+                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc.Value < obj.TTDoc.Value).Sum(p => p.TongCong.Value);
             }
             double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
 
@@ -560,7 +560,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc).Sum(p => p.TongCong);
+                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc.Value).Sum(p => p.TongCong.Value);
             }
             double tongCongCongDon = tongTienHoaDon + congDonHDTruoc;
 
@@ -808,7 +808,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc).Sum(p => p.TongCong);
+                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc.Value < obj.TTDoc.Value).Sum(p => p.TongCong.Value);
             }
             double tongCongCongDon = tongTienHoaDon + congDonHDTruoc;
             //thu ngân

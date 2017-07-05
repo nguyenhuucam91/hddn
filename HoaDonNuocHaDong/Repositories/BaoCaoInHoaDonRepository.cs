@@ -22,7 +22,7 @@ namespace HoaDonNuocHaDong.Repositories
                                 LoaiKH = t.LoaiKHID,
                                 NgayHoaDon = i.Ngayhoadon,
                                 TenKH = r.TenKH,
-                                TongTien = r.TongCong,
+                                TongTien = r.TongCong.Value,
                                 TuyenKHID = t.TuyenKHID,
                                 DiaChi = t.Diachi
                             }).ToList();
@@ -42,7 +42,7 @@ namespace HoaDonNuocHaDong.Repositories
                                 LoaiKH = t.LoaiKHID,
                                 NgayHoaDon = i.Ngayhoadon,
                                 TenKH = r.TenKH,
-                                TongTien = r.TongCong,
+                                TongTien = r.TongCong.Value,
                                 TuyenKHID = t.TuyenKHID,
                                 DiaChi = t.Diachi
                             }).ToList();
