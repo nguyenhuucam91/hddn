@@ -94,7 +94,7 @@ namespace HoaDonNuocHaDong.Controllers
                     updateAllHoaDon(quan, tuyenID, thangIn, namIn);
                     break;
                 case (int)PrintModeEnum.PRINT_SELECTED:
-                    updateSelectedReceipt(tuyenID, thangIn, namIn, hoaDons);
+                    updateSelectedReceipt(quan,tuyenID, thangIn, namIn, hoaDons);
                     break;
                 case (int)PrintModeEnum.PRINT_FROM_RECEIPT_TO_RECEIPT:
                     updateFromReceiptToReceipt(quan, tuyenID, thangIn, namIn, fromReceipt, toReceipt);
@@ -150,8 +150,9 @@ namespace HoaDonNuocHaDong.Controllers
                 }
         }
 
-        private void updateSelectedReceipt(string tuyenID, int thangIn, int namIn, String[] hoaDons)
+        private void updateSelectedReceipt(int? quan, string tuyenID, int thangIn, int namIn, String[] hoaDons)
         {
+            String ttVoOng = qHHelper.getTTVoOng(quan);
             int soHoaDon = 1; double tongTienCongDon = 0;
             double truocThue = 0; double thueVAT = 0; double phiBVMT = 0; double soTienHoaDon = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -172,8 +173,9 @@ namespace HoaDonNuocHaDong.Controllers
                         using (SqlCommand command = new SqlCommand("", connection))
                         {
                             connection.Open();
-                            command.CommandText = "Update Lichsuhoadon set TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi, TongCong=@tong, BangChu=@chu, ChiSoCongDon=@chiSo " +
+                            command.CommandText = "Update Lichsuhoadon set TTVoOng = @ttVoOng, TTThungan = @TTThuNgan, TruocThue=@truocThue, ThueSuatPrice=@thueVAT, PhiBVMT=@phi, TongCong=@tong, BangChu=@chu, ChiSoCongDon=@chiSo " +
                             "WHERE HoaDonID = @HoaDonID";
+                            command.Parameters.AddWithValue("@ttVoOng", ttVoOng);
                             command.Parameters.AddWithValue("@TTThuNgan", hoadon.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon);
                             command.Parameters.AddWithValue("@truocThue", truocThue);
                             command.Parameters.AddWithValue("@thueVAT", thueVAT);
