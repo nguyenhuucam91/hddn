@@ -15,7 +15,12 @@ namespace HoaDonNuocHaDong.Controllers
         protected BackupRepository backupRepository = new BackupRepository();
         public ActionResult Index()
         {
-            backupRepository.applyBackupProcess(LoggedInUser.NguoidungID);
+            DateTime currDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            Backup todayBackup = db.Backups.FirstOrDefault(p => p.backup_date == currDate);
+            if (todayBackup == null)
+            {
+                backupRepository.applyBackupProcess(LoggedInUser.NguoidungID);
+            }
             title = "Công ty TNHH một thành viên nước sạch Hà Đông";            
             return View();
         }

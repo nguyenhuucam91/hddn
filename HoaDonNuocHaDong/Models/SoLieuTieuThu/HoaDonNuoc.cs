@@ -44,7 +44,7 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
         public String SoHoaDon { get; set; }
 
 
-        public int TrangThaiChot { get { return GetINT(25); } set { SetINT(25, value); } }
+        public int TrangThaiChot { get { return GetINT(26); } set { SetINT(26, value); } }
         public bool TrangThaiIn { get; set; }
         public DateTime ngayIn { get; set; }     
 
