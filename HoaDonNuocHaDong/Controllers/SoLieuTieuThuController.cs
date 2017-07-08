@@ -604,7 +604,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.tenTuyen = UserInfo.getTenTuyen(tuyenID.Value);
             //load chỉ số và thông tin tách số vào đây
             List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);
-            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == 0);
+            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == "false");
             int loggedInRole = getUserRole(LoggedInUser.NhanvienID);
 
             #region ViewBag
