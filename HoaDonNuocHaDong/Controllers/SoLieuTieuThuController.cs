@@ -1268,35 +1268,48 @@ namespace HoaDonNuocHaDong.Controllers
 
             SqlConnection conn = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
             conn.Open();
+
             ControllerBase<DanhSachHoaDonKhongSanLuong> cB = new ControllerBase<DanhSachHoaDonKhongSanLuong>();
             List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@thang", currentMonth),
-                new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID));
+                new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID)).ToList();
 
-            foreach (var item in dsKhachHangKoSanLuong)
-            {               
-                Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(i => i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear
-                    && i.KhachhangID == item.KhachHangID);
-                              
-                if (nextMonthReceipt == null)
+            if (dsKhachHangKoSanLuong.Count() > 0)
+            {
+                int[] khachHangIdsArray = dsKhachHangKoSanLuong.Select(p => p.KhachHangID).ToArray();
+                var dsHoaDonThangSauCuaKhachHangCoSanLuong = (from i in db.Hoadonnuocs
+                                                      join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
+                                                      where i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear && r.TuyenKHID == tuyenID &&
+                                                      khachHangIdsArray.Contains(i.KhachhangID.Value) == true
+                                                      select new DanhSachHoaDonKhongSanLuong
+                                                      {
+                                                          NgayBatDauSuDung = i.Ngaybatdausudung,
+                                                          KhachHangID = i.KhachhangID.Value
+                                                      }).ToList();
+                List<DanhSachHoaDonKhongSanLuong> dsHoaDonsThangSau = dsKhachHangKoSanLuong.Except(dsHoaDonThangSauCuaKhachHangCoSanLuong).ToList();
+
+                foreach (var dsHoaDonThangSau in dsHoaDonsThangSau)
                 {
                     Hoadonnuoc khongSanLuong = new Hoadonnuoc();
                     khongSanLuong.ThangHoaDon = nextMonth;
                     khongSanLuong.NamHoaDon = nextYear;
-                    khongSanLuong.Ngaybatdausudung = item.NgayBatDauSuDung;
-                    khongSanLuong.KhachhangID = item.KhachHangID;
+                    khongSanLuong.Ngaybatdausudung = dsHoaDonThangSau.NgayBatDauSuDung;
+                    khongSanLuong.KhachhangID = dsHoaDonThangSau.KhachHangID;
                     khongSanLuong.NhanvienID = LoggedInUser.NhanvienID;
+                    khongSanLuong.Trangthaixoa = false;
+                    khongSanLuong.Trangthaithu = false;
+                    khongSanLuong.Trangthaiin = false;
+                    khongSanLuong.Trangthaichot = false;
                     db.Hoadonnuocs.Add(khongSanLuong);
                     db.SaveChanges();
                     //Thêm chi tiết hóa đơn nước tháng sau
                     Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
                     chiTiet.HoadonnuocID = khongSanLuong.HoadonnuocID;
-                    chiTiet.Chisocu = item.ChiSoCu;
+                    chiTiet.Chisocu = dsHoaDonThangSau.ChiSoCu;
                     db.Chitiethoadonnuocs.Add(chiTiet);
                     db.SaveChanges();
-                 
                 }
             }
-
+           
             conn.Close();
         }
         /// <summary>
