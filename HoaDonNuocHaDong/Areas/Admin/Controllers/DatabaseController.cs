@@ -50,7 +50,6 @@ namespace HoaDonNuocHaDong.Areas.Admin.Controllers
             {
 
             }
-
             return View();
         }
 
