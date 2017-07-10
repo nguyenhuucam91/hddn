@@ -415,7 +415,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult PrintAllPreview(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            //updateAllHoaDon(quan, TuyenID.ToString(), month, year);
+            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
@@ -440,7 +440,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult printAll(FormCollection form, int? quan, int TuyenID, int month, int year)
         {
             setPrintCircumstance((int)PrintModeEnum.PRINT_ALL);
-            //updateAllHoaDon(quan, TuyenID.ToString(), month, year);
+            updateAllHoaDon(quan, TuyenID.ToString(), month, year);
             String formPrintMachine = form["printMachine"];
             Stream str = null;
             if (formPrintMachine == "LQ2190")
