@@ -1337,40 +1337,22 @@ namespace HoaDonNuocHaDong.Controllers
         public List<Models.SoLieuTieuThu.HoaDonNuoc> loadDanhSachSanLuongBatThuong(int previousMonth, int previousYear, int month, int year, int tuyenID)
         {
             var danhSachHoaDonBatThuong = new List<Models.SoLieuTieuThu.HoaDonNuoc>();
-            var danhSachHoaDon = (from i in db.Hoadonnuocs
-                                  join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                                  join m in db.Chitiethoadonnuocs on i.HoadonnuocID equals m.HoadonnuocID
-                                  join t in db.Lichsuhoadons on i.HoadonnuocID equals t.HoaDonID
-                                  where i.ThangHoaDon == month && i.NamHoaDon == year && r.TuyenKHID == tuyenID
-                                  && (r.Tinhtrang == 0) && (r.IsDelete == false)
-                                  && (i.Trangthaichot == false || i.Trangthaichot == null)
-                                  && ((r.Ngayngungcapnuoc == null && r.Ngaycapnuoclai == null) || (r.Ngaycapnuoclai <= DateTime.Now))
-                                  orderby r.TTDoc
-                                  select new Models.SoLieuTieuThu.HoaDonNuoc
-                                  {
-                                      HoaDonNuocID = i.HoadonnuocID,
-                                      KhachHangID = r.KhachhangID,
-                                      MaKhachHang = r.MaKhachHang,
-                                      TenKhachHang = r.Ten,
-                                      SoHo = r.Soho,
-                                      SoKhau = r.Sonhankhau,
-                                      ChiSoCu = m.Chisocu,
-                                      ChiSoMoi = m.Chisomoi,
-                                      SanLuong = i.Tongsotieuthu,
-                                      ThuTuDoc = r.TTDoc,
-                                      SoHoaDon = t.TTThungan,
-                                      SoKhoan = i.SoKhoan
-                                  }).ToList();
-
+            ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> cB = new ControllerBase<DanhSachKhachHangCoSanLuongBatThuong>();
+            var danhSachHoaDon = cB.Query("DanhSachKhachHangCoSanLuongBatThuong", 
+                new SqlParameter("@prevMonth", previousMonth),
+                new SqlParameter("@prevYear", previousYear),
+                new SqlParameter("@currMonth", month),
+                new SqlParameter("@currYear", year),
+                new SqlParameter("@tuyen", tuyenID)).ToList();
             //load danh sách khách hàng có áp giá đặc biệt
             foreach (var item in danhSachHoaDon)
             {
-                int sanLuongThangTruocCuaKhachHang = getSanLuongThangTruocCuaKhachHang(previousMonth, previousYear, item.KhachHangID);
+                int sanLuongThangTruocCuaKhachHang = item.SanLuongThangTruoc;
                 if (item.SanLuong <= 1 || cS.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()))
                 {
                     danhSachHoaDonBatThuong.Add(item);
                 }
-                if (sanLuongThangTruocCuaKhachHang != -1 && item.SanLuong >= sanLuongThangTruocCuaKhachHang * 2)
+                if (sanLuongThangTruocCuaKhachHang != -1 && (item.SanLuong >= sanLuongThangTruocCuaKhachHang * 2 || item.SanLuong <= sanLuongThangTruocCuaKhachHang * 2))
                 {
                     danhSachHoaDonBatThuong.Add(item);
                 }
@@ -1389,9 +1371,8 @@ namespace HoaDonNuocHaDong.Controllers
 
         private int getSanLuongThangTruocCuaKhachHang(int month, int year, int khachhangId)
         {
-            var sanLuongThangTruoc = (from i in db.Hoadonnuocs
-                                      join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                                      where i.ThangHoaDon == month && i.NamHoaDon == year && r.KhachhangID == khachhangId
+            var sanLuongThangTruoc = (from i in db.Hoadonnuocs                                     
+                                      where i.ThangHoaDon == month && i.NamHoaDon == year && i.KhachhangID == khachhangId
                                       select new Models.SoLieuTieuThu.HoaDonNuoc
                                       {
                                           SanLuong = i.Tongsotieuthu,
