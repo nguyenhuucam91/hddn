@@ -736,7 +736,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                ViewBag.CumdancuID = new List<Phuongxa>();
+                ViewBag.CumdancuID = new List<Cumdancu>();
             }
 
             ViewBag.PhuongxaID = phuongXas;
