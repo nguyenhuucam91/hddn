@@ -539,7 +539,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                ViewBag.CumdancuID = new List<Phuongxa>();
+                ViewBag.CumdancuID = new List<Cumdancu>();
             }
             ViewBag.HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten");
             ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten");
