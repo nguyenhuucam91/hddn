@@ -86,4 +86,9 @@ namespace HDNHD.Models.Constants
         TEN_KHACH_HANG = 3,
         DIA_CHI = 4
     }
+
+    public enum EBackupThreshold
+    {
+        MAX_ALLOWED_FILES = 5
+    }
 }

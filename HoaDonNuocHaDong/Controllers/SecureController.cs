@@ -15,6 +15,7 @@ namespace HoaDonNuocHaDong.Controllers
         protected AdminUnitOfWork adminUow;
         protected INguoiDungRepository nguoiDungRepository;
         protected IDangNhapRepository dangNhapRepository;
+        protected BackupRepository backupRepository = new BackupRepository();
 
         public SecureController()
         {
@@ -69,6 +70,11 @@ namespace HoaDonNuocHaDong.Controllers
                             cookie.Path = "/"; // make cookie available across applications
                             Response.Cookies.Add(cookie);
 
+                            bool isMonday = backupRepository.isTodayIsMonday();
+                            if (isMonday)
+                            {
+                                backupRepository.applyBackupProcess(nguoiDung.NguoidungID);
+                            }
                             // redirect
                             if (prevUrl != null)
                                 Response.Redirect(prevUrl);
@@ -90,6 +96,9 @@ namespace HoaDonNuocHaDong.Controllers
 
                         adminUow.SubmitChanges();
                     }
+
+
+
                 } else {
                     ViewBag.Message = "Tài khoản hoặc mật khẩu chưa đúng. Vui lòng kiểm tra lại.";;
                 }

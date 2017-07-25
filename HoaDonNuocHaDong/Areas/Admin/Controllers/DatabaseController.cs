@@ -20,15 +20,7 @@ namespace HoaDonNuocHaDong.Areas.Admin.Controllers
 
         public ActionResult Backup()
         {
-            String dbFileName = backupRepository.setupBackupFileName();
-            String subPath = "~/DBBackups/";                       
-
-            String pathBuilder = subPath + dbFileName + ".bak";
-            string dbPath = Server.MapPath(pathBuilder);
-
-            backupRepository.executeBackupTransaction(dbPath, dbFileName);
-            backupRepository.updateOrCreateBackupRecord(LoggedInUser.NguoidungID);
-            
+            backupRepository.applyBackupProcess(LoggedInUser.NguoidungID);
             return View();
         }
     }

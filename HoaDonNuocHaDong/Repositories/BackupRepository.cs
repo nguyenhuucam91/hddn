@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using HDNHD.Models.Constants;
+using System.IO;
 
 namespace HoaDonNuocHaDong.Repositories
 {
@@ -12,7 +13,6 @@ namespace HoaDonNuocHaDong.Repositories
     {
         private HoaDonHaDongEntities db = new HoaDonHaDongEntities();
         private Config.DatabaseConfig databaseConfig = new Config.DatabaseConfig();
-        private HDNHD.Models.DataContexts.Nguoidung LoggedInUser;
 
         public String setupBackupFileName()
         {
@@ -25,18 +25,26 @@ namespace HoaDonNuocHaDong.Repositories
             return backupFileName;
         }
 
-        public void executeBackupTransaction(String dbPath, String fileName)
+        public void executeBackupTransaction(String fileName)
         {
-            String databaseIntialCatalog = databaseConfig.getCurrentDatabaseInitialCatalog(); 
+            String databaseIntialCatalog = databaseConfig.getCurrentDatabaseInitialCatalog();
+            String dbPath = getDbBackupPath();
+
             var cmd = String.Format("BACKUP DATABASE {0} TO DISK='{1}' WITH FORMAT, MEDIANAME='{2}', MEDIADESCRIPTION='Media set for {0} database';"
                 , databaseIntialCatalog, dbPath, fileName);
             db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, cmd);
         }
 
-        public void updateOrCreateBackupRecord(int nguoiDungId)
+        public Backup checkBackupRecordCurrentDate()
         {
             DateTime currentDate = DateTime.Now.Date;
             Backup hasBackupOrNull = db.Backups.FirstOrDefault(p => p.backup_date == currentDate);
+            return hasBackupOrNull;
+        }
+
+        public void updateOrCreateBackupRecord(int nguoiDungId)
+        {
+            Backup hasBackupOrNull = checkBackupRecordCurrentDate();
             if (hasBackupOrNull != null)
             {
                 updateBackupRecord(hasBackupOrNull, nguoiDungId);
@@ -64,6 +72,71 @@ namespace HoaDonNuocHaDong.Repositories
             backedUpEntity.user_backup_id = nguoiDungId;
             db.Entry(backedUpEntity).State = EntityState.Modified;
             db.SaveChanges();
+        }
+
+        public bool isTodayIsMonday()
+        {
+            DateTime today = DateTime.Today;
+            if (today.DayOfWeek == DayOfWeek.Monday)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void deleteOldBackupFiles()
+        {
+            int backupNumber = db.Backups.Count();
+            if (backupNumber > (int)EBackupThreshold.MAX_ALLOWED_FILES)
+            {
+                Backup oldestFile = db.Backups.OrderBy(p => p.backup_date).FirstOrDefault();
+                if (oldestFile != null)
+                {
+                    try
+                    {
+                        string pathName = HttpContext.Current.Server.MapPath("/DBBackups/" + oldestFile.backup_filename + ".bak");
+                        if (File.Exists(pathName))
+                        {
+                            File.Delete(pathName);
+                            deleteDatabaseRecordInDb(oldestFile.backup_filename);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        String exception = e.ToString();
+
+                    }
+                }
+
+            }
+        }
+
+        private void deleteDatabaseRecordInDb(String backupFileName)
+        {
+            Backup backup = db.Backups.FirstOrDefault(p => p.backup_filename == backupFileName);
+            if (backup != null)
+            {
+                db.Backups.Remove(backup);
+                db.SaveChanges();
+            }
+        }
+
+        internal string getDbBackupPath()
+        {
+            String dbFileName = setupBackupFileName();
+            String subPath = "~/DBBackups/";
+            String pathBuilder = subPath + dbFileName + ".bak";
+            string dbPath = HttpContext.Current.Server.MapPath(pathBuilder);
+            return dbPath;
+        }
+
+        public void applyBackupProcess(int nguoiDungId)
+        {
+            String dbFileName = setupBackupFileName();
+            String dbPath = getDbBackupPath();
+            executeBackupTransaction(dbFileName);
+            updateOrCreateBackupRecord(nguoiDungId);
+            deleteOldBackupFiles();
         }
     }
 }
