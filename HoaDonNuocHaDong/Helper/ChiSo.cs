@@ -93,7 +93,7 @@ namespace HoaDonHaDong.Helper
         /// <param name="khachHangID"></param>
         /// <returns></returns>
         public static int getChiSoThang(String month, String year, int khachHangID)
-        {            
+        {
             var hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachHangID && p.ThangHoaDon.ToString() == month && p.NamHoaDon.ToString() == year);
             if (hoaDonNuoc != null)
             {
@@ -109,17 +109,17 @@ namespace HoaDonHaDong.Helper
         /// <param name="year"></param>
         /// <returns></returns>
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> filterChiSo(int month, int year, int? tuyenKHID)
-        {            
+        {
             ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> cb = new ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
             List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> _hoaDonNuoc = cb.Query("DanhSachHoaDonsTheoThangNam",
                        new SqlParameter("@d1", month),
                        new SqlParameter("@d2", year),
                        new SqlParameter("@d3", tuyenKHID.Value)
                        );
-          
+
             return _hoaDonNuoc;
         }
-       
+
 
         /// <summary>
         /// Kiểm tra xem chỉ số có NULL hay ko, nếu null thì trả về 0
@@ -133,42 +133,6 @@ namespace HoaDonHaDong.Helper
                 return 0;
             }
             return Convert.ToDouble(chiSo);
-        }
-
-        /// <summary>
-        /// Lấy chỉ số SH theo cấp, ví dụ cấp 1,2,3,4 tương ứng với SH1,SH2,SH3,SH4
-        /// </summary>
-        /// <param name="level">SH1,2,3,4</param>
-        /// <returns></returns>
-        public static int? getChiSoSHTheoCap(String level)
-        {
-            switch (level)
-            {
-                case "SH1":
-                    Apgia _apGiaSH1 = db.Apgias.FirstOrDefault(p => p.Ten == "SH1");
-                    if (_apGiaSH1 != null)
-                    {
-                        return _apGiaSH1.Denmuc;
-                    }
-                    break;
-                case "SH2":
-                    Apgia _apGiaSH2 = db.Apgias.FirstOrDefault(p => p.Ten == "SH2");
-                    if (_apGiaSH2 != null)
-                    {
-                        return _apGiaSH2.Denmuc;
-                    }
-                    break;
-                case "SH3":
-                    Apgia _apGiaSH3 = db.Apgias.FirstOrDefault(p => p.Ten == "SH3");
-                    if (_apGiaSH3 != null)
-                    {
-                        return _apGiaSH3.Denmuc;
-                    }
-                    break;
-
-            }
-
-            return 0;
         }
 
         /// <summary>
@@ -409,9 +373,9 @@ namespace HoaDonHaDong.Helper
             {
                 connection.Open();
                 command.CommandText = "UPDATE A SET [Trangthaichot] = 1 FROM [dbo].[Hoadonnuoc] A JOIN [dbo].[Khachhang] B on A.KhachhangID = B.KhachhangID WHERE A.ThangHoaDon=@thang AND A.NamHoaDon =@nam AND B.TuyenKHID=@tuyen";
-                command.Parameters.AddWithValue("@thang",month);
-                command.Parameters.AddWithValue("@nam",year);
-                command.Parameters.AddWithValue("@tuyen",tuyenID);
+                command.Parameters.AddWithValue("@thang", month);
+                command.Parameters.AddWithValue("@nam", year);
+                command.Parameters.AddWithValue("@tuyen", tuyenID);
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -424,8 +388,8 @@ namespace HoaDonHaDong.Helper
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "UPDATE A SET [Trangthaicapnhathuy] = 1 FROM [dbo].[Hoadonnuocbihuy] A "+
-                "JOIN [dbo].[Hoadonnuoc] B on A.HoadonnuocID = B.HoadonnuocID "+
+                command.CommandText = "UPDATE A SET [Trangthaicapnhathuy] = 1 FROM [dbo].[Hoadonnuocbihuy] A " +
+                "JOIN [dbo].[Hoadonnuoc] B on A.HoadonnuocID = B.HoadonnuocID " +
                 "JOIN [dbo].[Khachhang] C on B.KhachhangID = C.KhachhangID " +
                 "WHERE B.ThangHoaDon=@thang AND B.NamHoaDon = @nam AND C.TuyenKHID=@tuyen";
                 command.Parameters.AddWithValue("@thang", month);
@@ -438,7 +402,7 @@ namespace HoaDonHaDong.Helper
 
         public int getSoHoaDonTrongDanhSachKhongBinhThuong(int month, int year, int tuyenKHID, int hoaDonID)
         {
-            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> danhSachHoaDon = filterChiSo(month,year,tuyenKHID);
+            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> danhSachHoaDon = filterChiSo(month, year, tuyenKHID);
             int soHoaDon = 1;
             foreach (var item in danhSachHoaDon)
             {
@@ -449,6 +413,62 @@ namespace HoaDonHaDong.Helper
                 soHoaDon++;
             }
             return soHoaDon;
+        }
+
+        public void generateChiSoFromPreviousMonth(int currentMonth, int currentYear, int nhanVienId, int tuyenKHID)
+        {
+            int previousMonth = currentMonth - 1 == 0 ? 12 : currentMonth - 1;
+            int previousYear = currentMonth - 1 == 0 ? currentYear - 1 : currentYear;
+            var hoaDonNuocsThangTruoc = getHoaDonThang(previousMonth, previousYear, tuyenKHID);
+            var hoaDonNuocsHienTai = getHoaDonThang(currentMonth, currentYear, tuyenKHID);
+            
+            int countHoaDonsThangTruoc = hoaDonNuocsThangTruoc.Count();
+            int countHoaDonsThangHienTai = hoaDonNuocsHienTai.Count();
+            if (countHoaDonsThangTruoc != 0)
+            {
+                if (countHoaDonsThangHienTai == 0)
+                {
+                    foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
+                    {
+                        
+                        Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();                        
+                        hoaDonThangHienTai.ThangHoaDon = currentMonth;
+                        hoaDonThangHienTai.NamHoaDon = currentYear;
+                        hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.Ngayketthucsudung;
+                        hoaDonThangHienTai.KhachhangID = hoaDonNuocThangTruoc.KhachhangID;
+                        hoaDonThangHienTai.NhanvienID = nhanVienId;
+                        hoaDonThangHienTai.Trangthaixoa = false;
+                        hoaDonThangHienTai.Trangthaithu = false;
+                        hoaDonThangHienTai.Trangthaiin = false;
+                        hoaDonThangHienTai.Trangthaichot = false;
+                        db.Hoadonnuocs.Add(hoaDonThangHienTai);
+                        db.SaveChanges();
+                        //Thêm chi tiết hóa đơn nước tháng sau
+                        Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
+                        chiTiet.HoadonnuocID = hoaDonThangHienTai.HoadonnuocID;
+                        chiTiet.Chisocu = hoaDonNuocThangTruoc.ChiSoMoiThangTruoc;
+                        db.Chitiethoadonnuocs.Add(chiTiet);
+                        db.SaveChanges();                        
+                    }
+                }
+            }
+        }
+
+        public IQueryable<dynamic> getHoaDonThang(int month, int year, int tuyenKHID)
+        {
+            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
+            var hoaDonNuocsThangTruoc = (from i in _db.Hoadonnuocs
+                                         join kH in _db.Khachhangs on i.KhachhangID equals kH.KhachhangID
+                                         join cT in _db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
+                                         where i.ThangHoaDon == month && i.NamHoaDon == year && kH.TuyenKHID == tuyenKHID
+                                         select new
+                                         {
+                                             Ngayketthucsudung = i.Ngayketthucsudung,
+                                             KhachhangID = i.KhachhangID,
+                                             ChiSoMoiThangTruoc = cT.Chisomoi,
+                                             HoaDonNuocID = i.HoadonnuocID
+                                         });
+            return hoaDonNuocsThangTruoc;
         }
     }
 }

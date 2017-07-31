@@ -109,6 +109,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Index(FormCollection form)
         {
+            
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
             //generate chi tiet hóa đơn nước tháng sau
@@ -120,10 +121,10 @@ namespace HoaDonNuocHaDong.Controllers
             String year = form["nam"];
             //nếu năm tháng rỗng thì lấy năm và tháng hiện tại, nếu tuyến được chọn rỗng thì lấy là 0
             int _month = String.IsNullOrEmpty(month) ? DateTime.Now.Month : Convert.ToInt16(month);
-            int _year = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt16(year);
-
+            int _year = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt16(year);                 
             String selectedNhanVien = form["nhanvien"];
             String selectedTuyen = form["tuyen"];
+            cS.generateChiSoFromPreviousMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
             //lấy danh sách tổ, phòng ban thuộc tổ quận huyện đó
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
@@ -194,8 +195,6 @@ namespace HoaDonNuocHaDong.Controllers
                 }
             }
 
-
-
             int _selectedTuyen = String.IsNullOrEmpty(selectedTuyen) ? 0 : Convert.ToInt32(selectedTuyen);
 
 
@@ -240,6 +239,8 @@ namespace HoaDonNuocHaDong.Controllers
 
             return View();
         }
+
+        
 
         /// <summary>
         /// Hàm để lưu dữ liệu thông số chỉ số vào hệ thống
@@ -1446,14 +1447,6 @@ namespace HoaDonNuocHaDong.Controllers
                 db.SaveChanges();
             }
         }
-
-        /// <summary>
-        /// JSON result cho phần load áp giá
-        /// </summary>
-        /// <param name="KhachHangID"></param>
-        /// <param name="thang"></param>
-        /// <param name="nam"></param>
-        /// <returns></returns>
 
         public JsonResult loadApGiaInfo(int KhachHangID, int thang, int nam)
         {
