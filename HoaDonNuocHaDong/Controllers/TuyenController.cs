@@ -48,7 +48,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
-            IEnumerable<Tuyenkhachhang> tuyensKhachHang = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien);
+            IEnumerable<Tuyenkhachhang> tuyensKhachHang = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien).OrderByDescending(p => p.TuyenKHID).Where(p => p.IsDelete == false).ToPagedList(page, pageSize);
 
             #region ViewBag
             ViewData["nhanVien"] = nhanViens;
@@ -57,7 +57,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.isOnlyTruongPhong = isOnlyTruongPhong;
             ViewBag.phongBanId = phongBanId;
             #endregion
-            return View(tuyensKhachHang.OrderByDescending(p => p.TuyenKHID).ToPagedList(page, pageSize));
+            return View(tuyensKhachHang);
         }
 
 
@@ -193,9 +193,6 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false || p.IsDelete == null), "CumdancuID", "Ten", tuyenkhachhang.CumdancuID);
-
-            ViewBag.ToID = new SelectList(db.Toes, "ToID", "Ten", tuyenkhachhang.ToID);
             return View(tuyenkhachhang);
         }
 
@@ -206,24 +203,27 @@ namespace HoaDonNuocHaDong.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Matuyen,TuyenKHID,ToID,CumdancuID,Ten,Diachi,IsDelete")] Tuyenkhachhang tuyenkhachhang)
         {
-
+            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
+            Tuyenkhachhang tuyen = _db.Tuyenkhachhangs.Find(tuyenkhachhang.TuyenKHID);
             if (ModelState.IsValid)
             {
-                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.IsDelete == false);
-                if (existingTuyen == null)
+
+                Tuyenkhachhang existingTuyen = db.Tuyenkhachhangs.AsNoTracking().FirstOrDefault(p => p.Matuyen == tuyenkhachhang.Matuyen && p.IsDelete == false);
+                if (existingTuyen == null || tuyen.Matuyen == tuyenkhachhang.Matuyen)
                 {
+                    db.Tuyenkhachhangs.AsNoTracking();
+                    db.Tuyenkhachhangs.Attach(tuyenkhachhang);
                     db.Entry(tuyenkhachhang).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    ViewBag.hasTuyen = true;
+                    ViewBag.hasTuyen = "Mã tuyến đã tồn tại trong cơ sở dữ liệu";
                 }
+
             }
-            ViewBag.nhanVien = new SelectList(db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null), "NhanvienID", "Ten");
-            ViewBag.CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false || p.IsDelete == null), "CumdancuID", "Ten", tuyenkhachhang.CumdancuID);
-            ViewBag.ToID = new SelectList(db.Toes, "ToID", "Ten", tuyenkhachhang.ToID);
+
             return View(tuyenkhachhang);
         }
 
