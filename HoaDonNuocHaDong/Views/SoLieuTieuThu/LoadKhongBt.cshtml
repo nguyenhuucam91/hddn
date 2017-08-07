@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Danh sách khách hàng có sản lượng không bình thường";
-    var kH = ViewBag.khachHang as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
+    var kH = ViewBag.khachHangBatThuong as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
     var tenTuyen = ViewBag.tenTuyen;
     int year = ViewBag.year;
     int month = ViewBag.month;
@@ -86,8 +86,7 @@
                                     {
                                         int sohoaDonDanhSachKhongBinhThuong = cS.getSoHoaDonTrongDanhSachKhongBinhThuong(month, year, tuyenID, item.HoaDonNuocID);
                                         int hoaDonID = Convert.ToInt32(item.HoaDonNuocID);
-                                        String[] soHoaDon = item.SoHoaDon.Split('-');
-                                        String soHoaDonTrimmed = soHoaDon[1].ToString().Trim();
+                                        
                                         Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == item.KhachHangID && p.ThangHoaDon == month && p.NamHoaDon == year);
                                         Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == item.KhachHangID && p.ThangHoaDon == nextMonthReceiptNumber && p.NamHoaDon == nextYearReceiptNumber);
                                         String cssClass = "";

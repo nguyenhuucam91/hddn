@@ -2,13 +2,17 @@
 using HoaDonNuocHaDong.Config;
 using HoaDonNuocHaDong.Helper;
 using HvitFramework;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Web;
+using HoaDonNuocHaDong.Models.SoLieuTieuThu;
 
 namespace HoaDonHaDong.Helper
 {
@@ -415,60 +419,159 @@ namespace HoaDonHaDong.Helper
             return soHoaDon;
         }
 
-        public void generateChiSoFromPreviousMonth(int currentMonth, int currentYear, int nhanVienId, int tuyenKHID)
+        public void generateChiSoFromNearestMonth(int currentMonth, int currentYear, int nhanVienId, int tuyenKHID)
         {
-            int previousMonth = currentMonth - 1 == 0 ? 12 : currentMonth - 1;
-            int previousYear = currentMonth - 1 == 0 ? currentYear - 1 : currentYear;
-            var hoaDonNuocsThangTruoc = getHoaDonThang(previousMonth, previousYear, tuyenKHID);
-            var hoaDonNuocsHienTai = getHoaDonThang(currentMonth, currentYear, tuyenKHID);
-            
-            int countHoaDonsThangTruoc = hoaDonNuocsThangTruoc.Count();
-            int countHoaDonsThangHienTai = hoaDonNuocsHienTai.Count();
-            if (countHoaDonsThangTruoc != 0)
+            DateTime thangNamGanNhat = getThangNamGanNhatThuocHoaDon(tuyenKHID, currentMonth, currentYear);
+            int previousMonth = thangNamGanNhat.Month;
+            int previousYear = thangNamGanNhat.Year;
+
+            if (previousYear != 1)
             {
-                if (countHoaDonsThangHienTai == 0)
+                var hoaDonNuocsThangTruoc = getHoaDonThang(previousMonth, previousYear, tuyenKHID);
+                var hoaDonNuocsHienTai = getHoaDonThang(currentMonth, currentYear, tuyenKHID);
+
+                int countHoaDonsThangTruoc = hoaDonNuocsThangTruoc.Count();
+                int countHoaDonsThangHienTai = hoaDonNuocsHienTai.Count();
+
+                if (countHoaDonsThangTruoc != 0)
                 {
-                    foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
+                    if (countHoaDonsThangHienTai == 0)
                     {
-                        
-                        Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();                        
-                        hoaDonThangHienTai.ThangHoaDon = currentMonth;
-                        hoaDonThangHienTai.NamHoaDon = currentYear;
-                        hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.Ngayketthucsudung;
-                        hoaDonThangHienTai.KhachhangID = hoaDonNuocThangTruoc.KhachhangID;
-                        hoaDonThangHienTai.NhanvienID = nhanVienId;
-                        hoaDonThangHienTai.Trangthaixoa = false;
-                        hoaDonThangHienTai.Trangthaithu = false;
-                        hoaDonThangHienTai.Trangthaiin = false;
-                        hoaDonThangHienTai.Trangthaichot = false;
-                        db.Hoadonnuocs.Add(hoaDonThangHienTai);
-                        db.SaveChanges();
-                        //Thêm chi tiết hóa đơn nước tháng sau
-                        Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
-                        chiTiet.HoadonnuocID = hoaDonThangHienTai.HoadonnuocID;
-                        chiTiet.Chisocu = hoaDonNuocThangTruoc.ChiSoMoiThangTruoc;
-                        db.Chitiethoadonnuocs.Add(chiTiet);
-                        db.SaveChanges();                        
+                        foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
+                        {
+                            Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();
+                            hoaDonThangHienTai.ThangHoaDon = currentMonth;
+                            hoaDonThangHienTai.NamHoaDon = currentYear;
+                            hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayKetThucSuDung;
+                            hoaDonThangHienTai.KhachhangID = hoaDonNuocThangTruoc.KhachHangID;
+                            hoaDonThangHienTai.NhanvienID = nhanVienId;
+                            hoaDonThangHienTai.Trangthaixoa = false;
+                            hoaDonThangHienTai.Trangthaithu = false;
+                            hoaDonThangHienTai.Trangthaiin = false;
+                            hoaDonThangHienTai.Trangthaichot = false;
+                            db.Hoadonnuocs.Add(hoaDonThangHienTai);
+                            db.SaveChanges();
+                            //Thêm chi tiết hóa đơn nước tháng sau
+                            Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
+                            chiTiet.HoadonnuocID = hoaDonThangHienTai.HoadonnuocID;
+                            chiTiet.Chisocu = hoaDonNuocThangTruoc.ChiSoMoi;
+                            db.Chitiethoadonnuocs.Add(chiTiet);
+                            db.SaveChanges();
+                        }
                     }
+                    //else
+                    //{
+                    //    int[] hoaDonsIDHienTaiToArray = hoaDonNuocsHienTai.Select(p => p.HoaDonNuocID).ToArray();
+                    //    var hoaDons = (from i in db.Hoadonnuocs
+                    //                   join r in db.Chitiethoadonnuocs on i.HoadonnuocID equals r.HoadonnuocID
+                    //                   where hoaDonsIDHienTaiToArray.Contains(i.HoadonnuocID)
+                    //                   select new
+                    //                   {
+                    //                       HoaDon = i,
+                    //                       ChiSoThang = r,
+                    //                       TongSoTieuThu = i.Tongsotieuthu,
+                    //                   }).ToList();
+                    //    foreach (var hoaDon in hoaDons)
+                    //    {
+                    //        foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
+                    //        {
+                    //            if (hoaDon.HoaDon.KhachhangID == hoaDonNuocThangTruoc.KhachHangID && hoaDon.TongSoTieuThu == 0)
+                    //            {
+                    //                hoaDon.HoaDon.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayKetThucSuDung;
+                    //                hoaDon.ChiSoThang.Chisocu = hoaDonNuocThangTruoc.ChiSoMoi;
+                    //                db.Entry(hoaDon.HoaDon).State = System.Data.Entity.EntityState.Modified;
+                    //                db.SaveChanges();
+                    //                db.Entry(hoaDon.ChiSoThang).State = System.Data.Entity.EntityState.Modified;
+                    //                db.SaveChanges();
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
             }
         }
 
-        public IQueryable<dynamic> getHoaDonThang(int month, int year, int tuyenKHID)
+        public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getHoaDonThang(int month, int year, int tuyenKHID)
         {
             HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
-            var hoaDonNuocsThangTruoc = (from i in _db.Hoadonnuocs
+            var hoaDonNuocs = (from i in _db.Hoadonnuocs
                                          join kH in _db.Khachhangs on i.KhachhangID equals kH.KhachhangID
                                          join cT in _db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
                                          where i.ThangHoaDon == month && i.NamHoaDon == year && kH.TuyenKHID == tuyenKHID
-                                         select new
+                                         select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                          {
-                                             Ngayketthucsudung = i.Ngayketthucsudung,
-                                             KhachhangID = i.KhachhangID,
-                                             ChiSoMoiThangTruoc = cT.Chisomoi,
-                                             HoaDonNuocID = i.HoadonnuocID
+                                             NgayKetThucSuDung = i.Ngayketthucsudung,
+                                             KhachHangID = i.KhachhangID.Value,
+                                             ChiSoMoi = cT.Chisomoi,
+                                             HoaDonNuocID = i.HoadonnuocID,
+                                             SanLuong = i.Tongsotieuthu
                                          });
-            return hoaDonNuocsThangTruoc;
+            return hoaDonNuocs.ToList();
+        }
+
+        public DateTime getThangNamGanNhatThuocHoaDon(int tuyenKHID, int currentMonth, int currentYear)
+        {
+            DateTime ngayThangHoaDon = new DateTime(1, 1, 1);
+            DateTime currentTime = new DateTime(currentYear, currentMonth, 1);
+            DateTime maxDateTime = new DateTime(1, 1, 1);
+            var hoaDonThangGanNhat = (from i in db.Hoadonnuocs
+                                      join kH in db.Khachhangs on i.KhachhangID equals kH.KhachhangID
+                                      join cT in db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
+                                      where kH.TuyenKHID == tuyenKHID && i.Tongsotieuthu > 0
+                                      select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
+                                      {
+                                          Thang = i.ThangHoaDon.Value,
+                                          Nam = i.NamHoaDon.Value,
+                                          HoaDonNuocID = i.HoadonnuocID
+                                      }
+                                   ).Distinct().ToList();
+            if (hoaDonThangGanNhat.Count > 0)
+            {
+                HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc obj = hoaDonThangGanNhat.First();
+                maxDateTime = new DateTime(obj.Nam, obj.Thang, 1);
+                foreach (var item in hoaDonThangGanNhat)
+                {
+                    ngayThangHoaDon = new DateTime(item.Nam, item.Thang, 1);
+                   
+                    if (DateTime.Compare(ngayThangHoaDon,maxDateTime) > 0 && DateTime.Compare(ngayThangHoaDon, currentTime) < 0)
+                    {
+                        maxDateTime = ngayThangHoaDon;
+                    }
+                }
+
+                return new DateTime(maxDateTime.Year, maxDateTime.Month, 1);
+            }
+            return ngayThangHoaDon;
+        }
+
+        public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> loadDanhSachSanLuongBatThuong(int previousMonth, int previousYear, int month, int year, int tuyenID)
+        {
+            var danhSachHoaDonBatThuong = new List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
+            ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> cB = new ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> ();
+            var danhSachHoaDon = cB.Query("DanhSachKhachHangCoSanLuongBatThuong",
+                new SqlParameter("@prevMonth", previousMonth),
+                new SqlParameter("@prevYear", previousYear),
+                new SqlParameter("@currMonth", month),
+                new SqlParameter("@currYear", year),
+                new SqlParameter("@tuyen", tuyenID)).ToList();
+            //load danh sách khách hàng có áp giá đặc biệt
+            foreach (var item in danhSachHoaDon)
+            {
+                int sanLuongThangTruocCuaKhachHang = item.SanLuongThangTruoc;
+                if (item.ChiSoMoi != 0)
+                {
+                    if (item.SanLuong <= 1 || this.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()))
+                    {
+                        danhSachHoaDonBatThuong.Add(item);
+                    }
+                    if (sanLuongThangTruocCuaKhachHang != -1 && (item.SanLuong >= sanLuongThangTruocCuaKhachHang * 2 || item.SanLuong <= sanLuongThangTruocCuaKhachHang * 2))
+                    {
+                        danhSachHoaDonBatThuong.Add(item);
+                    }
+                }
+            }
+
+            return danhSachHoaDonBatThuong;
         }
     }
 }

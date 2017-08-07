@@ -1,4 +1,5 @@
 ﻿using HoaDonNuocHaDong.Base;
+using HoaDonNuocHaDong.Models.KhachHang;
 using HoaDonNuocHaDong.Repositories;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,10 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 backupRepository.applyBackupProcess(LoggedInUser.NguoidungID);
             }
+            //kiểm tra ngày tháng hiện tại, nếu ngày tháng hiện tại mà lớn hơn ngày hết áp định thì cho số hộ(số định mức) = 1
+            var currentDate = DateTime.Now;
+            ModelKhachHang modelKH = new ModelKhachHang();
+            modelKH.updateKHHetHanApGia(currentDate);
             title = "Công ty TNHH một thành viên nước sạch Hà Đông";            
             return View();
         }

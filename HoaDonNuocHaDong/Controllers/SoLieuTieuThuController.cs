@@ -79,6 +79,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyen);
                 Nhanvien nhanVienObj = db.Nhanviens.Find(nhanvien);
                 ViewData["nhanVienObj"] = nhanVienObj;
+                ViewBag.tongSoHoaDon = chiSoTieuThu.Count;
             }
 
             #region ViewBag
@@ -109,7 +110,7 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Index(FormCollection form)
         {
-            
+
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
             //generate chi tiet hóa đơn nước tháng sau
@@ -121,10 +122,10 @@ namespace HoaDonNuocHaDong.Controllers
             String year = form["nam"];
             //nếu năm tháng rỗng thì lấy năm và tháng hiện tại, nếu tuyến được chọn rỗng thì lấy là 0
             int _month = String.IsNullOrEmpty(month) ? DateTime.Now.Month : Convert.ToInt16(month);
-            int _year = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt16(year);                 
+            int _year = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt16(year);
             String selectedNhanVien = form["nhanvien"];
             String selectedTuyen = form["tuyen"];
-            cS.generateChiSoFromPreviousMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
+            cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
             //lấy danh sách tổ, phòng ban thuộc tổ quận huyện đó
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
@@ -191,6 +192,7 @@ namespace HoaDonNuocHaDong.Controllers
                         ViewBag.selectedNhanvien = Session["solieuTieuThuNhanvien"];
                         ViewBag.selectedTuyen = tuyenInt;
                         ViewBag.selectedTo = toForm;
+                        ViewBag.tongSoHoaDon = chiSoTieuThu.Count;
                     }
                 }
             }
@@ -240,7 +242,7 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        
+
 
         /// <summary>
         /// Hàm để lưu dữ liệu thông số chỉ số vào hệ thống
@@ -1278,14 +1280,14 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 int[] khachHangIdsArray = dsKhachHangKoSanLuong.Select(p => p.KhachHangID).ToArray();
                 var dsHoaDonThangSauCuaKhachHangCoSanLuong = (from i in db.Hoadonnuocs
-                                                      join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                                                      where i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear && r.TuyenKHID == tuyenID &&
-                                                      khachHangIdsArray.Contains(i.KhachhangID.Value) == true
-                                                      select new DanhSachHoaDonKhongSanLuong
-                                                      {
-                                                          NgayBatDauSuDung = i.Ngaybatdausudung,
-                                                          KhachHangID = i.KhachhangID.Value
-                                                      }).ToList();
+                                                              join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
+                                                              where i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear && r.TuyenKHID == tuyenID &&
+                                                              khachHangIdsArray.Contains(i.KhachhangID.Value) == true
+                                                              select new DanhSachHoaDonKhongSanLuong
+                                                              {
+                                                                  NgayBatDauSuDung = i.Ngaybatdausudung,
+                                                                  KhachHangID = i.KhachhangID.Value
+                                                              }).ToList();
                 List<DanhSachHoaDonKhongSanLuong> dsHoaDonsThangSau = dsKhachHangKoSanLuong.Except(dsHoaDonThangSauCuaKhachHangCoSanLuong).ToList();
 
                 foreach (var dsHoaDonThangSau in dsHoaDonsThangSau)
@@ -1310,7 +1312,7 @@ namespace HoaDonNuocHaDong.Controllers
                     db.SaveChanges();
                 }
             }
-           
+
             conn.Close();
         }
         /// <summary>
@@ -1323,11 +1325,11 @@ namespace HoaDonNuocHaDong.Controllers
         {
             ViewBag.year = year;
             ViewBag.month = month;
+            DateTime thangNamGanNhat = cS.getThangNamGanNhatThuocHoaDon(tuyenID, month, year);
+            int previousMonth = thangNamGanNhat.Month;
+            int previousYear = thangNamGanNhat.Year;
 
-            int previousMonth = getPreviousMonthYear(month, year, true);
-            int previousYear = getPreviousMonthYear(month, year, false);
-
-            ViewBag.khachHang = loadDanhSachSanLuongBatThuong(previousMonth, previousYear, month, year, tuyenID).Distinct().ToList();
+            ViewBag.khachHangBatThuong = cS.loadDanhSachSanLuongBatThuong(previousMonth, previousYear, month, year, tuyenID).Distinct().ToList();
             ViewBag.currentDate = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month);
             ViewBag.nextMonth = String.Concat(DateTime.Now.Day, '/', DateTime.Now.Month + 1 > 12 ? 1 : DateTime.Now.Month + 1);
             ViewData["nhanVienObj"] = db.Nhanviens.Find(nhanvienInt);
@@ -1335,32 +1337,6 @@ namespace HoaDonNuocHaDong.Controllers
             return View();
         }
 
-        public List<Models.SoLieuTieuThu.HoaDonNuoc> loadDanhSachSanLuongBatThuong(int previousMonth, int previousYear, int month, int year, int tuyenID)
-        {
-            var danhSachHoaDonBatThuong = new List<Models.SoLieuTieuThu.HoaDonNuoc>();
-            ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> cB = new ControllerBase<DanhSachKhachHangCoSanLuongBatThuong>();
-            var danhSachHoaDon = cB.Query("DanhSachKhachHangCoSanLuongBatThuong", 
-                new SqlParameter("@prevMonth", previousMonth),
-                new SqlParameter("@prevYear", previousYear),
-                new SqlParameter("@currMonth", month),
-                new SqlParameter("@currYear", year),
-                new SqlParameter("@tuyen", tuyenID)).ToList();
-            //load danh sách khách hàng có áp giá đặc biệt
-            foreach (var item in danhSachHoaDon)
-            {
-                int sanLuongThangTruocCuaKhachHang = item.SanLuongThangTruoc;
-                if (item.SanLuong <= 1 || cS.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()))
-                {
-                    danhSachHoaDonBatThuong.Add(item);
-                }
-                if (sanLuongThangTruocCuaKhachHang != -1 && (item.SanLuong >= sanLuongThangTruocCuaKhachHang * 2 || item.SanLuong <= sanLuongThangTruocCuaKhachHang * 2))
-                {
-                    danhSachHoaDonBatThuong.Add(item);
-                }
-            }
-
-            return danhSachHoaDonBatThuong;
-        }
 
         public int getPreviousMonthYear(int month, int year, bool getMonth)
         {
@@ -1372,7 +1348,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         private int getSanLuongThangTruocCuaKhachHang(int month, int year, int khachhangId)
         {
-            var sanLuongThangTruoc = (from i in db.Hoadonnuocs                                     
+            var sanLuongThangTruoc = (from i in db.Hoadonnuocs
                                       where i.ThangHoaDon == month && i.NamHoaDon == year && i.KhachhangID == khachhangId
                                       select new Models.SoLieuTieuThu.HoaDonNuoc
                                       {

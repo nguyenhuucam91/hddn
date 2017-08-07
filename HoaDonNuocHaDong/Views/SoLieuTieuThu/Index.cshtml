@@ -1,6 +1,6 @@
 ﻿@{
     HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-    ViewBag.Title = "Nhập số liệu tiêu thụ";
+    ViewBag.Title = "Nhập số liệu tiêu thụ ("+ ViewBag.tongSoHoaDon + " hóa đơn)";
     var chiSoTieuThus = ViewData["ChiSoTieuThu"] as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
     int year = ViewBag.year;
     int month = ViewBag.month;
@@ -30,6 +30,7 @@
     var isAdminVaTruongPhong = ViewBag.isAdminVaTruongPhong;
     HoaDonNuocHaDong.Helper.KiemDinh kiemDinh = new HoaDonNuocHaDong.Helper.KiemDinh();
 }
+
 <script src="~/Assets/js/jquery.dataTables.min.js"></script>
 <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
 <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />

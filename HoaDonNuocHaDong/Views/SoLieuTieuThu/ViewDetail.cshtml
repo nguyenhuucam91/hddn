@@ -248,7 +248,7 @@
     </div> <!-- /container -->
 
 </div> <!-- /main-inner -->
-</div> <!-- /main -->
+
 <!-- Script để đối màu dòng trong trường hợp áp giá tổng hợp và đặc biệt -->
 <script type="text/javascript">
     $(function () {
@@ -259,10 +259,10 @@
             int nhanVienQLy = Convert.ToInt32(Request.QueryString["nvquanly"]);
             bool hasSLKhongBT = false;
             HoaDonNuocHaDong.Controllers.SoLieuTieuThuController ctl = new HoaDonNuocHaDong.Controllers.SoLieuTieuThuController();
-            int previousMonth = ctl.getPreviousMonthYear(month, year, true);
-            int previousYear = ctl.getPreviousMonthYear(month, year, false);
+            int previousMonth = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Month;
+            int previousYear = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Year;
 
-            var dsSanLuongKhongBinhThuong = ctl.loadDanhSachSanLuongBatThuong(previousMonth, previousYear,month,year,selectedTuyen);
+            var dsSanLuongKhongBinhThuong = cS.loadDanhSachSanLuongBatThuong(previousMonth, previousYear,month,year,selectedTuyen);
             if (dsSanLuongKhongBinhThuong.Count > 0)
             {
                 hasSLKhongBT = true;
