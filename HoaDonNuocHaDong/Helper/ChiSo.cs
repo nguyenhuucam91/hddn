@@ -495,17 +495,17 @@ namespace HoaDonHaDong.Helper
         {
             HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             var hoaDonNuocs = (from i in _db.Hoadonnuocs
-                                         join kH in _db.Khachhangs on i.KhachhangID equals kH.KhachhangID
-                                         join cT in _db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
-                                         where i.ThangHoaDon == month && i.NamHoaDon == year && kH.TuyenKHID == tuyenKHID
-                                         select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
-                                         {
-                                             NgayKetThucSuDung = i.Ngayketthucsudung,
-                                             KhachHangID = i.KhachhangID.Value,
-                                             ChiSoMoi = cT.Chisomoi,
-                                             HoaDonNuocID = i.HoadonnuocID,
-                                             SanLuong = i.Tongsotieuthu
-                                         });
+                               join kH in _db.Khachhangs on i.KhachhangID equals kH.KhachhangID
+                               join cT in _db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
+                               where i.ThangHoaDon == month && i.NamHoaDon == year && kH.TuyenKHID == tuyenKHID 
+                               select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
+                               {
+                                   NgayKetThucSuDung = i.Ngayketthucsudung,
+                                   KhachHangID = i.KhachhangID.Value,
+                                   ChiSoMoi = cT.Chisomoi,
+                                   HoaDonNuocID = i.HoadonnuocID,
+                                   SanLuong = i.Tongsotieuthu
+                               });
             return hoaDonNuocs.ToList();
         }
 
@@ -532,8 +532,8 @@ namespace HoaDonHaDong.Helper
                 foreach (var item in hoaDonThangGanNhat)
                 {
                     ngayThangHoaDon = new DateTime(item.Nam, item.Thang, 1);
-                   
-                    if (DateTime.Compare(ngayThangHoaDon,maxDateTime) > 0 && DateTime.Compare(ngayThangHoaDon, currentTime) < 0)
+
+                    if (DateTime.Compare(ngayThangHoaDon, maxDateTime) > 0 && DateTime.Compare(ngayThangHoaDon, currentTime) < 0)
                     {
                         maxDateTime = ngayThangHoaDon;
                     }
@@ -547,7 +547,7 @@ namespace HoaDonHaDong.Helper
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> loadDanhSachSanLuongBatThuong(int previousMonth, int previousYear, int month, int year, int tuyenID)
         {
             var danhSachHoaDonBatThuong = new List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
-            ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> cB = new ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> ();
+            ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> cB = new ControllerBase<DanhSachKhachHangCoSanLuongBatThuong>();
             var danhSachHoaDon = cB.Query("DanhSachKhachHangCoSanLuongBatThuong",
                 new SqlParameter("@prevMonth", previousMonth),
                 new SqlParameter("@prevYear", previousYear),

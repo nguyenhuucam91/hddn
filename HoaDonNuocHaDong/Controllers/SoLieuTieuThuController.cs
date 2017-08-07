@@ -1276,7 +1276,7 @@ namespace HoaDonNuocHaDong.Controllers
             List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@thang", currentMonth),
                 new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID)).ToList();
 
-            if (dsKhachHangKoSanLuong.Count() > 0)
+            if (dsKhachHangKoSanLuong.Count(p=>p.SanLuong is null) > 0)
             {
                 int[] khachHangIdsArray = dsKhachHangKoSanLuong.Select(p => p.KhachHangID).ToArray();
                 var dsHoaDonThangSauCuaKhachHangCoSanLuong = (from i in db.Hoadonnuocs
