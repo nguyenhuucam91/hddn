@@ -209,6 +209,7 @@ namespace HoaDonNuocHaDong.Base
             var tuyens = (from i in db.Tuyentheonhanviens
                           join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
                           where i.NhanVienID == NhanVienID && r.IsDelete == false
+                          orderby r.Matuyen
                           select new ModelTuyen
                           {
                               TuyenID = r.TuyenKHID,

@@ -467,7 +467,7 @@ namespace HoaDonNuocHaDong.Controllers
                     }
                 }
             }
-            return Json(tuyens.Distinct(), JsonRequestBehavior.AllowGet);
+            return Json(tuyens.Distinct().OrderBy(p => p.Matuyen), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>

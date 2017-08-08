@@ -19,6 +19,7 @@ namespace HoaDonHaDong.Helper
     public class ChiSo
     {
         static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        TimeHelper time = new TimeHelper();
         /// <summary>
         /// Hàm để tính chỉ số
         /// </summary>
@@ -371,16 +372,23 @@ namespace HoaDonHaDong.Helper
 
         public void capNhatTrangThaiChotHoaDon(int tuyenID, int month, int year)
         {
+            DateTime startDate = getThangNamGanNhatThuocHoaDon(tuyenID, month, year);
+            DateTime endDate = new DateTime(year, month, 1);
+            DateTime[] monthYearsBetween = time.getMonthYearBetweenDates(startDate, endDate);
             string connectionString = ConfigurationManager.ConnectionStrings["ReportConString"].ConnectionString;
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand("", connection))
             {
                 connection.Open();
-                command.CommandText = "UPDATE A SET [Trangthaichot] = 1 FROM [dbo].[Hoadonnuoc] A JOIN [dbo].[Khachhang] B on A.KhachhangID = B.KhachhangID WHERE A.ThangHoaDon=@thang AND A.NamHoaDon =@nam AND B.TuyenKHID=@tuyen";
-                command.Parameters.AddWithValue("@thang", month);
-                command.Parameters.AddWithValue("@nam", year);
-                command.Parameters.AddWithValue("@tuyen", tuyenID);
-                command.ExecuteNonQuery();
+                foreach (var monthYearBetween in monthYearsBetween)
+                {                    
+                    command.CommandText = "UPDATE A SET [Trangthaichot] = 1 FROM [dbo].[Hoadonnuoc] A JOIN [dbo].[Khachhang] B on A.KhachhangID = B.KhachhangID WHERE A.ThangHoaDon=@thang AND A.NamHoaDon =@nam AND B.TuyenKHID=@tuyen";
+                    command.Parameters.AddWithValue("@thang", monthYearBetween.Month);
+                    command.Parameters.AddWithValue("@nam", monthYearBetween.Year);
+                    command.Parameters.AddWithValue("@tuyen", tuyenID);
+                    command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                }
                 connection.Close();
             }
         }
@@ -442,7 +450,15 @@ namespace HoaDonHaDong.Helper
                             Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();
                             hoaDonThangHienTai.ThangHoaDon = currentMonth;
                             hoaDonThangHienTai.NamHoaDon = currentYear;
-                            hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayKetThucSuDung;
+                            if(hoaDonNuocThangTruoc.NgayKetThucSuDung == null || hoaDonNuocThangTruoc.NgayKetThucSuDung == DateTime.MinValue)
+                            {
+                                hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayBatDauSuDung;
+                            }
+                            else
+                            {
+                                hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayKetThucSuDung;
+                            }
+                            
                             hoaDonThangHienTai.KhachhangID = hoaDonNuocThangTruoc.KhachHangID;
                             hoaDonThangHienTai.NhanvienID = nhanVienId;
                             hoaDonThangHienTai.Trangthaixoa = false;
@@ -458,35 +474,7 @@ namespace HoaDonHaDong.Helper
                             db.Chitiethoadonnuocs.Add(chiTiet);
                             db.SaveChanges();
                         }
-                    }
-                    //else
-                    //{
-                    //    int[] hoaDonsIDHienTaiToArray = hoaDonNuocsHienTai.Select(p => p.HoaDonNuocID).ToArray();
-                    //    var hoaDons = (from i in db.Hoadonnuocs
-                    //                   join r in db.Chitiethoadonnuocs on i.HoadonnuocID equals r.HoadonnuocID
-                    //                   where hoaDonsIDHienTaiToArray.Contains(i.HoadonnuocID)
-                    //                   select new
-                    //                   {
-                    //                       HoaDon = i,
-                    //                       ChiSoThang = r,
-                    //                       TongSoTieuThu = i.Tongsotieuthu,
-                    //                   }).ToList();
-                    //    foreach (var hoaDon in hoaDons)
-                    //    {
-                    //        foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
-                    //        {
-                    //            if (hoaDon.HoaDon.KhachhangID == hoaDonNuocThangTruoc.KhachHangID && hoaDon.TongSoTieuThu == 0)
-                    //            {
-                    //                hoaDon.HoaDon.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayKetThucSuDung;
-                    //                hoaDon.ChiSoThang.Chisocu = hoaDonNuocThangTruoc.ChiSoMoi;
-                    //                db.Entry(hoaDon.HoaDon).State = System.Data.Entity.EntityState.Modified;
-                    //                db.SaveChanges();
-                    //                db.Entry(hoaDon.ChiSoThang).State = System.Data.Entity.EntityState.Modified;
-                    //                db.SaveChanges();
-                    //            }
-                    //        }
-                    //    }
-                    //}
+                    }                    
                 }
             }
         }
@@ -504,7 +492,8 @@ namespace HoaDonHaDong.Helper
                                    KhachHangID = i.KhachhangID.Value,
                                    ChiSoMoi = cT.Chisomoi,
                                    HoaDonNuocID = i.HoadonnuocID,
-                                   SanLuong = i.Tongsotieuthu
+                                   SanLuong = i.Tongsotieuthu,
+                                   NgayBatDauSuDung = i.Ngaybatdausudung
                                });
             return hoaDonNuocs.ToList();
         }
@@ -573,5 +562,30 @@ namespace HoaDonHaDong.Helper
 
             return danhSachHoaDonBatThuong;
         }
+
+        public void capNhatTrangThaiChotTuyen(int tuyenKHID, int month, int year)
+        {
+            DateTime thangNamGanNhat = getThangNamGanNhatThuocHoaDon(tuyenKHID, month, year);
+            DateTime thangNamHienTai = new DateTime(year, month, 1);
+            DateTime[] monthsYears = time.getMonthYearBetweenDates(thangNamGanNhat, thangNamHienTai);
+            foreach(var monthYear in monthsYears)
+            {
+                var isChot = db.TuyenDuocChots.FirstOrDefault(p => p.TuyenKHID == tuyenKHID && p.Thang == monthYear.Month && p.Nam == monthYear.Year);
+                if (isChot == null)
+                {
+                    TuyenDuocChot tuyenChot = new TuyenDuocChot();
+                    tuyenChot.TuyenKHID = tuyenKHID;
+                    tuyenChot.Nam = year;
+                    tuyenChot.Thang = month;
+                    tuyenChot.TrangThaiChot = true;
+                    tuyenChot.TrangThaiTinhTien = false;
+                    tuyenChot.NgayChot = DateTime.Now;
+                    db.TuyenDuocChots.Add(tuyenChot);
+                    db.SaveChanges();
+                }
+            }
+        }
+
+
     }
 }

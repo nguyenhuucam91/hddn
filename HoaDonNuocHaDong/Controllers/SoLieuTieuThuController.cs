@@ -69,6 +69,7 @@ namespace HoaDonNuocHaDong.Controllers
                                          join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
                                          join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
                                          where i.NhanVienID == nhanvien
+                                         orderby r.Matuyen
                                          select r).ToList();
                 tuyensLs.AddRange(tuyenTheoNhanVien);
                 ViewBag.tuyen = tuyensLs;
@@ -110,7 +111,8 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Index(FormCollection form)
         {
-
+            //khởi tạo danh sách lỗi
+            List<String> errorList = new List<String>();
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int quanHuyenID = selectedQuanHuyenID;
             //generate chi tiet hóa đơn nước tháng sau
@@ -125,14 +127,19 @@ namespace HoaDonNuocHaDong.Controllers
             int _year = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt16(year);
             String selectedNhanVien = form["nhanvien"];
             String selectedTuyen = form["tuyen"];
-            cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
+            if(new DateTime(_year, _month, 1) > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1))
+            {
+                errorList.Add("Ngày tháng được chọn không được quá ngày tháng hiện tại");
+            }
+            else
+            {
+                cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
+            }          
             //lấy danh sách tổ, phòng ban thuộc tổ quận huyện đó
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
-
-            //khởi tạo danh sách lỗi
-            List<String> errorList = new List<String>();
+            
             ViewBag.to = new List<ToQuanHuyen>();
             ViewBag.nhanVien = new List<Nhanvien>();
             ViewBag.tuyen = new List<Tuyenkhachhang>();
@@ -1238,22 +1245,8 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult chotSoLieu(int tuyenID, int month, int year)
         {
-            var isChot = db.TuyenDuocChots.FirstOrDefault(p => p.TuyenKHID == tuyenID && p.Thang == month && p.Nam == year);
-            if (isChot == null)
-            {
-                TuyenDuocChot tuyenChot = new TuyenDuocChot();
-                tuyenChot.TuyenKHID = tuyenID;
-                tuyenChot.Nam = year;
-                tuyenChot.Thang = month;
-                tuyenChot.TrangThaiChot = true;
-                tuyenChot.TrangThaiTinhTien = false;
-                tuyenChot.NgayChot = DateTime.Now;
-                db.TuyenDuocChots.Add(tuyenChot);
-                db.SaveChanges();
-            }
-            //cap nhat tinh trang ds hóa đơn bị hủy
+            cS.capNhatTrangThaiChotTuyen(tuyenID, month, year);
             cS.capnhatTrangThaiDanhSachHoaDonBiHuyThuocTuyen(tuyenID, month, year);
-            //cập nhật trạng thái chốt cho tất cả hóa đơn của khách hàng thuộc tuyến đó               
             cS.capNhatTrangThaiChotHoaDon(tuyenID, month, year);
             saochepDanhsachKhachHangKhongSanLuong(tuyenID, month, year);
             return RedirectToAction("Index");
@@ -1277,19 +1270,7 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID)).ToList();
 
             if (dsKhachHangKoSanLuong.Count > 0)
-            {
-                //int[] khachHangIdsArray = dsKhachHangKoSanLuong.Select(p => p.KhachHangID).ToArray();
-                //var dsHoaDonThangSauCuaKhachHangCoSanLuong = (from i in db.Hoadonnuocs
-                //                                              join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                //                                              where i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear && r.TuyenKHID == tuyenID &&
-                //                                              khachHangIdsArray.Contains(i.KhachhangID.Value) == true
-                //                                              select new DanhSachHoaDonKhongSanLuong
-                //                                              {
-                //                                                  NgayBatDauSuDung = i.Ngaybatdausudung,
-                //                                                  KhachHangID = i.KhachhangID.Value
-                //                                              }).ToList();
-                //List<DanhSachHoaDonKhongSanLuong> dsHoaDonsThangSau = dsKhachHangKoSanLuong.Except(dsHoaDonThangSauCuaKhachHangCoSanLuong).ToList();
-
+            {              
                 foreach (var dsHoaDonThangSau in dsKhachHangKoSanLuong)
                 {
                     Hoadonnuoc khongSanLuong = new Hoadonnuoc();

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 class TimeHelper
 {
     public static String getThangTrongQuy(int quy)
@@ -42,5 +44,18 @@ class TimeHelper
                 return 4;
         }
         return 0;
+    }
+
+    public DateTime[] getMonthYearBetweenDates(DateTime startDate, DateTime endDate)
+    {
+        List<DateTime> allDates = new List<DateTime>();
+        for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+        {
+            if (date.Day == 1)
+            {
+                allDates.Add(date);
+            }
+        }
+        return allDates.ToArray();
     }
 }
