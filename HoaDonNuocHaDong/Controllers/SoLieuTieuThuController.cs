@@ -1276,21 +1276,21 @@ namespace HoaDonNuocHaDong.Controllers
             List<DanhSachHoaDonKhongSanLuong> dsKhachHangKoSanLuong = cB.Query("DanhSachHoaDonKhongSanLuong", new SqlParameter("@thang", currentMonth),
                 new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID)).ToList();
 
-            if (dsKhachHangKoSanLuong.Count(p=>p.SanLuong is null) > 0)
+            if (dsKhachHangKoSanLuong.Count > 0)
             {
-                int[] khachHangIdsArray = dsKhachHangKoSanLuong.Select(p => p.KhachHangID).ToArray();
-                var dsHoaDonThangSauCuaKhachHangCoSanLuong = (from i in db.Hoadonnuocs
-                                                              join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
-                                                              where i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear && r.TuyenKHID == tuyenID &&
-                                                              khachHangIdsArray.Contains(i.KhachhangID.Value) == true
-                                                              select new DanhSachHoaDonKhongSanLuong
-                                                              {
-                                                                  NgayBatDauSuDung = i.Ngaybatdausudung,
-                                                                  KhachHangID = i.KhachhangID.Value
-                                                              }).ToList();
-                List<DanhSachHoaDonKhongSanLuong> dsHoaDonsThangSau = dsKhachHangKoSanLuong.Except(dsHoaDonThangSauCuaKhachHangCoSanLuong).ToList();
+                //int[] khachHangIdsArray = dsKhachHangKoSanLuong.Select(p => p.KhachHangID).ToArray();
+                //var dsHoaDonThangSauCuaKhachHangCoSanLuong = (from i in db.Hoadonnuocs
+                //                                              join r in db.Khachhangs on i.KhachhangID equals r.KhachhangID
+                //                                              where i.ThangHoaDon == nextMonth && i.NamHoaDon == nextYear && r.TuyenKHID == tuyenID &&
+                //                                              khachHangIdsArray.Contains(i.KhachhangID.Value) == true
+                //                                              select new DanhSachHoaDonKhongSanLuong
+                //                                              {
+                //                                                  NgayBatDauSuDung = i.Ngaybatdausudung,
+                //                                                  KhachHangID = i.KhachhangID.Value
+                //                                              }).ToList();
+                //List<DanhSachHoaDonKhongSanLuong> dsHoaDonsThangSau = dsKhachHangKoSanLuong.Except(dsHoaDonThangSauCuaKhachHangCoSanLuong).ToList();
 
-                foreach (var dsHoaDonThangSau in dsHoaDonsThangSau)
+                foreach (var dsHoaDonThangSau in dsKhachHangKoSanLuong)
                 {
                     Hoadonnuoc khongSanLuong = new Hoadonnuoc();
                     khongSanLuong.ThangHoaDon = nextMonth;
