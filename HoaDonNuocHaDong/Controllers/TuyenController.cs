@@ -35,7 +35,7 @@ namespace HoaDonNuocHaDong.Controllers
                 nhanViens = (from i in db.Nhanviens
                              join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
                              join t in db.Quanhuyens on r.QuanHuyenID equals quanHuyenId
-                             where i.PhongbanID == phongBanId && i.ChucvuID == (int)EChucVu.NHAN_VIEN && t.QuanhuyenID == quanHuyenId
+                             where i.PhongbanID == phongBanId && i.ChucvuID == (int)EChucVu.NHAN_VIEN && t.QuanhuyenID == quanHuyenId && i.IsDelete == false
                              select new
                              {
                                  nhanvien = i
@@ -43,7 +43,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                nhanViens = db.Nhanviens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList();
+                nhanViens = db.Nhanviens.Where(p => p.IsDelete == false).ToList();
             }
 
             int pageSize = (int)EPaginator.PAGESIZE;
