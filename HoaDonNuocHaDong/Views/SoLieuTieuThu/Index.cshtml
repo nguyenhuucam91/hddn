@@ -266,11 +266,11 @@
                                                                             }
 
 
-                                                                            <td>
+                                                                            <td class="chiSoTieuThu">
                                                                                 <input type="text" style="width:55px" name="sanLuong" disabled value="@item.SanLuong" />
                                                                             </td>
 
-                                                                            <td>
+                                                                            <td class="chiSoKhoan">
                                                                                 @{ String soKhoanAsTxt = item.SoKhoan != 0 ? item.SoKhoan.ToString() : "" ; }
                                                                                 @if (isChot == null || isChot == false)
                                                                                 {                                                                                   
@@ -314,16 +314,15 @@
                                                                                     if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
                                                                                     {
                                                                                         <td style="background-color:#ffcc00">
-                                                                                            <a target="_blank"
-                                                                                               href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year,to=toID,nhanvien=nhanVienID,tuyen=tuyenID, sohoadon = @i})"
-                                                                                               style="color:red">Áp</a>
+                                                                                            <a style="color:red" class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month" 
+                                                                                               data-year="@year" data-nhanvienid="@nhanVienID" data-tuyen="@tuyenID" data-sohoadon="@i.ToString()">Áp</a>
                                                                                         </td>
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         <td>
-                                                                                            <a target="_blank"
-                                                                                               href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID, nhanvien = nhanVienID, tuyen = tuyenID, sohoadon = @i })">
+                                                                                            <a class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month" 
+                                                                                               data-year="@year" data-nhanvienid="@nhanVienID" data-tuyen="@tuyenID" data-sohoadon="@i.ToString()">
                                                                                                 Áp
                                                                                             </a>
                                                                                         </td>
@@ -396,13 +395,28 @@
             if (event.ctrlKey && (event.which === 88)) {
                 //xem chỉ số chi tiết
                 window.location.href = "/Solieutieuthu/ViewDetail?toID =@toID &tuyenID=@selectedTuyen&month=@month&year=@year&nvquanly=@selectedNhanvien";
-            }
+            }           
         });
 
         var endDateInputField = $("td.endDate input").val();
         if (endDateInputField == '01/01/0001') {
             $("td.endDate input").val("");
         }
-
+        
+        $(".apgiadacbiet").click(function () {
+            var hoadonId = $(this).data('hoadonid');
+            var toId = $(this).data('to'); var patternToId = "?toID=" + toId;
+            var tuyenId = $(this).data('tuyen'); var patternTuyenId = "&tuyen=" + tuyenId;
+            var month = $(this).data('month'); var patternMonth = "&month=" + month;
+            var year = $(this).data('year'); var patternYear = "&year=" + year;
+            var nhanVienId = $(this).data('nhanvienid'); var patternNhanVienId = "&nhanvien=" + nhanVienId;
+            var soHoaDon = $(this).data('sohoadon'); var patternSoHoaDon = "&sohoadon=" + soHoaDon;
+            var chiSoTieuThu = $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val();
+            var chiSoKhoan = $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val();
+            var tongSoTieuThu = parseInt(chiSoTieuThu) + parseInt(chiSoKhoan);
+            var patternChiSoTieuThu = "&chisotieuthu=" + tongSoTieuThu;
+            window.location.href = "/solieutieuthu/apgiadacbiet/" + hoadonId + patternToId + patternTuyenId + patternMonth + patternYear + patternNhanVienId
+                + patternSoHoaDon + patternChiSoTieuThu;
+        });
     });
 </script>

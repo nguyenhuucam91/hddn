@@ -683,7 +683,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.maSoThue = hoaDonNuoc.KhachHang.Masothue;
                 ViewBag.month = month;
                 ViewBag.year = year;
-                ViewBag.sanLuong = hoaDonNuoc.HoaDonNuoc.Tongsotieuthu;
+                ViewBag.sanLuong = Convert.ToInt32(Request.QueryString["chisotieuthu"]);
                 ViewBag.sohoadon = sohoadon;
                 //load áp giá       
                 ApGiaDacBiet giaDacBiet = db.ApGiaDacBiets.FirstOrDefault(p => p.HoaDonNuocID == id);
