@@ -136,14 +136,8 @@
                                         var tuyenHasNhanVienThuocPhongBanQuanLy = tuyenHelper.tuyenHasNhanVienThuocPhongBanQuanLy(item.TuyenKHID, phongBanId);
                                         <tr>
                                             @if (isOnlyTruongPhong )
-                                            {
-                                                if(!tuyenHasNhanVienThuocPhongBanQuanLy){
-                                                <td><input type="checkbox" name="check" data-page="1" value="@item.TuyenKHID" /></td>
-                                                }
-                                                else
-                                                {
-                                                     <td></td>
-                                                }
+                                            {                                              
+                                                <td><input type="checkbox" name="check" data-page="1" value="@item.TuyenKHID" /></td>                                                
                                             }                                            
                                             <td>@((currentPage - 1) * pageSize + i)</td>
                                             <td>@Html.DisplayFor(modelItem => item.Matuyen)</td>
