@@ -1298,6 +1298,43 @@ namespace HoaDonNuocHaDong.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult DeleteSelected(FormCollection form, String tinhtrang = null)
+        {
+            String khachHangs = form["xoakhachhang"];
+            String toId = form["toId"];
+            String nhanvienId = form["nhanvienId"];
+            String tuyenId = form["tuyenId"];
+            String[] khachHangsToArray = khachHangs.Split(',');            
+
+            List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => khachHangsToArray.Contains(p.KhachhangID.ToString()) && p.ThangHoaDon == DateTime.Now.Month
+               && p.NamHoaDon == DateTime.Now.Year).ToList();
+            foreach (var item in hoadons)
+            {
+                item.Trangthaixoa = true;
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            List<Khachhang> khachHangAsList = db.Khachhangs.Where(p => khachHangsToArray.Contains(p.KhachhangID.ToString())).ToList();
+            foreach(var item in khachHangAsList)
+            {
+                item.IsDelete = true;
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            TempData["to"] = toId;
+            TempData["nhanvien"] = nhanvienId;
+            TempData["tuyen"] = tuyenId;            
+
+            if (!String.IsNullOrEmpty(tinhtrang))
+            {
+                return RedirectToAction("Index", new { TinhTrang = tinhtrang });
+            }
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Active(int id)
         {
             Khachhang khachhang = db.Khachhangs.Find(id);

@@ -38,49 +38,24 @@
                                             <p style="float:left;margin-right:5%">
 
                                                 <a class="btn btn-primary" href="@Url.Action("Create", "Khachhang")" role="button">Thêm mới khách hàng</a>
-
-                                                <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#myModal">Thanh lí hợp đồng</button>
-                                                <!-- Modal content để thanh lí hợp đồng-->
-                                                <div id="myModal" class="modal fade" role="dialog">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                <h4 class="modal-title">Thanh lí hợp đồng</h4>
-                                                            </div>
-                                                            @using (Html.BeginForm("Inactive", "Khachhang"))
-                                                            {
-                                                                <input type="hidden" name="thanhLy" class="khachHangSelectedHidden" />
-                                                                <div class="modal-body">
-                                                                    <input type="text" class="datepicker" name="ngayThanhLy" placeholder="Ngày thanh lý" />
-                                                                    <textarea name="Lydothanhly" style="min-width:519px;min-height:89px" placeholder="Lí do thanh lý hợp đồng"></textarea>
-                                                                    <!-- -->
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-default">Lưu</button>
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <!--  cắt nước-->
-                                                @if (String.IsNullOrEmpty(Request.QueryString["catnuoc"]) || Request.QueryString["catnuoc"] == "0")
+                                                @if (Request.QueryString["TinhTrang"] == "0")
                                                 {
-                                                    <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#catNuocModal">Cắt nước</button>
-                                            <!-- Modal để cắt nước -->
-                                                    <div id="catNuocModal" class="modal fade" role="dialog">
+                                                    <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#myModal">Thanh lí hợp đồng</button>
+                                                <!-- Modal content để thanh lí hợp đồng-->
+                                                    <div id="myModal" class="modal fade" role="dialog">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                    <h4 class="modal-title">Cắt nước</h4>
+                                                                    <h4 class="modal-title">Thanh lí hợp đồng</h4>
                                                                 </div>
-                                                                @using (Html.BeginForm("CatNuoc", "Khachhang"))
+                                                                @using (Html.BeginForm("Inactive", "Khachhang"))
                                                                 {
-                                                                    <input type="hidden" name="ngungcapnuoc" class="khachHangSelectedHidden" />
+                                                                    <input type="hidden" name="thanhLy" class="khachHangSelectedHidden" />
                                                                     <div class="modal-body">
-                                                                        <input type="text" class="datepicker" name="Ngayngungcapnuoc" placeholder="Ngày cắt nước" />
-                                                                        <textarea name="Lydongungcapnuoc" style="min-width:519px;min-height:89px" placeholder="Lí do cắt nước"></textarea>
+                                                                        <input type="text" class="datepicker" name="ngayThanhLy" placeholder="Ngày thanh lý" />
+                                                                        <textarea name="Lydothanhly" style="min-width:519px;min-height:89px" placeholder="Lí do thanh lý hợp đồng"></textarea>
                                                                         <!-- -->
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -90,35 +65,93 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    if (String.IsNullOrEmpty(Request.QueryString["catnuoc"]) || Request.QueryString["catnuoc"] == "0")
+                                                    {
+                                                        <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#catNuocModal">Cắt nước</button>
+                                            <!-- Modal để cắt nước -->
+                                                        <div id="catNuocModal" class="modal fade" role="dialog">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                        <h4 class="modal-title">Cắt nước</h4>
+                                                                    </div>
+                                                                    @using (Html.BeginForm("CatNuoc", "Khachhang"))
+                                                                    {
+                                                                        <input type="hidden" name="ngungcapnuoc" class="khachHangSelectedHidden" />
+                                                                        <div class="modal-body">
+                                                                            <input type="text" class="datepicker" name="Ngayngungcapnuoc" placeholder="Ngày cắt nước" />
+                                                                            <textarea name="Lydongungcapnuoc" style="min-width:519px;min-height:89px" placeholder="Lí do cắt nước"></textarea>
+                                                                            <!-- -->
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit" class="btn btn-default">Lưu</button>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#capLaiNuocModal">Cấp nước trở lại</button>
+                                            <!-- Modal để cắt nước -->
+                                                        <div id="capLaiNuocModal" class="modal fade" role="dialog">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                        <h4 class="modal-title">Câp nước trở lại</h4>
+                                                                    </div>
+                                                                    @using (Html.BeginForm("Caplainuoc", "Khachhang"))
+                                                                    {
+                                                                        <input type="hidden" name="capnuoclai" class="khachHangSelectedHidden" />
+                                                                        <div class="modal-body">
+                                                                            <input type="text" class="datepicker" name="Ngaycapnuoclai" placeholder="Ngày câp nước lại" />
+                                                                            <textarea name="Lydocapnuoclai" style="min-width:519px;min-height:89px" placeholder="Lí do cấp nước lại"></textarea>
+                                                                            <!-- -->
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit" class="btn btn-default">Lưu</button>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#capLaiNuocModal">Cấp nước trở lại</button>
-                                            <!-- Modal để cắt nước -->
-                                                    <div id="capLaiNuocModal" class="modal fade" role="dialog">
+                                                    <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#xoaKhachHangModal">Xóa</button>
+                                                    <div id="xoaKhachHangModal" class="modal fade" role="dialog">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                    <h4 class="modal-title">Câp nước trở lại</h4>
+                                                                    <h4 class="modal-title">Xóa khách hàng</h4>
                                                                 </div>
-                                                                @using (Html.BeginForm("Caplainuoc", "Khachhang"))
-                                                                {
-                                                                    <input type="hidden" name="capnuoclai" class="khachHangSelectedHidden" />
+
+                                                                <form action="/khachhang/deleteselected?tinhtrang=1" method="post">
+                                                                    <input type="hidden" name="xoakhachhang" class="khachHangSelectedHidden" />
+                                                                    <input type="hidden" name="toId" value="@selectedTo" />
+                                                                    <input type="hidden" name="nhanvienId" value="@selectedNhanVien" />
+                                                                    <input type="hidden" name="tuyenId" value="@selectedTuyen" />
                                                                     <div class="modal-body">
-                                                                        <input type="text" class="datepicker" name="Ngaycapnuoclai" placeholder="Ngày câp nước lại" />
-                                                                        <textarea name="Lydocapnuoclai" style="min-width:519px;min-height:89px" placeholder="Lí do cấp nước lại"></textarea>
+                                                                        <label>Bạn chắc chứ</label>
                                                                         <!-- -->
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="submit" class="btn btn-default">Lưu</button>
+                                                                        <button type="submit" class="btn btn-primary">Xóa khách hàng</button>
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
                                                                     </div>
-                                                                }
+
+                                                                </form>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 }
-                                                <!-- Tái sử dụng nước-->
+
                                             </p>
 
                                             <!-- Modal để tái sử dụng nước-->
@@ -237,11 +270,11 @@
 
                                                             </td>
                                                         </tr>
-                                                                i++;
+                                                        i++;
                                                     }
                                                 </tbody>
                                             </table>
-                                        }
+                                                        }
                                     </div>
                                 </div>
                             </div>
