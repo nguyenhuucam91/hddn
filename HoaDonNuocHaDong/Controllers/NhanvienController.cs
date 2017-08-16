@@ -18,6 +18,7 @@ namespace HoaDonNuocHaDong.Controllers
     {
         NhanVienHelper nhanVienHelper = new NhanVienHelper();
         NguoidungHelper ngDungHelper = new NguoidungHelper();
+        Tuyen tuyen = new Tuyen();
         // GET: /Nhanvien/
         public ActionResult Index()
         {
@@ -495,6 +496,8 @@ namespace HoaDonNuocHaDong.Controllers
         // GET: /Nhanvien/Delete/5
         public ActionResult Delete(int? id)
         {
+            List<Tuyentheonhanvien> tuyenTheoNhanVien = db.Tuyentheonhanviens.Where(p => p.NhanVienID == id).ToList();
+            db.Tuyentheonhanviens.RemoveRange(tuyenTheoNhanVien);
             Nhanvien nhanvien = db.Nhanviens.Find(id);
             nhanvien.IsDelete = true;
             db.SaveChanges();
