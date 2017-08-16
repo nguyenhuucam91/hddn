@@ -39,7 +39,7 @@
 
                                                 <a class="btn btn-primary" href="@Url.Action("Create", "Khachhang")" role="button">Thêm mới khách hàng</a>
                                                 <!--  cắt nước-->
-                                                @if (Request.QueryString["TinhTrang"] == "0")
+                                                @if (Request.QueryString["TinhTrang"] == "0" || Request.QueryString["TinhTrang"] == "")
                                                 {
                                                     <button type="button" class="btn btn-info btn-lg khachHangSelected" data-toggle="modal" data-target="#myModal">Thanh lí hợp đồng</button>
                                                 <!-- Modal content để thanh lí hợp đồng-->
