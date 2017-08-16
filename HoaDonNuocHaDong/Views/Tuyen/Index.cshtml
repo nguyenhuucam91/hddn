@@ -9,7 +9,7 @@
     var selectedNhanvien = ViewBag.selectedNhanvien;
     var isOnlyTruongPhong = ViewBag.isOnlyTruongPhong;
     var phongBanId = ViewBag.phongBanId;
-    
+
 }
 
 <div class="main">
@@ -135,10 +135,10 @@
                                     {
                                         var tuyenHasNhanVienThuocPhongBanQuanLy = tuyenHelper.tuyenHasNhanVienThuocPhongBanQuanLy(item.TuyenKHID, phongBanId);
                                         <tr>
-                                            @if (isOnlyTruongPhong )
-                                            {                                              
-                                                <td><input type="checkbox" name="check" data-page="1" value="@item.TuyenKHID" /></td>                                                
-                                            }                                            
+                                            @if (isOnlyTruongPhong)
+                                            {
+                                                <td><input type="checkbox" name="check" data-page="1" value="@item.TuyenKHID" /></td>
+                                            }
                                             <td>@((currentPage - 1) * pageSize + i)</td>
                                             <td>@Html.DisplayFor(modelItem => item.Matuyen)</td>
                                             <td>
@@ -149,18 +149,18 @@
                                                 @Html.ActionLink("Xem", "Details", new { id = item.TuyenKHID }) |
                                                 @Html.ActionLink("Sửa", "Edit", new { id = item.TuyenKHID })
 
-                                                @if (item.Khachhangs.FirstOrDefault() == null)
+                                                @if (item.Khachhangs.Count(p=>p.IsDelete == false) == 0)
                                                 {
                                                     @Html.Raw(" | ")
                                                     @Html.ActionLink("Xóa", "Delete", new { id = item.TuyenKHID }, new
-                                           {
-                                               onclick = "return confirm('Bạn có muốn xóa tuyến này không.')"
-                                           });
+                                               {
+                                                   onclick = "return confirm('Bạn có muốn xóa tuyến này không.')"
+                                               });
                                                 }
 
                                             </td>
                                         </tr>
-                                                i++;
+                                        i++;
                                     }
                                 </tbody>
                             </table>
