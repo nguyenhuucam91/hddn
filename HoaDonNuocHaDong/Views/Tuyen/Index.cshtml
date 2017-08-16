@@ -121,6 +121,7 @@
                                         <th>
                                             Tên tuyến
                                         </th>
+                                        <th>Nhân viên</th>
                                         <th>
                                             Hành động
                                         </th>
@@ -144,7 +145,7 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Ten)
                                             </td>
-
+                                            <td>@tuyenHelper.getTuyenCuaNhanVien(item.TuyenKHID)</td>
                                             <td>
                                                 @Html.ActionLink("Xem", "Details", new { id = item.TuyenKHID }) |
                                                 @Html.ActionLink("Sửa", "Edit", new { id = item.TuyenKHID })
