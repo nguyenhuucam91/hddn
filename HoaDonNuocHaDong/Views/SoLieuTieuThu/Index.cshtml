@@ -413,7 +413,7 @@
             var soHoaDon = $(this).data('sohoadon'); var patternSoHoaDon = "&sohoadon=" + soHoaDon;
             var chiSoTieuThu = $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val();
             var chiSoKhoan = $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val();
-            var tongSoTieuThu = parseInt(chiSoTieuThu) + parseInt(chiSoKhoan);
+            var tongSoTieuThu = parseInt(chiSoTieuThu) + parseInt(chiSoKhoan) <= 0 ? 0 : parseInt(chiSoTieuThu) + parseInt(chiSoKhoan);
             var patternChiSoTieuThu = "&chisotieuthu=" + tongSoTieuThu;
             window.location.href = "/solieutieuthu/apgiadacbiet/" + hoadonId + patternToId + patternTuyenId + patternMonth + patternYear + patternNhanVienId
                 + patternSoHoaDon + patternChiSoTieuThu;
