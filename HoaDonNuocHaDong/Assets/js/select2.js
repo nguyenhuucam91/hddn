@@ -515,7 +515,7 @@ $(document).ready(function () {
     $("input[name='soKhoan']").change(function () {
         var dateStart = $(this).parent('td').siblings(".startDate").find('input[name="startDate"]').val();
         var dateEnd = $(this).parent('td').siblings(".endDate").find('input[name="endDate"]').val();
-        var soKhoanInputValue = $(this).val();
+        var soKhoanInputValue = $(this).val() == "" ? 0 : $(this).val();
         var hoaDonID = $(this).data("hoadonid");
         var KHID = $(this).data("khid");
         var soHoaDon = $(this).data("sohoadon");
