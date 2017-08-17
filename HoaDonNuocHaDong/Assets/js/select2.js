@@ -535,8 +535,8 @@ $(document).ready(function () {
         else {
             sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
         }
-        var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue);
-        var sanLuongValue = $(this).parent('td').prev('td').find('input').val(hieuSo);
+        var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue) <= 0 ? 0 : parseInt(sanLuong) + parseInt(soKhoanInputValue);
+        $(this).parent('td').prev('td').find('input').val(hieuSo);
 
         //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
         $.ajax({
