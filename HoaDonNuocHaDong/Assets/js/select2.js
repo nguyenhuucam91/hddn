@@ -322,38 +322,6 @@ $(".to").change(function () {
     }
 });
 
-//$(".tothungan").change(function () {
-//    $(".nhanvien").find("option").remove().end();
-//    $(".tuyen").find("option").remove().end();
-//    var selectedVal = $(this).val();
-//    var nhanVienFirst = 0;
-//    $.ajax({
-//        url: '/khachhang/FillNhanVienByTo',
-//        method: "GET",
-//        data: { ToID: selectedVal },
-//        success: function (result) {
-//            $.each(result, function (key, value) {
-//                if (key == 0) {
-//                    nhanVienFirst = value.NhanvienID;
-//                    $.ajax({
-//                        url: '/khachhang/FillTuyen',
-//                        method: "GET",
-//                        data: { NhanVienID: nhanVienFirst },
-//                        success: function (result) {
-//                            $.each(result, function (key, value) {
-//                                $(".tuyen").append("<option value=" + value.TuyenID + ">" + (value.Matuyen + "-" + value.Ten) + "</option>");
-//                            });
-//                        }
-//                    });
-//                }
-//                $(".nhanvien").append("<option value=" + value.NhanvienID + ">" + (value.MaNhanVien + " - " + value.Ten) + "</option>");
-//                //ajax thứ 2 để load danh sách tuyến dựa theo người đầu tiên
-
-//            });
-//        }
-//    });
-//});
-
 //Khi nhân viên thay đổi thì tuyến thay đổi theo
 $(".nhanvien").change(function () {
     $(".tuyen").find("option").remove().end();
@@ -568,6 +536,7 @@ $(document).ready(function () {
             sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
         }
         var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue);
+        var sanLuongValue = $(this).parent('td').prev('td').find('input').val(hieuSo);
 
         //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
         $.ajax({
