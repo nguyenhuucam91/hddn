@@ -426,23 +426,26 @@ namespace HoaDonNuocHaDong.Helper
         /// </summary>
         /// <param name="TTDoc"></param>
         /// <param name="tuyen"></param>
-        public string pushKhachHangXuong(int TTDoc, int tuyen)
+        public string pushKhachHangXuong(int TTDoc, int tuyen, long createdTime)
         {
             HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
-            var khachHang = _db.Khachhangs.Where(p => p.TTDoc >= TTDoc && p.TuyenKHID == tuyen && p.IsDelete == false).Distinct().ToList();
+            var khachHang = _db.Khachhangs.Where(p => p.TTDoc >= TTDoc && p.TuyenKHID == tuyen && p.IsDelete == false).ToList();
             foreach (var item in khachHang)
             {
-                Khachhang kH = _db.Khachhangs.Find(item.KhachhangID);
-                int thuTuDoc = kH.TTDoc.Value;
-                kH.TTDoc = thuTuDoc + 1;
-                _db.Entry(item).State = EntityState.Modified;
-                try
+                if (item.TTDoc >= TTDoc)
                 {
-                    _db.SaveChanges();
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    return ex.ToString();
+                    if (createdTime > item.UpdatedTime || item.UpdatedTime == null)
+                    {
+                        Khachhang kH = _db.Khachhangs.Find(item.KhachhangID);
+                        if (kH.Ngaykyhopdong == null)
+                        {
+                            kH.Ngaykyhopdong = new DateTime(1970, 1, 1);
+                        }
+                        int thuTuDoc = kH.TTDoc.Value;
+                        kH.TTDoc = thuTuDoc + 1;
+                        _db.Entry(item).State = EntityState.Modified;
+                        _db.SaveChanges();
+                    }
                 }
             }
             return "";

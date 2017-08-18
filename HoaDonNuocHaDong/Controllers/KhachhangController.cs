@@ -621,24 +621,27 @@ namespace HoaDonNuocHaDong.Controllers
             int namKiHopDong = 0;
             if (ModelState.IsValid)
             {
-                khachhang.Chisolapdat = ChiSoDau;
-                //lấy thứ tự đọc
-                int ttDoc = khachhang.TTDoc.Value;
-                int tuyenID = khachhang.TuyenKHID.Value;
-                int countCustomer = db.Khachhangs.Count(p => p.TTDoc == ttDoc && (p.IsDelete == false || p.IsDelete == null) && p.TuyenKHID == khachhang.TuyenKHID);
-                thangKiHopDong = khachhang.Ngaykyhopdong.Value.Month;
-                namKiHopDong = khachhang.Ngaykyhopdong.Value.Year;
-                if (countCustomer > 0)
-                {
-                    khachHangHelper.pushKhachHangXuong(ttDoc, tuyenID);
-                }
-                //đặt tình trạng đang sử dụng
+                khachhang.Chisolapdat = ChiSoDau;                
+                int ttDoc = khachhang.TTDoc.Value;                
+                int tuyenID = khachhang.TuyenKHID.Value;                
+                khachhang.CreatedTime = DateTime.Now.Ticks;
+                khachhang.UpdatedTime = DateTime.Now.Ticks;
                 khachhang.Tinhtrang = 0;
                 maxMaKhachHang = getMaxMaKhachHang();
-                khachhang.MaKhachHang = maxMaKhachHang.ToString();
+                khachhang.MaKhachHang = maxMaKhachHang.ToString();               
+                thangKiHopDong = khachhang.Ngaykyhopdong.Value.Month;
+                namKiHopDong = khachhang.Ngaykyhopdong.Value.Year;
                 db.Khachhangs.Add(khachhang);
-                // lưu thay đổi vào DB và bắt ngoại lệ để debug                            
                 db.SaveChanges();
+
+
+                int countCustomer = db.Khachhangs.Count(p => p.TTDoc == ttDoc && p.IsDelete == false && p.TuyenKHID == khachhang.TuyenKHID);
+                if (countCustomer > 0)
+                {
+                    Khachhang khachHangWithSameTTDoc = db.Khachhangs.Find(khachhang.KhachhangID);
+                    khachHangHelper.pushKhachHangXuong(ttDoc, tuyenID, khachHangWithSameTTDoc.UpdatedTime.Value);
+                }                
+                
                 //nếu là áp giá tổng hợp
                 if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
                 {

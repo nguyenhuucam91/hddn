@@ -537,7 +537,8 @@ $(document).ready(function () {
         }
         var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue) <= 0 ? 0 : parseInt(sanLuong) + parseInt(soKhoanInputValue);
         $(this).parent('td').prev('td').find('input').val(hieuSo);
-
+        var trParent = $(this).closest('tr');
+        removeClassHasSanLuongAmInTr(hieuSo, trParent);
         //gửi yêu cầu ajax: thay đổi cột số khoán, mặc định = số mới - số cũ, đẩy vào db kiêm tách số, tách số phần DB làm
         $.ajax({
             url: "/SoLieuTieuThu/ChinhSuaSoKhoan",

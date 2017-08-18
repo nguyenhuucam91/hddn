@@ -47,7 +47,7 @@ namespace HoaDonNuocHaDong
         public string Diachithutien { get; set; }
         [Required(ErrorMessage = "Thứ tự đọc không để trống")]
         public Nullable<int> TTDoc { get; set; }
-        public virtual ICollection<Chitietchisonuoctheotuyen> Chitietchisonuoctheotuyens { get; set; }
+        //public virtual ICollection<Chitietchisonuoctheotuyen> Chitietchisonuoctheotuyens { get; set; }
         public virtual ICollection<Congno> Congnoes { get; set; }
 
         public virtual Phuongxa Phuongxa { get; set; }

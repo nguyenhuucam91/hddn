@@ -17,7 +17,6 @@ namespace HoaDonNuocHaDong
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Khachhang()
         {
-            this.Chitietchisonuoctheotuyens = new HashSet<Chitietchisonuoctheotuyen>();
             this.Congnoes = new HashSet<Congno>();
             this.DuCoes = new HashSet<DuCo>();
             this.Hoadonnuocs = new HashSet<Hoadonnuoc>();
@@ -60,9 +59,9 @@ namespace HoaDonNuocHaDong
         public Nullable<bool> IsDelete { get; set; }
         public Nullable<System.DateTime> Ngaylapdat { get; set; }
         public Nullable<int> Chisolapdat { get; set; }
+        public Nullable<long> CreatedTime { get; set; }
+        public Nullable<long> UpdatedTime { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Chitietchisonuoctheotuyen> Chitietchisonuoctheotuyens { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Congno> Congnoes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
