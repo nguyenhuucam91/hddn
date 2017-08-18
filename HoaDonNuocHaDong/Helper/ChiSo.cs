@@ -381,7 +381,7 @@ namespace HoaDonHaDong.Helper
             {
                 connection.Open();
                 foreach (var monthYearBetween in monthYearsBetween)
-                {                    
+                {
                     command.CommandText = "UPDATE A SET [Trangthaichot] = 1 FROM [dbo].[Hoadonnuoc] A JOIN [dbo].[Khachhang] B on A.KhachhangID = B.KhachhangID WHERE A.ThangHoaDon=@thang AND A.NamHoaDon =@nam AND B.TuyenKHID=@tuyen";
                     command.Parameters.AddWithValue("@thang", monthYearBetween.Month);
                     command.Parameters.AddWithValue("@nam", monthYearBetween.Year);
@@ -443,14 +443,16 @@ namespace HoaDonHaDong.Helper
 
                 if (countHoaDonsThangTruoc != 0)
                 {
-                    if (countHoaDonsThangHienTai == 0)
+
+                    foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
                     {
-                        foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
+                        int count = db.Hoadonnuocs.Count(p => p.ThangHoaDon == currentMonth && p.NamHoaDon == currentYear && p.KhachhangID == hoaDonNuocThangTruoc.KhachHangID);
+                        if (count == 0)
                         {
                             Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();
                             hoaDonThangHienTai.ThangHoaDon = currentMonth;
                             hoaDonThangHienTai.NamHoaDon = currentYear;
-                            if(hoaDonNuocThangTruoc.NgayKetThucSuDung == null || hoaDonNuocThangTruoc.NgayKetThucSuDung == DateTime.MinValue)
+                            if (hoaDonNuocThangTruoc.NgayKetThucSuDung == null || hoaDonNuocThangTruoc.NgayKetThucSuDung == DateTime.MinValue)
                             {
                                 hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayBatDauSuDung;
                             }
@@ -458,7 +460,7 @@ namespace HoaDonHaDong.Helper
                             {
                                 hoaDonThangHienTai.Ngaybatdausudung = hoaDonNuocThangTruoc.NgayKetThucSuDung;
                             }
-                            
+
                             hoaDonThangHienTai.KhachhangID = hoaDonNuocThangTruoc.KhachHangID;
                             hoaDonThangHienTai.NhanvienID = nhanVienId;
                             hoaDonThangHienTai.Trangthaixoa = false;
@@ -474,7 +476,7 @@ namespace HoaDonHaDong.Helper
                             db.Chitiethoadonnuocs.Add(chiTiet);
                             db.SaveChanges();
                         }
-                    }                    
+                    }
                 }
             }
         }
@@ -485,7 +487,7 @@ namespace HoaDonHaDong.Helper
             var hoaDonNuocs = (from i in _db.Hoadonnuocs
                                join kH in _db.Khachhangs on i.KhachhangID equals kH.KhachhangID
                                join cT in _db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
-                               where i.ThangHoaDon == month && i.NamHoaDon == year && kH.TuyenKHID == tuyenKHID 
+                               where i.ThangHoaDon == month && i.NamHoaDon == year && kH.TuyenKHID == tuyenKHID
                                select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                {
                                    NgayKetThucSuDung = i.Ngayketthucsudung,
@@ -506,7 +508,7 @@ namespace HoaDonHaDong.Helper
             var hoaDonThangGanNhat = (from i in db.Hoadonnuocs
                                       join kH in db.Khachhangs on i.KhachhangID equals kH.KhachhangID
                                       join cT in db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
-                                      where kH.TuyenKHID == tuyenKHID 
+                                      where kH.TuyenKHID == tuyenKHID
                                       select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                       {
                                           Thang = i.ThangHoaDon.Value,
@@ -568,7 +570,7 @@ namespace HoaDonHaDong.Helper
             DateTime thangNamGanNhat = getThangNamGanNhatThuocHoaDon(tuyenKHID, month, year);
             DateTime thangNamHienTai = new DateTime(year, month, 1);
             DateTime[] monthsYears = time.getMonthYearBetweenDates(thangNamGanNhat, thangNamHienTai);
-            foreach(var monthYear in monthsYears)
+            foreach (var monthYear in monthsYears)
             {
                 var isChot = db.TuyenDuocChots.FirstOrDefault(p => p.TuyenKHID == tuyenKHID && p.Thang == monthYear.Month && p.Nam == monthYear.Year);
                 if (isChot == null)
