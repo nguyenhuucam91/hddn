@@ -443,11 +443,10 @@ namespace HoaDonHaDong.Helper
 
                 if (countHoaDonsThangTruoc != 0)
                 {
-
                     foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
                     {
-                        int count = db.Hoadonnuocs.Count(p => p.ThangHoaDon == currentMonth && p.NamHoaDon == currentYear && p.KhachhangID == hoaDonNuocThangTruoc.KhachHangID);
-                        if (count == 0)
+                        Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.SingleOrDefault(p => p.ThangHoaDon == currentMonth && p.NamHoaDon == currentYear && p.KhachhangID == hoaDonNuocThangTruoc.KhachHangID);
+                        if (hoaDonNuoc == null)
                         {
                             Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();
                             hoaDonThangHienTai.ThangHoaDon = currentMonth;
