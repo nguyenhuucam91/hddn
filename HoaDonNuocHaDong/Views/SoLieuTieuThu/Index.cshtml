@@ -413,10 +413,15 @@
             var soHoaDon = $(this).data('sohoadon'); var patternSoHoaDon = "&sohoadon=" + soHoaDon;
             var chiSoTieuThu = $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val();
             var chiSoKhoan = $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val();
-            var tongSoTieuThu = parseInt(chiSoTieuThu) <= 0 ? 0 : parseInt(chiSoTieuThu);
+            var tongSoTieuThu = parseInt(chiSoTieuThu);
             var patternChiSoTieuThu = "&chisotieuthu=" + tongSoTieuThu;
-            window.location.href = "/solieutieuthu/apgiadacbiet/" + hoadonId + patternToId + patternTuyenId + patternMonth + patternYear + patternNhanVienId
-                + patternSoHoaDon + patternChiSoTieuThu;
+            if (tongSoTieuThu >= 0) {
+                window.location.href = "/solieutieuthu/apgiadacbiet/" + hoadonId + patternToId + patternTuyenId + patternMonth + patternYear + patternNhanVienId
+                    + patternSoHoaDon + patternChiSoTieuThu;
+            } else {
+                alert('Sản lượng âm, không áp giá đặc biệt. Xin hãy kiểm tra lại');
+            }
+            
         });
     });
 </script>

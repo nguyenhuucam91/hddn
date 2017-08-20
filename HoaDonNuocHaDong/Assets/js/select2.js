@@ -535,7 +535,7 @@ $(document).ready(function () {
         else {
             sanLuong = $(this).parent('td').prev('td').prev('td').find('input').val() - $(this).parent('td').prev('td').prev('td').prev('td').find('input').val();
         }
-        var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue) <= 0 ? 0 : parseInt(sanLuong) + parseInt(soKhoanInputValue);
+        var hieuSo = parseInt(sanLuong) + parseInt(soKhoanInputValue);
         $(this).parent('td').prev('td').find('input').val(hieuSo);
         var trParent = $(this).closest('tr');
         removeClassHasSanLuongAmInTr(hieuSo, trParent);
