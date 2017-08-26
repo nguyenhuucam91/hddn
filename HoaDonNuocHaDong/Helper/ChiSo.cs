@@ -445,7 +445,7 @@ namespace HoaDonHaDong.Helper
                 {
                     foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
                     {
-                        Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.SingleOrDefault(p => p.ThangHoaDon == currentMonth && p.NamHoaDon == currentYear && p.KhachhangID == hoaDonNuocThangTruoc.KhachHangID);
+                        HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc hoaDonNuoc = hoaDonNuocsHienTai.SingleOrDefault(p => p.Thang == currentMonth && p.Nam == currentYear && p.KhachHangID == hoaDonNuocThangTruoc.KhachHangID);
                         if (hoaDonNuoc == null)
                         {
                             Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();
@@ -494,7 +494,9 @@ namespace HoaDonHaDong.Helper
                                    ChiSoMoi = cT.Chisomoi,
                                    HoaDonNuocID = i.HoadonnuocID,
                                    SanLuong = i.Tongsotieuthu,
-                                   NgayBatDauSuDung = i.Ngaybatdausudung
+                                   NgayBatDauSuDung = i.Ngaybatdausudung,
+                                   Thang = month,
+                                   Nam = year
                                });
             return hoaDonNuocs.ToList();
         }

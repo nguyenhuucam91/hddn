@@ -415,11 +415,11 @@
             var chiSoKhoan = $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val();
             var tongSoTieuThu = parseInt(chiSoTieuThu);
             var patternChiSoTieuThu = "&chisotieuthu=" + tongSoTieuThu;
-            if (tongSoTieuThu >= 0) {
+            if (tongSoTieuThu > 0) {
                 window.location.href = "/solieutieuthu/apgiadacbiet/" + hoadonId + patternToId + patternTuyenId + patternMonth + patternYear + patternNhanVienId
                     + patternSoHoaDon + patternChiSoTieuThu;
             } else {
-                alert('Sản lượng âm, không áp giá đặc biệt. Xin hãy kiểm tra lại');
+                alert('Sản lượng âm hoặc 0, không áp giá đặc biệt. Xin hãy kiểm tra lại');
             }
             
         });
