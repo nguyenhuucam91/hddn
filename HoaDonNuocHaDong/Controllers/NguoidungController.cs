@@ -125,7 +125,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.loggedInUserQuanHuyenId = loggedInUserQuanHuyenId;
             ViewBag.isAdminVaTruongPhong = isLoggedUserAdminVaTruongPhong();
             ViewBag.currentlyLoggedInUser = LoggedInUser.NguoidungID;
-            ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0" ;
+            ViewBag.isAdmin = LoggedInUser.Isadmin == true ? "1" : "0";
             #endregion
             return View(nguoiDung.OrderByDescending(p => p.NguoidungID).ToList());
         }
@@ -170,58 +170,59 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Create([Bind(Include = "NguoidungID,NhanvienID,Taikhoan,Matkhau,Isadmin")] Nguoidung nguoidung, FormCollection form)
         {
             String repeatMK = form["RepeatMatKhau"];
+            String matKhau = form["MatKhau"];
             //lấy giá trị checkbox
             String isAdmin = form["isAdmin"];
-
-            //nếu trùng mật khâu nhập đi vs mật khẩu nhập lại thì mới add record, nếu sai thì đưa ra thông báo trùng
-            if (repeatMK.Equals(nguoidung.Matkhau))
+           
+            if (matKhau == "")
             {
-                //kiểm tra xem trong CSDL đã có người nào trùng tên hay chưa
-
-                String matKhau = nguoidung.Matkhau;
-                String firstHash = String.Concat(UserInfo.CreateMD5(matKhau).ToLower(), matKhau);
-                String md5MatKhau = UserInfo.CreateMD5(firstHash).ToLower();
-                //lưu record người dùng vào CSDL
-                nguoidung.Matkhau = md5MatKhau;
-                if (Convert.ToInt32(isAdmin) == 1)
-                {
-                    nguoidung.Isadmin = true;
-                    nguoidung.NhanvienID = null;
-                }
-                else
-                {
-                    nguoidung.Isadmin = false;
-                }
-
-                Nguoidung ngDung = db.Nguoidungs.FirstOrDefault(p => p.Taikhoan == nguoidung.Taikhoan && p.Matkhau == nguoidung.Matkhau);
-                if (ngDung == null)
-                {
-                    db.Nguoidungs.Add(nguoidung);
-                    db.SaveChanges();
-                    //lưu vào thông tin đăng nhập
-                    DateTime? nullDateTime = null;
-                    Dangnhap dangNhap = new Dangnhap();
-                    dangNhap.NguoidungID = nguoidung.NguoidungID;
-                    dangNhap.Solandangnhapsai = 0;
-                    dangNhap.Thoigiandangnhap = nullDateTime;
-                    dangNhap.Trangthaikhoa = false;
-                    dangNhap.Thoigianhethankhoa = nullDateTime;
-                    db.Dangnhaps.Add(dangNhap);
-                    db.SaveChanges();
-                    //điều hướng về trang chủ
-                    return RedirectToAction("Index");
-                }
-                //nếu có ng dùng trong CSDL
-                else
-                {
-                    ViewBag.isDuplicate = true;
-                }
-
+                ViewBag.passwordMesg = "Mật khẩu không được để trống";
             }
             else
             {
-                ViewBag.passwordMesg = "Mật khẩu cũ và mật khẩu mới phải trùng nhau";
-            }
+                if (repeatMK == matKhau)
+                {
+                    String firstHash = String.Concat(UserInfo.CreateMD5(nguoidung.Matkhau).ToLower(), nguoidung.Matkhau);
+                    String md5MatKhau = UserInfo.CreateMD5(firstHash).ToLower();
+                    nguoidung.Matkhau = md5MatKhau;
+                    if (Convert.ToInt32(isAdmin) == 1)
+                    {
+                        nguoidung.Isadmin = true;
+                        nguoidung.NhanvienID = null;
+                    }
+                    else
+                    {
+                        nguoidung.Isadmin = false;
+                    }
+
+                    Nguoidung ngDung = db.Nguoidungs.FirstOrDefault(p => p.Taikhoan == nguoidung.Taikhoan);
+                    if (ngDung == null)
+                    {
+                        db.Nguoidungs.Add(nguoidung);
+                        db.SaveChanges();
+                        DateTime? nullDateTime = null;
+                        Dangnhap dangNhap = new Dangnhap();
+                        dangNhap.NguoidungID = nguoidung.NguoidungID;
+                        dangNhap.Solandangnhapsai = 0;
+                        dangNhap.Thoigiandangnhap = nullDateTime;
+                        dangNhap.Trangthaikhoa = false;
+                        dangNhap.Thoigianhethankhoa = nullDateTime;
+                        db.Dangnhaps.Add(dangNhap);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ViewBag.isDuplicate = true;
+                    }
+
+                }
+                else
+                {
+                    ViewBag.passwordMesg = "Mật khẩu cũ và mật khẩu mới phải trùng nhau";
+                }
+
+            }           
 
             int phongBanID = getPhongBanNguoiDung();
             if (phongBanID == 0)

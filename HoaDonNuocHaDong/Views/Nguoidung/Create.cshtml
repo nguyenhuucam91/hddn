@@ -25,10 +25,10 @@
                             <div class="widget-content">
                                 <form id="edit-profile" class="form-horizontal">
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-8 pull-left">
+                                        <div class="span12">
                                             <label for="" class="col-sm-2 control-label">Tên đăng nhập:</label>&nbsp;&nbsp;
-                                            @Html.EditorFor(model => model.Taikhoan)
-                                            <br />
+                                            @Html.TextBoxFor(model => model.Taikhoan)
+                                            
                                             @Html.ValidationMessageFor(model => model.Taikhoan)
                                             @if (isDuplicate != null)
                                             {
@@ -37,7 +37,7 @@
                                         </div>
                                     </div>
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-12">
+                                        <div class="span12">
                                             <label for="" class="control-label">Mật khẩu:</label>&nbsp;&nbsp;
                                             @Html.TextBoxFor(model => model.Matkhau, new { @type = "password" })
                                             @Html.ValidationMessageFor(model => model.Matkhau)
@@ -46,7 +46,7 @@
 
                                     <!-- Nhập lại mật khẩu-->
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-12">
+                                        <div class="span12">
                                             <label for="" class="control-label">Nhập lại mật khẩu:</label>&nbsp;&nbsp;
                                             @Html.TextBox("RepeatMatKhau", "", new { @type = "password" })
                                             @if (passwordMesg != "")
@@ -60,7 +60,7 @@
                                     @if (isAdmin == 1)
                                     {
                                         <div class="row" style="margin: 1% 0 0 0%">
-                                            <div class="col-md-4 pull-left">
+                                            <div class="span7 pull-left">
                                                 <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
                                                 <input type="radio" value="1" name="isAdmin" checked /> Có
                                                 <input type="radio" value="0" name="isAdmin" style="margin-left:15px" /> Không
@@ -79,7 +79,7 @@
                                     }
                                     <!-- Nhân viên-->
                                     <div class="row nhanVienRadio hide" style="margin: 1% 0 0 0%">
-                                        <div class="span10 pull-left">
+                                        <div class="span8">
                                             <label for="" class="control-label">Nhân viên:</label>&nbsp;&nbsp;
 
                                             <select name="NhanvienID" class="dropdown nhanvien" style="width:80%">
@@ -90,8 +90,9 @@
                                             </select>
                                             @Html.ValidationMessageFor(model => model.NhanvienID)
                                             <!-- Thêm mới nhân viên link-->
-                                            @Html.ActionLink("Thêm mới", "Create", "Nhanvien")
+                                            
                                         </div>
+                                        @Html.ActionLink("Thêm mới", "Create", "Nhanvien")
                                     </div>
 
 
