@@ -28,7 +28,7 @@ using HoaDonNuocHaDong.Config;
 namespace HoaDonNuocHaDong.Controllers
 {
     public class KhachhangController : BaseController
-    {       
+    {
         private Tuyen tuyenHelper = new Tuyen();
         private KhachHang khachHangHelper = new KhachHang();
         private SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
@@ -40,21 +40,15 @@ namespace HoaDonNuocHaDong.Controllers
 
         public static string connectionString = DatabaseConfig.getConnectionString();
 
-        const int ADMIN = 0;
-        const int TRUONG_PHONG = 2;
-        const int NHAN_VIEN = 1;
-
         public ActionResult Index(string TinhTrang = null, string catNuoc = null)
         {
-
-            ViewBag.showKhachHang = false;
             int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
 
             List<ToQuanHuyen> toLs = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
-            ViewBag.to = toLs;
+
             //load danh sách nhân viên thuộc tổ có phòng ban đó.
             List<Nhanvien> nVLs = new List<Nhanvien>();
             foreach (var item in toLs)
@@ -111,10 +105,11 @@ namespace HoaDonNuocHaDong.Controllers
                 }
             }
 
+            ViewBag.to = toLs;
             ViewBag.selectedChiNhanh = quanHuyenID;
             ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
             ViewBag.tuyen = tuyensLs;
-
+            ViewBag.showKhachHang = false;
             return View();
         }
 
@@ -122,28 +117,30 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Index(FormCollection form, string TinhTrang = null, string catNuoc = null)
         {
             int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-
             int phongBanID = getPhongBanNguoiDung();
-
             int toForm = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-            int tuyenID = 0;
+            int nhanVienID = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);           
 
-            List<Tuyenkhachhang> tuyenKH = new List<Tuyenkhachhang>();
-            if (Session["tuyenID"] != null)
+            List<Tuyenkhachhang> tuyenKH = new List<Tuyenkhachhang>();            
+            bool isTruongPhong = ngDungHelper.isNguoiDungLaTruongPhong(nhanVienID);
+            if (isTruongPhong)
             {
-                String[] tuyenIDSession = Session["tuyenID"].ToString().Split(',');
-                foreach (var item in tuyenIDSession)
+                List<ModelNhanVien> nhanviens = new List<ModelNhanVien>();
+                
+                    List<ModelNhanVien> nhanVien = getNhanViensByTo(toForm);
+                    nhanviens.AddRange(nhanVien);
+                
+                foreach (var nhanvien in nhanviens)
                 {
-                    tuyenID = Convert.ToInt32(item);
-                    if (tuyenID != 0)
-                    {
-                        tuyenKH.Add(db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == tuyenID));
-                    }
-                }
+                    List<Tuyenkhachhang> tuyensThuocNhanVien = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien.NhanvienID).ToList();
+                    tuyenKH.AddRange(tuyensThuocNhanVien);
+                }               
+            }
+            else
+            {
+                tuyenKH = tuyenHelper.getDanhSachTuyensByNhanVien(nhanVienID).ToList();
             }
 
-
-            int nhanVienID = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
             int tuyen = String.IsNullOrEmpty(form["tuyen"]) ? 0 : Convert.ToInt32(form["tuyen"]);
             //danh sách viewBag
             int phongBanIDObjectInt = phongBanID;
@@ -154,14 +151,8 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.chiNhanh = db.Chinhanhs.OrderBy(p => p.Ten).ToList();
             ViewBag.to = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
             ViewBag.nhanVien = getNhanViensByTo(toForm);
-            var tuyenTheoNhanVien = from i in db.Tuyentheonhanviens
-                                    join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                                    join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
-                                    join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
-                                    where i.NhanVienID == nhanVienID
-                                    select r;
-            ViewBag.tuyen = tuyenTheoNhanVien.ToList();
-            ViewBag.tuyenTheoNhanVien = tuyenKH;
+                        
+            ViewBag.tuyen = tuyenKH.OrderBy(p=>p.Matuyen).ToList();
             ViewBag.showKhachHang = true;
             //selectedNhanvien và tuyến
             ViewBag.selectedNhanVien = nhanVienID;
@@ -447,14 +438,14 @@ namespace HoaDonNuocHaDong.Controllers
                 nhanviens.AddRange(nhanVien);
             }
 
-            if (userRole == NHAN_VIEN)
+            if (userRole == (int)EChucVu.NHAN_VIEN)
             {
                 tuyens = getTuyensThuocNhanVien(NhanVienID);
             }
             else
             {
                 int selectedUserRole = getUserRole(NhanVienID);
-                if (selectedUserRole == NHAN_VIEN)
+                if (selectedUserRole == (int)EChucVu.NHAN_VIEN)
                 {
                     tuyens = getTuyensThuocNhanVien(NhanVienID);
                 }
@@ -479,7 +470,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int isAdminAndTruongPhong = getUserRole(LoggedInUser.NhanvienID);
             var nhanViens = getNhanViensByTo(ToID);
-            if (isAdminAndTruongPhong != ADMIN && isAdminAndTruongPhong != TRUONG_PHONG) //2: Truong phong
+            if (isAdminAndTruongPhong != (int)EChucVu.ADMIN && isAdminAndTruongPhong != (int)EChucVu.TRUONG_PHONG) //2: Truong phong
             {
                 nhanViens = nhanViens.Where(p => p.ChucvuID == (int)EChucVu.NHAN_VIEN).ToList();
                 return Json(nhanViens, JsonRequestBehavior.AllowGet);
@@ -621,14 +612,14 @@ namespace HoaDonNuocHaDong.Controllers
             int namKiHopDong = 0;
             if (ModelState.IsValid)
             {
-                khachhang.Chisolapdat = ChiSoDau;                
-                int ttDoc = khachhang.TTDoc.Value;                
-                int tuyenID = khachhang.TuyenKHID.Value;                
+                khachhang.Chisolapdat = ChiSoDau;
+                int ttDoc = khachhang.TTDoc.Value;
+                int tuyenID = khachhang.TuyenKHID.Value;
                 khachhang.CreatedTime = DateTime.Now.Ticks;
                 khachhang.UpdatedTime = DateTime.Now.Ticks;
                 khachhang.Tinhtrang = 0;
                 maxMaKhachHang = getMaxMaKhachHang();
-                khachhang.MaKhachHang = maxMaKhachHang.ToString();               
+                khachhang.MaKhachHang = maxMaKhachHang.ToString();
                 thangKiHopDong = khachhang.Ngaykyhopdong.Value.Month;
                 namKiHopDong = khachhang.Ngaykyhopdong.Value.Year;
                 db.Khachhangs.Add(khachhang);
@@ -640,8 +631,8 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     Khachhang khachHangWithSameTTDoc = db.Khachhangs.Find(khachhang.KhachhangID);
                     khachHangHelper.pushKhachHangXuong(ttDoc, tuyenID, khachHangWithSameTTDoc.UpdatedTime.Value);
-                }                
-                
+                }
+
                 //nếu là áp giá tổng hợp
                 if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
                 {
@@ -1308,7 +1299,7 @@ namespace HoaDonNuocHaDong.Controllers
             String toId = form["toId"];
             String nhanvienId = form["nhanvienId"];
             String tuyenId = form["tuyenId"];
-            String[] khachHangsToArray = khachHangs.Split(',');            
+            String[] khachHangsToArray = khachHangs.Split(',');
 
             List<Hoadonnuoc> hoadons = db.Hoadonnuocs.Where(p => khachHangsToArray.Contains(p.KhachhangID.ToString()) && p.ThangHoaDon == DateTime.Now.Month
                && p.NamHoaDon == DateTime.Now.Year).ToList();
@@ -1320,7 +1311,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             List<Khachhang> khachHangAsList = db.Khachhangs.Where(p => khachHangsToArray.Contains(p.KhachhangID.ToString())).ToList();
-            foreach(var item in khachHangAsList)
+            foreach (var item in khachHangAsList)
             {
                 item.IsDelete = true;
                 db.Entry(item).State = EntityState.Modified;
@@ -1329,7 +1320,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             TempData["to"] = toId;
             TempData["nhanvien"] = nhanvienId;
-            TempData["tuyen"] = tuyenId;            
+            TempData["tuyen"] = tuyenId;
 
             if (!String.IsNullOrEmpty(tinhtrang))
             {
@@ -1428,9 +1419,9 @@ namespace HoaDonNuocHaDong.Controllers
             if (khachhang != null)
             {
                 var thongTinChiSo = (from i in db.Hoadonnuocs
-                                     join r in db.Lichsuhoadons on i.HoadonnuocID equals r.HoaDonID                                    
-                                     where i.KhachhangID == id                                     
-                                     select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc                                    
+                                     join r in db.Lichsuhoadons on i.HoadonnuocID equals r.HoaDonID
+                                     where i.KhachhangID == id
+                                     select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                      {
                                          HoaDonNuocID = i.HoadonnuocID,
                                          SH1 = r.SH1.ToString(),
@@ -1446,7 +1437,7 @@ namespace HoaDonNuocHaDong.Controllers
                                          ChiSoMoi = r.ChiSoMoi,
                                          SanLuong = r.SanLuongTieuThu,
                                          TongCong = r.TongCong.Value,
-                                     }).OrderBy(p=>p.HoaDonNuocID).ToList();
+                                     }).OrderBy(p => p.HoaDonNuocID).ToList();
 
                 ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
                 ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
@@ -1458,7 +1449,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag._TuyenongkythuatID = new SelectList(db.Tuyenongs, "TuyenongID", "Tentuyen", khachhang.TuyenongkythuatID);
                 ViewData["ttChiSo"] = thongTinChiSo;
                 //thông tin kiểm định
-                ViewBag.kiemDinh = kiemDinhHelper.getDanhSachKiemDinhCuaKhachHang(id.Value);                       
+                ViewBag.kiemDinh = kiemDinhHelper.getDanhSachKiemDinhCuaKhachHang(id.Value);
                 return View(khachhang);
             }
             return View();

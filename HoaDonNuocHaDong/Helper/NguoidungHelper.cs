@@ -167,38 +167,7 @@ namespace HoaDonNuocHaDong.Helper
             return toQH.ToList();
         }
 
-        /// <summary>
-        /// Kiểm tra xem nhân viên đó có phải là trưởng phòng hay không
-        /// </summary>
-        /// <param name="nhanVienID">ID nhân viên</param>
-        /// <returns></returns>
-        public bool isTruongPhong(int nhanVienID)
-        {
-            HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-            Nhanvien nV = db.Nhanviens.FirstOrDefault(p => p.NhanvienID == nhanVienID);
-            if (nV != null)
-            {
-                int? chucVuID = nV.ChucvuID;
-                if (chucVuID == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    //nếu là trưởng phòng
-                    if (chucVuID == ChucVuHelper.TRUONGPHONG)
-                    {
-                        return true;
-                    }
-                    //nếu là nhân viên
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-            return false;
-        }
+       
         /// <summary>
         /// Lấy nhân viên ID từ người dùng ID
         /// </summary>
@@ -230,5 +199,8 @@ namespace HoaDonNuocHaDong.Helper
             }
             return isOnlyTruongPhong;
         }
+
+
+        
     }
 }
