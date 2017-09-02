@@ -50,6 +50,7 @@ namespace HoaDonNuocHaDong
         //public virtual ICollection<Chitietchisonuoctheotuyen> Chitietchisonuoctheotuyens { get; set; }
         public virtual ICollection<Congno> Congnoes { get; set; }
 
+        public virtual Quanhuyen QuanHuyen { get; set; }
         public virtual Phuongxa Phuongxa { get; set; }
         public virtual Tuyenkhachhang Tuyenkhachhang { get; set; }
         public virtual ICollection<Hoadonnuoc> Hoadonnuocs { get; set; }

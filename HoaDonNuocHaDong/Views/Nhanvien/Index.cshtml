@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HoaDonNuocHaDong.Nhanvien>
+﻿@model List<Nhanvien>
 
 @{
     ViewBag.Title = "Danh sách nhân viên";
@@ -134,10 +134,11 @@
                                                         }
                                                         @tenPhongBan
                                                     </td>
-
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.Chucvu.Ten)
-                                                    </td>
+                                                    @{
+                                                String dangerLabel = item.Chucvu.ChucvuID == (int)HDNHD.Models.Constants.EChucVu.TRUONG_PHONG ? "text-danger" : "";
+                                                    }
+                                                    <td><span class="@dangerLabel">@item.Chucvu.Ten</span></td>
+                                                    
                                                     @if (isAdminVaTruongPhong == "1")
                                                     {
                                                         <td>

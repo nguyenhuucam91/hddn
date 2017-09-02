@@ -16,6 +16,16 @@ namespace HoaDonNuocHaDong.Controllers
 {
     public class NhanvienController : BaseController
     {
+        private NhanVienRepository repository;
+        public NhanvienController()
+        {
+
+        }
+        public NhanvienController(NhanVienRepository repository)
+        {
+            this.repository = repository;
+        }
+
         NhanVienHelper nhanVienHelper = new NhanVienHelper();
         NguoidungHelper ngDungHelper = new NguoidungHelper();
         Tuyen tuyen = new Tuyen();
@@ -31,7 +41,9 @@ namespace HoaDonNuocHaDong.Controllers
             if (phongBanId == 0)
             {
                 nhanviens = (from i in db.Nhanviens
-                             where i.IsDelete == false
+                             join r in db.ToQuanHuyens on i.ToQuanHuyenID equals r.ToQuanHuyenID
+                             join s in db.Quanhuyens on r.QuanHuyenID equals s.QuanhuyenID
+                             where i.IsDelete == false && s.QuanhuyenID == quanHuyenIdLoggedInUser
                              select new
                              {
                                  nhanvien = i,
@@ -328,7 +340,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.PhongBanQuanHuyen = new SelectList(db.Phongbans, "PhongbanID", "Ten");
                 ViewBag.To = db.ToQuanHuyens.Where(p => p.IsDelete == false);
             }
-            ViewBag._TuyenKHID = db.Tuyenkhachhangs.ToList();
+            ViewBag._TuyenKHID = nhanVienHelper.loadTuyenChuaCoNhanVien();
             ViewBag.ChinhanhID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "QuanhuyenID", "Ten");           
             ViewBag.ChucvuID = new SelectList(db.Chucvus, "ChucvuID", "Ten");
             ViewBag._PhongbanID = new SelectList(db.ToQuanHuyens.Where(p => p.IsDelete == false || p.IsDelete == null), "ToQuanHuyenID", "Ma");
@@ -508,8 +520,8 @@ namespace HoaDonNuocHaDong.Controllers
         {
             return View("QuickAssign");
         }
-        
 
+        #region QuickAssign(Optional)
         [HttpPost]
         public ActionResult quickAssign(FormCollection form)
         {
@@ -528,7 +540,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
             return RedirectToAction("quickAssignNhanvienChoTuyen");
         }
-
+        #endregion
         protected override void Dispose(bool disposing)
         {
             if (disposing)

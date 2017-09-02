@@ -3645,3 +3645,9 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endCo
 .invisible {
 	visibility: hidden;
 }
+.text-danger {
+	color:red;
+}
+.text-danger:after {
+	content: " (*) ";
+}
