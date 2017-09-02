@@ -322,8 +322,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         // GET: /Nguoidung/Delete/5
         public ActionResult Delete(int? id)
-        {
-            //xóa bảng đăng nhập 
+        {         
             Nguoidung nguoidung = db.Nguoidungs.Find(id);
             int ngDungID = nguoidung.NguoidungID;
             Dangnhap dN = db.Dangnhaps.FirstOrDefault(p => p.NguoidungID == ngDungID);
