@@ -182,7 +182,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 if (repeatMK == matKhau)
                 {
-                    String firstHash = String.Concat(UserInfo.CreateMD5(nguoidung.Matkhau).ToLower(), nguoidung.Matkhau);
+                    String firstHash = String.Concat(UserInfo.CreateMD5(matKhau).ToLower(), matKhau);
                     String md5MatKhau = UserInfo.CreateMD5(firstHash).ToLower();
                     nguoidung.Matkhau = md5MatKhau;
                     if (Convert.ToInt32(isAdmin) == 1)
@@ -213,7 +213,7 @@ namespace HoaDonNuocHaDong.Controllers
                     }
                     else
                     {
-                        ViewBag.isDuplicate = true;
+                        ViewBag.isDuplicate = "Người dùng này đã có trong cơ sở dữ liệu";
                     }
 
                 }
@@ -244,6 +244,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Nguoidung nguoidung = db.Nguoidungs.Find(id);
             if (nguoidung == null)
             {
@@ -273,30 +274,26 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int nhanvienID = int.Parse(form["NhanvienID"]);
             String repeatMK = form["RepeatMatKhau"];
-            //lấy giá trị checkbox
+            String matKhau = form["Matkhau"];           
             String isAdmin = form["isAdmin"];
 
-            Nguoidung currentlyEditedNguoiDung = db.Nguoidungs.Find(id);
-            //nếu trùng mật khâu nhập đi vs mật khẩu nhập lại thì mới add record, nếu sai thì đưa ra thông báo trùng
-            if (repeatMK.Equals(nguoidung.Matkhau))
-            {
+            Nguoidung nguoiDung = db.Nguoidungs.Find(id);
+            if (repeatMK.Equals(matKhau))
+            {                
                 if (ModelState.IsValid)
-                {
-                    String matKhau = nguoidung.Matkhau;
+                {                    
                     String firstHash = String.Concat(UserInfo.CreateMD5(matKhau).ToLower(), matKhau);
-                    currentlyEditedNguoiDung.Matkhau = UserInfo.CreateMD5(firstHash).ToLower();
-                    currentlyEditedNguoiDung.NhanvienID = nhanvienID;
-                    //lưu record người dùng vào CSDL                
+                    nguoiDung.Matkhau = UserInfo.CreateMD5(firstHash).ToLower();
+                    nguoiDung.NhanvienID = nhanvienID;
                     if (Convert.ToInt32(isAdmin) == 1)
                     {
-                        currentlyEditedNguoiDung.Isadmin = true;
+                        nguoiDung.Isadmin = true;
                     }
                     else
                     {
-                        currentlyEditedNguoiDung.Isadmin = false;
+                        nguoiDung.Isadmin = false;
                     }
-                    db.Entry(currentlyEditedNguoiDung).State = EntityState.Modified;
-                    //lưu thay đổi vào hệ thống
+                    db.Entry(nguoiDung).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -317,7 +314,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewBag.NhanvienID = db.Nhanviens.Where(p => p.IsDelete == false && p.PhongbanID == phongBanID).ToList();
             }
             ViewBag.isAdmin = LoggedInUser.Isadmin.Value == true ? "" : null;
-            return View(currentlyEditedNguoiDung);
+            return View(nguoiDung);
         }
 
         // GET: /Nguoidung/Delete/5

@@ -25,9 +25,9 @@
                             <div class="widget-content">
                                 <form id="edit-profile" class="form-horizontal">
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-8 pull-left">
+                                        <div class="span12">
                                             <label for="" class="col-sm-2 control-label">Tên đăng nhập:</label>&nbsp;&nbsp;
-                                            @Html.EditorFor(model => model.Taikhoan)
+                                            @Html.TextBoxFor(model => model.Taikhoan, new { disabled = true })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Taikhoan)
                                         </div>
@@ -42,7 +42,7 @@
 
                                     <!-- Nhập lại mật khẩu-->
                                     <div class="row" style="margin: 1% 0 0 0%">
-                                        <div class="col-md-12">
+                                        <div class="span12">
                                             <label for="" class="control-label">Nhập lại mật khẩu:</label>&nbsp;&nbsp;
                                             @Html.TextBox("RepeatMatKhau", "", new { @type = "password" })
                                             @if (passwordMesg != "")
@@ -56,7 +56,7 @@
                                     @if (loggedInUserIsAdmin != null)
                                     {
                                         <div class="row" style="margin: 1% 0 0 0%">
-                                            <div class="col-md-4 pull-left">
+                                            <div class="span12">
                                                 <label for="" class="control-label">Là admin:</label>&nbsp;&nbsp;
                                                 @if (Model.Isadmin.Value == true)
                                                 {
@@ -76,7 +76,7 @@
                                     <!-- Nhân viên (nếu k phải là admin)-->
 
                                     <div class="row nhanVienRadio hide" style="margin: 1% 0 0 0%">
-                                        <div class="span8">
+                                        <div class="span12">
                                             <label for="" class="control-label">Nhân viên:</label>&nbsp;&nbsp;
                                             <select name="NhanvienID" class="dropdown nhanvien" style="width:80%">
                                                 @foreach (var item in nhanVien)
