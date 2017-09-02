@@ -279,24 +279,27 @@ namespace HoaDonNuocHaDong.Controllers
 
             Nguoidung nguoiDung = db.Nguoidungs.Find(id);
             if (repeatMK.Equals(matKhau))
-            {                
-                if (ModelState.IsValid)
-                {                    
-                    String firstHash = String.Concat(UserInfo.CreateMD5(matKhau).ToLower(), matKhau);
-                    nguoiDung.Matkhau = UserInfo.CreateMD5(firstHash).ToLower();
-                    nguoiDung.NhanvienID = nhanvienID;
-                    if (Convert.ToInt32(isAdmin) == 1)
+            {
+                if (matKhau != "")
+                {
+                    if (ModelState.IsValid)
                     {
-                        nguoiDung.Isadmin = true;
+                        String firstHash = String.Concat(UserInfo.CreateMD5(matKhau).ToLower(), matKhau);
+                        nguoiDung.Matkhau = UserInfo.CreateMD5(firstHash).ToLower();
+                        if (Convert.ToInt32(isAdmin) == 1)
+                        {
+                            nguoiDung.Isadmin = true;
+                        }
+                        else
+                        {
+                            nguoiDung.Isadmin = false;
+                        }
+                        db.Entry(nguoiDung).State = EntityState.Modified;
+                        db.SaveChanges();
+                        
                     }
-                    else
-                    {
-                        nguoiDung.Isadmin = false;
-                    }
-                    db.Entry(nguoiDung).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
                 }
+                return RedirectToAction("Index");
             }
             else
             {
