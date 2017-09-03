@@ -119,22 +119,24 @@ namespace HoaDonNuocHaDong.Controllers
             int quanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
             int phongBanID = getPhongBanNguoiDung();
             int toForm = String.IsNullOrEmpty(form["to"]) ? 0 : Convert.ToInt32(form["to"]);
-            int nhanVienID = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);           
+            int nhanVienID = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
 
-            List<Tuyenkhachhang> tuyenKH = new List<Tuyenkhachhang>();            
+            List<Tuyenkhachhang> tuyenKH = new List<Tuyenkhachhang>();
             bool isTruongPhong = ngDungHelper.isNguoiDungLaTruongPhong(nhanVienID);
             if (isTruongPhong)
             {
                 List<ModelNhanVien> nhanviens = new List<ModelNhanVien>();
-                
-                    List<ModelNhanVien> nhanVien = getNhanViensByTo(toForm);
-                    nhanviens.AddRange(nhanVien);
-                
+                List<ToQuanHuyen> toes = getToes(quanHuyenID, phongBanID);
+                foreach (var to in toes)
+                {
+                    nhanviens.AddRange(getNhanViensByTo(to.ToQuanHuyenID));
+                }                               
+
                 foreach (var nhanvien in nhanviens)
                 {
                     List<Tuyenkhachhang> tuyensThuocNhanVien = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien.NhanvienID).ToList();
                     tuyenKH.AddRange(tuyensThuocNhanVien);
-                }               
+                }
             }
             else
             {
@@ -151,8 +153,8 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.chiNhanh = db.Chinhanhs.OrderBy(p => p.Ten).ToList();
             ViewBag.to = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
             ViewBag.nhanVien = getNhanViensByTo(toForm);
-                        
-            ViewBag.tuyen = tuyenKH.OrderBy(p=>p.Matuyen).ToList();
+
+            ViewBag.tuyen = tuyenKH.OrderBy(p => p.Matuyen).ToList();
             ViewBag.showKhachHang = true;
             //selectedNhanvien và tuyến
             ViewBag.selectedNhanVien = nhanVienID;
@@ -517,12 +519,12 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     _tuyen.AddRange(tuyenHelper.getTuyenByTo(item.ToQuanHuyenID));
                 }
-                ViewBag.TuyenKHID = _tuyen;
+                ViewBag.TuyenKHID = _tuyen.OrderBy(p=>p.MaTuyenKH).ToList();
             }
 
             ViewBag.selectedQuanHuyen = selectedQuanHuyenID;
             ViewBag.selectedQuanHuyenName = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-            List<Phuongxa> phuongXas = db.Phuongxas.Where(p => p.QuanhuyenID == selectedQuanHuyenID && p.IsDelete == false).ToList();
+            List<Phuongxa> phuongXas = db.Phuongxas.Where(p=>p.IsDelete == false).ToList();
             if (phuongXas.Count > 0)
             {
                 int idPhuongXaDauTien = phuongXas.First().PhuongxaID;
@@ -539,7 +541,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.QuanhuyenID = new SelectList(db.Quanhuyens.Where(p => p.IsDelete == false || p.IsDelete == null).ToList(), "QuanhuyenID", "Ten");
             ViewBag.TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
             ViewBag.MaKH = getMaxMaKhachHang();
-            return View();
+            return View(new Khachhang());
         }
 
         public int getMaxMaKhachHang()
@@ -722,7 +724,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
             ViewBag.LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
 
-            List<Phuongxa> phuongXas = db.Phuongxas.Where(p => p.QuanhuyenID == selectedQuanHuyenID && p.IsDelete == false).ToList();
+            List<Phuongxa> phuongXas = db.Phuongxas.Where(p=>p.IsDelete == false).ToList();
             if (phuongXas.Count > 0)
             {
                 int idPhuongXaDauTien = phuongXas.First().PhuongxaID;
