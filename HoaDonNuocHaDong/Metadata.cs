@@ -16,9 +16,7 @@ namespace HoaDonNuocHaDong
         public Nullable<int> LoaiKHID { get; set; }
         public Nullable<int> LoaiapgiaID { get; set; }
         public Nullable<int> HinhthucttID { get; set; }
-
         public string Sotaikhoan { get; set; }
-
         public string Masothue { get; set; }
         [Required(ErrorMessage = "Ngày kí hợp đồng không được để trống")]
         public Nullable<System.DateTime> Ngaykyhopdong { get; set; }
@@ -32,7 +30,7 @@ namespace HoaDonNuocHaDong
         public Nullable<int> Sonhankhau { get; set; }
         [Required(ErrorMessage = "Tên không được để trống")]
         public string Ten { get; set; }
-        [Required(ErrorMessage = "Địa chỉ không được để trống")]
+        [Required(ErrorMessage = "Địa chỉ không được để trống ")]
         public string Diachi { get; set; }
 
         public string Dienthoai { get; set; }
@@ -47,10 +45,11 @@ namespace HoaDonNuocHaDong
         public string Diachithutien { get; set; }
         [Required(ErrorMessage = "Thứ tự đọc không để trống")]
         public Nullable<int> TTDoc { get; set; }
-        //public virtual ICollection<Chitietchisonuoctheotuyen> Chitietchisonuoctheotuyens { get; set; }
-        public virtual ICollection<Congno> Congnoes { get; set; }
 
         public virtual Quanhuyen QuanHuyen { get; set; }
+
+        //public virtual ICollection<Chitietchisonuoctheotuyen> Chitietchisonuoctheotuyens { get; set; }
+        public virtual ICollection<Congno> Congnoes { get; set; }       
         public virtual Phuongxa Phuongxa { get; set; }
         public virtual Tuyenkhachhang Tuyenkhachhang { get; set; }
         public virtual ICollection<Hoadonnuoc> Hoadonnuocs { get; set; }

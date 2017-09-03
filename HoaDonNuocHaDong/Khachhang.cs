@@ -68,6 +68,8 @@ namespace HoaDonNuocHaDong
         public virtual ICollection<DuCo> DuCoes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Hoadonnuoc> Hoadonnuocs { get; set; }
+
+        public virtual Quanhuyen QuanHuyen { get; set; }
         public virtual Phuongxa Phuongxa { get; set; }
         public virtual Tuyenkhachhang Tuyenkhachhang { get; set; }
     }
