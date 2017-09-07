@@ -169,11 +169,11 @@
                                                 String hasSanLuongAmCss = item.SanLuong < 0 ? "hasSanLuongAm" : "";
                                                 bool vanDangSuDungNuoc = item.NgayNgungCapNuoc == new DateTime(1, 1, 1) && item.NgayCapNuocLai == new DateTime(1, 1, 1);
                                                 bool isCapNuocLai = item.NgayCapNuocLai != new DateTime(1, 1, 1) && item.NgayCapNuocLai <= DateTime.Now;
-                                                cssClass += (vanDangSuDungNuoc || isCapNuocLai) ? "" : "catnuocBackgroundCss";
+                                                cssClass += (vanDangSuDungNuoc || isCapNuocLai) ? "traverse" : "catnuocBackgroundCss";
                                                 cssClass += hasSanLuongAmCss;
                                                 DateTime ngayBatDauHoaDon = DateTime.Now;
                                                 {
-                                                    <tr class=@cssClass>
+                                                    <tr class="@cssClass">
                                                         <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
                                                         <td>
                                                             <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,

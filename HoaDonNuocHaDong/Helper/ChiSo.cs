@@ -496,9 +496,10 @@ namespace HoaDonHaDong.Helper
                                    SanLuong = i.Tongsotieuthu,
                                    NgayBatDauSuDung = i.Ngaybatdausudung,
                                    Thang = month,
-                                   Nam = year
+                                   Nam = year,                                          
                                });
             return hoaDonNuocs.ToList();
+            
         }
 
         public DateTime getThangNamGanNhatThuocHoaDon(int tuyenKHID, int currentMonth, int currentYear)

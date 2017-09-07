@@ -50,23 +50,6 @@
 
                     <div class="widget-content">
 
-                        <form action="/solieutieuthu?isback=1" method="post">
-                            <input type="hidden" name="to" value="@Request.QueryString["toID"]" />
-                            <input type="hidden" name="thang" value="@Request.QueryString["month"]" />
-                            <input type="hidden" name="nam" value="@Request.QueryString["year"]" />
-                            <input type="hidden" name="tuyen" value="@Request.QueryString["tuyenID"]" />
-                            <input type="hidden" name="nhanvien" value="@Request.QueryString["nvquanly"]" />
-                            <button type="submit" class="btn btn-success">Trở lại</button>
-                        </form>
-
-                        <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
-                            <!-- Nếu là admin hoặc số lượng chưa chốt > 0-->
-                            @if (adminVaTruongPhong == 0 || adminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG || soLuongHoaDonChuaChot > 0)
-                            {
-                                <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
-                            }
-                        </form>
-
                         <!-- Hướng dẫn tìm kiếm-->
                         <div class="huongDan">
                             <div class="pull-left">
@@ -77,8 +60,7 @@
                         </div>
 
                         @Html.Partial("_SoLieuTieuThuChuThich")
-
-                        <div class="clearfix"></div>
+                      
                     </div>
                     <!--Tắt bật cột-->
                     <div class="form-actions">
@@ -131,7 +113,27 @@
                             <!-- Dòng 2 fixed cột -->
                             <tr>
                                 <th colspan="18" style="font-size:15px">
-                                    (@tuyenKH.Matuyen-@tuyen) - (@nV.MaNhanVien - @nV.Ten) - (@Request.QueryString["month"] / @Request.QueryString["year"])
+                                    <span class="pull-left">(@tuyenKH.Matuyen-@tuyen) - (@nV.MaNhanVien - @nV.Ten) - (@Request.QueryString["month"] / @Request.QueryString["year"])</span>
+
+                                    <div class="pull-right">
+                                        <form action="/solieutieuthu?isback=1" method="post">
+                                            <input type="hidden" name="to" value="@Request.QueryString["toID"]" />
+                                            <input type="hidden" name="thang" value="@Request.QueryString["month"]" />
+                                            <input type="hidden" name="nam" value="@Request.QueryString["year"]" />
+                                            <input type="hidden" name="tuyen" value="@Request.QueryString["tuyenID"]" />
+                                            <input type="hidden" name="nhanvien" value="@Request.QueryString["nvquanly"]" />
+                                            <button type="submit" class="btn btn-success">Trở lại</button>
+                                        </form>
+
+                                        <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
+                                            <!-- Nếu là admin hoặc số lượng chưa chốt > 0-->
+                                            @if (adminVaTruongPhong == 0 || adminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG || soLuongHoaDonChuaChot > 0)
+                                            {
+                                                <button type="button" id="chotSoLieu" class="btn btn-primary">Chốt số liệu</button>
+                                            }
+                                        </form>
+                                    </div>
+
                                 </th>
                             </tr>
                         </thead>
@@ -142,7 +144,7 @@
                             {
                                 int hoaDonID = item.HoaDonNuocID;
                                 int khachHangIDRow = item.KhachHangID;
-                                String SH1 = item.SH1 == "0" ? "": item.SH1;
+                                String SH1 = item.SH1 == "0" ? "" : item.SH1;
                                 String SH2 = item.SH2 == "0" ? "" : item.SH2;
                                 String SH3 = item.SH3 == "0" ? "" : item.SH3;
                                 String SH4 = item.SH4 == "0" ? "" : item.SH4;
@@ -200,16 +202,16 @@
                                                                             <td style="color:blue"><label>@SX</label></td>
                                                                             <td style="color:blue"><label>@KD</label></td>
                                                                         </tr>
-                                
-                                       sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
-                                       sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
-                                       sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
-                                       sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
-                                       sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
-                                       sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
-                                       sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
-                                       sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
-                                       sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
+
+ sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
+ sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
+ sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
+ sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
+ sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
+ sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
+ sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
+ sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
+ sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
                             }
                         </tbody>
                         <tfoot>
@@ -248,7 +250,6 @@
     </div> <!-- /container -->
 
 </div> <!-- /main-inner -->
-
 <!-- Script để đối màu dòng trong trường hợp áp giá tổng hợp và đặc biệt -->
 <script type="text/javascript">
     $(function () {

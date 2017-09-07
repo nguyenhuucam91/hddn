@@ -456,6 +456,7 @@ $(document).ready(function () {
         }
 
         var hoaDonID = $(this).data("hoadonid");
+        var tuyenKHID = $("select[name='tuyen']").val();
         var KHID = $(this).data("khid");
         var _soHoaDon = $(this).data("sohoadon");
         var dateInput = new Date();
@@ -491,8 +492,12 @@ $(document).ready(function () {
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({
                 HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoan, KHID: KHID,
-                SoHoaDon: _soHoaDon, dateStart: dateStart, dateEnd: dateEnd, dateInput: dateInput, thang: selectedMonth, nam: selectedYear
+                SoHoaDon: _soHoaDon, dateStart: dateStart, dateEnd: dateEnd, dateInput: dateInput, thang: selectedMonth, nam: selectedYear,
+                tuyenKHID: tuyenKHID
             }),
+            error: function (result) {
+                console.error(result);
+            }
         });
     });
 });
@@ -564,9 +569,9 @@ $(document).on('keyup', function (e) {
     //lấy vị trí cột dựa theo index
     var index = focusedElement.closest("td").index();
     //nếu nút ấn là nút Enter
-    var ENTERKEYCODE = 13;
-    var UPARROW = 38;
-    var DOWNARROW = 40;
+    const ENTERKEYCODE = 13;
+    const UPARROW = 38;
+    const DOWNARROW = 40;
 
     if (e.which == ENTERKEYCODE || e.which == DOWNARROW) {
 

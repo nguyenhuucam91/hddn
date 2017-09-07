@@ -259,21 +259,21 @@ namespace HoaDonNuocHaDong.Controllers
         /// <param name="ChiSoCuoi"></param>
         /// <param name="TongSoTieuThu"></param>
         /// <param name="hieuSo"></param>
-        public void NhapChiSoMoi(int HoaDonID, int? ChiSoDau, int? ChiSoCuoi, int? TongSoTieuThu, int SoKhoan, int KHID, int SoHoaDon, String dateStart, String dateEnd, String dateInput, int thang, int nam)
+        public void NhapChiSoMoi(int HoaDonID, int? ChiSoDau, int? ChiSoCuoi, int? TongSoTieuThu, int SoKhoan, int KHID, 
+            int SoHoaDon, String dateStart, String dateEnd, String dateInput, int thang, int nam, int tuyenKHID)
         {
             int _month = thang;
             int _year = nam;
             int _TongSoTieuThu = 0;
-            int _tongKiemDinh = 0;
+            int _tongKiemDinh = 0;           
 
             Hoadonnuoc hoaDon = db.Hoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
             //nếu có record hóa đơn trọng hệ thống
             if (hoaDon != null)
-            {
-                //nếu session người dùng ID khác null thì lấy người dùng đăng nhập hệ thống, nếu không lấy NhanVienID = 0;
-                if (Session["nhanVienID"] != null)
+            {                
+                if (LoggedInUser.NhanvienID != null)
                 {
-                    hoaDon.NhanvienID = int.Parse(Session["nhanVienID"].ToString());
+                    hoaDon.NhanvienID = LoggedInUser.NhanvienID;
                 }
 
                 var isKiemDinh = kiemDinh.checkKiemDinhStatus(KHID, _month, _year);
@@ -296,11 +296,8 @@ namespace HoaDonNuocHaDong.Controllers
                 db.SaveChanges();
             }
 
-            //tách chỉ số
             tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu, SoKhoan, KHID);
-
-            //thêm 1 records số tiền phải nộp vào tháng sau với ngày kết thúc của tháng này là ngày bắt đầu của tháng sau
-            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
+            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
 
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);

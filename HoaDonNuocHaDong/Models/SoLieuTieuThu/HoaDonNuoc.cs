@@ -39,15 +39,15 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
         public String LoaiApGia { get { return GetSTR(24); } set { SetSTR(24, value); } }
         public int? LoaiApGiaID { get { return GetINT(25); } set { SetINT(25, value); } }
         public int Thang { get; set; }
-        public int Nam { get; set; }       
-        public String ThangNamHoaDon { get; set; }       
+        public int Nam { get; set; }
+        public String ThangNamHoaDon { get; set; }
         public String SoHoaDon { get; set; }
-       public DateTime ThangNamHoaDonToDateTime { get; set; }
-
+        public DateTime ThangNamHoaDonToDateTime { get; set; }
+        public int nhanVienId { get; set; }
         public String TrangThaiChot { get { return GetSTR(26); } set { SetSTR(26, value); } }
         public bool TrangThaiIn { get; set; }
-        public DateTime ngayIn { get; set; }     
-
+        public DateTime ngayIn { get; set; }
+        public DateTime ngayNhapHoaDon { get; set; }
         public double TongCong { get; set; }
 
         protected override Type TransferType()
