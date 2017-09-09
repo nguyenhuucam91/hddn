@@ -145,22 +145,19 @@ namespace HoaDonNuocHaDong.Controllers
 
             int tuyen = String.IsNullOrEmpty(form["tuyen"]) ? 0 : Convert.ToInt32(form["tuyen"]);
             //danh sách viewBag
+            #region ViewBag
             int phongBanIDObjectInt = phongBanID;
-            /*View Bag cho dropdown*/
             ViewBag.selectedChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0);
-            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-            //load viewbag mặc định
+            ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);            
             ViewBag.chiNhanh = db.Chinhanhs.OrderBy(p => p.Ten).ToList();
             ViewBag.to = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
             ViewBag.nhanVien = getNhanViensByTo(toForm);
-
             ViewBag.tuyen = tuyenKH.OrderBy(p => p.Matuyen).ToList();
             ViewBag.showKhachHang = true;
-            //selectedNhanvien và tuyến
             ViewBag.selectedNhanVien = nhanVienID;
             ViewBag.selectedTuyen = tuyen;
             ViewBag.selectedTo = toForm;
-
+            #endregion
             // tiến hành lọc khách hàng dựa trên các tiêu chí trên
             if (tuyen > 0)
             {
@@ -371,7 +368,7 @@ namespace HoaDonNuocHaDong.Controllers
 
         public JsonResult checkTTDoc(int? TTDoc, int? tuyenID)
         {
-            var ttDoc = db.Khachhangs.Count(p => p.TTDoc == TTDoc && p.TuyenKHID == tuyenID && (p.IsDelete == false || p.IsDelete == null));
+            var ttDoc = db.Khachhangs.Count(p => p.TTDoc == TTDoc && p.TuyenKHID == tuyenID && p.IsDelete == false);
             return Json(ttDoc, JsonRequestBehavior.AllowGet);
         }
         /// <summary>

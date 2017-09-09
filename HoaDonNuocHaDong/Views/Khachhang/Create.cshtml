@@ -4,8 +4,9 @@
     input[name='Ten'] {
         width: 334px !important;
     }
+
     .tonghop {
-        background-color: #fff ;
+        background-color: #fff;
     }
 </style>
 
@@ -62,13 +63,13 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-6 pull-left">
                                             <label for="" class="control-label">Mã khách hàng:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.MaKhachHang, new { Value= maKH, @readonly = "readonly" })
+                                            @Html.TextBoxFor(model => model.MaKhachHang, new { Value = maKH, @readonly = "readonly" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.MaKhachHang)
                                         </div>
                                         <div class="col-md-6" style="margin-right:20%">
                                             <label for="" class="control-label">Tên khách hàng:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Ten, new { autofocus = true, Value=""})
+                                            @Html.TextBoxFor(model => model.Ten, new { autofocus = true, Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Ten)
                                         </div>
@@ -116,7 +117,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-3 pull-left" style="margin-right:20%">
                                             <label for="" class="control-label">Số điện thoại:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Dienthoai, new { Value = ""})
+                                            @Html.TextBoxFor(model => model.Dienthoai, new { Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Dienthoai)
                                         </div>
@@ -177,7 +178,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="span12">
                                             <label for="" class="control-label">Địa chỉ đọc đồng hồ:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Diachi, new { style = "width:78.5%"})
+                                            @Html.TextBoxFor(model => model.Diachi, new { style = "width:78.5%" })
                                             <br />
 
                                             @Html.ValidationMessageFor(model => model.Diachi)
@@ -187,7 +188,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-12">
                                             <label for="" class="control-label">Địa chỉ thu tiền:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Diachithutien, new { style = "width:78.5%"})
+                                            @Html.TextBoxFor(model => model.Diachithutien, new { style = "width:78.5%" })
                                             <br />
 
                                             @Html.ValidationMessageFor(model => model.Diachithutien)
@@ -198,7 +199,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-6 pull-left">
                                             <label for="" class="control-label">Số tài khoản:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Sotaikhoan, new { Value = ""})
+                                            @Html.TextBoxFor(model => model.Sotaikhoan, new { Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Sotaikhoan)
                                         </div>
@@ -206,7 +207,7 @@
 
                                         <div class="col-md-6 pull-right" style="margin-right:20%">
                                             <label for="" class="control-label">Mã số thuế:</label>&nbsp;&nbsp;
-                                            @Html.TextBoxFor(model => model.Masothue, new { Value = ""})
+                                            @Html.TextBoxFor(model => model.Masothue, new { Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Masothue)
                                         </div>
@@ -217,7 +218,7 @@
                                     <div class="row" style="margin: 1% 0 0 0%">
                                         <div class="col-md-3 pull-left">
                                             <label for="" class="control-label">Ngày ký hợp đồng:</label>&nbsp; &nbsp;
-                                            @Html.TextBoxFor(model => model.Ngaykyhopdong, "{0:dd/mm/yyyy}", 
+                                            @Html.TextBoxFor(model => model.Ngaykyhopdong, "{0:dd/mm/yyyy}",
                                             new { @class = "datepicker kihopdong", @required = "required", Value = "" })
                                             <br />
                                             @Html.ValidationMessageFor(model => model.Ngaykyhopdong)
@@ -459,7 +460,7 @@
             }
         });
 
-        $(".addCustomer").click(function(){
+        $(".addCustomer").click(function () {
 
             //kiểm tra thứ tự đọc
             var ttDoc = $("#TTDoc");
@@ -467,18 +468,18 @@
             var ttDocValue = ttDoc.val();
             //check thứ tự đọc trong csdl
             $.ajax({
-                url:'/KhachHang/checkTTDoc',
-                method:"POST",
-                dataType:"json",
-                contentType:"application/json;charset=utf-8",
-                data:JSON.stringify({TTDoc:ttDocValue,tuyenID:tuyenID}),
-                success:function(result){
-                    if(result==1){
+                url: '/KhachHang/checkTTDoc',
+                method: "POST",
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify({ TTDoc: ttDocValue, tuyenID: tuyenID }),
+                success: function (result) {
+                    if (result == 1) {
                         var isConfirmed = confirm("Thứ tự đọc này đã có trong hệ thống, bạn có muốn chèn khách hàng này vào không");
-                        if(isConfirmed){
+                        if (isConfirmed) {
                             $("form").submit();
                         }
-                    }else{
+                    } else {
                         $("form").submit();
                     }
                 }
@@ -487,7 +488,7 @@
 
         //Ấn F1 để submit form
         $(document).keyup(function (event) {
-            if (event.which == 112) {                
+            if (event.which == 112) {
                 //xem chỉ số chi tiết
                 $("form").submit();
             }
