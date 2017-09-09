@@ -286,27 +286,17 @@ namespace HoaDonHaDong.Helper
             double CCPrice = getSoTienTheoApGia("CC").Value;
             double SXPrice = getSoTienTheoApGia("SX-XD").Value;
             double KDPrice = getSoTienTheoApGia("KDDV").Value;
+          
+            double SH1Total = SH1 * SH1Price;
+            double SH2Total = SH2 * SH2Price;
+            double SH3Total = SH3 * SH3Price;
+            double SH4Total = SH4 * SH4Price;
+            double HCTotal = HC * HCPrice;
+            double CCTotal = CC * CCPrice;
+            double KDTotal = KD * KDPrice;
+            double SXTotal = SX * SXPrice;
 
-            double SH1Total = 0;
-            double SH2Total = 0;
-            double SH3Total = 0;
-            double SH4Total = 0;
-            double HCTotal = 0;
-            double CCTotal = 0;
-            double KDTotal = 0;
-            double SXTotal = 0;
-            double Sum = 0;
-
-            SH1Total = SH1 * SH1Price;
-            SH2Total = SH2 * SH2Price;
-            SH3Total = SH3 * SH3Price;
-            SH4Total = SH4 * SH4Price;
-            HCTotal = HC * HCPrice;
-            CCTotal = CC * CCPrice;
-            KDTotal = KD * KDPrice;
-            SXTotal = SX * SXPrice;
-
-            Sum = SH1Total + SH2Total + SH3Total + SH4Total + HCTotal + CCTotal + KDTotal + SXTotal;
+            double Sum = SH1Total + SH2Total + SH3Total + SH4Total + HCTotal + CCTotal + KDTotal + SXTotal;
             return Math.Floor(Sum);
         }
 

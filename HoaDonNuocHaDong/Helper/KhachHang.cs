@@ -130,7 +130,7 @@ namespace HoaDonNuocHaDong.Helper
         /// </summary>
         /// <param name="quanID"></param>
         /// <returns></returns>
-        public  String getQuan(int? quanID)
+        public String getQuan(int? quanID)
         {
             HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             if (quanID != null)
@@ -149,7 +149,7 @@ namespace HoaDonNuocHaDong.Helper
         /// </summary>
         /// <param name="quanID"></param>
         /// <returns></returns>
-        public  String getPhuong(int? phuongXaID)
+        public String getPhuong(int? phuongXaID)
         {
             HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             if (phuongXaID != null)
@@ -166,14 +166,14 @@ namespace HoaDonNuocHaDong.Helper
         public Khachhang getKH(int KHID)
         {
             HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-            return db.Khachhangs.Find(KHID);        
+            return db.Khachhangs.Find(KHID);
         }
         /// <summary>
         ///  Lấy cụm dân cư của khách hàng
         /// </summary>
         /// <param name="cumDanCuID"></param>
         /// <returns></returns>
-        public  String getCumDanCu(int? cumDanCuID)
+        public String getCumDanCu(int? cumDanCuID)
         {
             HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             if (cumDanCuID != null)
@@ -232,9 +232,10 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="SH"></param>
         /// <param name="KD"></param>
         /// <param name="SX"></param>
-        public static void saveGiaTongHop(int KhachHangID, byte isPhanTram, double SH, double KD, double HC, double CC, double SX, int month, short year)
+        public void saveGiaTongHop(int KhachHangID, byte isPhanTram, double SH, double KD, double HC, double CC, double SX, int month, short year)
         {
-            db.Apgiatonghops.RemoveRange(db.Apgiatonghops.Where(p => p.KhachhangID == KhachHangID));
+            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();            
+            _db.Apgiatonghops.RemoveRange(_db.Apgiatonghops.Where(p => p.KhachhangID == KhachHangID).ToList());
             if (KD != -1)
             {
                 Apgiatonghop apTongHopKD = new Apgiatonghop();
@@ -245,7 +246,8 @@ namespace HoaDonNuocHaDong.Helper
                 apTongHopKD.SanLuong = KD;
                 apTongHopKD.NamTongHop = year;
                 apTongHopKD.ThangTongHop = month;
-                db.Apgiatonghops.Add(apTongHopKD);
+                _db.Apgiatonghops.Add(apTongHopKD);
+                _db.SaveChanges();
             }
             if (HC != -1)
             {
@@ -257,7 +259,8 @@ namespace HoaDonNuocHaDong.Helper
                 apTongHopHC.SanLuong = HC;
                 apTongHopHC.NamTongHop = year;
                 apTongHopHC.ThangTongHop = month;
-                db.Apgiatonghops.Add(apTongHopHC);
+                _db.Apgiatonghops.Add(apTongHopHC);
+                _db.SaveChanges();
             }
             if (CC != -1)
             {
@@ -269,7 +272,8 @@ namespace HoaDonNuocHaDong.Helper
                 apTongHopCC.SanLuong = CC;
                 apTongHopCC.NamTongHop = year;
                 apTongHopCC.ThangTongHop = month;
-                db.Apgiatonghops.Add(apTongHopCC);
+                _db.Apgiatonghops.Add(apTongHopCC);
+                _db.SaveChanges();
             }
             if (SX != -1)
             {
@@ -281,7 +285,8 @@ namespace HoaDonNuocHaDong.Helper
                 apTongHopSX.SanLuong = SX;
                 apTongHopSX.NamTongHop = year;
                 apTongHopSX.ThangTongHop = month;
-                db.Apgiatonghops.Add(apTongHopSX);
+                _db.Apgiatonghops.Add(apTongHopSX);
+                _db.SaveChanges();
             }
             if (SH != -1)
             {
@@ -293,9 +298,9 @@ namespace HoaDonNuocHaDong.Helper
                 apTongHop.SanLuong = SH;
                 apTongHop.NamTongHop = year;
                 apTongHop.ThangTongHop = month;
-                db.Apgiatonghops.Add(apTongHop);
+                _db.Apgiatonghops.Add(apTongHop);
+                _db.SaveChanges();
             }
-            db.SaveChanges();
         }
 
         /// <summary>
@@ -310,7 +315,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="SX"></param>
         /// <param name="month"></param>
         /// <param name="year"></param>
-        public void saveGiaDacBiet(int KhachHangID, double SH, double KD, double HC, double CC, double SX,double SH1, double SH2, double SH3, double SH4, int month, int year)
+        public void saveGiaDacBiet(int KhachHangID, double SH, double KD, double HC, double CC, double SX, double SH1, double SH2, double SH3, double SH4, int month, int year)
         {
             HoaDonHaDongEntities db = new HoaDonHaDongEntities();
             //xóa record ứng với áp giá tổng hợp của khách hàng đó
@@ -319,7 +324,7 @@ namespace HoaDonNuocHaDong.Helper
             {
                 Apgiatonghop apTongHopKD = new Apgiatonghop();
                 apTongHopKD.KhachhangID = KhachHangID;
-                apTongHopKD.IsDelete = false;                
+                apTongHopKD.IsDelete = false;
                 apTongHopKD.IDLoaiApGia = KhachHang.KINHDOANHDICHVU; //KD
                 apTongHopKD.SanLuong = KD;
                 apTongHopKD.NamTongHop = year;
@@ -330,7 +335,7 @@ namespace HoaDonNuocHaDong.Helper
             {
                 Apgiatonghop apTongHopHC = new Apgiatonghop();
                 apTongHopHC.KhachhangID = KhachHangID;
-                apTongHopHC.IsDelete = false;                
+                apTongHopHC.IsDelete = false;
                 apTongHopHC.IDLoaiApGia = KhachHang.COQUANHANHCHINH; //HC
                 apTongHopHC.SanLuong = HC;
                 apTongHopHC.NamTongHop = year;
@@ -488,6 +493,6 @@ namespace HoaDonNuocHaDong.Helper
                 db.SaveChanges();
             }
         }
-        
+
     }
 }

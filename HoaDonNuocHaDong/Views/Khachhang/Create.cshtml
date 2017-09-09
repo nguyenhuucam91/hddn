@@ -474,6 +474,7 @@
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({ TTDoc: ttDocValue, tuyenID: tuyenID }),
                 success: function (result) {
+                    console.log(result);
                     if (result == 1) {
                         var isConfirmed = confirm("Thứ tự đọc này đã có trong hệ thống, bạn có muốn chèn khách hàng này vào không");
                         if (isConfirmed) {
