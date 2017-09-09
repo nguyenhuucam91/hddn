@@ -455,8 +455,7 @@ $(document).ready(function () {
             var dateEnd = dateEndInput.val();
         }
 
-        var hoaDonID = $(this).data("hoadonid");
-        var tuyenKHID = $("select[name='tuyen']").val();
+        var hoaDonID = $(this).data("hoadonid");       
         var KHID = $(this).data("khid");
         var _soHoaDon = $(this).data("sohoadon");
         var dateInput = new Date();
@@ -492,12 +491,9 @@ $(document).ready(function () {
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({
                 HoaDonID: hoaDonID, ChiSoDau: chiSoCuValue, ChiSoCuoi: chiSoMoiValue, TongSoTieuThu: hieuSo, SoKhoan: soKhoan, KHID: KHID,
-                SoHoaDon: _soHoaDon, dateStart: dateStart, dateEnd: dateEnd, dateInput: dateInput, thang: selectedMonth, nam: selectedYear,
-                tuyenKHID: tuyenKHID
+                SoHoaDon: _soHoaDon, dateStart: dateStart, dateEnd: dateEnd, dateInput: dateInput, thang: selectedMonth, nam: selectedYear
             }),
-            error: function (result) {
-                console.error(result);
-            }
+            
         });
     });
 });

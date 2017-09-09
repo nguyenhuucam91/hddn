@@ -21,7 +21,7 @@ namespace HoaDonNuocHaDong.Controllers
     public class SoLieuTieuThuController : BaseController
     {
         private ChiSo cS = new ChiSo();
-
+        private Tuyen tuyenHelper = new Tuyen();
         private KhachHang kHHelper = new KhachHang();
         private NguoidungHelper ngDungHelper = new NguoidungHelper();
         private KiemDinh kiemDinh = new KiemDinh();
@@ -111,15 +111,13 @@ namespace HoaDonNuocHaDong.Controllers
         [HttpPost]
         public ActionResult Index(FormCollection form)
         {
-            //khởi tạo danh sách lỗi
+            #region parameters
             List<String> errorList = new List<String>();
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-            int quanHuyenID = selectedQuanHuyenID;
-            //generate chi tiet hóa đơn nước tháng sau
+            int quanHuyenID = selectedQuanHuyenID;            
             int nhanVienInt = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
             //gán session cho nhân viên để tiến hành thêm mới hóa đơn tháng sau cũng như lấy nhân viên cho các controller khác có thể tác động vào.          
-            Session["nhanvien"] = nhanVienInt;
-            //năm và tháng được chọn
+            Session["nhanvien"] = nhanVienInt;            
             String month = form["thang"];
             String year = form["nam"];
             //nếu năm tháng rỗng thì lấy năm và tháng hiện tại, nếu tuyến được chọn rỗng thì lấy là 0
@@ -127,19 +125,24 @@ namespace HoaDonNuocHaDong.Controllers
             int _year = String.IsNullOrEmpty(year) ? DateTime.Now.Year : Convert.ToInt16(year);
             String selectedNhanVien = form["nhanvien"];
             String selectedTuyen = form["tuyen"];
-            if(new DateTime(_year, _month, 1) > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1))
+            int tuyenInt = Convert.ToInt32(selectedTuyen);
+            //sao chép ds khách hàng không sản lượng vào tháng hiện tại                       
+            ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenInt);
+            #endregion
+
+            if (new DateTime(_year, _month, 1) > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1))
             {
                 errorList.Add("Ngày tháng được chọn không được quá ngày tháng hiện tại");
             }
             else
             {
                 cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
-            }          
+            }
             //lấy danh sách tổ, phòng ban thuộc tổ quận huyện đó
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
-            
+
             ViewBag.to = new List<ToQuanHuyen>();
             ViewBag.nhanVien = new List<Nhanvien>();
             ViewBag.tuyen = new List<Tuyenkhachhang>();
@@ -153,7 +156,6 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-
                 List<ToQuanHuyen> toLs = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
                 ViewBag.to = toLs;
 
@@ -169,38 +171,57 @@ namespace HoaDonNuocHaDong.Controllers
                 //nếu nhân viên không để trống thì kiểm tra tuyến
                 else
                 {
-                    Nhanvien nhanVienObj = db.Nhanviens.Find(nhanVienInt);
-                    ViewData["nhanVienObj"] = nhanVienObj;
-                    //load danh sách tuyến thuộc nhân viên đó.
-                    List<Tuyenkhachhang> tuyensLs = new List<Tuyenkhachhang>();
+                    bool isTruongPhong = ngDungHelper.isNguoiDungLaTruongPhong(nhanVienInt);
+                    if (isTruongPhong)
+                    {
+                        List<HoaDonNuocHaDong.Models.ModelNhanVien> nhanviens = new List<HoaDonNuocHaDong.Models.ModelNhanVien>();
+                        List<ToQuanHuyen> toes = getToes(quanHuyenID, phongBanID);
+                        List<Tuyenkhachhang> tuyens = new List<Tuyenkhachhang>();
+                        foreach (var to in toes)
+                        {
+                            nhanviens.AddRange(getNhanViensByTo(to.ToQuanHuyenID));
+                        }
 
-                    var tuyenTheoNhanVien = (from i in db.Tuyentheonhanviens
-                                             join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                                             join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
-                                             join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
-                                             where i.NhanVienID == nhanVienInt
-                                             select r).ToList();
-                    tuyensLs.AddRange(tuyenTheoNhanVien);
-                    ViewBag.tuyen = tuyensLs;
+                        foreach (var nhanvien in nhanviens)
+                        {
+                            List<Tuyenkhachhang> tuyensThuocNhanVien = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien.NhanvienID).ToList();
+                            tuyens.AddRange(tuyensThuocNhanVien);
+                        }
+                        ViewBag.tuyen = tuyens;                        
+                    }
+                    else
+                    {
+
+                        Nhanvien nhanVienObj = db.Nhanviens.Find(nhanVienInt);
+                        ViewData["nhanVienObj"] = nhanVienObj;                                                                       
+                        //load danh sách tuyến thuộc nhân viên đó.
+                        List<Tuyenkhachhang> tuyensLs = new List<Tuyenkhachhang>();
+
+                        var tuyenTheoNhanVien = (from i in db.Tuyentheonhanviens
+                                                 join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
+                                                 join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
+                                                 join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
+                                                 where i.NhanVienID == nhanVienInt
+                                                 select r).ToList();
+                        tuyensLs.AddRange(tuyenTheoNhanVien);
+                        ViewBag.tuyen = tuyensLs;                       
+                    }
                     Session["solieuTieuThuNhanvien"] = Convert.ToInt32(selectedNhanVien);
                     //nếu tuyến để trống thì thêm mới lỗi vào errorList
                     if (String.IsNullOrEmpty(selectedTuyen))
                     {
                         errorList.Add("Không nhập được số liệu tiêu thụ do tuyến để trống");
-                        ViewBag.tuyen = new List<Tuyenkhachhang>();
                     }
                     else
                     {
-                        int tuyenInt = Convert.ToInt32(selectedTuyen);
-                        //sao chép ds khách hàng không sản lượng vào tháng hiện tại                       
-                        ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenInt);
-                        List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cS.filterChiSo(_month, _year, tuyenInt);
-                        ViewData["ChiSoTieuThu"] = chiSoTieuThu;
                         ViewBag.selectedNhanvien = Session["solieuTieuThuNhanvien"];
                         ViewBag.selectedTuyen = tuyenInt;
                         ViewBag.selectedTo = toForm;
-                        ViewBag.tongSoHoaDon = chiSoTieuThu.Count;
                     }
+                    ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenInt);
+                    List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cS.filterChiSo(_month, _year, tuyenInt);
+                    ViewData["ChiSoTieuThu"] = chiSoTieuThu;
+                    ViewBag.tongSoHoaDon = chiSoTieuThu.Count;
                 }
             }
 
@@ -259,18 +280,18 @@ namespace HoaDonNuocHaDong.Controllers
         /// <param name="ChiSoCuoi"></param>
         /// <param name="TongSoTieuThu"></param>
         /// <param name="hieuSo"></param>
-        public void NhapChiSoMoi(int HoaDonID, int? ChiSoDau, int? ChiSoCuoi, int? TongSoTieuThu, int SoKhoan, int KHID, 
-            int SoHoaDon, String dateStart, String dateEnd, String dateInput, int thang, int nam, int tuyenKHID)
+        public void NhapChiSoMoi(int HoaDonID, int? ChiSoDau, int? ChiSoCuoi, int? TongSoTieuThu, int SoKhoan, int KHID,
+            int SoHoaDon, String dateStart, String dateEnd, String dateInput, int thang, int nam)
         {
             int _month = thang;
             int _year = nam;
             int _TongSoTieuThu = 0;
-            int _tongKiemDinh = 0;           
+            int _tongKiemDinh = 0;
 
             Hoadonnuoc hoaDon = db.Hoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
             //nếu có record hóa đơn trọng hệ thống
             if (hoaDon != null)
-            {                
+            {
                 if (LoggedInUser.NhanvienID != null)
                 {
                     hoaDon.NhanvienID = LoggedInUser.NhanvienID;
@@ -453,52 +474,32 @@ namespace HoaDonNuocHaDong.Controllers
                 //loại khách hàng: doanh nghiệp - tính theo số kinh doanh, CC,...
                 else
                 {
+                    chiTiet.SH1 = 0;
+                    chiTiet.SH2 = 0;
+                    chiTiet.SH3 = 0;
+                    chiTiet.SH4 = 0;
+                    chiTiet.CC = 0;
+                    chiTiet.HC = 0;
+                    chiTiet.SXXD = 0;
+                    chiTiet.KDDV = 0;
                     //nếu khách hàng là kinh doanh 
                     if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU)
                     {
-                        chiTiet.SH1 = 0;
-                        chiTiet.SH2 = 0;
-                        chiTiet.SH3 = 0;
-                        chiTiet.SH4 = 0;
-                        chiTiet.CC = 0;
-                        chiTiet.HC = 0;
-                        chiTiet.SXXD = 0;
                         chiTiet.KDDV = _TongSoTieuThu;
                     }
                     //Sản xuất
                     else if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.SANXUAT)
                     {
-                        chiTiet.SH1 = 0;
-                        chiTiet.SH2 = 0;
-                        chiTiet.SH3 = 0;
-                        chiTiet.SH4 = 0;
-                        chiTiet.CC = 0;
-                        chiTiet.HC = 0;
-                        chiTiet.KDDV = 0;
                         chiTiet.SXXD = _TongSoTieuThu;
                     }
                     //đơn vị sự nghiệp
                     else if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP)
                     {
-                        chiTiet.SH1 = 0;
-                        chiTiet.SH2 = 0;
-                        chiTiet.SH3 = 0;
-                        chiTiet.SH4 = 0;
-                        chiTiet.HC = 0;
-                        chiTiet.KDDV = 0;
-                        chiTiet.SXXD = 0;
                         chiTiet.CC = _TongSoTieuThu;
                     }
                     //kinh doanh dịch vụ
                     else if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH)
                     {
-                        chiTiet.SH1 = 0;
-                        chiTiet.SH2 = 0;
-                        chiTiet.SH3 = 0;
-                        chiTiet.SH4 = 0;
-                        chiTiet.CC = 0;
-                        chiTiet.KDDV = 0;
-                        chiTiet.SXXD = 0;
                         chiTiet.HC = _TongSoTieuThu;
                     }
                 }
@@ -1267,7 +1268,7 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@nam", currentYear), new SqlParameter("@tuyen", tuyenID)).ToList();
 
             if (dsKhachHangKoSanLuong.Count > 0)
-            {              
+            {
                 foreach (var dsHoaDonThangSau in dsKhachHangKoSanLuong)
                 {
                     Hoadonnuoc khongSanLuong = new Hoadonnuoc();

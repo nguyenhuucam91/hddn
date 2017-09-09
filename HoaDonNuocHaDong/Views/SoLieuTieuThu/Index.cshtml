@@ -1,6 +1,6 @@
 ﻿@{
     HoaDonHaDongEntities db = new HoaDonHaDongEntities();
-    ViewBag.Title = "Nhập số liệu tiêu thụ ("+ ViewBag.tongSoHoaDon + " hóa đơn)";
+    ViewBag.Title = "Nhập số liệu tiêu thụ (" + ViewBag.tongSoHoaDon + " hóa đơn)";
     var chiSoTieuThus = ViewData["ChiSoTieuThu"] as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
     int year = ViewBag.year;
     int month = ViewBag.month;
@@ -151,10 +151,12 @@
                                                 <th>Kiểm định</th>
                                                 <th data-toggle="tooltip" data-placement="top" title="Màu đỏ là danh sách những khách hàng có áp giá đặc biệt trong tháng này">Áp đặc biệt</th>
                                             </tr>
+
                                             <tr>
-                                                <td colspan="10"><b>(@tuyenObj.Matuyen - @tuyenObj.Ten) - (@nhanVienObj.MaNhanVien - @nhanVienObj.Ten) - (@month / @year)</b></td>
+                                                <td colspan="10"><b>(@tuyenObj.Matuyen - @tuyenObj.Ten) - (@month / @year)</b></td>
                                                 <td colspan="3">Ngày kết thúc: <input type="text" class="endDateFixedTop"></td>
                                             </tr>
+
                                         </thead>
 
                                         <tbody>
@@ -271,9 +273,9 @@
                                                                             </td>
 
                                                                             <td class="chiSoKhoan">
-                                                                                @{ String soKhoanAsTxt = item.SoKhoan != 0 ? item.SoKhoan.ToString() : "" ; }
+                                                                                @{ String soKhoanAsTxt = item.SoKhoan != 0 ? item.SoKhoan.ToString() : ""; }
                                                                                 @if (isChot == null || isChot == false)
-                                                                                {                                                                                   
+                                                                                {
                                                                                     <input type="text" data-khid="@item.KhachHangID" data-sohoadon="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" name="soKhoan"
                                                                                            style="width:35px" placeholder="@soKhoanAsTxt" value="@soKhoanAsTxt" />
                                                                                 }
@@ -314,14 +316,14 @@
                                                                                     if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
                                                                                     {
                                                                                         <td style="background-color:#ffcc00">
-                                                                                            <a style="color:red" class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month" 
+                                                                                            <a style="color:red" class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month"
                                                                                                data-year="@year" data-nhanvienid="@nhanVienID" data-tuyen="@tuyenID" data-sohoadon="@i.ToString()">Áp</a>
                                                                                         </td>
                                                                                     }
                                                                                     else
                                                                                     {
                                                                                         <td>
-                                                                                            <a class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month" 
+                                                                                            <a class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month"
                                                                                                data-year="@year" data-nhanvienid="@nhanVienID" data-tuyen="@tuyenID" data-sohoadon="@i.ToString()">
                                                                                                 Áp
                                                                                             </a>
@@ -395,14 +397,14 @@
             if (event.ctrlKey && (event.which === 88)) {
                 //xem chỉ số chi tiết
                 window.location.href = "/Solieutieuthu/ViewDetail?toID =@toID &tuyenID=@selectedTuyen&month=@month&year=@year&nvquanly=@selectedNhanvien";
-            }           
+            }
         });
 
         var endDateInputField = $("td.endDate input").val();
         if (endDateInputField == '01/01/0001') {
             $("td.endDate input").val("");
         }
-        
+
         $(".apgiadacbiet").click(function () {
             var hoadonId = $(this).data('hoadonid');
             var toId = $(this).data('to'); var patternToId = "?toID=" + toId;
@@ -421,7 +423,7 @@
             } else {
                 alert('Sản lượng âm hoặc 0, không áp giá đặc biệt. Xin hãy kiểm tra lại');
             }
-            
+
         });
     });
 </script>

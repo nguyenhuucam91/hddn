@@ -942,49 +942,26 @@ namespace HoaDonNuocHaDong.Controllers
                             db.SaveChanges();
                         }
                     }
-                }
-                else
-                {
-                    Hoadonnuoc hoaDonThangNamKiHopDong = new Hoadonnuoc();
-                    //lấy last inserted id của khách hàng
-                    hoaDonThangNamKiHopDong.KhachhangID = db.Khachhangs.Max(p => p.KhachhangID);
-                    //lấy nhân viên ID đang đăng nhập hệ thống
-                    if (LoggedInUser.NhanvienID != null)
+
+                    Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuoc.HoadonnuocID);
+                    #region reCalculateWaterReceipt
+                    int sanLuongTieuThu = 0; int chiSoDau = 0; int chiSoCuoi = 0; int soKhoan = 0;
+                    
+                    if (hoaDonNuoc.Tongsotieuthu != null)
                     {
-                        int nhanvienID = LoggedInUser.NhanvienID.Value;
-                        hoaDonThangNamKiHopDong.NhanvienID = nhanvienID;
-                    }
-                    else
-                    {
-                        hoaDonThangNamKiHopDong.NhanvienID = 0;
+                        sanLuongTieuThu = hoaDonNuoc.Tongsotieuthu.Value;
                     }
 
-                    hoaDonThangNamKiHopDong.Tongsotieuthu = 0;
-                    hoaDonThangNamKiHopDong.Trangthaiin = false;
-                    hoaDonThangNamKiHopDong.Trangthaithu = false;
-                    hoaDonThangNamKiHopDong.NamHoaDon = selectedYear;
-                    hoaDonThangNamKiHopDong.ThangHoaDon = selectedMonth;
-                    hoaDonThangNamKiHopDong.Ngaybatdausudung = khachhang.Ngaykyhopdong;
-                    db.Hoadonnuocs.Add(hoaDonThangNamKiHopDong);
-                    db.SaveChanges();
-                    int chiSoDauChiTietHoaDon = 0;
-                    themMoiChiTietHoaDonNuoc(chiSoDauChiTietHoaDon);
-                }
+                    if (cT.Chisocu != null)
+                    {
+                        chiSoDau = cT.Chisocu.Value;
+                    }
 
-                int sanLuongTieuThu = 0; int chiSoDau = 0; int chiSoCuoi = 0; int soKhoan = 0;
-                //lấy sản lượng đã có trong db
-                Hoadonnuoc hD = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == selectedMonth && p.NamHoaDon == selectedYear);
-                if (hD != null)
-                {
-                    int? isNullTongSoTieuThu = hD.Tongsotieuthu;
-                    if (isNullTongSoTieuThu != null)
+                    if (cT.Chisomoi != null)
                     {
-                        sanLuongTieuThu = isNullTongSoTieuThu.Value;
+                        chiSoCuoi = cT.Chisomoi.Value;
                     }
-                    else
-                    {
-                        sanLuongTieuThu = 0;
-                    }
+                  
                     #region TachChiSoSanLuongApGiaTongHop
                     if (loaiApGiaID == KhachHang.TONGHOP)
                     {
@@ -993,17 +970,16 @@ namespace HoaDonNuocHaDong.Controllers
                         {
                             cachTinh = 1;
                         }
-                        sLTT.tachSoTongHop(hD.HoadonnuocID, cachTinh, khachhang.KhachhangID, sanLuongTieuThu);
+                        sLTT.tachSoTongHop(hoaDonNuoc.HoadonnuocID, cachTinh, khachhang.KhachhangID, sanLuongTieuThu);
                     }
                     //tách lại chỉ số giá khác
                     else
                     {
-                        sLTT.tachChiSoSanLuong(hD.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);
+                        sLTT.tachChiSoSanLuong(hoaDonNuoc.HoadonnuocID, chiSoDau, chiSoCuoi, sanLuongTieuThu, soKhoan, khachhang.KhachhangID);
                     }
                     #endregion
                     //chi tiết
 
-                    Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hD.HoadonnuocID);
                     double thueBVMT = 0;
                     double tongTienHoaDon = 0;
                     double dinhMuc = 0;
@@ -1027,9 +1003,9 @@ namespace HoaDonNuocHaDong.Controllers
                         double SX = cT.SXXD == null ? 0 : cT.SXXD.Value;
                         double KD = cT.KDDV == null ? 0 : cT.KDDV.Value;
 
-                        dinhMuc = chiSo.tinhTongTienTheoDinhMuc(hD.HoadonnuocID, SH1, SH2, SH3, SH4, HC, CC, KD, SX);
+                        dinhMuc = chiSo.tinhTongTienTheoDinhMuc(hoaDonNuoc.HoadonnuocID, SH1, SH2, SH3, SH4, HC, CC, KD, SX);
                         VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
-                        thueBVMT = chiSo.tinhThue(hD.HoadonnuocID, SH1, SH2, SH3, SH4, HC, CC, KD, SX, khachhang.Tilephimoitruong.Value);
+                        thueBVMT = chiSo.tinhThue(hoaDonNuoc.HoadonnuocID, SH1, SH2, SH3, SH4, HC, CC, KD, SX, khachhang.Tilephimoitruong.Value);
                         tongTienHoaDon = dinhMuc + thueBVMT + VAT;
                         if (tongTienHoaDon <= 0)
                         {
@@ -1060,7 +1036,7 @@ namespace HoaDonNuocHaDong.Controllers
                         {
                             ngayKetThucSuDung = String.Format("{0: dd/MM/yyyy }", hoaDonNuoc.Ngayketthucsudung.Value);
                         }
-                        lichSuHoaDonRepo.updateLichSuHoaDon(hD.HoadonnuocID, selectedMonth, selectedYear, khachhang.Ten, khachhang.Diachi, khachhang.Masothue, khachhang.MaKhachHang,
+                        lichSuHoaDonRepo.updateLichSuHoaDon(hoaDonNuoc.HoadonnuocID, selectedMonth, selectedYear, khachhang.Ten, khachhang.Diachi, khachhang.Masothue, khachhang.MaKhachHang,
                          khachhang.TuyenKHID.Value, khachhang.Sohopdong, chiSoDau, chiSoCuoi, sanLuongTieuThu,
                          SH1, chiSo.getSoTienTheoApGia("SH1").Value,
                          SH2, chiSo.getSoTienTheoApGia("SH2").Value,
@@ -1076,175 +1052,156 @@ namespace HoaDonNuocHaDong.Controllers
                          thuNgan, khachhang.TuyenKHID.Value, khachhang.TTDoc.Value, 0, ngayBatDauSuDung,
                          ngayKetThucSuDung);
                         #endregion
+                    #endregion
+
+                    }
+                    else
+                    {
+                        Hoadonnuoc hoaDonThangNamKiHopDong = new Hoadonnuoc();
+                        //lấy last inserted id của khách hàng
+                        hoaDonThangNamKiHopDong.KhachhangID = db.Khachhangs.Max(p => p.KhachhangID);
+                        //lấy nhân viên ID đang đăng nhập hệ thống
+                        if (LoggedInUser.NhanvienID != null)
+                        {
+                            int nhanvienID = LoggedInUser.NhanvienID.Value;
+                            hoaDonThangNamKiHopDong.NhanvienID = nhanvienID;
+                        }
+                        else
+                        {
+                            hoaDonThangNamKiHopDong.NhanvienID = 0;
+                        }
+
+                        hoaDonThangNamKiHopDong.Tongsotieuthu = 0;
+                        hoaDonThangNamKiHopDong.Trangthaiin = false;
+                        hoaDonThangNamKiHopDong.Trangthaithu = false;
+                        hoaDonThangNamKiHopDong.NamHoaDon = selectedYear;
+                        hoaDonThangNamKiHopDong.ThangHoaDon = selectedMonth;
+                        hoaDonThangNamKiHopDong.Ngaybatdausudung = khachhang.Ngaykyhopdong;
+                        db.Hoadonnuocs.Add(hoaDonThangNamKiHopDong);
+                        db.SaveChanges();
+                        int chiSoDauChiTietHoaDon = 0;
+                        themMoiChiTietHoaDonNuoc(chiSoDauChiTietHoaDon);
                     }
 
-                    //tách chỉ số tổng hợp
-                    //tiến hành áp lại giá tổng hợp và đặc biệt
 
-
-
-                } //end hD != null
-
-
-                //chỉnh sửa khách hàng trong trang áp giá
-                if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "viewdetail")
-                {
-                    return RedirectToAction("viewdetail", "Solieutieuthu", new
+                    //chỉnh sửa khách hàng trong trang áp giá
+                    if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "viewdetail")
                     {
-                        toID = toID,
-                        tuyenID = tuyenIDUrl,
-                        month = Request.QueryString["thang"],
-                        year = Request.QueryString["nam"],
-                        nvquanly = nhanVienIDUrl
-                    });
+                        return RedirectToAction("viewdetail", "Solieutieuthu", new
+                        {
+                            toID = toID,
+                            tuyenID = tuyenIDUrl,
+                            month = Request.QueryString["thang"],
+                            year = Request.QueryString["nam"],
+                            nvquanly = nhanVienIDUrl
+                        });
+                    }
+                    else if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "solieutieuthuindex")
+                    {
+                        return RedirectToAction("index", "solieutieuthu");
+                    }
+
+                    TempData["to"] = toID;
+                    TempData["tuyen"] = tuyenIDUrl;
+                    TempData["nhanvien"] = nhanVienIDUrl;
+                    return RedirectToAction("Index");
                 }
-                else if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "solieutieuthuindex")
+
+                //lấy danh sách tuyến thuộc nhân viên ID
+                if (nhanVien != null)
                 {
-                    return RedirectToAction("index", "solieutieuthu");
+                    //lấy danh sách tổ của người dùng
+                    List<Models.TuyenKhachHang.TuyenKhachHang> _tuyen = new List<Models.TuyenKhachHang.TuyenKhachHang>();
+                    var toQuanHuyens = db.ToQuanHuyens.Where(p => p.PhongbanID == phongBanID && p.QuanHuyenID == quanHuyenID);
+                    int count = toQuanHuyens.Count();
+                    foreach (var item in toQuanHuyens)
+                    {
+                        _tuyen.AddRange(tuyenHelper.getTuyenByTo(item.ToQuanHuyenID));
+                    }
+                    ViewBag._TuyenKHID = _tuyen;
+                    ViewBag.SelectedTuyen = khachhang.TuyenKHID;
                 }
 
-                TempData["to"] = toID;
-                TempData["tuyen"] = tuyenIDUrl;
-                TempData["nhanvien"] = nhanVienIDUrl;
-                return RedirectToAction("Index");
-            }
-
-            //lấy danh sách tuyến thuộc nhân viên ID
-            if (nhanVien != null)
-            {
-                //lấy danh sách tổ của người dùng
-                List<Models.TuyenKhachHang.TuyenKhachHang> _tuyen = new List<Models.TuyenKhachHang.TuyenKhachHang>();
-                var toQuanHuyens = db.ToQuanHuyens.Where(p => p.PhongbanID == phongBanID && p.QuanHuyenID == quanHuyenID);
-                int count = toQuanHuyens.Count();
-                foreach (var item in toQuanHuyens)
+                ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
+                ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
+                ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
+                ViewBag._LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
+                ViewBag._PhuongxaID = new SelectList(db.Phuongxas, "PhuongxaID", "Ten", khachhang.PhuongxaID);
+                ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens, "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
+                ViewBag._TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
+                ViewBag.selectedTuyenOng = khachhang.TuyenongkythuatID;
+                if (khachhang.LoaiapgiaID == KhachHang.TONGHOP || khachhang.LoaiapgiaID == KhachHang.DACBIET)
                 {
-                    _tuyen.AddRange(tuyenHelper.getTuyenByTo(item.ToQuanHuyenID));
-                }
-                ViewBag._TuyenKHID = _tuyen;
-                ViewBag.SelectedTuyen = khachhang.TuyenKHID;
-            }
-
-            ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
-            ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
-            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
-            ViewBag._LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
-            ViewBag._PhuongxaID = new SelectList(db.Phuongxas, "PhuongxaID", "Ten", khachhang.PhuongxaID);
-            ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens, "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
-            ViewBag._TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
-            ViewBag.selectedTuyenOng = khachhang.TuyenongkythuatID;
-            if (khachhang.LoaiapgiaID == KhachHang.TONGHOP || khachhang.LoaiapgiaID == KhachHang.DACBIET)
-            {
-                List<Apgiatonghop> ls = db.Apgiatonghops.Where(p => p.KhachhangID == khachhang.KhachhangID).ToList();
-                if (ls != null)
-                {
-                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT) == null)
+                    List<Apgiatonghop> ls = db.Apgiatonghops.Where(p => p.KhachhangID == khachhang.KhachhangID).ToList();
+                    if (ls != null)
                     {
-                        ViewBag.SH = "";
-                    }
-                    else
-                    {
-                        ViewBag.SH = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT).SanLuong.Value;
-                    }
-
-                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU) == null)
-                    {
-                        ViewBag.KD = "";
-                    }
-                    else
-                    {
-                        ViewBag.KD = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU).SanLuong.Value;
-                    }
-
-                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH) == null)
-                    {
-                        ViewBag.HC = "";
-                    }
-                    else
-                    {
-                        ViewBag.HC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH).SanLuong.Value;
-                    }
-
-                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP) == null)
-                    {
-                        ViewBag.CC = "";
-                    }
-                    else
-                    {
-                        ViewBag.CC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP).SanLuong.Value;
-                    }
-
-                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT) == null)
-                    {
-                        ViewBag.SX = "";
-                    }
-                    else
-                    {
-                        ViewBag.SX = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT).SanLuong.Value;
-                    }
-
-                    //nếu là áp giá tổng hợp
-                    if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
-                    {
-                        if (ls.Count() > 0)
+                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT) == null)
                         {
-                            ViewBag.option = ls[0].CachTinh;
+                            ViewBag.SH = "";
                         }
                         else
                         {
-                            ViewBag.option = 0;
+                            ViewBag.SH = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT).SanLuong.Value;
                         }
-                        ViewBag.hasTongHop = true;
-                        ViewBag.hasDacBiet = false;
-                    }
 
-                    //nếu là áp giá đặc biệt
-                    else if (khachhang.LoaiapgiaID == KhachHang.DACBIET)
-                    {
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH1) == null)
+                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU) == null)
                         {
-                            ViewBag.SH1 = "";
+                            ViewBag.KD = "";
                         }
                         else
                         {
-                            ViewBag.SH1 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH1).SanLuong.Value;
+                            ViewBag.KD = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU).SanLuong.Value;
                         }
 
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH2) == null)
+                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH) == null)
                         {
-                            ViewBag.SH2 = "";
+                            ViewBag.HC = "";
                         }
                         else
                         {
-                            ViewBag.SH2 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH2).SanLuong.Value;
+                            ViewBag.HC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH).SanLuong.Value;
                         }
 
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH3) == null)
+                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP) == null)
                         {
-                            ViewBag.SH3 = "";
+                            ViewBag.CC = "";
                         }
                         else
                         {
-                            ViewBag.SH3 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH3).SanLuong.Value;
+                            ViewBag.CC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP).SanLuong.Value;
                         }
 
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH4) == null)
+                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT) == null)
                         {
-                            ViewBag.SH4 = "";
+                            ViewBag.SX = "";
                         }
                         else
                         {
-                            ViewBag.SH4 = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SH4).SanLuong.Value;
+                            ViewBag.SX = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT).SanLuong.Value;
                         }
-                        ViewBag.hasTongHop = false;
-                        ViewBag.hasDacBiet = true;
+
+                        //nếu là áp giá tổng hợp
+                        if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
+                        {
+                            if (ls.Count() > 0)
+                            {
+                                ViewBag.option = ls[0].CachTinh;
+                            }
+                            else
+                            {
+                                ViewBag.option = 0;
+                            }
+                            ViewBag.hasTongHop = true;
+                            ViewBag.hasDacBiet = false;
+                        }                       
                     }
                 }
-            }
-            //nếu không phải loại giá tổng hợp & đặc biệt
-            else
-            {
-                ViewBag.hasTongHop = false;
-                ViewBag.hasDacBiet = false;
+                //nếu không phải loại giá tổng hợp & đặc biệt
+                else
+                {
+                    ViewBag.hasTongHop = false;
+                    ViewBag.hasDacBiet = false;
+                }                
             }
             return View(khachhang);
         }
