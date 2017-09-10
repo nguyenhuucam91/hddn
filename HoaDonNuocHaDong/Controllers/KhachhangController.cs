@@ -890,7 +890,6 @@ namespace HoaDonNuocHaDong.Controllers
             int phongBanID = phongBan.PhongbanID;
             int KHID = Convert.ToInt32(form["KhachhangID"]);
 
-
             int TTDocTruoc = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID).TTDoc.Value;
 
             if (ModelState.IsValid)
@@ -929,6 +928,7 @@ namespace HoaDonNuocHaDong.Controllers
 
                 int chiSoDauEdited = String.IsNullOrEmpty(form["ChiSoDau"]) ? -1 : Convert.ToInt32(form["ChiSoDau"]);
                 //nếu chỉ số đầu để trống thì không cập nhật lại nữa
+                #region HasHoaDonNuocThangHienTai
                 Hoadonnuoc hoaDonNuoc = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == khachhang.KhachhangID && p.ThangHoaDon == selectedMonth && p.NamHoaDon == selectedYear);
                 if (hoaDonNuoc != null)
                 {
@@ -946,7 +946,7 @@ namespace HoaDonNuocHaDong.Controllers
                     Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuoc.HoadonnuocID);
                     #region reCalculateWaterReceipt
                     int sanLuongTieuThu = 0; int chiSoDau = 0; int chiSoCuoi = 0; int soKhoan = 0;
-                    
+
                     if (hoaDonNuoc.Tongsotieuthu != null)
                     {
                         sanLuongTieuThu = hoaDonNuoc.Tongsotieuthu.Value;
@@ -961,7 +961,7 @@ namespace HoaDonNuocHaDong.Controllers
                     {
                         chiSoCuoi = cT.Chisomoi.Value;
                     }
-                  
+
                     #region TachChiSoSanLuongApGiaTongHop
                     if (loaiApGiaID == KhachHang.TONGHOP)
                     {
@@ -1053,7 +1053,6 @@ namespace HoaDonNuocHaDong.Controllers
                          ngayKetThucSuDung);
                         #endregion
                     #endregion
-
                     }
                     else
                     {
@@ -1106,103 +1105,106 @@ namespace HoaDonNuocHaDong.Controllers
                     TempData["nhanvien"] = nhanVienIDUrl;
                     return RedirectToAction("Index");
                 }
-
-                //lấy danh sách tuyến thuộc nhân viên ID
-                if (nhanVien != null)
-                {
-                    //lấy danh sách tổ của người dùng
-                    List<Models.TuyenKhachHang.TuyenKhachHang> _tuyen = new List<Models.TuyenKhachHang.TuyenKhachHang>();
-                    var toQuanHuyens = db.ToQuanHuyens.Where(p => p.PhongbanID == phongBanID && p.QuanHuyenID == quanHuyenID);
-                    int count = toQuanHuyens.Count();
-                    foreach (var item in toQuanHuyens)
-                    {
-                        _tuyen.AddRange(tuyenHelper.getTuyenByTo(item.ToQuanHuyenID));
-                    }
-                    ViewBag._TuyenKHID = _tuyen;
-                    ViewBag.SelectedTuyen = khachhang.TuyenKHID;
-                }
-
-                ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
-                ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
-                ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
-                ViewBag._LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
-                ViewBag._PhuongxaID = new SelectList(db.Phuongxas, "PhuongxaID", "Ten", khachhang.PhuongxaID);
-                ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens, "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
-                ViewBag._TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
-                ViewBag.selectedTuyenOng = khachhang.TuyenongkythuatID;
-                if (khachhang.LoaiapgiaID == KhachHang.TONGHOP || khachhang.LoaiapgiaID == KhachHang.DACBIET)
-                {
-                    List<Apgiatonghop> ls = db.Apgiatonghops.Where(p => p.KhachhangID == khachhang.KhachhangID).ToList();
-                    if (ls != null)
-                    {
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT) == null)
-                        {
-                            ViewBag.SH = "";
-                        }
-                        else
-                        {
-                            ViewBag.SH = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT).SanLuong.Value;
-                        }
-
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU) == null)
-                        {
-                            ViewBag.KD = "";
-                        }
-                        else
-                        {
-                            ViewBag.KD = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU).SanLuong.Value;
-                        }
-
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH) == null)
-                        {
-                            ViewBag.HC = "";
-                        }
-                        else
-                        {
-                            ViewBag.HC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH).SanLuong.Value;
-                        }
-
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP) == null)
-                        {
-                            ViewBag.CC = "";
-                        }
-                        else
-                        {
-                            ViewBag.CC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP).SanLuong.Value;
-                        }
-
-                        if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT) == null)
-                        {
-                            ViewBag.SX = "";
-                        }
-                        else
-                        {
-                            ViewBag.SX = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT).SanLuong.Value;
-                        }
-
-                        //nếu là áp giá tổng hợp
-                        if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
-                        {
-                            if (ls.Count() > 0)
-                            {
-                                ViewBag.option = ls[0].CachTinh;
-                            }
-                            else
-                            {
-                                ViewBag.option = 0;
-                            }
-                            ViewBag.hasTongHop = true;
-                            ViewBag.hasDacBiet = false;
-                        }                       
-                    }
-                }
-                //nếu không phải loại giá tổng hợp & đặc biệt
-                else
-                {
-                    ViewBag.hasTongHop = false;
-                    ViewBag.hasDacBiet = false;
-                }                
+                #endregion
+                return RedirectToAction("Index");
             }
+
+            #region IfValidationFails
+            if (nhanVien != null)
+            {
+                //lấy danh sách tổ của người dùng
+                List<Models.TuyenKhachHang.TuyenKhachHang> _tuyen = new List<Models.TuyenKhachHang.TuyenKhachHang>();
+                var toQuanHuyens = db.ToQuanHuyens.Where(p => p.PhongbanID == phongBanID && p.QuanHuyenID == quanHuyenID);
+                int count = toQuanHuyens.Count();
+                foreach (var item in toQuanHuyens)
+                {
+                    _tuyen.AddRange(tuyenHelper.getTuyenByTo(item.ToQuanHuyenID));
+                }
+                ViewBag._TuyenKHID = _tuyen;
+                ViewBag.SelectedTuyen = khachhang.TuyenKHID;
+            }
+
+            ViewBag._CumdancuID = new SelectList(db.Cumdancus.Where(p => p.IsDelete == false), "CumdancuID", "Ten", khachhang.CumdancuID);
+            ViewBag._HinhthucttID = new SelectList(db.Hinhthucthanhtoans, "HinhthucttID", "Ten", khachhang.HinhthucttID);
+            ViewBag._LoaiapgiaID = new SelectList(db.Loaiapgias.Where(p => p.LoaiapgiaID != (int)EApGia.DacBiet), "LoaiapgiaID", "Ten", khachhang.LoaiapgiaID);
+            ViewBag._LoaiKHID = new SelectList(db.LoaiKHs, "LoaiKHID", "Ten", khachhang.LoaiKHID);
+            ViewBag._PhuongxaID = new SelectList(db.Phuongxas, "PhuongxaID", "Ten", khachhang.PhuongxaID);
+            ViewBag._QuanhuyenID = new SelectList(db.Quanhuyens, "QuanhuyenID", "Ten", khachhang.QuanhuyenID);
+            ViewBag._TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
+            ViewBag.selectedTuyenOng = khachhang.TuyenongkythuatID;
+            if (khachhang.LoaiapgiaID == KhachHang.TONGHOP || khachhang.LoaiapgiaID == KhachHang.DACBIET)
+            {
+                List<Apgiatonghop> ls = db.Apgiatonghops.Where(p => p.KhachhangID == khachhang.KhachhangID).ToList();
+                if (ls != null)
+                {
+                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT) == null)
+                    {
+                        ViewBag.SH = "";
+                    }
+                    else
+                    {
+                        ViewBag.SH = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SINHHOAT).SanLuong.Value;
+                    }
+
+                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU) == null)
+                    {
+                        ViewBag.KD = "";
+                    }
+                    else
+                    {
+                        ViewBag.KD = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.KINHDOANHDICHVU).SanLuong.Value;
+                    }
+
+                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH) == null)
+                    {
+                        ViewBag.HC = "";
+                    }
+                    else
+                    {
+                        ViewBag.HC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.COQUANHANHCHINH).SanLuong.Value;
+                    }
+
+                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP) == null)
+                    {
+                        ViewBag.CC = "";
+                    }
+                    else
+                    {
+                        ViewBag.CC = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.DONVISUNGHIEP).SanLuong.Value;
+                    }
+
+                    if (ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT) == null)
+                    {
+                        ViewBag.SX = "";
+                    }
+                    else
+                    {
+                        ViewBag.SX = ls.FirstOrDefault(p => p.IDLoaiApGia == KhachHang.SANXUAT).SanLuong.Value;
+                    }
+
+                    //nếu là áp giá tổng hợp
+                    if (khachhang.LoaiapgiaID == KhachHang.TONGHOP)
+                    {
+                        if (ls.Count() > 0)
+                        {
+                            ViewBag.option = ls[0].CachTinh;
+                        }
+                        else
+                        {
+                            ViewBag.option = 0;
+                        }
+                        ViewBag.hasTongHop = true;
+                        ViewBag.hasDacBiet = false;
+                    }
+                }
+            }
+            //nếu không phải loại giá tổng hợp & đặc biệt
+            else
+            {
+                ViewBag.hasTongHop = false;
+                ViewBag.hasDacBiet = false;
+            }
+            #endregion
             return View(khachhang);
         }
 

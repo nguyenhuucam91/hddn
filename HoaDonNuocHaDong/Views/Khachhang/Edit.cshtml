@@ -28,7 +28,7 @@
     var SH3 = ViewBag.SH3;
     var SH4 = ViewBag.SH4;
     var selectedTuyenOng = ViewBag.selectedTuyenOng;
-    List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> toQHLs = ViewBag._TuyenKHID as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
+    List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> tuyens = ViewBag._TuyenKHID as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
 }
 
 @using (Html.BeginForm("Edit", "Khachhang",new { @toID = Request.QueryString["toID"],
@@ -80,7 +80,7 @@
                                     <div class="col-md-4 pull-left">
                                         <label for="" class="control-label">Tuyến khách hàng:</label>&nbsp;&nbsp;
                                         <select name="TuyenKHID" class="dropdown tuyen">
-                                           @foreach (var item in toQHLs)
+                                           @foreach (var item in tuyens)
                                            {
                                                var TuyenKH = item.TuyenCuaKH;
                                                var TenTuyenKH = item.TenTuyen;

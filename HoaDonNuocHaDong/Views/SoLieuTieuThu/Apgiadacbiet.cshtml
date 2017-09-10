@@ -14,7 +14,7 @@
     //helper class để xem ai áp giá đặc biệt
     var startDate = ViewBag.startDate;
     var endDate = ViewBag.endDate;
-    var to = Request.QueryString["to"];
+    var to = Request.QueryString["toID"];
     var nhanVien = Request.QueryString["nhanvien"];
     var tuyen = Request.QueryString["tuyen"];
 }
@@ -64,19 +64,19 @@
                                 <!-- Số liệu chi tiết -->
                                 <div class="col-md-6" style="width:50%;float:left">
                                     <div class="form-control">
-                                        <label for="SH1">Sản lượng SH1</label>
+                                        <label for="SH1">SH1</label>
                                         <input type="checkbox" />
                                         <input type="number" id="SH1" name="SH1" value="@giaDacBiet.SH1" tabindex="1"/>
 
-                                        <label for="SH2">Sản lượng SH2</label>
+                                        <label for="SH2">SH2</label>
                                         <input type="checkbox" />
                                         <input type="number" id="SH2" name="SH2" value="@giaDacBiet.SH2" tabindex="2"/>
 
-                                        <label for="SH3">Sản lượng SH3</label>
+                                        <label for="SH3">SH3</label>
                                         <input type="checkbox" />
                                         <input type="number" id="SH3" name="SH3" value="@giaDacBiet.SH3" tabindex="3"/>
 
-                                        <label for="SH4">Sản lượng SH4</label>
+                                        <label for="SH4">SH4</label>
                                         <input type="checkbox" />
                                         <input type="number" id="SH4" name="SH4" value="@giaDacBiet.SH4" tabindex="4"/>
                                     </div>
@@ -84,19 +84,19 @@
 
                                 <div class="col-md-6" style="width:50%;float:left">
                                     <div class="form-control">
-                                        <label for="HC">Sản lượng Cơ quan hành chính sự nghiêp</label>
+                                        <label for="HC">Cơ quan hành chính sự nghiêp</label>
                                         <input type="checkbox" />
                                         <input type="number" id="HC" name="HC" value="@giaDacBiet.HC" tabindex="5"/>
 
-                                        <label for="CC">Sản lượng Đơn vị sự nghiệp, dịch vụ công cộng	</label>
+                                        <label for="CC">Đơn vị sự nghiệp, dịch vụ công cộng	</label>
                                         <input type="checkbox" />
                                         <input type="number" id="CC" name="CC" value="@giaDacBiet.CC" tabindex="6"/>
 
-                                        <label for="SX">Sản lượng Sản xuất vật chất	</label>
+                                        <label for="SX">Sản xuất vật chất	</label>
                                         <input type="checkbox" />
                                         <input type="number" id="SX" name="SX" value="@giaDacBiet.SXSD" tabindex="7"/>
 
-                                        <label for="KD">Sản lượng Kinh doanh dịch vụ</label>
+                                        <label for="KD">Kinh doanh dịch vụ</label>
                                         <input type="checkbox" />
                                         <input type="number" id="KD" name="KD" value="@giaDacBiet.KDDV" tabindex="8"/>
                                     </div>

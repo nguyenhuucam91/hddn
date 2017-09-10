@@ -40,7 +40,6 @@ namespace HoaDonNuocHaDong.Controllers
             int phongBanID = phongBan.PhongbanID;
 
             List<ToQuanHuyen> toLs = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.QuanHuyenID == quanHuyenID && p.PhongbanID == phongBanID).ToList();
-            ViewBag.to = toLs;
             ViewBag.showHoaDon = false;
             //load danh sách nhân viên thuộc tổ có phòng ban đó.
             if (nhanvien == null)
@@ -50,8 +49,8 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                List<Nhanvien> _nvLs = db.Nhanviens.OrderBy(p => p.Ten).Where(p => p.ToQuanHuyenID == to && (p.IsDelete == false || p.IsDelete == null)).ToList();
-                ViewBag.nhanVien = _nvLs;
+                List<Nhanvien> _nvLs = db.Nhanviens.OrderBy(p => p.Ten).Where(p => p.ToQuanHuyenID == to && p.IsDelete == false).ToList();
+                ViewBag.nhanVien = _nvLs;                
             }
             //load danh sách tuyến thuộc nhân viên đó.
             if (tuyen == null)
@@ -62,17 +61,39 @@ namespace HoaDonNuocHaDong.Controllers
             }
             else
             {
-                List<Tuyenkhachhang> tuyensLs = new List<Tuyenkhachhang>();
+                bool isTruongPhong = ngDungHelper.isNguoiDungLaTruongPhong(nhanvien);
+                if (isTruongPhong)
+                {
+                    List<HoaDonNuocHaDong.Models.ModelNhanVien> nhanviens = new List<HoaDonNuocHaDong.Models.ModelNhanVien>();
+                    List<ToQuanHuyen> toes = getToes(quanHuyenID, phongBanID);
+                    List<Tuyenkhachhang> tuyens = new List<Tuyenkhachhang>();
+                    foreach (var toTruongPhong in toes)
+                    {
+                        nhanviens.AddRange(getNhanViensByTo(toTruongPhong.ToQuanHuyenID));
+                    }
 
-                var tuyenTheoNhanVien = (from i in db.Tuyentheonhanviens
-                                         join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
-                                         join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
-                                         join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
-                                         where i.NhanVienID == nhanvien
-                                         orderby r.Matuyen
-                                         select r).ToList();
-                tuyensLs.AddRange(tuyenTheoNhanVien);
-                ViewBag.tuyen = tuyensLs;
+                    foreach (var nhanvienQuanLiTuyen in nhanviens)
+                    {
+                        List<Tuyenkhachhang> tuyensThuocNhanVien = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvienQuanLiTuyen.NhanvienID).ToList();
+                        tuyens.AddRange(tuyensThuocNhanVien);
+                    }
+
+                    ViewBag.tuyen = tuyens;
+                }
+
+                else
+                {
+                    List<Tuyenkhachhang> tuyensLs = new List<Tuyenkhachhang>();
+                    var tuyenTheoNhanVien = (from i in db.Tuyentheonhanviens
+                                             join r in db.Tuyenkhachhangs on i.TuyenKHID equals r.TuyenKHID
+                                             join s in db.Nhanviens on i.NhanVienID equals s.NhanvienID
+                                             join q in db.Phongbans on s.PhongbanID equals q.PhongbanID
+                                             where i.NhanVienID == nhanvien && r.IsDelete == false
+                                             orderby r.Matuyen
+                                             select r).ToList();
+                    tuyensLs.AddRange(tuyenTheoNhanVien);
+                    ViewBag.tuyen = tuyensLs;                      
+                }
                 //lấy danh sách khách hàng thuộc tuyến đó
                 List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cS.filterChiSo(thang.Value, nam.Value, tuyen.Value);
                 ViewData["ChiSoTieuThu"] = chiSoTieuThu;
@@ -81,6 +102,7 @@ namespace HoaDonNuocHaDong.Controllers
                 Nhanvien nhanVienObj = db.Nhanviens.Find(nhanvien);
                 ViewData["nhanVienObj"] = nhanVienObj;
                 ViewBag.tongSoHoaDon = chiSoTieuThu.Count;
+                ViewBag.showHoaDon = true;
             }
 
             #region ViewBag
@@ -90,15 +112,15 @@ namespace HoaDonNuocHaDong.Controllers
             //kiểm đinh            
             ViewBag.ngayBatDau = "";
             ViewBag.ngayKetThuc = "";
-            //danh sách lỗi
+            ViewBag.to = toLs;
             List<string> errors = new List<string>();
-            ViewData["errorList"] = errors;
-            //view
+            ViewData["errorList"] = errors;          
             ViewBag.selectedTo = to;
             ViewBag.selectedTuyen = tuyen;
-            ViewBag.selectedNhanVien = nhanvien;
+            ViewBag.selectedNhanvien = nhanvien;
             ViewBag.selectedChiNhanh = quanHuyenID;
             ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
+            
             #endregion
             return View();
         }
@@ -719,7 +741,7 @@ namespace HoaDonNuocHaDong.Controllers
         /// <param name="form"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Nhapgiadacbiet(int? id, FormCollection form, int to, int nhanvien, int tuyen, int thang, int nam)
+        public ActionResult Nhapgiadacbiet(int? id, FormCollection form, int? to, int nhanvien, int tuyen, int thang, int nam)
         {
             #region chiSoGiaDacBietChiTiet
             double SH1 = ChiSo.checkChiSoNull(form["SH1"]);
@@ -820,8 +842,6 @@ namespace HoaDonNuocHaDong.Controllers
             double tongCongCongDon = tongTienHoaDon + congDonHDTruoc;
             //thu ngân
             String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon;
-
-
 
             lichSuHoaDonRepository.updateLichSuHoaDon(id.Value, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau, ChiSoCuoi, Sum,
               SH1, cS.getSoTienTheoApGia("SH1").Value,
