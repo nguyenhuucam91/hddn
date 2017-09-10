@@ -27,6 +27,8 @@ namespace HoaDonNuocHaDong.Controllers
         private KiemDinh kiemDinh = new KiemDinh();
         private LichSuHoaDonRepository lichSuHoaDonRepository = new LichSuHoaDonRepository();
 
+        private List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> hoaDons;
+
         // GET: /SoLieuTieuThu/
         /// <summary>
         /// Hiển thị danh sách chi nhánh, tổ, nhân viên, tuyến và khách hàng
@@ -50,7 +52,7 @@ namespace HoaDonNuocHaDong.Controllers
             else
             {
                 List<Nhanvien> _nvLs = db.Nhanviens.OrderBy(p => p.Ten).Where(p => p.ToQuanHuyenID == to && p.IsDelete == false).ToList();
-                ViewBag.nhanVien = _nvLs;                
+                ViewBag.nhanVien = _nvLs;
             }
             //load danh sách tuyến thuộc nhân viên đó.
             if (tuyen == null)
@@ -92,7 +94,7 @@ namespace HoaDonNuocHaDong.Controllers
                                              orderby r.Matuyen
                                              select r).ToList();
                     tuyensLs.AddRange(tuyenTheoNhanVien);
-                    ViewBag.tuyen = tuyensLs;                      
+                    ViewBag.tuyen = tuyensLs;
                 }
                 //lấy danh sách khách hàng thuộc tuyến đó
                 List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cS.filterChiSo(thang.Value, nam.Value, tuyen.Value);
@@ -103,6 +105,7 @@ namespace HoaDonNuocHaDong.Controllers
                 ViewData["nhanVienObj"] = nhanVienObj;
                 ViewBag.tongSoHoaDon = chiSoTieuThu.Count;
                 ViewBag.showHoaDon = true;
+                hoaDons = chiSoTieuThu;
             }
 
             #region ViewBag
@@ -114,13 +117,13 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.ngayKetThuc = "";
             ViewBag.to = toLs;
             List<string> errors = new List<string>();
-            ViewData["errorList"] = errors;          
+            ViewData["errorList"] = errors;
             ViewBag.selectedTo = to;
             ViewBag.selectedTuyen = tuyen;
             ViewBag.selectedNhanvien = nhanvien;
             ViewBag.selectedChiNhanh = quanHuyenID;
             ViewBag.selectedTenChiNhanh = NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 1);
-            
+
             #endregion
             return View();
         }
@@ -136,10 +139,10 @@ namespace HoaDonNuocHaDong.Controllers
             #region parameters
             List<String> errorList = new List<String>();
             int selectedQuanHuyenID = Convert.ToInt32(NguoidungHelper.getChiNhanhCuaNguoiDung(LoggedInUser.NguoidungID, 0));
-            int quanHuyenID = selectedQuanHuyenID;            
+            int quanHuyenID = selectedQuanHuyenID;
             int nhanVienInt = String.IsNullOrEmpty(form["nhanvien"]) ? 0 : Convert.ToInt32(form["nhanvien"]);
             //gán session cho nhân viên để tiến hành thêm mới hóa đơn tháng sau cũng như lấy nhân viên cho các controller khác có thể tác động vào.          
-            Session["nhanvien"] = nhanVienInt;            
+            Session["nhanvien"] = nhanVienInt;
             String month = form["thang"];
             String year = form["nam"];
             //nếu năm tháng rỗng thì lấy năm và tháng hiện tại, nếu tuyến được chọn rỗng thì lấy là 0
@@ -209,10 +212,10 @@ namespace HoaDonNuocHaDong.Controllers
                             List<Tuyenkhachhang> tuyensThuocNhanVien = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien.NhanvienID).ToList();
                             tuyens.AddRange(tuyensThuocNhanVien);
                         }
-                        ViewBag.tuyen = tuyens;                        
+                        ViewBag.tuyen = tuyens;
                     }
                     else
-                    {                                                                                             
+                    {
                         //load danh sách tuyến thuộc nhân viên đó.
                         List<Tuyenkhachhang> tuyensLs = new List<Tuyenkhachhang>();
 
@@ -223,7 +226,7 @@ namespace HoaDonNuocHaDong.Controllers
                                                  where i.NhanVienID == nhanVienInt
                                                  select r).ToList();
                         tuyensLs.AddRange(tuyenTheoNhanVien);
-                        ViewBag.tuyen = tuyensLs;                       
+                        ViewBag.tuyen = tuyensLs;
                     }
                     Session["solieuTieuThuNhanvien"] = Convert.ToInt32(selectedNhanVien);
                     //nếu tuyến để trống thì thêm mới lỗi vào errorList
@@ -308,34 +311,51 @@ namespace HoaDonNuocHaDong.Controllers
             int _year = nam;
             int _TongSoTieuThu = 0;
             int _tongKiemDinh = 0;
-
-            Hoadonnuoc hoaDon = db.Hoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
+            int nhanVienId = 0;
+            //HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc hoaDon = hoaDons.FirstOrDefault(p => p.HoaDonNuocID == HoaDonID);
             //nếu có record hóa đơn trọng hệ thống
-            if (hoaDon != null)
-            {
-                if (LoggedInUser.NhanvienID != null)
-                {
-                    hoaDon.NhanvienID = LoggedInUser.NhanvienID;
-                }
 
-                var isKiemDinh = kiemDinh.checkKiemDinhStatus(KHID, _month, _year);
-                //nếu khách hàng đang chỉnh sửa chưa kiểm định mà nhập số thì tính như bình thường
-                if (isKiemDinh)
+            if (LoggedInUser.NhanvienID != null)
+            {
+                nhanVienId = LoggedInUser.NhanvienID.Value;
+                //hoaDon.nhanVienId = LoggedInUser.NhanvienID.Value;
+            }
+
+            var isKiemDinh = kiemDinh.checkKiemDinhStatus(KHID, _month, _year);
+            //nếu khách hàng đang chỉnh sửa chưa kiểm định mà nhập số thì tính như bình thường
+            if (isKiemDinh)
+            {
+                var kiemDinh1 = kiemDinh.getChiSoLucKiemDinh(KHID, _month, _year) - ChiSoDau.Value;
+                var kiemDinh2 = ChiSoCuoi.Value - kiemDinh.getChiSoSauKiemDinh(KHID, _month, _year);
+                _tongKiemDinh = kiemDinh1 + kiemDinh2;
+                _TongSoTieuThu = _tongKiemDinh;
+            }
+            else
+            {
+                _TongSoTieuThu = TongSoTieuThu.Value;
+            }
+
+            //hoaDon.NgayBatDauSuDung = Convert.ToDateTime(dateStart);
+            //hoaDon.NgayKetThucSuDung = Convert.ToDateTime(dateEnd);
+            //hoaDon.SanLuong = _TongSoTieuThu;
+            //db.SaveChanges();
+
+
+
+            using (SqlConnection con = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString()))
+            {
+                using (SqlCommand cmd = new SqlCommand("NhapChiSoTieuThuThang", con))
                 {
-                    var kiemDinh1 = kiemDinh.getChiSoLucKiemDinh(KHID, _month, _year) - ChiSoDau.Value;
-                    var kiemDinh2 = ChiSoCuoi.Value - kiemDinh.getChiSoSauKiemDinh(KHID, _month, _year);
-                    _tongKiemDinh = kiemDinh1 + kiemDinh2;
-                    _TongSoTieuThu = _tongKiemDinh;
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@nhanVienId", nhanVienId);
+                    cmd.Parameters.AddWithValue("@ngayBatDauSuDung", Convert.ToDateTime(dateStart));
+                    cmd.Parameters.AddWithValue("@ngayKetThucSuDung", Convert.ToDateTime(dateEnd));
+                    cmd.Parameters.AddWithValue("@sanLuong", _TongSoTieuThu);
+                    cmd.Parameters.AddWithValue("@hoaDonId", HoaDonID);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
                 }
-                else
-                {
-                    _TongSoTieuThu = TongSoTieuThu.Value;
-                }
-                hoaDon.Ngayhoadon = Convert.ToDateTime(dateInput);
-                hoaDon.Ngaybatdausudung = Convert.ToDateTime(dateStart);
-                hoaDon.Ngayketthucsudung = Convert.ToDateTime(dateEnd);
-                hoaDon.Tongsotieuthu = _TongSoTieuThu;
-                db.SaveChanges();
             }
 
             tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu, SoKhoan, KHID);
