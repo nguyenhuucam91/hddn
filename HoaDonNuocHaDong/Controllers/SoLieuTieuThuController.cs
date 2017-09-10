@@ -190,10 +190,7 @@ namespace HoaDonNuocHaDong.Controllers
                         ViewBag.tuyen = tuyens;                        
                     }
                     else
-                    {
-
-                        Nhanvien nhanVienObj = db.Nhanviens.Find(nhanVienInt);
-                        ViewData["nhanVienObj"] = nhanVienObj;                                                                       
+                    {                                                                                             
                         //load danh sách tuyến thuộc nhân viên đó.
                         List<Tuyenkhachhang> tuyensLs = new List<Tuyenkhachhang>();
 
@@ -218,6 +215,8 @@ namespace HoaDonNuocHaDong.Controllers
                         ViewBag.selectedTuyen = tuyenInt;
                         ViewBag.selectedTo = toForm;
                     }
+                    Nhanvien nhanVienObj = db.Nhanviens.Find(nhanVienInt);
+                    ViewData["nhanVienObj"] = nhanVienObj;
                     ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenInt);
                     List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cS.filterChiSo(_month, _year, tuyenInt);
                     ViewData["ChiSoTieuThu"] = chiSoTieuThu;
@@ -1296,7 +1295,7 @@ namespace HoaDonNuocHaDong.Controllers
         }
         /// <summary>
         /// load hóa đơn có chỉ số không bình thường lên, giống vs hàm load danh sách hóa đơn, 
-        /// chỉ khác là load danh sách hóa đơn có sản lượng <code><=1</code> và gấp đôi tháng trước
+        /// chỉ khác là load danh sách hóa đơn có sản lượng nho hon 1 và gấp đôi tháng trước
         /// </summary>
         /// <returns></returns>
 

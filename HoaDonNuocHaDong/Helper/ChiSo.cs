@@ -496,7 +496,7 @@ namespace HoaDonHaDong.Helper
         {
             DateTime ngayThangHoaDon = new DateTime(1, 1, 1);
             DateTime currentTime = new DateTime(currentYear, currentMonth, 1);
-            DateTime maxDateTime = new DateTime(1, 1, 1);
+            DateTime nearestDate = new DateTime(1, 1, 1);
             var hoaDonThangGanNhat = (from i in db.Hoadonnuocs
                                       join kH in db.Khachhangs on i.KhachhangID equals kH.KhachhangID
                                       join cT in db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
@@ -511,18 +511,18 @@ namespace HoaDonHaDong.Helper
             if (hoaDonThangGanNhat.Count > 0)
             {
                 HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc obj = hoaDonThangGanNhat.First();
-                maxDateTime = new DateTime(obj.Nam, obj.Thang, 1);
+                nearestDate = new DateTime(obj.Nam, obj.Thang, 1);
                 foreach (var item in hoaDonThangGanNhat)
                 {
                     ngayThangHoaDon = new DateTime(item.Nam, item.Thang, 1);
 
-                    if (DateTime.Compare(ngayThangHoaDon, maxDateTime) > 0 && DateTime.Compare(ngayThangHoaDon, currentTime) < 0)
+                    if (DateTime.Compare(ngayThangHoaDon, nearestDate) > 0 && DateTime.Compare(ngayThangHoaDon, currentTime) < 0)
                     {
-                        maxDateTime = ngayThangHoaDon;
+                        nearestDate = ngayThangHoaDon;
                     }
                 }
 
-                return new DateTime(maxDateTime.Year, maxDateTime.Month, 1);
+                return new DateTime(nearestDate.Year, nearestDate.Month, 1);
             }
             return ngayThangHoaDon;
         }
@@ -540,18 +540,23 @@ namespace HoaDonHaDong.Helper
             //load danh sách khách hàng có áp giá đặc biệt
             foreach (var item in danhSachHoaDon)
             {
-                int sanLuongThangTruocCuaKhachHang = item.SanLuongThangTruoc;
                 if (item.ChiSoMoi != 0)
                 {
-                    if (item.SanLuong <= 1 || this.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()))
+                    int sanLuongThangTruocCuaKhachHang = item.SanLuongThangTruoc;
+                    if (item.SanLuong <= 1)
                     {
                         danhSachHoaDonBatThuong.Add(item);
                     }
-                    if (sanLuongThangTruocCuaKhachHang != -1 && (item.SanLuong >= sanLuongThangTruocCuaKhachHang * 2 || item.SanLuong <= sanLuongThangTruocCuaKhachHang * 2))
+                    else
                     {
-                        danhSachHoaDonBatThuong.Add(item);
+                        if (this.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()) || 
+                            sanLuongThangTruocCuaKhachHang != -1 && 
+                            ((item.SanLuong >= (sanLuongThangTruocCuaKhachHang * 2) || item.SanLuong <= (sanLuongThangTruocCuaKhachHang / 2))))
+                        {
+                            danhSachHoaDonBatThuong.Add(item);
+                        }
                     }
-                }
+                }                             
             }
 
             return danhSachHoaDonBatThuong;
