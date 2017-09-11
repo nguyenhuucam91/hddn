@@ -45,6 +45,13 @@ namespace HoaDonNuocHaDong.Models.SoLieuTieuThu
         public DateTime ThangNamHoaDonToDateTime { get; set; }
         public int nhanVienId { get; set; }
         public String TrangThaiChot { get { return GetSTR(26); } set { SetSTR(26, value); } }
+        public String DiaChi { get { return GetSTR(27); } set { SetSTR(27, value); } }
+        public int TuyenKHID { get { return GetINT(28); } set { SetSTR(28, value); } }
+        public String MaSoThue { get { return GetSTR(29); } set { SetSTR(29, value); } }
+        public int TTDoc { get { return GetINT(30); } set { SetSTR(30, value); } }
+        public int TiLePhiMoiTruong { get { return GetINT(31); } set { SetSTR(31, value); } }
+        public int QuanHuyenID { get { return GetINT(32); } set { SetSTR(32, value); } }
+        public String SoHopDong { get { return GetSTR(33); } set { SetSTR(33, value); } }
         public bool TrangThaiIn { get; set; }
         public DateTime ngayIn { get; set; }
         public DateTime ngayNhapHoaDon { get; set; }
