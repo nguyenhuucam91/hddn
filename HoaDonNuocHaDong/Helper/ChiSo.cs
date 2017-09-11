@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using HoaDonNuocHaDong.Models.SoLieuTieuThu;
+using System.Data;
 
 namespace HoaDonHaDong.Helper
 {
@@ -124,8 +125,7 @@ namespace HoaDonHaDong.Helper
 
             return _hoaDonNuoc;
         }
-
-
+        
         /// <summary>
         /// Kiểm tra xem chỉ số có NULL hay ko, nếu null thì trả về 0
         /// </summary>
