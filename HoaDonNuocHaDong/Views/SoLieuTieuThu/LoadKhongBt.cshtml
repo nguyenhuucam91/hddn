@@ -78,19 +78,16 @@
                                 <tbody>
                                     @{
                                         int i = 1;
-                                        int nextMonthReceiptNumber = month + 1 == 13 ? 1 : month + 1;
-                                        int nextYearReceiptNumber = month + 1 == 13 ? year + 1 : year;
                                         HoaDonHaDongEntities db = new HoaDonHaDongEntities();
                                     }
                                     @foreach (var item in kH)
                                     {
                                         int sohoaDonDanhSachKhongBinhThuong = cS.getSoHoaDonTrongDanhSachKhongBinhThuong(month, year, tuyenID, item.HoaDonNuocID);
                                         int hoaDonID = Convert.ToInt32(item.HoaDonNuocID);
-                                        
+
                                         Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == item.KhachHangID && p.ThangHoaDon == month && p.NamHoaDon == year);
-                                        Hoadonnuoc nextMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == item.KhachHangID && p.ThangHoaDon == nextMonthReceiptNumber && p.NamHoaDon == nextYearReceiptNumber);
                                         String cssClass = "";
-                                        cssClass = item.SanLuong.GetValueOrDefault() < 0 ? "hasSanLuongAm" : "" ;
+                                        cssClass = item.SanLuong.GetValueOrDefault() < 0 ? "hasSanLuongAm" : "";
 
 
                                         <tr class="@cssClass">
@@ -107,7 +104,7 @@
                                                 <td class="startDate">
                                                     <input type="hidden" class="hasNgayBatDau" data-hoadonid="@item.HoaDonNuocID" value="1" />
                                                     <input type="text" style="width:90%" name="startDate"
-                                                           value="@String.Format("{0:dd/MM/yyyy}",thisMonthReceipt.Ngaybatdausudung)"
+                                                           value="@String.Format("{0:dd/MM/yyyy}",item.NgayBatDauSuDung)"
                                                            data-hoadonid="@item.HoaDonNuocID" readonly />
                                                 </td>
                                             }
@@ -123,36 +120,21 @@
                                             }
                                             <!-- Kết thúc -->
                                             <td class="endDate">
-                                                @if (nextMonthReceipt != null)
+
+                                                @if (!cS.isChotHoaDon(hoaDonID))
                                                 {
-                                                    if (!cS.isChotHoaDon(hoaDonID))
-                                                    {
-                                                        <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                               value="@String.Format("{0:dd/MM/yyyy}", nextMonthReceipt.Ngaybatdausudung)"
-                                                               data-hoadonid="@item.HoaDonNuocID" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
-                                                               value="@String.Format("{0:dd/MM/yyyy}", nextMonthReceipt.Ngaybatdausudung)"
-                                                               data-hoadonid="@item.HoaDonNuocID" />
-                                                    }
+                                                    <input type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
+                                                           value="@String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung)"
+                                                           data-hoadonid="@item.HoaDonNuocID" />
                                                 }
                                                 else
                                                 {
-                                                    if (!cS.isChotHoaDon(hoaDonID))
-                                                    {
-                                                        <input type="text" style="width:90%" name="endDate"
-                                                               data-khid="@item.KhachHangID"
-                                                               data-hoadonid="@item.HoaDonNuocID" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <input class="disabledEndDate" type="text" style="width:90%" name="endDate"
-                                                               data-khid="@item.KhachHangID"
-                                                               data-hoadonid="@item.HoaDonNuocID" disabled />
-                                                    }
+                                                    <input class="disabledEndDate" type="text" style="width:90%" name="endDate" data-khid="@item.KhachHangID"
+                                                           value="@String.Format("{0:dd/MM/yyyy}", item.NgayKetThucSuDung)"
+                                                           data-hoadonid="@item.HoaDonNuocID" />
                                                 }
+
+
                                             </td>
 
 
@@ -180,13 +162,13 @@
                                             <td>
                                                 <!-- Áp giá đặc biệt -->
                                                 @if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
-                                                {                                                                                                                                                               
+                                                {
                                                     <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID,
-                                                            nhanvien=nVQuanLi,tuyen = tuyenID,sohoadon = sohoaDonDanhSachKhongBinhThuong})" style="color:red">Áp giá đặc biệt</a>                                             
+                                                            nhanvien=nVQuanLi,tuyen = tuyenID,sohoadon = sohoaDonDanhSachKhongBinhThuong})" style="color:red">Áp giá đặc biệt</a>
                                                 }
                                                 else
                                                 {
-                                                     <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID,
+                                                    <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID,
                                                             nhanvien=nVQuanLi,tuyen = tuyenID,sohoadon = sohoaDonDanhSachKhongBinhThuong})">Áp giá đặc biệt</a>
                                                 }
                                             </td>
