@@ -600,14 +600,7 @@ namespace HoaDonHaDong.Helper
                     SH4 = _TongSoTieuThu - SH1 - SH2 - SH3;
                 }
 
-            }
-            //tách số tổng hợp
-            else if (_loaiApGia == KhachHang.TONGHOP)
-            {
-                //int cachTinh = db.Apgiatonghops.FirstOrDefault(p => p.KhachhangID == KHID).CachTinh.Value;
-                //lấy các chỉ số liên quan đến áp giá tổng hợp
-                //tachSoTongHop(HoaDonID, cachTinh, KHID, TongSoTieuThu);
-            }
+            }           
             
             //loại khách hàng: doanh nghiệp - tính theo số kinh doanh, CC,...
             else

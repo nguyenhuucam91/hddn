@@ -370,67 +370,64 @@ namespace HoaDonNuocHaDong.Controllers
                         tachSoTongHop(HoaDonID, khachHangApGiaTongHop.CachTinh.Value, KHID, _TongSoTieuThu);
                     }                    
                     
-                    //tongTienHoaDon;
-                    double dinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, item.SH1, item.SH2, item.SH3, item.SH4, item.HC, item.CC, item.KDDV, item.SXXD);
-                    double VAT = Math.Round(dinhMuc * 0.05, 0, MidpointRounding.AwayFromZero);
-                    double thueBVMT = Math.Round(dinhMuc * (item.TiLePhiMoiTruong / 100), MidpointRounding.AwayFromZero);
-                    double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
-                    if (tongTienHoaDon <= 0)
-                    {
-                        tongTienHoaDon = 0;
-                    }
+                    ////tongTienHoaDon;
+                    //double dinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, item.SH1, item.SH2, item.SH3, item.SH4, item.HC, item.CC, item.KDDV, item.SXXD);
+                    //double VAT = Math.Round(dinhMuc * 0.05, 0, MidpointRounding.AwayFromZero);
+                    //double thueBVMT = Math.Round(dinhMuc * (item.TiLePhiMoiTruong / 100), MidpointRounding.AwayFromZero);
+                    //double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
+                    //if (tongTienHoaDon <= 0)
+                    //{
+                    //    tongTienHoaDon = 0;
+                    //}
 
-                    if (dinhMuc <= 0)
-                    {
-                        dinhMuc = 0;
-                    }
+                    //if (dinhMuc <= 0)
+                    //{
+                    //    dinhMuc = 0;
+                    //}
 
-                    if (VAT <= 0)
-                    {
-                        VAT = 0;
-                    }
+                    //if (VAT <= 0)
+                    //{
+                    //    VAT = 0;
+                    //}
 
-                    if (thueBVMT <= 0)
-                    {
-                        thueBVMT = 0;
-                    }
-                    String thuNgan = item.TTDoc + "/" + item.MaTuyen + " - " + SoHoaDon;
-                    //cộng dồn
-                    int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == item.TuyenKHID && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < item.TTDoc);
-                    double congDonHDTruoc = 0;
-                    if (count == 0)
-                    {
-                        congDonHDTruoc = 0;
-                    }
-                    else
-                    {
-                        congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == item.TuyenKHID && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc.Value < item.TTDoc).Sum(p => p.TongCong.Value);
-                    }
-                    double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
+                    //if (thueBVMT <= 0)
+                    //{
+                    //    thueBVMT = 0;
+                    //}
+                    //String thuNgan = item.TTDoc + "/" + item.MaTuyen + " - " + SoHoaDon;
+                    ////cộng dồn
+                    //int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == item.TuyenKHID && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < item.TTDoc);
+                    //double congDonHDTruoc = 0;
+                    //if (count == 0)
+                    //{
+                    //    congDonHDTruoc = 0;
+                    //}
+                    //else
+                    //{
+                    //    congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == item.TuyenKHID && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc.Value < item.TTDoc).Sum(p => p.TongCong.Value);
+                    //}
+                    //double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
 
-                    lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, item.TenKhachHang, item.DiaChi, item.MaSoThue, 
-                        item.MaKhachHang, item.TuyenKHID, item.SoHopDong, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu,
-                    item.SH1, cS.getSoTienTheoApGia("SH1").Value,
-                    item.SH2, cS.getSoTienTheoApGia("SH2").Value,
-                    item.SH3, cS.getSoTienTheoApGia("SH3").Value,
-                    item.SH4, cS.getSoTienTheoApGia("SH4").Value,
-                    item.HC, cS.getSoTienTheoApGia("HC").Value,
-                    item.CC, cS.getSoTienTheoApGia("CC").Value,
-                    item.SXXD, cS.getSoTienTheoApGia("SX-XD").Value,
-                    item.KDDV, cS.getSoTienTheoApGia("KDDV").Value,
-                    dinhMuc,
-                    5, VAT,
-                    item.TiLePhiMoiTruong, thueBVMT, tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
-                    db.Quanhuyens.Find(item.QuanHuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai3,
-                    thuNgan, item.TuyenKHID, item.TTDoc, tongCongCongDon, dateStart, dateEnd);
+                    //lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, item.TenKhachHang, item.DiaChi, item.MaSoThue, 
+                    //    item.MaKhachHang, item.TuyenKHID, item.SoHopDong, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu,
+                    //item.SH1, cS.getSoTienTheoApGia("SH1").Value,
+                    //item.SH2, cS.getSoTienTheoApGia("SH2").Value,
+                    //item.SH3, cS.getSoTienTheoApGia("SH3").Value,
+                    //item.SH4, cS.getSoTienTheoApGia("SH4").Value,
+                    //item.HC, cS.getSoTienTheoApGia("HC").Value,
+                    //item.CC, cS.getSoTienTheoApGia("CC").Value,
+                    //item.SXXD, cS.getSoTienTheoApGia("SX-XD").Value,
+                    //item.KDDV, cS.getSoTienTheoApGia("KDDV").Value,
+                    //dinhMuc,
+                    //5, VAT,
+                    //item.TiLePhiMoiTruong, thueBVMT, tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
+                    //db.Quanhuyens.Find(item.QuanHuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai3,
+                    //thuNgan, item.TuyenKHID, item.TTDoc, tongCongCongDon, dateStart, dateEnd);
 
-                    HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
-                    themMoiSoTienPhaiNop(HoaDonID);
+                    //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
+                    //themMoiSoTienPhaiNop(HoaDonID);
                 }
-            }
-
-
-           
+            }       
            
         }
 
