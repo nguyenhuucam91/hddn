@@ -510,7 +510,7 @@ namespace HoaDonHaDong.Helper
             return ngayThangHoaDon;
         }
 
-        public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> loadDanhSachSanLuongBatThuong(int previousMonth, int previousYear, int month, int year, int tuyenID)
+        public List<DanhSachKhachHangCoSanLuongBatThuong> loadDanhSachSanLuongBatThuong(int previousMonth, int previousYear, int month, int year, int tuyenID)
         {
             var danhSachHoaDonBatThuong = new List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
             ControllerBase<DanhSachKhachHangCoSanLuongBatThuong> cB = new ControllerBase<DanhSachKhachHangCoSanLuongBatThuong>();
@@ -521,28 +521,9 @@ namespace HoaDonHaDong.Helper
                 new SqlParameter("@currYear", year),
                 new SqlParameter("@tuyen", tuyenID)).ToList();
             //load danh sách khách hàng có áp giá đặc biệt
-            foreach (var item in danhSachHoaDon)
-            {
-                if (item.ChiSoMoi != 0)
-                {
-                    int sanLuongThangTruocCuaKhachHang = item.SanLuongThangTruoc;
-                    if (item.SanLuong <= 1)
-                    {
-                        danhSachHoaDonBatThuong.Add(item);
-                    }
-                    else
-                    {
-                        if (this.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()) ||
-                            sanLuongThangTruocCuaKhachHang != -1 &&
-                            ((item.SanLuong >= (sanLuongThangTruocCuaKhachHang * 2) || item.SanLuong <= (sanLuongThangTruocCuaKhachHang / 2))))
-                        {
-                            danhSachHoaDonBatThuong.Add(item);
-                        }
-                    }
-                }
-            }
+           
 
-            return danhSachHoaDonBatThuong;
+            return danhSachHoaDon;
         }
 
         public void capNhatTrangThaiChotTuyen(int tuyenKHID, int month, int year)

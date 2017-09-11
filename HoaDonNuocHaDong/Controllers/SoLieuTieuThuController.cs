@@ -382,7 +382,6 @@ namespace HoaDonNuocHaDong.Controllers
                 }
             }
 
-
             //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
 
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
