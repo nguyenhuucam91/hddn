@@ -312,55 +312,67 @@ namespace HoaDonNuocHaDong.Controllers
             int _tongKiemDinh = 0;
             int nhanVienId = 0;
 
-            //testing
-
-            //end testing
-
-          //  Hoadonnuoc hoaDon = db.Hoadonnuocs.FirstOrDefault(s => s.HoadonnuocID == HoaDonID);
-            //nếu có record hóa đơn trọng hệ thống
-            //if (hoaDon != null)
-            //{
-                if (LoggedInUser.NhanvienID != null)
-                {
-                   nhanVienId = LoggedInUser.NhanvienID.Value;
-                }
-
-                var isKiemDinh = kiemDinh.checkKiemDinhStatus(KHID, _month, _year);
-                //nếu khách hàng đang chỉnh sửa chưa kiểm định mà nhập số thì tính như bình thường
-                if (isKiemDinh)
-                {
-                    var kiemDinh1 = kiemDinh.getChiSoLucKiemDinh(KHID, _month, _year) - ChiSoDau.Value;
-                    var kiemDinh2 = ChiSoCuoi.Value - kiemDinh.getChiSoSauKiemDinh(KHID, _month, _year);
-                    _tongKiemDinh = kiemDinh1 + kiemDinh2;
-                    _TongSoTieuThu = _tongKiemDinh;
-                }
-                else
-                {
-                    _TongSoTieuThu = TongSoTieuThu.Value;
-                }
-                //hoaDon.Ngayhoadon = Convert.ToDateTime(dateInput);
-                //hoaDon.Ngaybatdausudung = Convert.ToDateTime(dateStart);
-                //hoaDon.Ngayketthucsudung = Convert.ToDateTime(dateEnd);
-                //hoaDon.Tongsotieuthu = _TongSoTieuThu;
-                //db.SaveChanges();
-            //}
-
-            using (SqlConnection con = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString()))
+            if (LoggedInUser.NhanvienID != null)
             {
-                using (SqlCommand cmd = new SqlCommand("NhapChiSoTieuThuThang", con))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@nhanVienId", nhanVienId);
-                    cmd.Parameters.AddWithValue("@ngayBatDauSuDung", Convert.ToDateTime(dateStart));
-                    cmd.Parameters.AddWithValue("@ngayKetThucSuDung", Convert.ToDateTime(dateEnd));
-                    cmd.Parameters.AddWithValue("@sanLuong", _TongSoTieuThu);
-                    cmd.Parameters.AddWithValue("@hoaDonId", HoaDonID);
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                }
+                nhanVienId = LoggedInUser.NhanvienID.Value;
             }
 
+            var isKiemDinh = kiemDinh.checkKiemDinhStatus(KHID, _month, _year);
+            //nếu khách hàng đang chỉnh sửa chưa kiểm định mà nhập số thì tính như bình thường
+            if (isKiemDinh)
+            {
+                var kiemDinh1 = kiemDinh.getChiSoLucKiemDinh(KHID, _month, _year) - ChiSoDau.Value;
+                var kiemDinh2 = ChiSoCuoi.Value - kiemDinh.getChiSoSauKiemDinh(KHID, _month, _year);
+                _tongKiemDinh = kiemDinh1 + kiemDinh2;
+                _TongSoTieuThu = _tongKiemDinh;
+            }
+            else
+            {
+                _TongSoTieuThu = TongSoTieuThu.Value;
+            }
+
+            ControllerBase<ThongTinHoaDon> cB = new ControllerBase<ThongTinHoaDon>();
+            List<ThongTinHoaDon> ttChiTietHoaDon = cB.Query("ThongTinChiTietHoaDon", 
+                new SqlParameter("@hoaDonId", HoaDonID)
+                ).ToList();
+
+            //run command to get info here.
+
+
             #region checkDelete
+            if (ttChiTietHoaDon.Count > 0) {
+                foreach (var item in ttChiTietHoaDon)
+                {
+                   double[] chiSoChiTiet = cS.tachChiSoSanLuong(_TongSoTieuThu, item.LoaiApGiaID, item.SoHo, item.SoKhau);
+                    //massupdate here.
+
+                   using (SqlConnection con = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString()))
+                   {
+                       using (SqlCommand cmd = new SqlCommand("NhapChiSoTieuThuThang", con))
+                       {
+                           cmd.CommandType = CommandType.StoredProcedure;
+                           cmd.Parameters.AddWithValue("@nhanVienId", nhanVienId);
+                           cmd.Parameters.AddWithValue("@ngayBatDauSuDung", Convert.ToDateTime(dateStart));
+                           cmd.Parameters.AddWithValue("@ngayKetThucSuDung", Convert.ToDateTime(dateEnd));
+                           cmd.Parameters.AddWithValue("@sanLuong", _TongSoTieuThu);
+                           cmd.Parameters.AddWithValue("@hoaDonId", HoaDonID);
+                           cmd.Parameters.AddWithValue("@soKhoan", SoKhoan);
+                           cmd.Parameters.AddWithValue("@chiSoMoi", ChiSoCuoi);
+                           cmd.Parameters.AddWithValue("@SH1", chiSoChiTiet[0]);
+                           cmd.Parameters.AddWithValue("@SH2", chiSoChiTiet[1]);
+                           cmd.Parameters.AddWithValue("@SH3", chiSoChiTiet[2]);
+                           cmd.Parameters.AddWithValue("@SH4", chiSoChiTiet[3]);
+                           cmd.Parameters.AddWithValue("@HC", chiSoChiTiet[5]);
+                           cmd.Parameters.AddWithValue("@CC", chiSoChiTiet[4]);                           
+                           cmd.Parameters.AddWithValue("@SX", chiSoChiTiet[6]);
+                           cmd.Parameters.AddWithValue("@KD", chiSoChiTiet[7]);
+                           con.Open();
+                           cmd.ExecuteNonQuery();
+                       }
+                   }       
+                }            
+            }
+
             //tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu, SoKhoan, KHID);
             //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
 
@@ -426,6 +438,7 @@ namespace HoaDonNuocHaDong.Controllers
             #endregion
         }
 
+
         public void tachChiSoSanLuong(int HoaDonID, int ChiSoDau, int ChiSoCuoi, int TongSoTieuThu, int SoKhoan, int KHID)
         {
             Hoadonnuoc hoaDon = db.Hoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
@@ -465,7 +478,6 @@ namespace HoaDonNuocHaDong.Controllers
                     double dinhMucSH1 = dinhMucTungNha;
                     double dinhMucSH2 = dinhMucTungNha * 2;
                     double dinhMucSH3 = dinhMucTungNha * 3;
-
 
                     if (_TongSoTieuThu - SH1 <= 0)
                     {
@@ -511,10 +523,6 @@ namespace HoaDonNuocHaDong.Controllers
                     int cachTinh = db.Apgiatonghops.FirstOrDefault(p => p.KhachhangID == KHID).CachTinh.Value;
                     //lấy các chỉ số liên quan đến áp giá tổng hợp
                     tachSoTongHop(HoaDonID, cachTinh, KHID, TongSoTieuThu);
-                }
-                else if (_loaiApGia == KhachHang.DACBIET)
-                {
-                    tachSoTongHop(HoaDonID, -1, KHID, TongSoTieuThu);
                 }
                 //loại khách hàng: doanh nghiệp - tính theo số kinh doanh, CC,...
                 else
@@ -672,8 +680,6 @@ namespace HoaDonNuocHaDong.Controllers
             #endregion
             return View();
         }
-
-
 
         public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getDanhSachHoaDonTieuThu(int _month, int _year, int tuyenID)
         {

@@ -125,7 +125,7 @@ namespace HoaDonHaDong.Helper
 
             return _hoaDonNuoc;
         }
-        
+
         /// <summary>
         /// Kiểm tra xem chỉ số có NULL hay ko, nếu null thì trả về 0
         /// </summary>
@@ -214,23 +214,6 @@ namespace HoaDonHaDong.Helper
             return 0;
         }
 
-        /// <summary>
-        /// Tính tổng tiền của toàn hóa đơn
-        /// </summary>
-        /// <param name="hoaDonNuocID"></param>
-        /// <param name="SH1"></param>
-        /// <param name="SH2"></param>
-        /// <param name="SH3"></param>
-        /// <param name="SH4"></param>
-        /// <param name="HC"></param>
-        /// <param name="CC"></param>
-        /// <param name="KD"></param>
-        /// <param name="SX"></param>
-        /// <param name="thangHoaDon"></param>
-        /// <param name="namHoaDon"></param>
-        /// <param name="VAT"></param>
-        /// <param name="tiLePhiBVMT"></param>
-        /// <returns></returns>
         public double tinhTongTienHoaDon(int hoaDonNuocID, double SH1, double SH2, double SH3, double SH4,
             double HC, double CC, double KD, double SX, int thangHoaDon, int namHoaDon, int tiLePhiBVMT)
         {
@@ -286,7 +269,7 @@ namespace HoaDonHaDong.Helper
             double CCPrice = getSoTienTheoApGia("CC").Value;
             double SXPrice = getSoTienTheoApGia("SX-XD").Value;
             double KDPrice = getSoTienTheoApGia("KDDV").Value;
-          
+
             double SH1Total = SH1 * SH1Price;
             double SH2Total = SH2 * SH2Price;
             double SH3Total = SH3 * SH3Price;
@@ -486,10 +469,10 @@ namespace HoaDonHaDong.Helper
                                    SanLuong = i.Tongsotieuthu,
                                    NgayBatDauSuDung = i.Ngaybatdausudung,
                                    Thang = month,
-                                   Nam = year,                                          
+                                   Nam = year,
                                });
             return hoaDonNuocs.ToList();
-            
+
         }
 
         public DateTime getThangNamGanNhatThuocHoaDon(int tuyenKHID, int currentMonth, int currentYear)
@@ -549,14 +532,14 @@ namespace HoaDonHaDong.Helper
                     }
                     else
                     {
-                        if (this.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()) || 
-                            sanLuongThangTruocCuaKhachHang != -1 && 
+                        if (this.isDacBiet(item.HoaDonNuocID, month.ToString(), year.ToString()) ||
+                            sanLuongThangTruocCuaKhachHang != -1 &&
                             ((item.SanLuong >= (sanLuongThangTruocCuaKhachHang * 2) || item.SanLuong <= (sanLuongThangTruocCuaKhachHang / 2))))
                         {
                             danhSachHoaDonBatThuong.Add(item);
                         }
                     }
-                }                             
+                }
             }
 
             return danhSachHoaDonBatThuong;
@@ -585,6 +568,101 @@ namespace HoaDonHaDong.Helper
             }
         }
 
+        public double[] tachChiSoSanLuong(int _TongSoTieuThu, int _loaiApGia, int soHo, int soNhanKhau)
+        {
+            double[] chiSoSuDung = new double[8];
+            double SH1 = 0;
+            double SH2 = 0;
+            double SH3 = 0;
+            double SH4 = 0;
+            double CC = 0;
+            double HC = 0;
+            double SXXD = 0;
+            double KDDV = 0;
+            if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.SINHHOAT)
+            {
+                int dinhMucCoSo = 10;
+                double dinhMucTungNha = getDinhMucTungNha(soHo, soNhanKhau, dinhMucCoSo);
+               
+                SH1 = _TongSoTieuThu <= dinhMucTungNha ? _TongSoTieuThu : dinhMucTungNha;
+
+                double dinhMucSH1 = dinhMucTungNha;
+                double dinhMucSH2 = dinhMucTungNha * 2;
+                double dinhMucSH3 = dinhMucTungNha * 3;
+
+                if (_TongSoTieuThu - SH1 <= 0)
+                {
+                    SH2 = 0;
+                }
+                else
+                {
+                    //22
+                    //SH2 = 16 <=10 ? 6 : 10 ;
+                    SH2 = _TongSoTieuThu - SH1 <= (dinhMucSH2 - dinhMucSH1) ? _TongSoTieuThu - SH1 : (dinhMucSH2 - dinhMucSH1);
+                }
+
+                if (_TongSoTieuThu - SH1 - SH2 <= 0)
+                {
+                    SH3 = 0;
+                }
+                else
+                {
+                    SH3 = _TongSoTieuThu - SH1 - SH2 <= (dinhMucSH3 - dinhMucSH2) ? _TongSoTieuThu - SH1 - SH2 : (dinhMucSH3 - dinhMucSH2);
+                }
+
+                if (_TongSoTieuThu - SH1 - SH2 - SH3 <= 0)
+                {
+                    SH4 = 0;
+                }
+                else
+                {
+                    SH4 = _TongSoTieuThu - SH1 - SH2 - SH3;
+                }
+
+            }
+            //tách số tổng hợp
+            else if (_loaiApGia == KhachHang.TONGHOP)
+            {
+                //int cachTinh = db.Apgiatonghops.FirstOrDefault(p => p.KhachhangID == KHID).CachTinh.Value;
+                //lấy các chỉ số liên quan đến áp giá tổng hợp
+                //tachSoTongHop(HoaDonID, cachTinh, KHID, TongSoTieuThu);
+            }
+            
+            //loại khách hàng: doanh nghiệp - tính theo số kinh doanh, CC,...
+            else
+            {
+                //nếu khách hàng là kinh doanh 
+                if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.KINHDOANHDICHVU)
+                {
+                    KDDV = _TongSoTieuThu;
+                }
+                //Sản xuất
+                else if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.SANXUAT)
+                {
+                    SXXD = _TongSoTieuThu;
+                }
+                //đơn vị sự nghiệp
+                else if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.DONVISUNGHIEP)
+                {
+                    CC = _TongSoTieuThu;
+                }
+                //kinh doanh dịch vụ
+                else if (_loaiApGia == HoaDonNuocHaDong.Helper.KhachHang.COQUANHANHCHINH)
+                {
+                    HC = _TongSoTieuThu;
+                }
+            }
+
+            chiSoSuDung[0] = SH1;
+            chiSoSuDung[1] = SH2;
+            chiSoSuDung[2] = SH3;
+            chiSoSuDung[3] = SH4;
+            chiSoSuDung[4] = CC;
+            chiSoSuDung[5] = HC;
+            chiSoSuDung[6] = SXXD;
+            chiSoSuDung[7] = KDDV;
+            return chiSoSuDung;
+        }
 
     }
 }
