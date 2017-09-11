@@ -418,7 +418,7 @@ namespace HoaDonHaDong.Helper
                 {
                     foreach (var hoaDonNuocThangTruoc in hoaDonNuocsThangTruoc)
                     {
-                        HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc hoaDonNuoc = hoaDonNuocsHienTai.SingleOrDefault(p => p.Thang == currentMonth && p.Nam == currentYear && p.KhachHangID == hoaDonNuocThangTruoc.KhachHangID);
+                        HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc hoaDonNuoc = hoaDonNuocsHienTai.FirstOrDefault(p => p.Thang == currentMonth && p.Nam == currentYear && p.KhachHangID == hoaDonNuocThangTruoc.KhachHangID);
                         if (hoaDonNuoc == null)
                         {
                             Hoadonnuoc hoaDonThangHienTai = new Hoadonnuoc();

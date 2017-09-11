@@ -332,7 +332,7 @@ namespace HoaDonNuocHaDong.Controllers
             //run command to get info here.
 
 
-            #region checkDelete
+            
             if (ttChiTietHoaDon.Count > 0)
             {
                 foreach (var item in ttChiTietHoaDon)
@@ -419,7 +419,6 @@ namespace HoaDonNuocHaDong.Controllers
             }
             double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
 
-
             lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu,
             cT.SH1.Value, cS.getSoTienTheoApGia("SH1").Value,
             cT.SH2.Value, cS.getSoTienTheoApGia("SH2").Value,
@@ -436,7 +435,7 @@ namespace HoaDonNuocHaDong.Controllers
             thuNgan, obj.TuyenKHID.Value, obj.TTDoc.Value, tongCongCongDon, dateStart, dateEnd);
 
             themMoiSoTienPhaiNop(HoaDonID);
-            #endregion
+           
         }
 
 
@@ -1034,7 +1033,7 @@ namespace HoaDonNuocHaDong.Controllers
                 db.Entry(chiTiet).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 //tính bằng giá khoán nếu cách tính = 0 (false) hoặc cách tính = -1 (giá đặc biệt)
-                if (cachTinh == 0 || cachTinh == -1)
+                if (cachTinh == 0)
                 {
                     List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> ls = sortApGiaTongHopBasedOnPriority(_ls);
                     foreach (var item in ls)
