@@ -50,8 +50,7 @@ namespace HoaDonNuocHaDong.Helper
             {
                 month = month + 1;
             }
-            var hoaDonNuocThangSau = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == KHID && p.ThangHoaDon == month
-                && p.NamHoaDon == year);
+            var hoaDonNuocThangSau = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == KHID && p.ThangHoaDon == month && p.NamHoaDon == year);
             //nếu k có trong db mới tiến hành add record
             if (hoaDonNuocThangSau == null)
             {
