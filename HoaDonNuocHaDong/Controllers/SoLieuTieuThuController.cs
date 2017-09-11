@@ -26,8 +26,8 @@ namespace HoaDonNuocHaDong.Controllers
         private NguoidungHelper ngDungHelper = new NguoidungHelper();
         private KiemDinh kiemDinh = new KiemDinh();
         private LichSuHoaDonRepository lichSuHoaDonRepository = new LichSuHoaDonRepository();
-
         private List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> hoadons = new List<Models.SoLieuTieuThu.HoaDonNuoc>();
+
         // GET: /SoLieuTieuThu/
         /// <summary>
         /// Hiển thị danh sách chi nhánh, tổ, nhân viên, tuyến và khách hàng
@@ -151,16 +151,9 @@ namespace HoaDonNuocHaDong.Controllers
             int tuyenInt = Convert.ToInt32(selectedTuyen);
             //sao chép ds khách hàng không sản lượng vào tháng hiện tại                       
             ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenInt);
-            #endregion
-
-            if (new DateTime(_year, _month, 1) > new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1))
-            {
-                errorList.Add("Ngày tháng được chọn không được quá ngày tháng hiện tại");
-            }
-            else
-            {
-                cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
-            }
+            #endregion            
+            cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
+            
             //lấy danh sách tổ, phòng ban thuộc tổ quận huyện đó
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
@@ -382,7 +375,7 @@ namespace HoaDonNuocHaDong.Controllers
                 }
             }
 
-            //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
+            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
 
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
