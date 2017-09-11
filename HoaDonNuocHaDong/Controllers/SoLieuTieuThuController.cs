@@ -332,7 +332,7 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ControllerBase<ThongTinHoaDon> cB = new ControllerBase<ThongTinHoaDon>();
-            List<ThongTinHoaDon> ttChiTietHoaDon = cB.Query("ThongTinChiTietHoaDon", 
+            List<ThongTinHoaDon> ttChiTietHoaDon = cB.Query("ThongTinChiTietHoaDon",
                 new SqlParameter("@hoaDonId", HoaDonID)
                 ).ToList();
 
@@ -340,40 +340,49 @@ namespace HoaDonNuocHaDong.Controllers
 
 
             #region checkDelete
-            if (ttChiTietHoaDon.Count > 0) {
+            if (ttChiTietHoaDon.Count > 0)
+            {
                 foreach (var item in ttChiTietHoaDon)
                 {
-                   double[] chiSoChiTiet = cS.tachChiSoSanLuong(_TongSoTieuThu, item.LoaiApGiaID, item.SoHo, item.SoKhau);
-                    //massupdate here.
+                    SqlConnection con = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
+                    SqlCommand cmd = new SqlCommand("NhapChiSoTieuThuThang", con);
 
-                   using (SqlConnection con = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString()))
-                   {
-                       using (SqlCommand cmd = new SqlCommand("NhapChiSoTieuThuThang", con))
-                       {
-                           cmd.CommandType = CommandType.StoredProcedure;
-                           cmd.Parameters.AddWithValue("@nhanVienId", nhanVienId);
-                           cmd.Parameters.AddWithValue("@ngayBatDauSuDung", Convert.ToDateTime(dateStart));
-                           cmd.Parameters.AddWithValue("@ngayKetThucSuDung", Convert.ToDateTime(dateEnd));
-                           cmd.Parameters.AddWithValue("@sanLuong", _TongSoTieuThu);
-                           cmd.Parameters.AddWithValue("@hoaDonId", HoaDonID);
-                           cmd.Parameters.AddWithValue("@soKhoan", SoKhoan);
-                           cmd.Parameters.AddWithValue("@chiSoMoi", ChiSoCuoi);
-                           cmd.Parameters.AddWithValue("@SH1", chiSoChiTiet[0]);
-                           cmd.Parameters.AddWithValue("@SH2", chiSoChiTiet[1]);
-                           cmd.Parameters.AddWithValue("@SH3", chiSoChiTiet[2]);
-                           cmd.Parameters.AddWithValue("@SH4", chiSoChiTiet[3]);
-                           cmd.Parameters.AddWithValue("@HC", chiSoChiTiet[5]);
-                           cmd.Parameters.AddWithValue("@CC", chiSoChiTiet[4]);                           
-                           cmd.Parameters.AddWithValue("@SX", chiSoChiTiet[6]);
-                           cmd.Parameters.AddWithValue("@KD", chiSoChiTiet[7]);
-                           con.Open();
-                           cmd.ExecuteNonQuery();
-                       }
-                   }       
-                }            
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@nhanVienId", nhanVienId);
+                    cmd.Parameters.AddWithValue("@ngayBatDauSuDung", Convert.ToDateTime(dateStart));
+                    cmd.Parameters.AddWithValue("@ngayKetThucSuDung", Convert.ToDateTime(dateEnd));
+                    cmd.Parameters.AddWithValue("@sanLuong", _TongSoTieuThu);
+                    cmd.Parameters.AddWithValue("@hoaDonId", HoaDonID);
+                    cmd.Parameters.AddWithValue("@soKhoan", SoKhoan);
+                    cmd.Parameters.AddWithValue("@chiSoMoi", ChiSoCuoi);
+
+                    if (item.LoaiApGiaID != KhachHang.TONGHOP)
+                    {
+                        double[] chiSoChiTiet = cS.tachChiSoSanLuong(_TongSoTieuThu, item.LoaiApGiaID, item.SoHo, item.SoKhau);
+                        //massupdate here.
+                        cmd.Parameters.AddWithValue("@SH1", chiSoChiTiet[0]);
+                        cmd.Parameters.AddWithValue("@SH2", chiSoChiTiet[1]);
+                        cmd.Parameters.AddWithValue("@SH3", chiSoChiTiet[2]);
+                        cmd.Parameters.AddWithValue("@SH4", chiSoChiTiet[3]);
+                        cmd.Parameters.AddWithValue("@HC", chiSoChiTiet[5]);
+                        cmd.Parameters.AddWithValue("@CC", chiSoChiTiet[4]);
+                        cmd.Parameters.AddWithValue("@SX", chiSoChiTiet[6]);
+                        cmd.Parameters.AddWithValue("@KD", chiSoChiTiet[7]);
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        Apgiatonghop khachHangApGiaTongHop = db.Apgiatonghops.FirstOrDefault(p=>p.KhachhangID == KHID);
+                        tachSoTongHop(HoaDonID, khachHangApGiaTongHop.CachTinh.Value , KHID, _TongSoTieuThu);
+                    }
+                    
+                }
             }
 
-            //tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, _TongSoTieuThu, SoKhoan, KHID);
+
             //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
 
             //Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
