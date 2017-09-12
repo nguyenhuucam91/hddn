@@ -567,6 +567,7 @@ namespace HoaDonNuocHaDong.Controllers
                     }
                     incrementStep++;
                 }
+                reader.Close();
                 connection.Close();
             }
 
@@ -736,7 +737,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.TuyenongkythuatID = db.Tuyenongs.Where(p => p.IsDelete == false);
             ViewBag.selectedTuyenKHID = khachhang.TuyenKHID;
             ViewBag.reEnterCustomer = true;
-            ViewBag.MaKH = maxMaKhachHang.ToString();
+            ViewBag.MaKH = getMaxMaKhachHang().ToString();
             return View(khachhang);
         }
 

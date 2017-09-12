@@ -1307,7 +1307,9 @@ namespace HoaDonNuocHaDong.Controllers
                     db.Quanhuyens.Find(item.QuanHuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai3,
                     thuNgan, item.TuyenKHID, item.TTDoc, tongCongCongDon, String.Format("{0:yyyy/MM/dd}", item.NgayBatDauSuDung), String.Format("{0:yyyy/MM/dd}", item.NgayKetThucSuDung), lichSus);
                    
-                    //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(item.KhachHangID, item.HoaDonNuocID, item.ChiSoMoi.Value, LoggedInUser.NhanvienID.Value, month, year, Convert.ToDateTime(item.NgayKetThucSuDung));
+
+                    HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(item.KhachHangID, item.HoaDonNuocID, item.ChiSoMoi.Value, 
+                        LoggedInUser.NhanvienID.Value, month, year, Convert.ToDateTime(item.NgayKetThucSuDung));
                     themMoiSoTienPhaiNop(item.HoaDonNuocID);
                 }
             }
