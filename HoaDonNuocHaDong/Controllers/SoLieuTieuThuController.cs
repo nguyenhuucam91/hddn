@@ -151,9 +151,15 @@ namespace HoaDonNuocHaDong.Controllers
             int tuyenInt = Convert.ToInt32(selectedTuyen);
             //sao chép ds khách hàng không sản lượng vào tháng hiện tại                       
             ViewData["tuyenObj"] = db.Tuyenkhachhangs.Find(tuyenInt);
-            #endregion            
-            cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
-            
+            #endregion
+            if (new DateTime(Convert.ToInt32(form["nam"]), Convert.ToInt32(form["thang"]), 1) > DateTime.Now)
+            {
+                errorList.Add("Tháng năm được chọn không lớn hơn tháng năm hiện tại");
+            }
+            else
+            {
+                cS.generateChiSoFromNearestMonth(_month, _year, nhanVienInt, Convert.ToInt32(selectedTuyen));
+            }
             //lấy danh sách tổ, phòng ban thuộc tổ quận huyện đó
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);

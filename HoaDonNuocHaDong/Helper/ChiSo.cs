@@ -448,6 +448,7 @@ namespace HoaDonHaDong.Helper
                             db.Chitiethoadonnuocs.Add(chiTiet);
                             db.SaveChanges();
                         }
+                        
                     }
                 }
             }
