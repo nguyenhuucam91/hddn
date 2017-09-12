@@ -375,6 +375,7 @@ namespace HoaDonNuocHaDong.Controllers
                         Apgiatonghop khachHangApGiaTongHop = db.Apgiatonghops.FirstOrDefault(p => p.KhachhangID == KHID);
                         tachSoTongHop(HoaDonID, khachHangApGiaTongHop.CachTinh.Value, KHID, _TongSoTieuThu);
                     }
+                    con.Close();
                     //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(item.KhachHangID, item.HoaDonNuocID, item.ChiSoMoi.Value, LoggedInUser.NhanvienID.Value, thang, nam, Convert.ToDateTime(item.NgayKetThucSuDung));
 
                     //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
@@ -1242,9 +1243,8 @@ namespace HoaDonNuocHaDong.Controllers
             cS.capnhatTrangThaiDanhSachHoaDonBiHuyThuocTuyen(tuyenID, month, year);
             cS.capNhatTrangThaiChotHoaDon(tuyenID, month, year);
             //saochepDanhsachKhachHangKhongSanLuong(tuyenID, month, year);
-            ////thêm ds lich su hoa don va them thang sau
-            List<Models.SoLieuTieuThu.HoaDonNuoc> hoaDons = getDanhSachHoaDonTieuThu(month, year, tuyenID);
-            //narrow down result
+            
+            List<Models.SoLieuTieuThu.HoaDonNuoc> hoaDons = getDanhSachHoaDonTieuThu(month, year, tuyenID);            
            
             List<Lichsuhoadon> lichSus = db.Lichsuhoadons.Where(p => p.ThangHoaDon == month && p.NamHoaDon == year && p.TuyenKHID == tuyenID).ToList();              
            
@@ -1278,7 +1278,7 @@ namespace HoaDonNuocHaDong.Controllers
                     }
                     String thuNgan = "/";
                     //cộng dồn
-                    int count = lichSus.Count(p => p.TuyenKHID == item.TuyenKHID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTDoc < item.TTDoc);
+                    int count = lichSus.Count(p => p.TTDoc < item.TTDoc);
                     double congDonHDTruoc = 0;
                     if (count == 0)
                     {
@@ -1286,7 +1286,7 @@ namespace HoaDonNuocHaDong.Controllers
                     }
                     else
                     {
-                        congDonHDTruoc = lichSus.Where(p => p.TuyenKHID == item.TuyenKHID && p.ThangHoaDon == month && p.NamHoaDon == year && p.TTDoc.Value < item.TTDoc).Sum(p => p.TongCong.Value);
+                        congDonHDTruoc = lichSus.Where(p=>p.TTDoc.Value < item.TTDoc).Sum(p => p.TongCong.Value);
                     }
                     double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
 
