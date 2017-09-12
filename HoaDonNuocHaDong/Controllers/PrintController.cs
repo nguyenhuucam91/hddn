@@ -27,6 +27,7 @@ using PagedList;
 using HvitFramework;
 using HoaDonNuocHaDong.Models.SoLieuTieuThu;
 using HoaDonNuocHaDong.Models.TuyenKhachHang;
+using HoaDonNuocHaDong.Repositories;
 
 namespace HoaDonNuocHaDong.Controllers
 {
@@ -39,8 +40,8 @@ namespace HoaDonNuocHaDong.Controllers
         QuanHuyenHelper qHHelper = new QuanHuyenHelper();
         Lichsuhoadon lichSuHoaDon = new Lichsuhoadon();
         TuyenKhachHangDuocChot tuyenDuocChot = new TuyenKhachHangDuocChot();
-
-
+        private LichSuHoaDonRepository lichSuHoaDonRepository = new LichSuHoaDonRepository();
+        private SoLieuTieuThuController sLTT = new SoLieuTieuThuController();
 
         public void setPrintCircumstance(int printCircumstance)
         {
@@ -231,7 +232,7 @@ namespace HoaDonNuocHaDong.Controllers
                 connection.Close();
             }
             return hoadons;
-        }
+        }       
 
         [HttpPost]
         public ActionResult PrintPreviewSelected(FormCollection form, int? quan, int TuyenID, int month, int year)
@@ -473,6 +474,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 Quanhuyen quanHuyenDauTien = db.Quanhuyens.FirstOrDefault(p => p.IsDelete == false);
                 ViewData["to"] = db.ToQuanHuyens.Where(p => p.IsDelete == false && p.PhongbanID == PhongbanHelper.KINHDOANH && p.QuanHuyenID == quanHuyenDauTien.QuanhuyenID).ToList();
+                
             }
             else
             {
@@ -486,7 +488,7 @@ namespace HoaDonNuocHaDong.Controllers
                 tuyens = _tuyen.getDanhSachTuyensDuocChot(quan, to, null, thangDuocChon, namDuocChon);
             }
 
-
+           
             #region ViewBag
             ViewBag.isThuNgan = loggedInUserIsThuNgan;
             ViewData["nhanviens"] = new List<Nhanvien>();
@@ -572,11 +574,8 @@ namespace HoaDonNuocHaDong.Controllers
             else
             {
                 if (duocChot != null)
-                {
-                    if (duocChot.TrangThaiTinhTien == false)
-                    {
-                        updateAllHoaDon(quan, tuyen, Convert.ToInt32(month), Convert.ToInt32(year));
-                    }
+                {                    
+                    updateAllHoaDon(quan, tuyen, Convert.ToInt32(month), Convert.ToInt32(year));                   
                 }
             }
             //Cập nhật trạng thái tính tiền
