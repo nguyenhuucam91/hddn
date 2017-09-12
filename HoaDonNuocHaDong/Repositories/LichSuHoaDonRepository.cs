@@ -150,14 +150,5 @@ namespace HoaDonNuocHaDong.Repositories
             return false;
         }
 
-        public Lichsuhoadon findLichSuHoaDonByHoaDonId(int hoaDonID)
-        {
-            Lichsuhoadon lichSuHoaDon = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == hoaDonID);
-            if (lichSuHoaDon != null)
-            {
-                return lichSuHoaDon;
-            }
-            return null;
-        }
     }
 }
