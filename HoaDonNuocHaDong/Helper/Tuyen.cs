@@ -44,7 +44,7 @@ namespace HoaDonNuocHaDong.Helper
                 var tuyenTheoNhanVien = (from p in _db.Tuyentheonhanviens
                                          join r in _db.Tuyenkhachhangs on p.TuyenKHID equals r.TuyenKHID
                                          join s in _db.Nhanviens on p.NhanVienID equals s.NhanvienID
-                                         where p.NhanVienID == nhanVienId
+                                         where p.NhanVienID == nhanVienId && r.IsDelete == false
                                          select new
                                          {
                                              TuyenKhachHang = r

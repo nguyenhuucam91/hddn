@@ -95,7 +95,8 @@ namespace HDNHD.Models.Constants
     public enum EChucVu
     {
         NHAN_VIEN = 1,
-        TRUONG_PHONG = 2
+        TRUONG_PHONG = 2,
+        ADMIN = 0
     }
 
     public enum EPaginator
