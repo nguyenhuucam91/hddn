@@ -12,6 +12,7 @@ namespace HoaDonNuocHaDong.Helper
     {
 
         static HoaDonHaDongEntities db = new HoaDonHaDongEntities();
+        HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
 
         public const int LOAIKHCANHAN = 1;
         public const int LOAIKHDOANHNGHIEP = 2;
@@ -132,7 +133,6 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public String getQuan(int? quanID)
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             if (quanID != null)
             {
                 var quan = _db.Quanhuyens.FirstOrDefault(p => p.QuanhuyenID == quanID);
@@ -151,7 +151,6 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public String getPhuong(int? phuongXaID)
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             if (phuongXaID != null)
             {
                 var pX = _db.Phuongxas.FirstOrDefault(p => p.PhuongxaID == phuongXaID);
@@ -175,7 +174,6 @@ namespace HoaDonNuocHaDong.Helper
         /// <returns></returns>
         public String getCumDanCu(int? cumDanCuID)
         {
-            HoaDonHaDongEntities _db = new HoaDonHaDongEntities();
             if (cumDanCuID != null)
             {
                 var cumDanCu = _db.Cumdancus.FirstOrDefault(p => p.CumdancuID == cumDanCuID);
@@ -464,12 +462,25 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="tuyen"></param>
         public static void pullKhachHangLen(int TTDocSau, int TTDocTruoc, int tuyen)
         {
-            var khachHang = db.Khachhangs.Where(p => p.TTDoc <= TTDocSau && p.TTDoc > TTDocTruoc && p.TuyenKHID == tuyen && p.IsDelete == false).Distinct().ToList();
+            var khachHang = db.Khachhangs.Where(p => p.TTDoc <= TTDocSau && p.TTDoc > TTDocTruoc && p.TuyenKHID == tuyen && p.IsDelete == false).ToList();
             foreach (var item in khachHang)
             {
                 Khachhang kH = db.Khachhangs.Find(item.KhachhangID);
                 int thuTuDoc = kH.TTDoc.Value;
                 kH.TTDoc = thuTuDoc - 1;
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public static void pushKhachHang(int thuTuDocCu, int thuTuDocMoi, int tuyen)
+        {
+            var khachHang = db.Khachhangs.Where(p => p.TTDoc >= thuTuDocMoi && p.TTDoc < thuTuDocCu && p.TuyenKHID == tuyen && p.IsDelete == false).ToList();
+            foreach (var item in khachHang)
+            {
+                Khachhang kH = db.Khachhangs.Find(item.KhachhangID);
+                int thuTuDoc = kH.TTDoc.Value;
+                kH.TTDoc = thuTuDoc + 1;
                 db.Entry(item).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -483,7 +494,7 @@ namespace HoaDonNuocHaDong.Helper
         public static void pushKhachHangXuongKhiEdit(int TTDoc, int tuyen)
         {
 
-            var khachHang = db.Khachhangs.Where(p => p.TTDoc > TTDoc && p.TuyenKHID == tuyen && p.IsDelete == false).Distinct().ToList();
+            var khachHang = db.Khachhangs.Where(p => p.TTDoc >= TTDoc && p.TuyenKHID == tuyen && p.IsDelete == false).Distinct().ToList();
             foreach (var item in khachHang)
             {
                 Khachhang kH = db.Khachhangs.Find(item.KhachhangID);
@@ -492,6 +503,28 @@ namespace HoaDonNuocHaDong.Helper
                 db.Entry(item).State = EntityState.Modified;
                 db.SaveChanges();
             }
+        }
+
+        public static void changeTTDocPosition(int thuTuDocCu, int thuTuDocMoi, int tuyenIDCu, int tuyenIDMoi)
+        {
+            if (tuyenIDCu == tuyenIDMoi)
+            {
+                if (thuTuDocCu != thuTuDocMoi)
+                {
+                    if (thuTuDocCu < thuTuDocMoi)
+                    {
+                        pullKhachHangLen(thuTuDocMoi, thuTuDocCu, tuyenIDMoi);
+                    }
+                    else
+                    {
+                        pushKhachHang(thuTuDocCu, thuTuDocMoi, tuyenIDMoi);
+                    }
+                }                
+            }
+            else
+            {
+                pushKhachHangXuongKhiEdit(thuTuDocMoi, tuyenIDMoi);
+            }            
         }
 
     }

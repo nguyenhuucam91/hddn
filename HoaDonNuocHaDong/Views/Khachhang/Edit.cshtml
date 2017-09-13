@@ -31,12 +31,13 @@
     List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang> tuyens = ViewBag._TuyenKHID as List<HoaDonNuocHaDong.Models.TuyenKhachHang.TuyenKhachHang>;
 }
 
-@using (Html.BeginForm("Edit", "Khachhang",new { @toID = Request.QueryString["toID"],
-    nhanvienIDUrl = @Request.QueryString["nhanvienIDUrl"], 
-    tuyenIDUrl = @Request.QueryString["tuyenIDUrl"], 
-    thang=@Request.QueryString["thang"],
-    nam=@Request.QueryString["nam"],
-    referrer = @Request.QueryString["referrer"]},FormMethod.Post))
+@using (Html.BeginForm("Edit", "Khachhang",new { toID = Request.QueryString["toID"],
+    nhanvienIDUrl = Request.QueryString["nhanvienIDUrl"], 
+    tuyenIDUrl = Request.QueryString["tuyenIDUrl"], 
+    thang = Request.QueryString["thang"],
+    nam=Request.QueryString["nam"],
+    ttdoc = Request.QueryString["ttdoc"],
+    referrer = Request.QueryString["referrer"]},FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(p => p.KhachhangID)

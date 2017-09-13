@@ -876,6 +876,7 @@ namespace HoaDonNuocHaDong.Controllers
             int selectedMonth = DateTime.Now.Month;
             int selectedYear = DateTime.Now.Year;
             int loaiApGiaID = Convert.ToInt32(form["LoaiapgiaID"]);
+            int ttDocCu = Request.QueryString["ttdoc"] != null ? Convert.ToInt32(Request.QueryString["ttdoc"]): 0;
             String loaiChiSo = "";
 
             if (Request.QueryString["thang"] != null)
@@ -889,26 +890,24 @@ namespace HoaDonNuocHaDong.Controllers
             var phongBanRepository = uow.Repository<PhongBanRepository>();
             var phongBan = phongBanRepository.GetSingle(m => m.PhongbanID == nhanVien.PhongbanID);
             int phongBanID = phongBan.PhongbanID;
-            int KHID = Convert.ToInt32(form["KhachhangID"]);
-
-            int TTDocTruoc = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID).TTDoc.Value;
+            int KHID = Convert.ToInt32(form["KhachhangID"]);           
 
             if (ModelState.IsValid)
             {
                 //cập nhật lại thứ tự đọc
-                int ttDoc = khachhang.TTDoc.Value;
+                int ttDocMoi = khachhang.TTDoc.Value;
                 int tuyenID = khachhang.TuyenKHID.Value;
 
-                int countCustomer = db.Khachhangs.Count(p => p.TTDoc == ttDoc && p.IsDelete == false && p.TuyenKHID == khachhang.TuyenKHID);
+                int countCustomer = db.Khachhangs.Count(p => p.TTDoc == ttDocMoi && p.IsDelete == false && p.TuyenKHID == khachhang.TuyenKHID);
                 if (countCustomer > 0)
-                {
-                    KhachHang.pullKhachHangLen(ttDoc, TTDocTruoc, tuyenID);
+                {               
+                   KhachHang.changeTTDocPosition(ttDocCu, ttDocMoi, Convert.ToInt32(tuyenIDUrl.Value), khachhang.TuyenKHID.Value);
                 }
-                //create new connection to save Db
+
                 khachhang.IsDelete = false;
                 HoaDonHaDongEntities newConnection = new HoaDonHaDongEntities();
                 newConnection.Entry(khachhang).State = EntityState.Modified;
-                newConnection.SaveChanges();
+                newConnection.SaveChanges();               
 
                 if (loaiApGiaID == KhachHang.TONGHOP)
                 {
@@ -945,6 +944,7 @@ namespace HoaDonNuocHaDong.Controllers
                     }
 
                     Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuoc.HoadonnuocID);
+
                     #region reCalculateWaterReceipt
                     int sanLuongTieuThu = 0; int chiSoDau = 0; int chiSoCuoi = 0; int soKhoan = 0;
 
@@ -1054,7 +1054,9 @@ namespace HoaDonNuocHaDong.Controllers
                          ngayKetThucSuDung);
                         #endregion
                     #endregion
+
                     }
+                    #region ThemMoiHoaDonThang
                     else
                     {
                         Hoadonnuoc hoaDonThangNamKiHopDong = new Hoadonnuoc();
@@ -1082,7 +1084,7 @@ namespace HoaDonNuocHaDong.Controllers
                         int chiSoDauChiTietHoaDon = 0;
                         themMoiChiTietHoaDonNuoc(chiSoDauChiTietHoaDon);
                     }
-
+                    #endregion
 
                     //chỉnh sửa khách hàng trong trang áp giá
                     if (!String.IsNullOrEmpty(Request.QueryString["referrer"]) && Request.QueryString["referrer"] == "viewdetail")
@@ -1121,7 +1123,7 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     _tuyen.AddRange(tuyenHelper.getTuyenByTo(item.ToQuanHuyenID));
                 }
-                ViewBag._TuyenKHID = _tuyen;
+                ViewBag._TuyenKHID = _tuyen.OrderBy(p=>p.MaTuyenKH);
                 ViewBag.SelectedTuyen = khachhang.TuyenKHID;
             }
 

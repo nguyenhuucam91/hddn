@@ -245,7 +245,7 @@
                                                             </td>
 
                                                             <td>
-                                                                @Html.ActionLink("Sửa", "Edit", new { id = item.KhachhangID, toID = selectedTo, nhanvienIDUrl = selectedNhanVien, tuyenIDUrl = selectedTuyen }) |
+                                                                @Html.ActionLink("Sửa", "Edit", new { id = item.KhachhangID, toID = selectedTo, nhanvienIDUrl = selectedNhanVien, tuyenIDUrl = selectedTuyen, ttdoc = item.TTDoc }) |
 
                                                                 @if (item.Tinhtrang == 0 || item.Tinhtrang == null)
                                                                 {
