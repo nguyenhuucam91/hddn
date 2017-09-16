@@ -934,34 +934,48 @@ namespace HoaDonNuocHaDong.Controllers
             }
         }
 
-        public List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sortApGiaTongHopBasedOnPriority(List<Apgiatonghop> ls)
+        public List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sortApGiaTongHopBasedOnPriority(int cachTinh, List<Apgiatonghop> ls)
         {
-            List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sorted = (from i in ls
+            if (cachTinh == (int)ECachTinhGia.TONGHOPSOKHOAN)
+            {
+                List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sortedSoKhoan = (from i in ls
+                                                                           join r in db.Loaiapgias on i.IDLoaiApGia equals (byte)r.LoaiapgiaID
+                                                                           where i.SanLuong != 0
+                                                                           orderby r.MucDoUuTienTinhGiaSoKhoan
+                                                                           select new HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop
+                                                                           {
+                                                                               SanLuong = i.SanLuong.Value,
+                                                                               IDLoaiApGia = i.IDLoaiApGia.Value
+                                                                           }).ToList();
+
+                List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sanLuongZero = (from i in ls
+                                                                                 where i.SanLuong == 0
+                                                                                 select new HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop
+                                                                                 {
+                                                                                     SanLuong = i.SanLuong.Value,
+                                                                                     IDLoaiApGia = i.IDLoaiApGia.Value
+                                                                                 }).ToList();
+                sortedSoKhoan.AddRange(sanLuongZero);
+                return sortedSoKhoan;                       
+            }
+
+            List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sortedPhanTram = (from i in ls
                                                                        join r in db.Loaiapgias on i.IDLoaiApGia equals (byte)r.LoaiapgiaID
-                                                                       where i.SanLuong != 0
-                                                                       orderby r.MucDoUuTienTinhGia
+                                                                       orderby r.MucDoUuTienTinhGiaPhanTram
+                                                                       where i.SanLuong != 0 && r.MucDoUuTienTinhGiaPhanTram != -1                                                        
                                                                        select new HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop
                                                                        {
                                                                            SanLuong = i.SanLuong.Value,
                                                                            IDLoaiApGia = i.IDLoaiApGia.Value
                                                                        }).ToList();
-
-            List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> sanLuongZero = (from i in ls
-                                                                             where i.SanLuong == 0
-                                                                             select new HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop
-                                                                             {
-                                                                                 SanLuong = i.SanLuong.Value,
-                                                                                 IDLoaiApGia = i.IDLoaiApGia.Value
-                                                                             }).ToList();
-            sorted.AddRange(sanLuongZero);
-            return sorted;
+            return sortedPhanTram;
         }
 
         /// <summary>
         /// Dành cho khách hàng áp giá tổng hợp, tách chỉ số giá tổng hợp ra.
         /// </summary>
         public void tachSoTongHop(int HoaDonID, int cachTinh, int KhachHangID, double SanLuong)
-        {
+        {            
             List<Apgiatonghop> _ls = db.Apgiatonghops.Where(p => p.KhachhangID == KhachHangID).ToList();
 
             double sanLuongThuc = 0;
@@ -979,10 +993,10 @@ namespace HoaDonNuocHaDong.Controllers
                 chiTiet.KDDV = 0;
                 db.Entry(chiTiet).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+                List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> ls = sortApGiaTongHopBasedOnPriority(cachTinh, _ls);
                 //tính bằng giá khoán nếu cách tính = 0 (false) hoặc cách tính = -1 (giá đặc biệt)
                 if (cachTinh == 0)
-                {
-                    List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> ls = sortApGiaTongHopBasedOnPriority(_ls);
+                {                    
                     foreach (var item in ls)
                     {
                         if (item.SanLuong > 0)
@@ -1024,22 +1038,7 @@ namespace HoaDonNuocHaDong.Controllers
                             {
                                 chiTiet.CC = sanLuongThuc;
                             }
-                            else if (item.IDLoaiApGia == KhachHang.SH1)
-                            {
-                                chiTiet.SH1 = sanLuongThuc;
-                            }
-                            else if (item.IDLoaiApGia == KhachHang.SH2)
-                            {
-                                chiTiet.SH2 = sanLuongThuc;
-                            }
-                            else if (item.IDLoaiApGia == KhachHang.SH3)
-                            {
-                                chiTiet.SH3 = sanLuongThuc;
-                            }
-                            else if (item.IDLoaiApGia == KhachHang.SH4)
-                            {
-                                chiTiet.SH4 = sanLuongThuc;
-                            }
+                           
                             db.Entry(chiTiet).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
 
@@ -1078,22 +1077,7 @@ namespace HoaDonNuocHaDong.Controllers
                             {
                                 chiTiet.CC = sanLuongThuc;
                             }
-                            else if (item.IDLoaiApGia == KhachHang.SH1)
-                            {
-                                chiTiet.SH1 = sanLuongThuc;
-                            }
-                            else if (item.IDLoaiApGia == KhachHang.SH2)
-                            {
-                                chiTiet.SH2 = sanLuongThuc;
-                            }
-                            else if (item.IDLoaiApGia == KhachHang.SH3)
-                            {
-                                chiTiet.SH3 = sanLuongThuc;
-                            }
-                            else if (item.IDLoaiApGia == KhachHang.SH4)
-                            {
-                                chiTiet.SH4 = sanLuongThuc;
-                            }
+                           
 
                             db.Entry(chiTiet).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
@@ -1107,8 +1091,8 @@ namespace HoaDonNuocHaDong.Controllers
                 {
                     double SanLuongTuongUng = 0;
                     double SanLuongTong = 0;
-                    int recordLeftAfterIteration = _ls.Count();
-                    foreach (var item in _ls)
+                    int recordLeftAfterIteration = ls.Count();
+                    foreach (var item in ls)
                     {
                         if (item.SanLuong != 0)
                         {
