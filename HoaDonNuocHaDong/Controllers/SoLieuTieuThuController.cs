@@ -372,8 +372,6 @@ namespace HoaDonNuocHaDong.Controllers
                     tachSoTongHop(HoaDonID, khachHangApGiaTongHop.CachTinh.Value, KHID, _TongSoTieuThu);
                 }
                 con.Close();
-                //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, item.ChiSoMoi.Value, LoggedInUser.NhanvienID.Value, thang, nam, Convert.ToDateTime(item.NgayKetThucSuDung));
-
                 HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
                 //approx 200ms
                 themMoiSoTienPhaiNop(HoaDonID);
