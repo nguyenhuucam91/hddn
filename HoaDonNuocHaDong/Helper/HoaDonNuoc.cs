@@ -66,7 +66,7 @@ namespace HoaDonNuocHaDong.Helper
                 db.Hoadonnuocs.Add(hoaDonThangSau);
                 db.SaveChanges();
 
-                var chiTietHoaDonNuocExist = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonThangSau.HoadonnuocID);
+                var chiTietHoaDonNuocExist = hoaDonNuocThangSau.Chitiethoadonnuocs.FirstOrDefault();
                 //nếu k có trong db thì add
                 if (chiTietHoaDonNuocExist == null)
                 {
@@ -89,7 +89,7 @@ namespace HoaDonNuocHaDong.Helper
             {
                 hoaDonNuocThangSau.Ngaybatdausudung = ngayBatDau;
                 db.SaveChanges();
-                var chiTietHoaDonNuocExist = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == hoaDonNuocThangSau.HoadonnuocID);
+                var chiTietHoaDonNuocExist = hoaDonNuocThangSau.Chitiethoadonnuocs.FirstOrDefault();
                 //nếu k có trong db thì add
                 if (chiTietHoaDonNuocExist == null)
                 {
