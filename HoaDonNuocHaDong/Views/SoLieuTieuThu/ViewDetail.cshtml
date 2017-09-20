@@ -16,27 +16,34 @@
     HoaDonNuocHaDong.Controllers.NhanvienController nhanVienController = new HoaDonNuocHaDong.Controllers.NhanvienController();
 }
 
-<script src="~/Assets/js/jquery.dataTables.min.js"></script>
-<script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
-<link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
-<!-- Khu vực toggle cột tắt bật -->
-<style>
-    .clicked {
-        color: red;
-    }
+@section Scripts {
+    <script src="~/Assets/js/jquery.dataTables.min.js"></script>
+    <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
+}
 
-    tbody {
-        font-size: 15px;
-    }
+@section Styles {
+    <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
+    <!-- Khu vực toggle cột tắt bật -->
+    <style>
+        .clicked {
+            color: red;
+        }
 
-    table.dataTable thead th, table.dataTable thead td {
-        padding: 10px 10px !important;
-    }
+        tbody, input, label{
+            font-size: 15px;
+            font-family: Arial;
+        }
 
-    form {
-        display: inline;
-    }
-</style>
+        table.dataTable thead th, table.dataTable thead td{
+            padding: 10px 10px !important;            
+        }
+
+        form {
+            display: inline;
+        }       
+    </style>
+}
+
 
 <div class="main">
     <div class="main-inner">
@@ -60,7 +67,7 @@
                         </div>
 
                         @Html.Partial("_SoLieuTieuThuChuThich")
-                      
+
                     </div>
                     <!--Tắt bật cột-->
                     <div class="form-actions">
@@ -171,12 +178,13 @@
 
                                     <td><a target="_blank" style="color:blue" href="@Url.Action("ViewDetail", "Khachhang", new { id = khachHangIDRow })">@item.MaKhachHang</a></td>
                                     <td>
-                                        <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
+                                        <a target="_blank" class="solieutieuthu" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
                                                                                 toID = Request.QueryString["toID"],
                                                                                 nhanvienIDUrl = Request.QueryString["nvquanly"],
                                                                                 tuyenIDUrl = Request.QueryString["tuyenID"],
                                                                                 thang = Request.QueryString["month"],
                                                                                 nam = Request.QueryString["year"],
+                                                                                ttdoc = @item.ThuTuDoc,
                                                                                 referrer = "viewdetail"})">@item.TenKhachHang</a>
                                                                             </td>
                                                                             <td><label>@item.ThuTuDoc</label></td>
@@ -228,7 +236,7 @@
                                 <td style="color:blue;font-size:16px">@sumKD</td>
                             </tr>
                         </tfoot>
-                    </table>                  
+                    </table>
 
                 </div> <!-- /widget-content -->
 

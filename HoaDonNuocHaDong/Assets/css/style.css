@@ -1461,3 +1461,13 @@ table.fc-border-separate {
 .hoadonprinted {
     background-color: #b8860b !important;
 }
+
+@media print {
+    @page{
+        margin-bottom:0 !important;
+    }
+}
+
+.solieutieuthu{
+    color: #0e08fc;
+}

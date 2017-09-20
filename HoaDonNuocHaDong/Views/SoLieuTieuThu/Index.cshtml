@@ -36,17 +36,19 @@
 }
 @section Styles{
     <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
-}
-<!-- Khu vực toggle cột tắt bật -->
-<style type="text/css">
-    .clicked {
-        color: red;
-    }
+    <!-- Khu vực toggle cột tắt bật -->
+    <style type="text/css">
+        .clicked {
+            color: red;
+        }
 
-    tbody, tbody input {
-        font-size: 15px;
-    }
-</style>
+        table, tbody, tbody input {
+            font-size: 15px;
+            font-family: Arial;
+        }
+    </style>
+}
+
 <div class="main">
 
     <div class="main-inner">
@@ -179,9 +181,9 @@
                                                 DateTime ngayBatDauHoaDon = DateTime.Now;
                                                 {
                                                     <tr class="@cssClass">
-                                                        <td><a target="_blank" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
+                                                        <td><a target="_blank" class="solieutieuthu" href="@Url.Action("ViewDetail", "Khachhang", new { id=khachHangIDRow})">@item.MaKhachHang</a></td>
                                                         <td>
-                                                            <a target="_blank" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
+                                                            <a target="_blank" class="solieutieuthu" href="@Url.Action("Edit", "Khachhang", new { id=khachHangIDRow,
                                                                                 toID = @toID,
                                                                                 nhanvienIDUrl = @nhanVienID,
                                                                                 tuyenIDUrl = tuyenID,
@@ -327,7 +329,7 @@
                                                                                     else
                                                                                     {
                                                                                         <td>
-                                                                                            <a class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month"
+                                                                                            <a class="solieutieuthu apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month"
                                                                                                data-year="@year" data-nhanvienid="@nhanVienID" data-tuyen="@tuyenID" data-sohoadon="@i.ToString()">
                                                                                                 Áp
                                                                                             </a>
@@ -347,7 +349,7 @@
                                                                                     else
                                                                                     {
                                                                                         <td>
-                                                                                            <a target="_blank"
+                                                                                            <a target="_blank" class="solieutieuthu"
                                                                                                href="javascript:void(0)">
                                                                                                 Áp
                                                                                             </a>
