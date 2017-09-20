@@ -4,6 +4,14 @@
 }
 
 
+@section Styles{
+    @Styles.Render("~/Assets/components/jTreeView/zTree_v3-master/css/zTreeStyle/zTreeStyle.css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/Assets/components/jTreeView/zTree_v3-master/js/jquery.ztree.core.js")
+}
+
 <div class="main">
     <div class="main-inner">
         <div class="container">
@@ -43,7 +51,7 @@
                                     }
 
                                 </div>
-                                
+
                                 <!-- Load tuyến ống dưới dạng tree view-->
                                 <ul id="treeDemo" class="ztree"></ul>
                             </div>

@@ -11,13 +11,12 @@
 
     @Styles.Render("~/Assets/css/style.css")
     @Styles.Render("~/Assets/css/dashboard.css")
-    @Styles.Render("~/Assets/components/datatables/media/css/jquery.dataTables.min.css")
-    @Styles.Render("~/fonts/OpenSans.css")
+    @Styles.Render("~/Assets/components/datatables/media/css/jquery.dataTables.min.css")    
     @Styles.Render("~/Assets/components/font-awesome/css/font-awesome.css")
-    @Styles.Render("~/Assets/components/select2/dist/css/select2.min.css")
-    @Styles.Render("~/Assets/components/jTreeView/zTree_v3-master/css/zTreeStyle/zTreeStyle.css")
+    @Styles.Render("~/Assets/components/select2/dist/css/select2.min.css")    
     @Styles.Render("~/Assets/components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css")
     @Styles.Render("/Assets/css/buttons.dataTables.min.css")
+  
     <style>
         .dataTables_wrapper {
             overflow-x: auto;
@@ -34,7 +33,7 @@
 
     @RenderSection("Styles", required: false)
     <!-- Jquery -->
-    @Scripts.Render("~/Assets/components/jquery/dist/jquery.js")
+    @Scripts.Render("~/Assets/components/jquery/dist/jquery.min.js")
 
 </head>
 <body>
@@ -90,23 +89,6 @@
     @RenderPage("~/Views/Shared/_Footer.cshtml")
 
    
-    <!-- Script để load trang phụ -->
-    <script type="text/javascript">
-
-        function OpenPopup(Url, WindowName, width, height, extras, scrollbars) {
-            var wide = width;
-            var high = height;
-            var additional = extras;
-            var top = (screen.height - high) / 2;
-            var leftside = (screen.width - wide) / 2; newWindow = window.open('' + Url +
-              '', '' + WindowName + '', 'width=' + wide + ',height=' + high + ',top=' +
-              top + ',left=' + leftside + ',features=' + additional + '' +
-              ',scrollbars=1');
-            newWindow.focus();
-        }
-
-    </script>
-
     <!-- Drop down toggle trên nav bảr-->
     <script type="text/javascript">
         var view = $("#viewname").html().trim();
@@ -282,12 +264,8 @@
     @Scripts.Render("~/Scripts/bootstrap.min.js")
     @Scripts.Render("~/Assets/components/ckeditor/ckeditor.js")
     @Scripts.Render("~/Assets/components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js")
-    @Scripts.Render("~/Assets/components/jTreeView/zTree_v3-master/js/jquery.ztree.core.js")
     @Scripts.Render("~/Assets/js/datatable_custom.js")
-
-    @Scripts.Render("~/Assets/js/toggle.js")
-   
-    @*@Scripts.Render("~/Assets/js/CongNo.js")*@
+    @Scripts.Render("~/Assets/js/toggle.js")     
     @Scripts.Render("~/Assets/js/KhachHang.js")
     @Scripts.Render("~/Assets/js/LogHandler.js")
     @Scripts.Render("~/Assets/js/CommonHandler.js")
@@ -295,7 +273,6 @@
     @Scripts.Render("~/Assets/js/select2.js")
     @Scripts.Render("~/Assets/BaoCaoJs/dataTables.buttons.min.js")
     @Scripts.Render("~/Assets/BaoCaoJs/buttons.html5.min.js")
-    @Scripts.Render("~/Assets/BaoCaoJs/jszip.min.js")
 
     @RenderSection("Scripts", required: false)
 </body>

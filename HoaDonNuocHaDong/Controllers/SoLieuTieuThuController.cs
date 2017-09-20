@@ -981,7 +981,7 @@ namespace HoaDonNuocHaDong.Controllers
                 db.Entry(chiTiet).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 List<HoaDonNuocHaDong.Models.ApGia.ApGiaTongHop> ls = sortApGiaTongHopBasedOnPriority(cachTinh, _ls);
-                //tính bằng giá khoán nếu cách tính = 0 (false) hoặc cách tính = -1 (giá đặc biệt)
+                //tính bằng giá khoán nếu cách tính = 0 hoặc cách tính = -1 (giá đặc biệt)
                 if (cachTinh == 0)
                 {
                     foreach (var item in ls)
@@ -1038,10 +1038,9 @@ namespace HoaDonNuocHaDong.Controllers
                         else
                         {
                             sanLuongThuc = SanLuong;
-
+                            int dinhMucCoSo = 10;
                             if (item.IDLoaiApGia == KhachHang.SINHHOAT)
-                            {
-                                int dinhMucCoSo = 10;
+                            {                                
                                 List<double> chiaChiSoSinhHoatTuongUng = chiaChiSoSinhHoat(sanLuongThuc, dinhMucCoSo, KhachHangID);
                                 chiTiet.SH1 = chiaChiSoSinhHoatTuongUng[0];
                                 chiTiet.SH2 = chiaChiSoSinhHoatTuongUng[1];
