@@ -88,8 +88,11 @@ namespace HoaDonHaDong.Helper
                     }
                     return (hoKhau - 1) * dinhMucCoSo + soNgDu * 2.5;
                 }
-            }
-            return 0;
+                else
+                {
+                    return (hoKhau - 1) * dinhMucCoSo;
+                }
+            }         
         }
 
 
@@ -445,11 +448,10 @@ namespace HoaDonHaDong.Helper
                             Chitiethoadonnuoc chiTiet = new Chitiethoadonnuoc();
                             chiTiet.HoadonnuocID = hoaDonThangHienTai.HoadonnuocID;
                             chiTiet.Chisocu = hoaDonNuocThangTruoc.ChiSoMoi;
-                            db.Chitiethoadonnuocs.Add(chiTiet);
-                            db.SaveChanges();
-                        }
-                        
+                            db.Chitiethoadonnuocs.Add(chiTiet);                           
+                        }                        
                     }
+                    db.SaveChanges();
                 }
             }
         }
