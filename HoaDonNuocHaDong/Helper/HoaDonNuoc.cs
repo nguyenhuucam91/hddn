@@ -78,7 +78,8 @@ namespace HoaDonNuocHaDong.Helper
             //nếu có record trong tháng sau thì cập nhật lại ngày bắt đầu và các thông số liên quan
             else
             {
-                hoaDonNuocThangSau.Ngaybatdausudung = ngayBatDau;               
+                hoaDonNuocThangSau.Ngaybatdausudung = ngayBatDau;
+                db.SaveChanges();
                 var chiTietHoaDonNuocExist = hoaDonNuocThangSau.Chitiethoadonnuocs.FirstOrDefault();
                 //nếu k có trong db thì add
                 if (chiTietHoaDonNuocExist == null)
@@ -88,12 +89,13 @@ namespace HoaDonNuocHaDong.Helper
                     chiTietThangSau.HoadonnuocID = hoaDonNuocThangSau.HoadonnuocID;
                     chiTietThangSau.Chisocu = ChiSoCuoi;
                     db.Chitiethoadonnuocs.Add(chiTietThangSau);
+                    db.SaveChanges();
                 }
                 else
                 {
-                    chiTietHoaDonNuocExist.Chisocu = ChiSoCuoi;                   
+                    chiTietHoaDonNuocExist.Chisocu = ChiSoCuoi;
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
         }
 
