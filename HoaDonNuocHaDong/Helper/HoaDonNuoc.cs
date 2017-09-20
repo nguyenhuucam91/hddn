@@ -34,7 +34,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="KHID"></param>
         /// <param name="HoaDonID"></param>
         /// <param name="ChiSoCuoi"></param>
-        public static void themMoiHoaDonThangSau(int KHID, int HoaDonID, int ChiSoCuoi, int nhanvienID, int? _month, int? _year, DateTime ngayBatDau)
+        public static void themMoiHoaDonThangSau(int KHID, int ChiSoCuoi, int nhanvienID, int? _month, int? _year, DateTime ngayBatDau)
         {
             int month = _month.Value; int year = _year.Value;
             //thêm 1 record vào tháng sau trong trường hợp chưa có
@@ -66,22 +66,13 @@ namespace HoaDonNuocHaDong.Helper
                 db.Hoadonnuocs.Add(hoaDonThangSau);
                 db.SaveChanges();
 
-                var chiTietHoaDonNuocExist = hoaDonNuocThangSau.Chitiethoadonnuocs.FirstOrDefault();
-                //nếu k có trong db thì add
-                if (chiTietHoaDonNuocExist == null)
-                {
-                    //tạo new record chi tiết hóa đơn nước vào tháng sau
-                    Chitiethoadonnuoc chiTietThangSau = new Chitiethoadonnuoc();
-                    chiTietThangSau.HoadonnuocID = hoaDonThangSau.HoadonnuocID;
-                    chiTietThangSau.Chisocu = ChiSoCuoi;
-                    db.Chitiethoadonnuocs.Add(chiTietThangSau);
-                    db.SaveChanges();
-                }
-                else
-                {
-                    chiTietHoaDonNuocExist.Chisocu = ChiSoCuoi;
-                    db.SaveChanges();
-                }
+                //tạo new record chi tiết hóa đơn nước vào tháng sau
+                Chitiethoadonnuoc chiTietThangSau = new Chitiethoadonnuoc();
+                chiTietThangSau.HoadonnuocID = hoaDonThangSau.HoadonnuocID;
+                chiTietThangSau.Chisocu = ChiSoCuoi;
+                db.Chitiethoadonnuocs.Add(chiTietThangSau);
+                db.SaveChanges();
+
             }
 
             //nếu có record trong tháng sau thì cập nhật lại ngày bắt đầu và các thông số liên quan
@@ -107,7 +98,7 @@ namespace HoaDonNuocHaDong.Helper
                 }
             }
         }
-        
+
         /// <summary>
         /// Hàm để format chuỗi tiền tệ
         /// </summary>

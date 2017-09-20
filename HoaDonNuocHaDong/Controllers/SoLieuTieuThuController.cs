@@ -375,9 +375,9 @@ namespace HoaDonNuocHaDong.Controllers
                         tachSoTongHop(HoaDonID, khachHangApGiaTongHop.CachTinh.Value, KHID, _TongSoTieuThu);
                     }
                     con.Close();
-                    HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(item.KhachHangID, item.HoaDonNuocID, item.ChiSoMoi.Value, LoggedInUser.NhanvienID.Value, thang, nam, Convert.ToDateTime(item.NgayKetThucSuDung));
+                    //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, item.ChiSoMoi.Value, LoggedInUser.NhanvienID.Value, thang, nam, Convert.ToDateTime(item.NgayKetThucSuDung));
 
-                    //HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
+                    HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
                     themMoiSoTienPhaiNop(HoaDonID);                    
                 }
             }       
@@ -522,7 +522,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             //Cập nhật lại SH1...
             tachChiSoSanLuong(HoaDonID, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value, SoKhoan, KHID);
-            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, HoaDonID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
+            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, ChiSoCuoi.Value, Convert.ToInt32(Session["nhanvien"]), _month, _year, Convert.ToDateTime(dateEnd));
             //thêm vào bảng lịch sử sử dụng nước
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);                  
