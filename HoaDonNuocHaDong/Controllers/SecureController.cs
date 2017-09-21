@@ -94,8 +94,9 @@ namespace HoaDonNuocHaDong.Controllers
 
                             // set cookie
                             var cookie = new HttpCookie(Cookies.B_ADMIN_LOGIN_TOKEN, AuthHelpers.MD5(nguoiDung.NguoidungID.ToString()));
-                            cookie.Expires = DateTime.Now.AddDays(31);
+                            cookie.Expires = DateTime.Now.AddDays(365);
                             cookie.Path = "/"; // make cookie available across applications
+                            cookie.Domain = null;
                             Response.Cookies.Add(cookie);                           
 
                             // redirect

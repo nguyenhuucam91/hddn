@@ -215,7 +215,7 @@ namespace HoaDonHaDong.Helper
                     break;
             }
             return 0;
-        }
+        }        
 
         public double tinhTongTienHoaDon(int hoaDonNuocID, double SH1, double SH2, double SH3, double SH4,
             double HC, double CC, double KD, double SX, int thangHoaDon, int namHoaDon, int tiLePhiBVMT)

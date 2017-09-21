@@ -348,10 +348,10 @@ namespace HoaDonNuocHaDong.Controllers
                 cmd.Parameters.AddWithValue("@hoaDonId", HoaDonID);
                 cmd.Parameters.AddWithValue("@soKhoan", SoKhoan);
                 cmd.Parameters.AddWithValue("@chiSoMoi", ChiSoCuoi);
-
+                double[] chiSoChiTiet = new double[8];
                 if (ttChiTietHoaDon.LoaiApGiaID != KhachHang.TONGHOP)
                 {
-                    double[] chiSoChiTiet = cS.tachChiSoSanLuong(_TongSoTieuThu, ttChiTietHoaDon.LoaiApGiaID, ttChiTietHoaDon.SoHo, ttChiTietHoaDon.SoKhau);
+                    chiSoChiTiet = cS.tachChiSoSanLuong(_TongSoTieuThu, ttChiTietHoaDon.LoaiApGiaID, ttChiTietHoaDon.SoHo, ttChiTietHoaDon.SoKhau);
                     //massupdate here.
                     cmd.Parameters.AddWithValue("@SH1", chiSoChiTiet[0]);
                     cmd.Parameters.AddWithValue("@SH2", chiSoChiTiet[1]);
@@ -369,9 +369,27 @@ namespace HoaDonNuocHaDong.Controllers
                     con.Open();
                     cmd.ExecuteNonQuery();
                     Apgiatonghop khachHangApGiaTongHop = db.Apgiatonghops.FirstOrDefault(p => p.KhachhangID == KHID);
-                    tachSoTongHop(HoaDonID, khachHangApGiaTongHop.CachTinh.Value, KHID, _TongSoTieuThu);
+                    chiSoChiTiet = tachSoTongHop(HoaDonID, khachHangApGiaTongHop.CachTinh.Value, KHID, _TongSoTieuThu);
                 }
                 con.Close();
+
+                //thêm lịch sử sử dụng nước                
+                lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, ttChiTietHoaDon.TenKhachHang, ttChiTietHoaDon.DiaChi, ttChiTietHoaDon.MaSoThue, ttChiTietHoaDon.MaKhachHang, ttChiTietHoaDon.TuyenKHID,
+                    ttChiTietHoaDon.SoHopDong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value,
+                    chiSoChiTiet[0], cS.getSoTienTheoApGia("SH1").Value,
+                    chiSoChiTiet[1], cS.getSoTienTheoApGia("SH2").Value,
+                    chiSoChiTiet[2], cS.getSoTienTheoApGia("SH3").Value,
+                    chiSoChiTiet[3], cS.getSoTienTheoApGia("SH4").Value,
+                    chiSoChiTiet[4], cS.getSoTienTheoApGia("HC").Value,
+                    chiSoChiTiet[5], cS.getSoTienTheoApGia("CC").Value,
+                    chiSoChiTiet[6], cS.getSoTienTheoApGia("SX-XD").Value,
+                    chiSoChiTiet[7], cS.getSoTienTheoApGia("KDDV").Value,
+            0, 5, 0,
+            ttChiTietHoaDon.TiLePhiMoiTruong, 0,
+            0, "",
+            "", "", ttChiTietHoaDon.TuyenKHID,
+            ttChiTietHoaDon.TTDoc, 0, dateStart, dateEnd);             
+
                 HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
                 //approx 200ms
                 themMoiSoTienPhaiNop(HoaDonID);
@@ -961,11 +979,12 @@ namespace HoaDonNuocHaDong.Controllers
         /// <summary>
         /// Dành cho khách hàng áp giá tổng hợp, tách chỉ số giá tổng hợp ra.
         /// </summary>
-        public void tachSoTongHop(int HoaDonID, int cachTinh, int KhachHangID, double SanLuong)
+        public double[] tachSoTongHop(int HoaDonID, int cachTinh, int KhachHangID, double SanLuong)
         {
             List<Apgiatonghop> _ls = db.Apgiatonghops.Where(p => p.KhachhangID == KhachHangID).ToList();
 
             double sanLuongThuc = 0;
+            double[] thongTinChiSoChiTiet = new double[8];
 
             Chitiethoadonnuoc chiTiet = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
             if (chiTiet != null)
@@ -1040,7 +1059,7 @@ namespace HoaDonNuocHaDong.Controllers
                             sanLuongThuc = SanLuong;
                             int dinhMucCoSo = 10;
                             if (item.IDLoaiApGia == KhachHang.SINHHOAT)
-                            {                                
+                            {
                                 List<double> chiaChiSoSinhHoatTuongUng = chiaChiSoSinhHoat(sanLuongThuc, dinhMucCoSo, KhachHangID);
                                 chiTiet.SH1 = chiaChiSoSinhHoatTuongUng[0];
                                 chiTiet.SH2 = chiaChiSoSinhHoatTuongUng[1];
@@ -1063,7 +1082,6 @@ namespace HoaDonNuocHaDong.Controllers
                             {
                                 chiTiet.CC = sanLuongThuc;
                             }
-
 
                             db.Entry(chiTiet).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
@@ -1153,7 +1171,16 @@ namespace HoaDonNuocHaDong.Controllers
                         recordLeftAfterIteration--;
                     }
                 }//end cach tinh = 1 
+                thongTinChiSoChiTiet[0] = chiTiet.SH1.Value;
+                thongTinChiSoChiTiet[1] = chiTiet.SH2.Value;
+                thongTinChiSoChiTiet[2] = chiTiet.SH3.Value;
+                thongTinChiSoChiTiet[3] = chiTiet.SH4.Value;
+                thongTinChiSoChiTiet[4] = chiTiet.CC.Value;
+                thongTinChiSoChiTiet[5] = chiTiet.HC.Value;
+                thongTinChiSoChiTiet[6] = chiTiet.SXXD.Value;
+                thongTinChiSoChiTiet[7] = chiTiet.KDDV.Value;
             }
+            return thongTinChiSoChiTiet;
         }
 
         private List<double> chiaChiSoSinhHoat(double _TongSoTieuThu, int dinhMucCoSo, int KhachHangID)
