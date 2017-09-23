@@ -1239,84 +1239,11 @@ namespace HoaDonNuocHaDong.Controllers
             cS.capNhatTrangThaiChotTuyen(tuyenID, month, year);
             cS.capnhatTrangThaiDanhSachHoaDonBiHuyThuocTuyen(tuyenID, month, year);
             cS.capNhatTrangThaiChotHoaDon(tuyenID, month, year);
-            //saochepDanhsachKhachHangKhongSanLuong(tuyenID, month, year);
-            //setItem();
+            //saochepDanhsachKhachHangKhongSanLuong(tuyenID, month, year);            
 
             return RedirectToAction("Index");
         }
-
-        public void setItem()
-        {
-            //List<Models.SoLieuTieuThu.HoaDonNuoc> hoaDons = getDanhSachHoaDonTieuThu(month, year, tuyenID);            
-
-            //List<Lichsuhoadon> lichSus = db.Lichsuhoadons.Where(p => p.ThangHoaDon == month && p.NamHoaDon == year && p.TuyenKHID == tuyenID).ToList();              
-
-            //foreach (var item in hoaDons)
-            //{
-            //    if (item.ChiSoMoi > 0)
-            //    {
-            //        double dinhMuc = cS.tinhTongTienTheoDinhMuc(item.HoaDonNuocID, Convert.ToInt32(item.SH1), Convert.ToInt32(item.SH2), Convert.ToInt32(item.SH3), Convert.ToInt32(item.SH4),
-            //            Convert.ToInt32(item.HC), Convert.ToInt32(item.CC), Convert.ToInt32(item.KDDV), Convert.ToInt32(item.SXXD));
-            //        double VAT = Math.Round(dinhMuc * 0.05, 0, MidpointRounding.AwayFromZero);
-            //        double thueBVMT = Math.Round(dinhMuc * item.TiLePhiMoiTruong / 100, MidpointRounding.AwayFromZero);
-            //        double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
-            //        if (tongTienHoaDon <= 0)
-            //        {
-            //            tongTienHoaDon = 0;
-            //        }
-
-            //        if (dinhMuc <= 0)
-            //        {
-            //            dinhMuc = 0;
-            //        }
-
-            //        if (VAT <= 0)
-            //        {
-            //            VAT = 0;
-            //        }
-
-            //        if (thueBVMT <= 0)
-            //        {
-            //            thueBVMT = 0;
-            //        }
-            //        String thuNgan = "/";
-            //        //cộng dồn
-            //        int count = lichSus.Count(p => p.TTDoc < item.TTDoc);
-            //        double congDonHDTruoc = 0;
-            //        if (count == 0)
-            //        {
-            //            congDonHDTruoc = 0;
-            //        }
-            //        else
-            //        {
-            //            congDonHDTruoc = lichSus.Where(p=>p.TTDoc.Value < item.TTDoc).Sum(p => p.TongCong.Value);
-            //        }
-            //        double tongCongCongDon = Convert.ToDouble(tongTienHoaDon + congDonHDTruoc);
-
-
-            //        lichSuHoaDonRepository.updateLichSuHoaDon(item.HoaDonNuocID, month, year, item.TenKhachHang, item.DiaChi, item.MaSoThue,
-            //            item.MaKhachHang, item.TuyenKHID, item.SoHopDong, item.ChiSoCu.Value, item.ChiSoMoi.Value, item.SanLuong.Value,
-            //        Convert.ToDouble(item.SH1), cS.getSoTienTheoApGia("SH1").Value,
-            //        Convert.ToDouble(item.SH2), cS.getSoTienTheoApGia("SH2").Value,
-            //        Convert.ToDouble(item.SH3), cS.getSoTienTheoApGia("SH3").Value,
-            //        Convert.ToDouble(item.SH4), cS.getSoTienTheoApGia("SH4").Value,
-            //        Convert.ToDouble(item.HC), cS.getSoTienTheoApGia("HC").Value,
-            //        Convert.ToDouble(item.CC), cS.getSoTienTheoApGia("CC").Value,
-            //        Convert.ToDouble(item.SXXD), cS.getSoTienTheoApGia("SX-XD").Value,
-            //        Convert.ToDouble(item.KDDV), cS.getSoTienTheoApGia("KDDV").Value,
-            //        dinhMuc,
-            //        5, VAT,
-            //        item.TiLePhiMoiTruong, thueBVMT, tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
-            //        db.Quanhuyens.Find(item.QuanHuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(item.QuanHuyenID).DienThoai3,
-            //        thuNgan, item.TuyenKHID, item.TTDoc, tongCongCongDon, String.Format("{0:yyyy/MM/dd}", item.NgayBatDauSuDung), String.Format("{0:yyyy/MM/dd}", item.NgayKetThucSuDung), lichSus);
-
-
-            //        HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(item.KhachHangID, item.HoaDonNuocID, item.ChiSoMoi.Value, 
-            //            LoggedInUser.NhanvienID.Value, month, year, Convert.ToDateTime(item.NgayKetThucSuDung));
-            //        themMoiSoTienPhaiNop(item.HoaDonNuocID);
-            //    }
-            //}
-        }
+        
 
         /// <summary>
         /// Hàm dùng để sao chép danh sách khách hàng không sản lượng từ tháng trước

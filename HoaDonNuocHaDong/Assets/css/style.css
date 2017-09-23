@@ -17,6 +17,11 @@ p {
     font: 13px/1.7em 'Open Sans';
 }
 
+a {
+    color: #0e08fc;
+    font-size: 15px;
+    font-family: Arial;
+}
 input,
 button,
 select,

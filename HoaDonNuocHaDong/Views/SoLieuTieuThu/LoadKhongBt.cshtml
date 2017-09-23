@@ -25,10 +25,19 @@
     HoaDonNuocHaDong.Helper.KiemDinh kiemDinh = new HoaDonNuocHaDong.Helper.KiemDinh();
 }
 
-<script src="~/Assets/js/jquery.dataTables.min.js"></script>
-<script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
-<link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
-
+@section Scripts {
+    <script src="~/Assets/js/jquery.dataTables.min.js"></script>
+    <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
+}
+@section Styles {
+    <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
+    <style>
+        table, label, input {
+            font-family: Arial;
+            font-size: 15px;
+        }
+    </style>
+}
 <div class="main">
     <div class="main-inner">
         <div class="container-fluid">
