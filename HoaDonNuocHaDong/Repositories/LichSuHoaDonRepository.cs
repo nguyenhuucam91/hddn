@@ -1,8 +1,10 @@
 ﻿using HoaDonNuocHaDong.Helper;
+using HvitFramework.CoreData;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -14,17 +16,11 @@ namespace HoaDonNuocHaDong.Repositories
         public void updateLichSuHoaDon(int HoaDonID, int thangHoaDon, int namHoaDon, String tenKH, String diaChi, String MST, String maKH, int TuyenKHID, String soHD,
             int chiSoCu, int ChiSoMoi, int TongTieuThu, double SH1, double SH1Price, double SH2, double SH2Price, double SH3, double SH3Price, double SH4, double SH4Price, double HC, double HCPrice,
             double CC, double CCPrice, double SX, double SXPrice, double KD, double KDPrice, double DinhMuc, double Thue, double TienThueVAT, double TileBVMT,
-            double BVMTPrice, double TongCong, String bangChu, String TTVoOng, String ThuNgan, int tuyen, int TTDoc, double chiSoCongDon, string ngayBatDau, string ngayKetThuc, List<Lichsuhoadon> ls = null)
+            double BVMTPrice, double TongCong, String bangChu, String TTVoOng, String ThuNgan, int tuyen, int TTDoc, double chiSoCongDon, string ngayBatDau, string ngayKetThuc)
         {
-            Lichsuhoadon lichSuHoaDon = new Lichsuhoadon();
-            if (ls != null)
-            {
-                lichSuHoaDon = ls.FirstOrDefault(p => p.HoaDonID == HoaDonID);
-            }
-            else
-            {
-                lichSuHoaDon = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == HoaDonID);
-            }
+
+            Lichsuhoadon lichSuHoaDon = db.Lichsuhoadons.FirstOrDefault(p => p.HoaDonID == HoaDonID);
+
             if (lichSuHoaDon != null)
             {
                 lichSuHoaDon.HoaDonID = HoaDonID;
@@ -80,7 +76,6 @@ namespace HoaDonNuocHaDong.Repositories
               BVMTPrice, TongCong, bangChu, TTVoOng, ThuNgan, tuyen, TTDoc, chiSoCongDon, ngayBatDau, ngayKetThuc);
             }
 
-            
         }
 
         public void addLichSuHoaDon(int HoaDonID, int thangHoaDon, int namHoaDon, String tenKH, String diaChi, String MST, String maKH, int TuyenKHID, String soHD,
@@ -88,6 +83,7 @@ namespace HoaDonNuocHaDong.Repositories
             double CC, double CCPrice, double SX, double SXPrice, double KD, double KDPrice, double DinhMuc, double Thue, double TienThueVAT, double TileBVMT,
             double BVMTPrice, double TongCong, String bangChu, String TTVoOng, String ThuNgan, int tuyen, int TTDoc, double chiSoCongDon, string ngayBatDau, string ngayKetThuc)
         {
+
             Lichsuhoadon history = new Lichsuhoadon();
             history.HoaDonID = HoaDonID;
             history.ThangHoaDon = thangHoaDon;

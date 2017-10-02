@@ -30,6 +30,7 @@
     var isAdminVaTruongPhong = ViewBag.isAdminVaTruongPhong;
     HoaDonNuocHaDong.Helper.KiemDinh kiemDinh = new HoaDonNuocHaDong.Helper.KiemDinh();
 }
+
 @section Scripts {
     <script src="~/Assets/js/jquery.dataTables.min.js"></script>
     <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
@@ -65,8 +66,7 @@
                     <div class="widget-content">
 
                         <input type="hidden" name="isBack" value="@Request.QueryString["isback"]" />
-
-                        <h4>Bạn đang nhập số liệu cho:</h4>
+                      
                         <div style="margin:25px; margin-left:10px">
                             <form action="@Url.Action("index","solieutieuthu")" method="post">
 
