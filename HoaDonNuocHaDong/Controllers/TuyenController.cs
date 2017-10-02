@@ -48,8 +48,8 @@ namespace HoaDonNuocHaDong.Controllers
 
             int pageSize = (int)EPaginator.PAGESIZE;
             int pageNumber = page != 0 ? page : 0;
-            IEnumerable<Tuyenkhachhang> tuyensKhachHang = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien).OrderByDescending(p => p.TuyenKHID).Where(p => p.IsDelete == false).ToPagedList(page, pageSize);
-
+            IEnumerable<Tuyenkhachhang> tuyensKhachHang = tuyenHelper.getDanhSachTuyensByNhanVien(nhanvien).OrderBy(p => p.Matuyen).Where(p => p.IsDelete == false).ToPagedList(page, pageSize);
+            
             #region ViewBag
             ViewData["nhanVien"] = nhanViens;
             ViewBag.pageSize = pageSize;
@@ -99,7 +99,7 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.phongBanId = phongBanId;
             #endregion
 
-            return View(tuyenkhachhangs.OrderByDescending(p => p.TuyenKHID).ToPagedList(pageNumber, pageSize));
+            return View(tuyenkhachhangs.OrderBy(p => p.Matuyen).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: /Tuyen/Details/5

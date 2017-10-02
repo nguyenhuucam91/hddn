@@ -19,12 +19,12 @@ namespace HoaDonNuocHaDong.Helper
         /// Lấy tên nhân viên theo tuyến ID
         /// </summary>
         /// <returns></returns>
-        public String getTuyenCuaNhanVien(int tuyenID)
+        public String getTuyenCuaNhanVien(int phongBanId, int tuyenID)
         {
             var tuyenTheoNhanVienList = (from p in _db.Tuyentheonhanviens
                                          join q in _db.Tuyenkhachhangs on p.TuyenKHID equals q.TuyenKHID
                                          join r in _db.Nhanviens on p.NhanVienID equals r.NhanvienID
-                                         where p.TuyenKHID == tuyenID
+                                         where p.TuyenKHID == tuyenID && r.PhongbanID == phongBanId
                                          select new
                                          {
                                              TenNhanVien = r.Ten,

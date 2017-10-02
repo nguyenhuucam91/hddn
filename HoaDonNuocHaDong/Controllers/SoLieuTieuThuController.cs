@@ -317,15 +317,15 @@ namespace HoaDonNuocHaDong.Controllers
             }
 
             ControllerBase<ThongTinHoaDon> cB = new ControllerBase<ThongTinHoaDon>();
-            ThongTinHoaDon ttChiTietHoaDon = cB.Query("ThongTinChiTietHoaDon",
+            ThongTinHoaDon obj = cB.Query("ThongTinChiTietHoaDon",
                 new SqlParameter("@hoaDonId", HoaDonID)
                 ).FirstOrDefault();
 
 
-            if (ttChiTietHoaDon.ChiSoTruocKiemDinh != null)
+            if (obj.ChiSoTruocKiemDinh != null)
             {
-                var kiemDinh1 = ttChiTietHoaDon.ChiSoTruocKiemDinh.Value - ChiSoDau.Value;
-                var kiemDinh2 = ChiSoCuoi.Value - ttChiTietHoaDon.ChiSoSauKiemDinh.Value;
+                var kiemDinh1 = obj.ChiSoTruocKiemDinh.Value - ChiSoDau.Value;
+                var kiemDinh2 = ChiSoCuoi.Value - obj.ChiSoSauKiemDinh.Value;
                 _tongKiemDinh = kiemDinh1 + kiemDinh2;
                 _TongSoTieuThu = _tongKiemDinh;
             }
@@ -334,9 +334,8 @@ namespace HoaDonNuocHaDong.Controllers
                 _TongSoTieuThu = TongSoTieuThu.Value;
             }
 
-            if (ttChiTietHoaDon != null)
+            if (obj != null)
             {
-
                 SqlConnection con = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
                 SqlCommand cmd = new SqlCommand("NhapChiSoTieuThuThang", con);
 
@@ -349,9 +348,9 @@ namespace HoaDonNuocHaDong.Controllers
                 cmd.Parameters.AddWithValue("@soKhoan", SoKhoan);
                 cmd.Parameters.AddWithValue("@chiSoMoi", ChiSoCuoi);
                 double[] chiSoChiTiet = new double[8];
-                if (ttChiTietHoaDon.LoaiApGiaID != KhachHang.TONGHOP)
+                if (obj.LoaiApGiaID != KhachHang.TONGHOP)
                 {
-                    chiSoChiTiet = cS.tachChiSoSanLuong(_TongSoTieuThu, ttChiTietHoaDon.LoaiApGiaID, ttChiTietHoaDon.SoHo, ttChiTietHoaDon.SoKhau);
+                    chiSoChiTiet = cS.tachChiSoSanLuong(_TongSoTieuThu, obj.LoaiApGiaID, obj.SoHo, obj.SoKhau);
                     //massupdate here.
                     cmd.Parameters.AddWithValue("@SH1", chiSoChiTiet[0]);
                     cmd.Parameters.AddWithValue("@SH2", chiSoChiTiet[1]);
@@ -374,8 +373,8 @@ namespace HoaDonNuocHaDong.Controllers
                 con.Close();
 
                 //thêm lịch sử sử dụng nước                
-                lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, ttChiTietHoaDon.TenKhachHang, ttChiTietHoaDon.DiaChi, ttChiTietHoaDon.MaSoThue, ttChiTietHoaDon.MaKhachHang, ttChiTietHoaDon.TuyenKHID,
-                    ttChiTietHoaDon.SoHopDong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value,
+                lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, obj.TenKhachHang, obj.DiaChi, obj.MaSoThue, obj.MaKhachHang, obj.TuyenKHID,
+                    obj.SoHopDong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value,
                     chiSoChiTiet[0], cS.getSoTienTheoApGia("SH1").Value,
                     chiSoChiTiet[1], cS.getSoTienTheoApGia("SH2").Value,
                     chiSoChiTiet[2], cS.getSoTienTheoApGia("SH3").Value,
@@ -385,10 +384,10 @@ namespace HoaDonNuocHaDong.Controllers
                     chiSoChiTiet[6], cS.getSoTienTheoApGia("SX-XD").Value,
                     chiSoChiTiet[7], cS.getSoTienTheoApGia("KDDV").Value,
             0, 5, 0,
-            ttChiTietHoaDon.TiLePhiMoiTruong, 0,
+            obj.TiLePhiMoiTruong, 0,
             0, "",
-            "", "", ttChiTietHoaDon.TuyenKHID,
-            ttChiTietHoaDon.TTDoc, 0, dateStart, dateEnd);             
+            "", "", obj.TuyenKHID,
+            obj.TTDoc, 0, dateStart, dateEnd);             
 
                 HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
                 //approx 200ms
@@ -542,55 +541,23 @@ namespace HoaDonNuocHaDong.Controllers
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
 
             Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
-            //tongTienHoaDon;
-            double dinhMuc = cS.tinhTongTienTheoDinhMuc(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value);
-            double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
-            double thueBVMT = cS.tinhThue(HoaDonID, cT.SH1.Value, cT.SH2.Value, cT.SH3.Value, cT.SH4.Value, cT.HC.Value, cT.CC.Value, cT.KDDV.Value, cT.SXXD.Value, obj.Tilephimoitruong.Value);
-            double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
+           
+            lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value,
+                    obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value,
+                    cT.SH1.Value, cS.getSoTienTheoApGia("SH1").Value,
+                    cT.SH2.Value, cS.getSoTienTheoApGia("SH2").Value,
+                    cT.SH3.Value, cS.getSoTienTheoApGia("SH3").Value,
+                    cT.SH4.Value, cS.getSoTienTheoApGia("SH4").Value,
+                    cT.HC.Value, cS.getSoTienTheoApGia("HC").Value,
+                    cT.CC.Value, cS.getSoTienTheoApGia("CC").Value,
+                    cT.SXXD.Value, cS.getSoTienTheoApGia("SX-XD").Value,
+                    cT.KDDV.Value, cS.getSoTienTheoApGia("KDDV").Value,
+            0, 5, 0,
+            obj.Tilephimoitruong.Value, 0,
+            0, "",
+            "", "", obj.TuyenKHID.Value,
+            obj.TTDoc.Value, 0, dateStart, dateEnd);  
 
-            if (tongTienHoaDon <= 0)
-            {
-                tongTienHoaDon = 0;
-            }
-
-            if (dinhMuc <= 0)
-            {
-                dinhMuc = 0;
-            }
-
-            if (VAT <= 0)
-            {
-                VAT = 0;
-            }
-
-            if (thueBVMT <= 0)
-            {
-                thueBVMT = 0;
-            }
-
-            String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + sohoadon;
-
-            //tổng cộng dồn
-            double congDonHDTruoc = 0;
-            int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc);
-            if (count == 0)
-            {
-                congDonHDTruoc = 0;
-            }
-            else
-            {
-                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc.Value).Sum(p => p.TongCong.Value);
-            }
-            double tongCongCongDon = tongTienHoaDon + congDonHDTruoc;
-
-            lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value, cT.SH1.Value,
-            cS.getSoTienTheoApGia("SH1").Value, cT.SH2.Value, cS.getSoTienTheoApGia("SH2").Value, cT.SH3.Value, cS.getSoTienTheoApGia("SH3").Value, cT.SH4.Value, cS.getSoTienTheoApGia("SH4").Value,
-            cT.HC.Value, cS.getSoTienTheoApGia("HC").Value, cT.CC.Value, cS.getSoTienTheoApGia("CC").Value, cT.SXXD.Value, cS.getSoTienTheoApGia("SX-XD").Value, cT.KDDV.Value, cS.getSoTienTheoApGia("KDDV").Value,
-            dinhMuc, 5, VAT,
-            obj.Tilephimoitruong.Value, thueBVMT,
-            tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
-            db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3, thuNgan, obj.TuyenKHID.Value,
-            obj.TTDoc.Value, tongCongCongDon, dateStart, dateEnd);
             themMoiSoTienPhaiNop(HoaDonID);
         }
 

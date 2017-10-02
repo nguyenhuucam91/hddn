@@ -462,7 +462,7 @@ namespace HoaDonNuocHaDong.Helper
         /// <param name="tuyen"></param>
         public static void pullKhachHangLen(int TTDocSau, int TTDocTruoc, int tuyen)
         {
-            var khachHang = db.Khachhangs.Where(p => p.TTDoc <= TTDocSau && p.TTDoc > TTDocTruoc && p.TuyenKHID == tuyen && p.IsDelete == false).ToList();
+            var khachHang = db.Khachhangs.Where(p => p.TTDoc <= TTDocSau && p.TTDoc >= TTDocTruoc && p.TuyenKHID == tuyen && p.IsDelete == false).ToList();
             foreach (var item in khachHang)
             {
                 Khachhang kH = db.Khachhangs.Find(item.KhachhangID);
