@@ -1,6 +1,8 @@
 ﻿using HoaDonNuocHaDong;
+using HvitFramework;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Web;
@@ -135,6 +137,17 @@ namespace HoaDonNuocHaDong.Helper
                 return ngayCapNuocLai;
             }
             return ngayBatDauHoaDon;
+        }
+
+        public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getDanhSachHoaDonTieuThu(int _month, int _year, int tuyenID)
+        {
+            ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> cB = new ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
+            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cB.Query("ChiaChiSoTieuThuKhachHang",
+                new SqlParameter("@month", _month),
+                new SqlParameter("@year", _year),
+                new SqlParameter("@tuyen", tuyenID)
+            ).ToList();
+            return chiSoTieuThu;
         }
     }
 }

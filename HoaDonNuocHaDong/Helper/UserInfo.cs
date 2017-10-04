@@ -131,31 +131,6 @@ namespace HoaDonNuocHaDong.Helper
             return -1;
         }
 
-        /// <summary>
-        /// Hàm để lấy tên tuyến dựa theo tuyến ID
-        /// </summary>
-        /// <param name="tuyenID"></param>
-        /// <returns></returns>
-        public static string getTenTuyen(int tuyenID)
-        {
-            var tuyenKhachHang = db.Tuyenkhachhangs.FirstOrDefault(p=>p.TuyenKHID == tuyenID);
-            //nếu tuyến khách hàng có trong CSDL
-            if (tuyenKhachHang != null)
-            {
-                return tuyenKhachHang.Ten;
-            }
-            return String.Empty;
-        }
-
-        public static string getTenTo(int toID)
-        {
-            ToQuanHuyen to = db.ToQuanHuyens.Find(toID);
-            if (to != null)
-            {
-                return to.Ma;
-            }
-            return "";
-        }
         
     }
 }

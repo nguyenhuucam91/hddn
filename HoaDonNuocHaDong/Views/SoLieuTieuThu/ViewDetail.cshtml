@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Xem chi tiết chỉ số của khách hàng";
-    var tuyen = ViewBag.tenTuyen;
+
     var chiSoTieuThu = ViewBag.chiSoTieuThu as List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>;
     int soLuongHoaDonChuaChot = ViewBag.trangthaiChotTuyen;
     int tongSoLuongHoaDon = ViewBag.soLuongHoaDon;
@@ -16,10 +16,6 @@
     HoaDonNuocHaDong.Controllers.NhanvienController nhanVienController = new HoaDonNuocHaDong.Controllers.NhanvienController();
 }
 
-@section Scripts {
-    <script src="~/Assets/js/jquery.dataTables.min.js"></script>
-    <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
-}
 
 @section Styles {
     <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
@@ -29,18 +25,18 @@
             color: red;
         }
 
-        tbody, input, label{
+        tbody, input, label {
             font-size: 15px;
             font-family: Arial;
         }
 
-        table.dataTable thead th, table.dataTable thead td{
-            padding: 10px 10px !important;            
+        table.dataTable thead th, table.dataTable thead td {
+            padding: 10px 10px !important;
         }
 
         form {
             display: inline;
-        }       
+        }
     </style>
 }
 
@@ -52,7 +48,7 @@
                 <div class="widget ">
                     <div class="widget-header">
                         <i class="icon-user"></i>
-                        <h3>Chỉ số chi tiết của tuyến @tuyen</h3>
+                        <h3>Chỉ số chi tiết của tuyến @tuyenKH.Ten</h3>
                     </div> <!-- /widget-header -->
 
                     <div class="widget-content">
@@ -120,7 +116,7 @@
                             <!-- Dòng 2 fixed cột -->
                             <tr>
                                 <th colspan="18" style="font-size:15px">
-                                    <span class="pull-left">(@tuyenKH.Matuyen-@tuyen) - (@nV.MaNhanVien - @nV.Ten) - (@Request.QueryString["month"] / @Request.QueryString["year"])</span>
+                                    <span class="pull-left">(@tuyenKH.Matuyen-@tuyenKH.Ten) - (@nV.MaNhanVien - @nV.Ten) - (@Request.QueryString["month"] / @Request.QueryString["year"])</span>
 
                                     <div class="pull-right">
                                         <form action="/solieutieuthu?isback=1" method="post">
@@ -247,27 +243,29 @@
 
 </div> <!-- /main-inner -->
 <!-- Script để đối màu dòng trong trường hợp áp giá tổng hợp và đặc biệt -->
+@section Scripts{
 <script type="text/javascript">
     $(function () {
-        @{
-            int month = Convert.ToInt32(Request.QueryString["month"]);
-            int year = Convert.ToInt32(Request.QueryString["year"]);
-            int selectedTuyen = Convert.ToInt32(Request.QueryString["tuyenID"]);
-            int nhanVienQLy = Convert.ToInt32(Request.QueryString["nvquanly"]);
-            bool hasSLKhongBT = false;
-            HoaDonNuocHaDong.Controllers.SoLieuTieuThuController ctl = new HoaDonNuocHaDong.Controllers.SoLieuTieuThuController();
-            int previousMonth = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Month;
-            int previousYear = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Year;
-
-            var dsSanLuongKhongBinhThuong = cS.loadDanhSachSanLuongBatThuong(previousMonth, previousYear,month,year,selectedTuyen);
-            if (dsSanLuongKhongBinhThuong.Count > 0)
-            {
-                hasSLKhongBT = true;
-            }
-        }
 
         //chốt số liệu khi ấn vào nút chốt số liệu
         $("#chotSoLieu").click(function () {
+            @{
+                int month = Convert.ToInt32(Request.QueryString["month"]);
+                int year = Convert.ToInt32(Request.QueryString["year"]);
+                int selectedTuyen = Convert.ToInt32(Request.QueryString["tuyenID"]);
+                int nhanVienQLy = Convert.ToInt32(Request.QueryString["nvquanly"]);
+                bool hasSLKhongBT = true;
+                HoaDonNuocHaDong.Controllers.SoLieuTieuThuController ctl = new HoaDonNuocHaDong.Controllers.SoLieuTieuThuController();
+                int previousMonth = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Month;
+                int previousYear = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Year;
+
+                var dsSanLuongKhongBinhThuong = cS.loadDanhSachSanLuongBatThuong(previousMonth, previousYear, month, year, selectedTuyen);
+                if (dsSanLuongKhongBinhThuong.Count > 0)
+                {
+                    hasSLKhongBT = true;
+                }
+            }
+
             @if (hasSLKhongBT)
             {
                 <text>
@@ -303,9 +301,11 @@
         @{
             int tongHop = HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
         }
-        $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
 
+
+        $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
 
     });
 
 </script>
+    }

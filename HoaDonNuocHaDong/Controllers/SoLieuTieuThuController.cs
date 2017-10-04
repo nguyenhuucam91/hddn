@@ -27,6 +27,7 @@ namespace HoaDonNuocHaDong.Controllers
         private KiemDinh kiemDinh = new KiemDinh();
         private LichSuHoaDonRepository lichSuHoaDonRepository = new LichSuHoaDonRepository();
         private List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> hoadons = new List<Models.SoLieuTieuThu.HoaDonNuoc>();
+        private HoaDonNuocHaDong.Helper.HoaDonNuoc hoaDonNuocHelper = new HoaDonNuocHaDong.Helper.HoaDonNuoc();
 
         // GET: /SoLieuTieuThu/
         /// <summary>
@@ -586,33 +587,26 @@ namespace HoaDonNuocHaDong.Controllers
                 _year = Convert.ToInt16(year);
             }
 
-            //load danh sách khách hàng thuộc tuyến mà người dùng (nhân viên) đăng nhập                       
-            ViewBag.tenTuyen = UserInfo.getTenTuyen(tuyenID.Value);
+         
             //load chỉ số và thông tin tách số vào đây
-            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);
-            int soLuongHoaDonChuaChot = chiSoTieuThu.Count(p => p.TrangThaiChot == "False");
+            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu =  hoaDonNuocHelper.getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);           
             int loggedInRole = getUserRole(LoggedInUser.NhanvienID);
 
+            int soLuongHoaDonCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong > 1);
+            int soLuongHoaDonKhongSanLuong = chiSoTieuThu.Count(p => p.SanLuong <= 1);
             #region ViewBag
-            ViewBag.trangthaiChotTuyen = soLuongHoaDonChuaChot;
+            ViewBag.trangthaiChotTuyen = chiSoTieuThu.Count(p => p.TrangThaiChot == "False");
             ViewBag.chiSoTieuThu = chiSoTieuThu;
             ViewBag.isAdminHoacTruongPhong = loggedInRole;
-            ViewBag.soLuongHoaDonCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong > 1);
-            ViewBag.soLuongHoaDonKhongCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong <= 1);
-            ViewBag.soLuongHoaDon = chiSoTieuThu.Count();
+            ViewBag.soLuongHoaDonCoSanLuong = soLuongHoaDonCoSanLuong;
+            ViewBag.soLuongHoaDonKhongCoSanLuong = soLuongHoaDonKhongSanLuong;
+            ViewBag.soLuongHoaDon = soLuongHoaDonKhongSanLuong + soLuongHoaDonCoSanLuong;
+
             ViewData["nhanvien"] = db.Nhanviens.Find(nvquanly);
             ViewData["tuyen"] = db.Tuyenkhachhangs.Find(tuyenID);
             #endregion
             return View();
-        }
-
-        public List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> getDanhSachHoaDonTieuThu(int _month, int _year, int tuyenID)
-        {
-            ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> cB = new ControllerBase<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc>();
-            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = cB.Query("ChiaChiSoTieuThuKhachHang", new SqlParameter("@month", _month), new SqlParameter("@year", _year),
-            new SqlParameter("@tuyen", tuyenID)).ToList();
-            return chiSoTieuThu;
-        }
+        }        
 
 
         /// <summary>
