@@ -388,21 +388,7 @@ namespace HoaDonHaDong.Helper
             }
         }
 
-        public int getSoHoaDonTrongDanhSachKhongBinhThuong(int month, int year, int tuyenKHID, int hoaDonID)
-        {
-            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> danhSachHoaDon = filterChiSo(month, year, tuyenKHID);
-            int soHoaDon = 1;
-            foreach (var item in danhSachHoaDon)
-            {
-                if (item.HoaDonNuocID == hoaDonID)
-                {
-                    return soHoaDon;
-                }
-                soHoaDon++;
-            }
-            return soHoaDon;
-        }
-
+     
         public void generateChiSoFromNearestMonth(int currentMonth, int currentYear, int nhanVienId, int tuyenKHID)
         {
             DateTime thangNamGanNhat = getThangNamGanNhatThuocHoaDon(tuyenKHID, currentMonth, currentYear);

@@ -17,12 +17,7 @@ namespace HoaDonNuocHaDong.Controllers
         public ActionResult Index()
         {
             DateTime currDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            Backup todayBackup = db.Backups.FirstOrDefault(p => p.backup_date == currDate);
-            if (todayBackup == null)
-            {
-                backupRepository.applyBackupProcess(LoggedInUser.NguoidungID);
-            }
-            //kiểm tra ngày tháng hiện tại, nếu ngày tháng hiện tại mà lớn hơn ngày hết áp định thì cho số hộ(số định mức) = 1
+           
             var currentDate = DateTime.Now;
             ModelKhachHang modelKH = new ModelKhachHang();
             modelKH.updateKHHetHanApGia(currentDate);
