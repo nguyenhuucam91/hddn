@@ -388,7 +388,7 @@ namespace HoaDonNuocHaDong.Controllers
             obj.TiLePhiMoiTruong, 0,
             0, "",
             "", "", obj.TuyenKHID,
-            obj.TTDoc, 0, dateStart, dateEnd);             
+            obj.TTDoc, 0, dateStart, dateEnd);
 
                 HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, ChiSoCuoi.Value, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(dateEnd));
                 //approx 200ms
@@ -542,7 +542,7 @@ namespace HoaDonNuocHaDong.Controllers
             Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
 
             Chitiethoadonnuoc cT = db.Chitiethoadonnuocs.FirstOrDefault(p => p.HoadonnuocID == HoaDonID);
-           
+
             lichSuHoaDonRepository.updateLichSuHoaDon(HoaDonID, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value,
                     obj.Sohopdong, ChiSoDau.Value, ChiSoCuoi.Value, TongSoTieuThu.Value,
                     cT.SH1.Value, cS.getSoTienTheoApGia("SH1").Value,
@@ -557,7 +557,7 @@ namespace HoaDonNuocHaDong.Controllers
             obj.Tilephimoitruong.Value, 0,
             0, "",
             "", "", obj.TuyenKHID.Value,
-            obj.TTDoc.Value, 0, dateStart, dateEnd);  
+            obj.TTDoc.Value, 0, dateStart, dateEnd);
 
             themMoiSoTienPhaiNop(HoaDonID);
         }
@@ -587,13 +587,18 @@ namespace HoaDonNuocHaDong.Controllers
                 _year = Convert.ToInt16(year);
             }
 
-         
-            //load chỉ số và thông tin tách số vào đây
-            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu =  hoaDonNuocHelper.getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);           
-            int loggedInRole = getUserRole(LoggedInUser.NhanvienID);
 
+            //load chỉ số và thông tin tách số vào đây
+            #region Params
+            List<HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc> chiSoTieuThu = hoaDonNuocHelper.getDanhSachHoaDonTieuThu(_month, _year, tuyenID.Value);
+            int loggedInRole = getUserRole(LoggedInUser.NhanvienID);
             int soLuongHoaDonCoSanLuong = chiSoTieuThu.Count(p => p.SanLuong > 1);
             int soLuongHoaDonKhongSanLuong = chiSoTieuThu.Count(p => p.SanLuong <= 1);
+            DateTime thangNamGanNhat = cS.getThangNamGanNhatThuocHoaDon(tuyenID.Value, _month, _year);
+            int previousMonth = thangNamGanNhat.Month;
+            int previousYear = thangNamGanNhat.Year;
+            #endregion
+
             #region ViewBag
             ViewBag.trangthaiChotTuyen = chiSoTieuThu.Count(p => p.TrangThaiChot == "False");
             ViewBag.chiSoTieuThu = chiSoTieuThu;
@@ -601,12 +606,15 @@ namespace HoaDonNuocHaDong.Controllers
             ViewBag.soLuongHoaDonCoSanLuong = soLuongHoaDonCoSanLuong;
             ViewBag.soLuongHoaDonKhongCoSanLuong = soLuongHoaDonKhongSanLuong;
             ViewBag.soLuongHoaDon = soLuongHoaDonKhongSanLuong + soLuongHoaDonCoSanLuong;
-
+            var dsSanLuongKhongBinhThuong = cS.loadDanhSachSanLuongBatThuong(previousMonth, previousYear, _month, _year, tuyenID.Value);
+            ViewBag.soLuongKhongBinhThuong = dsSanLuongKhongBinhThuong.Count();
             ViewData["nhanvien"] = db.Nhanviens.Find(nvquanly);
             ViewData["tuyen"] = db.Tuyenkhachhangs.Find(tuyenID);
             #endregion
             return View();
-        }        
+        }
+
+
 
 
         /// <summary>
@@ -761,36 +769,15 @@ namespace HoaDonNuocHaDong.Controllers
             //thêm mới hóa đơn nước và chi tiết hóa đơn nước của tháng sau
             int KHID = db.Hoadonnuocs.Find(id).KhachhangID.Value;
             //thêm 1 records số tiền phải nộp
-            //HoaDonNuoc.themMoiHoaDonThangSau(KHID, id.Value, ChiSoCu + Sum, Convert.ToInt32(Session["nhanvien"]),null,null);
 
             //thêm vào bảng lịch sử
             Khachhang obj = db.Khachhangs.FirstOrDefault(p => p.KhachhangID == KHID);
-
-            Tuyenkhachhang tuyenKH = db.Tuyenkhachhangs.FirstOrDefault(p => p.TuyenKHID == obj.TuyenKHID);
+           
             int _month = hoaDonDacBiet.ThangHoaDon.Value;
             int _year = hoaDonDacBiet.NamHoaDon.Value;
             int ChiSoDau = chiTiet.Chisocu.Value;
             int ChiSoCuoi = chiTiet.Chisomoi.Value;
-            //Giá 
-            double dinhMuc = cS.tinhTongTienTheoDinhMuc(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value);
-            double thueBVMT = cS.tinhThue(id.Value, chiTiet.SH1.Value, chiTiet.SH2.Value, chiTiet.SH3.Value, chiTiet.SH4.Value, chiTiet.HC.Value, chiTiet.CC.Value, chiTiet.KDDV.Value, chiTiet.SXXD.Value, obj.Tilephimoitruong.Value);
-            double VAT = Math.Round(dinhMuc * 0.05, MidpointRounding.AwayFromZero);
-            //chỉ số cộng dồn
-            double tongTienHoaDon = dinhMuc + thueBVMT + VAT;
-            double congDonHDTruoc = 0;
-            //kiểm tra, nếu là record đầu tiên
-            int count = db.Lichsuhoadons.Count(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc < obj.TTDoc);
-            if (count == 0)
-            {
-                congDonHDTruoc = 0;
-            }
-            else
-            {
-                congDonHDTruoc = db.Lichsuhoadons.Where(p => p.TuyenKHID == obj.TuyenKHID.Value && p.ThangHoaDon == _month && p.NamHoaDon == _year && p.TTDoc.Value < obj.TTDoc.Value).Sum(p => p.TongCong.Value);
-            }
-            double tongCongCongDon = tongTienHoaDon + congDonHDTruoc;
-            //thu ngân
-            String thuNgan = obj.TTDoc + "/" + tuyenKH.Matuyen + " - " + soHoaDon;
+           
 
             lichSuHoaDonRepository.updateLichSuHoaDon(id.Value, _month, _year, obj.Ten, obj.Diachi, obj.Masothue, obj.MaKhachHang, obj.TuyenKHID.Value, obj.Sohopdong, ChiSoDau, ChiSoCuoi, Sum,
               SH1, cS.getSoTienTheoApGia("SH1").Value,
@@ -801,11 +788,13 @@ namespace HoaDonNuocHaDong.Controllers
               CC, cS.getSoTienTheoApGia("CC").Value,
               SX, cS.getSoTienTheoApGia("SX-XD").Value,
               KD, cS.getSoTienTheoApGia("KDDV").Value,
-              dinhMuc,
-              5, VAT, obj.Tilephimoitruong.Value, thueBVMT,
-              tongTienHoaDon, ConvertMoney.So_chu(tongTienHoaDon),
-              db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai2 + "<br/>" + db.Quanhuyens.Find(obj.QuanhuyenID).DienThoai3,
-              thuNgan, obj.TuyenKHID.Value, obj.TTDoc.Value, tongCongCongDon, startDate, endDate);
+                 0, 5, 0,
+            obj.Tilephimoitruong.Value, 0,
+            0, "",
+            "", "", obj.TuyenKHID.Value,
+            obj.TTDoc.Value, 0, startDate, endDate);
+
+            HoaDonNuocHaDong.Helper.HoaDonNuoc.themMoiHoaDonThangSau(KHID, ChiSoCuoi, LoggedInUser.NhanvienID.Value, _month, _year, Convert.ToDateTime(endDate));
             themMoiSoTienPhaiNop(id.Value);
 
             return RedirectToAction("Index", new { to = to, nhanvien = nhanvien, tuyen = tuyen, thang = thang, nam = nam });
@@ -1204,7 +1193,7 @@ namespace HoaDonNuocHaDong.Controllers
 
             return RedirectToAction("Index");
         }
-        
+
 
         /// <summary>
         /// Hàm dùng để sao chép danh sách khách hàng không sản lượng từ tháng trước

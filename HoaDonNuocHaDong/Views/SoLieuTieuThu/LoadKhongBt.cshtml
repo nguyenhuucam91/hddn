@@ -25,10 +25,7 @@
     HoaDonNuocHaDong.Helper.KiemDinh kiemDinh = new HoaDonNuocHaDong.Helper.KiemDinh();
 }
 
-@section Scripts {
-    <script src="~/Assets/js/jquery.dataTables.min.js"></script>
-    <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
-}
+
 @section Styles {
     <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
     <style>
@@ -76,7 +73,7 @@
                                         <th>Sản lượng</th>
                                         <th>Số khoán</th>
                                         <th>Kiểm định</th>
-                                        <th data-toggle="tooltip" data-placement="top" title="Màu đỏ là danh sách những khách hàng có áp giá đặc biệt trong tháng này">Hướng dẫn</th>
+                                        <th data-toggle="tooltip" data-placement="top" title="Màu đỏ là danh sách những khách hàng có áp giá đặc biệt trong tháng này">Áp giá đặc biệt</th>
                                     </tr>
                                     <tr>
                                         <td colspan="10"><b>(@tuyenObj.Matuyen - @tuyenObj.Ten) - (@nhanVienObj.MaNhanVien - @nhanVienObj.Ten) - (@month / @year)</b></td>
@@ -91,7 +88,6 @@
                                     }
                                     @foreach (var item in kH)
                                     {
-                                        int sohoaDonDanhSachKhongBinhThuong = cS.getSoHoaDonTrongDanhSachKhongBinhThuong(month, year, tuyenID, item.HoaDonNuocID);
                                         int hoaDonID = Convert.ToInt32(item.HoaDonNuocID);
 
                                         Hoadonnuoc thisMonthReceipt = db.Hoadonnuocs.FirstOrDefault(p => p.KhachhangID == item.KhachHangID && p.ThangHoaDon == month && p.NamHoaDon == year);
@@ -148,7 +144,7 @@
 
 
                                             <td><input type="text" style="width:60px" value="@item.ChiSoCu" readonly /></td>
-                                            <td><input class="negNumber" min="0" placeholder="@item.ChiSoMoi" name="chiSoMoi" data-sohoadon="@sohoaDonDanhSachKhongBinhThuong" data-khid="@item.KhachHangID" id="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:80px"></td>
+                                            <td><input class="negNumber" min="0" placeholder="@item.ChiSoMoi" name="chiSoMoi" data-khid="@item.KhachHangID" id="@i.ToString()" data-hoadonid="@item.HoaDonNuocID" style="width:80px"></td>
                                             <td><input type="text" data-sohoadon="" style="width:60px" name="sanLuong" readonly value="@item.SanLuong" /></td>
                                             <!-- so khoán -->
                                             <td><input data-khid="@item.KhachHangID" data-hoadonid="@item.HoaDonNuocID" name="soKhoan" style="width:80px" placeholder="0" value="@item.SoKhoan" /></td>
@@ -168,21 +164,25 @@
                                                     <input type="checkbox" class="toggle" disabled />
                                                 }
                                             </td>
-                                            <td>
-                                                <!-- Áp giá đặc biệt -->
-                                                @if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
-                                                {
+
+                                            <!-- Áp giá đặc biệt -->
+                                            @if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
+                                            {
+                                                <td class="hoaDonNuoc__apgiadacbiet--show">
                                                     <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID,
-                                                            nhanvien=nVQuanLi,tuyen = tuyenID,sohoadon = sohoaDonDanhSachKhongBinhThuong})" style="color:red">Áp giá đặc biệt</a>
-                                                }
-                                                else
-                                                {
+                                                            nhanvien=nVQuanLi,tuyen = tuyenID,sohoadon = 0, chisotieuthu = @item.SanLuong})" style="color:red">Áp</a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
                                                     <a href="@Url.Action("Apgiadacbiet", "Solieutieuthu", new { @id = item.HoaDonNuocID, @month = month, @year = year, to = toID,
-                                                            nhanvien=nVQuanLi,tuyen = tuyenID,sohoadon = sohoaDonDanhSachKhongBinhThuong})">Áp giá đặc biệt</a>
-                                                }
-                                            </td>
+                                                            nhanvien=nVQuanLi,tuyen = tuyenID, sohoadon = 0, chisotieuthu = @item.SanLuong})">Áp</a>
+                                                </td>
+                                            }
+
                                         </tr>
-                                                i++;
+                                            i++;
                                     }
                                 </tbody>
 
@@ -202,21 +202,24 @@
     </div>
 </div>
 
-
-<script>
-    $(function () {
-        //chốt số liệu khi ấn vào nút chốt số liệu
-        $("#chotSoLieu").click(function () {
-            var hasSanLuongAmHtml = $("tr").hasClass('hasSanLuongAm');
-            if (hasSanLuongAmHtml) {
-                alert('Không chốt được sản lượng âm, xin hãy kiểm tra lại');
-            } else {
-                xacnhanChotSoLieu = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");
-                if (xacnhanChotSoLieu) {
-                    this.form.submit();
+@section Scripts {
+    <script src="~/Assets/js/jquery.dataTables.min.js"></script>
+    <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
+    <script>
+        $(function () {
+            //chốt số liệu khi ấn vào nút chốt số liệu
+            $("#chotSoLieu").click(function () {
+                var hasSanLuongAmHtml = $("tr").hasClass('hasSanLuongAm');
+                if (hasSanLuongAmHtml) {
+                    alert('Không chốt được sản lượng âm, xin hãy kiểm tra lại');
+                } else {
+                    xacnhanChotSoLieu = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");
+                    if (xacnhanChotSoLieu) {
+                        this.form.submit();
+                    }
                 }
-            }
 
-        }); //chốt số liệu
-    });
-</script>
+            }); //chốt số liệu
+        });
+    </script>
+}

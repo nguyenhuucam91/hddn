@@ -321,7 +321,7 @@
                                                                                 {
                                                                                     if (helper.isApGiaDacBiet(item.HoaDonNuocID) > 0)
                                                                                     {
-                                                                                        <td style="background-color:#ffcc00">
+                                                                                        <td class="hoaDonNuoc__apgiadacbiet--show">
                                                                                             <a style="color:red" class="apgiadacbiet" data-hoadonid="@item.HoaDonNuocID" data-to="@toID" data-month="@month"
                                                                                                data-year="@year" data-nhanvienid="@nhanVienID" data-tuyen="@tuyenID" data-sohoadon="@i.ToString()">Áp</a>
                                                                                         </td>
@@ -418,7 +418,7 @@
             var month = $(this).data('month'); var patternMonth = "&month=" + month;
             var year = $(this).data('year'); var patternYear = "&year=" + year;
             var nhanVienId = $(this).data('nhanvienid'); var patternNhanVienId = "&nhanvien=" + nhanVienId;
-            var soHoaDon = $(this).data('sohoadon'); var patternSoHoaDon = "&sohoadon=" + soHoaDon;
+            var soHoaDon = 0; var patternSoHoaDon = "&sohoadon=" + soHoaDon;
             var chiSoTieuThu = $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoTieuThu').find('input[name="sanLuong"]').val();
             var chiSoKhoan = $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val() == "" ? 0 : $(this).parent('td').siblings('.chiSoKhoan').find('input[name="soKhoan"]').val();
             var tongSoTieuThu = parseInt(chiSoTieuThu);

@@ -1476,3 +1476,11 @@ table.fc-border-separate {
 .solieutieuthu{
     color: #0e08fc;
 }
+
+form input, form select {
+    font-size:14px;
+}
+
+.hoaDonNuoc__apgiadacbiet--show {
+    background-color: #ffcc00;
+}

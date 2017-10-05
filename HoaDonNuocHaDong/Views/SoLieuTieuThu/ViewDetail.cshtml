@@ -14,8 +14,16 @@
     HoaDonHaDongEntities db = new HoaDonHaDongEntities();
     HoaDonNuocHaDong.Helper.HoaDonNuoc hoaDonNuoc = new HoaDonNuocHaDong.Helper.HoaDonNuoc();
     HoaDonNuocHaDong.Controllers.NhanvienController nhanVienController = new HoaDonNuocHaDong.Controllers.NhanvienController();
+    int soLuongHoaDonBatThuong = ViewBag.soLuongKhongBinhThuong;
 }
 
+@{
+    String toID = Request.QueryString["toID"];
+    String month = Request.QueryString["month"];
+    String year = Request.QueryString["year"];
+    String tuyenID = Request.QueryString["tuyenID"];
+    String nhanVienId = Request.QueryString["nvquanly"];
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/Assets/css/fixedHeader.dataTables.min.css" />
@@ -82,8 +90,8 @@
                             - <a class="toggle-vis" data-column="9">Sản lượng</a>
                         </div>
                         <div class="pull-right">
-                            <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
-                        </div>
+                                <p class="pull-right">Tổng số: <span>@tongSoLuongHoaDon</span> hóa đơn (@soHoaDonCoSanLuong:có sản lượng - @soHoaDonKhongCoSanLuong:không có sản lượng)</p>
+                            </div>
                     </div>
                     <!--Hết tắt bật cột-->
                     @{
@@ -120,15 +128,15 @@
 
                                     <div class="pull-right">
                                         <form action="/solieutieuthu?isback=1" method="post">
-                                            <input type="hidden" name="to" value="@Request.QueryString["toID"]" />
-                                            <input type="hidden" name="thang" value="@Request.QueryString["month"]" />
-                                            <input type="hidden" name="nam" value="@Request.QueryString["year"]" />
-                                            <input type="hidden" name="tuyen" value="@Request.QueryString["tuyenID"]" />
-                                            <input type="hidden" name="nhanvien" value="@Request.QueryString["nvquanly"]" />
+                                            <input type="hidden" name="to" value="@toID" />
+                                            <input type="hidden" name="thang" value="@month" />
+                                            <input type="hidden" name="nam" value="@year" />
+                                            <input type="hidden" name="tuyen" value="@tuyenID" />
+                                            <input type="hidden" name="nhanvien" value="@nhanVienId" />
                                             <button type="submit" class="btn btn-success">Trở lại</button>
                                         </form>
 
-                                        <form action="/Solieutieuthu/chotSoLieu?toID=@Request.QueryString["toID"]&tuyenID=@Request.QueryString["tuyenID"]&month=@Request.QueryString["month"]&year=@Request.QueryString["year"]" method="post">
+                                        <form action="/Solieutieuthu/chotSoLieu?toID=@toID&tuyenID=@tuyenID&month=@month&year=@year" method="post">
                                             <!-- Nếu là admin hoặc số lượng chưa chốt > 0-->
                                             @if (adminVaTruongPhong == 0 || adminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG || soLuongHoaDonChuaChot > 0)
                                             {
@@ -142,7 +150,7 @@
                         </thead>
 
                         <tbody>
-
+                            <!-- Bảng chi tiết hóa đơn -->
                             @foreach (var item in chiSoTieuThu)
                             {
                                 int hoaDonID = item.HoaDonNuocID;
@@ -207,16 +215,18 @@
                                                                             <td style="color:blue"><label>@KD</label></td>
                                                                         </tr>
 
- sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
- sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
- sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
- sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
- sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
- sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
- sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
- sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
- sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
+                 sumSanLuong += item.SanLuong == null ? 0 : (double)item.SanLuong;
+                 sumSH1 += item.SH1 == "" ? 0.0 : Convert.ToDouble(item.SH1);
+                 sumSH2 += item.SH2 == "" ? 0.0 : Convert.ToDouble(item.SH2);
+                 sumSH3 += item.SH3 == "" ? 0 : Convert.ToDouble(item.SH3);
+                 sumSH4 += item.SH4 == "" ? 0 : Convert.ToDouble(item.SH4);
+                 sumHC += item.HC == "" ? 0 : Convert.ToDouble(item.HC);
+                 sumCC += item.CC == "" ? 0 : Convert.ToDouble(item.CC);
+                 sumSX += item.SXXD == "" ? 0 : Convert.ToDouble(item.SXXD);
+                 sumKD += item.KDDV == "" ? 0 : Convert.ToDouble(item.KDDV);
+
                             }
+                            <!-- End table -->
                         </tbody>
                         <tfoot>
                             <tr role="row">
@@ -244,46 +254,34 @@
 </div> <!-- /main-inner -->
 <!-- Script để đối màu dòng trong trường hợp áp giá tổng hợp và đặc biệt -->
 @section Scripts{
-<script type="text/javascript">
-    $(function () {
+    <script src="~/Assets/js/jquery.dataTables.min.js"></script>
+    <script src="~/Assets/js/dataTables.fixedHeader.min.js"></script>
 
-        //chốt số liệu khi ấn vào nút chốt số liệu
-        $("#chotSoLieu").click(function () {
-            @{
-                int month = Convert.ToInt32(Request.QueryString["month"]);
-                int year = Convert.ToInt32(Request.QueryString["year"]);
-                int selectedTuyen = Convert.ToInt32(Request.QueryString["tuyenID"]);
-                int nhanVienQLy = Convert.ToInt32(Request.QueryString["nvquanly"]);
-                bool hasSLKhongBT = true;
-                HoaDonNuocHaDong.Controllers.SoLieuTieuThuController ctl = new HoaDonNuocHaDong.Controllers.SoLieuTieuThuController();
-                int previousMonth = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Month;
-                int previousYear = cS.getThangNamGanNhatThuocHoaDon(selectedTuyen, month, year).Year;
+    <script type="text/javascript">
+        $(function () {
 
-                var dsSanLuongKhongBinhThuong = cS.loadDanhSachSanLuongBatThuong(previousMonth, previousYear, month, year, selectedTuyen);
-                if (dsSanLuongKhongBinhThuong.Count > 0)
-                {
-                    hasSLKhongBT = true;
-                }
-            }
+            //chốt số liệu khi ấn vào nút chốt số liệu
+            $("#chotSoLieu").click(function () {
 
-            @if (hasSLKhongBT)
+
+                @if (soLuongHoaDonBatThuong > 0)
             {
                 <text>
-            var isConfirmed = confirm("Danh sách này có khách hàng có sản lượng không bình thường. Bạn có muốn chỉnh sửa không?. ");
-            //nếu muốn chỉnh sửa sản lượng không BT thì load trang load không bình thường
-            if (isConfirmed) {
-                window.open("/solieutieuthu/loadkhongbt?toID=@Request.QueryString["toID"]&tuyenID=@selectedTuyen&month=@month&year=@year&nhanvienInt=@nhanVienQLy");
-            }
+                var isConfirmed = confirm("Danh sách này có khách hàng có sản lượng không bình thường. Bạn có muốn chỉnh sửa không?. ");
+                //nếu muốn chỉnh sửa sản lượng không BT thì load trang load không bình thường
+                if (isConfirmed) {
+                    window.open("/solieutieuthu/loadkhongbt?toID=@toID&tuyenID=@tuyenID&month=@month&year=@year&nhanvienInt=@nhanVienId");
+                }
 
-            </text>
+                </text>
             }
             //nếu không có sản lượng bất thường nào
             else
             {
                 <text>
-            //xác nhận lần 2
-            var secondConfirm = "";
-            @if (adminVaTruongPhong == 0 ||  adminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
+                //xác nhận lần 2
+                var secondConfirm = "";
+                @if (adminVaTruongPhong == 0 ||  adminVaTruongPhong == HoaDonNuocHaDong.Helper.ChucVuHelper.TRUONGPHONG)
             {
                 <text>secondConfirm = confirm("Bạn có thực sự muốn chốt số liệu không?");</text>
             }
@@ -291,21 +289,21 @@
             {
                 <text>secondConfirm = confirm("Nếu xác nhận, chỉ số sẽ không chỉnh sửa được nữa, bạn có chắc chắn muốn chốt số liệu không");</text>
             }
-            if (secondConfirm) {
-                this.form.submit();
-            }
-            </text>
+                if (secondConfirm) {
+                    this.form.submit();
+                }
+                </text>
         }
+            });
+          
+
+            @{
+            int tongHop = HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
+            }
+
+            $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
+
         });
 
-        @{
-            int tongHop = HoaDonNuocHaDong.Helper.KhachHang.TONGHOP;
-        }
-
-
-        $("tr.@tongHop").css({ "background-color": "#29a286", "color": "black" });
-
-    });
-
-</script>
-    }
+    </script>
+}
