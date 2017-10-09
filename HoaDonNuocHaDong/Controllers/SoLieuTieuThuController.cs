@@ -308,7 +308,7 @@ namespace HoaDonNuocHaDong.Controllers
         {
             int _month = thang;
             int _year = nam;
-            int _TongSoTieuThu = 0;
+            int _TongSoTieuThu = TongSoTieuThu.Value;
             int _tongKiemDinh = 0;
             int nhanVienId = 0;
 
@@ -322,19 +322,14 @@ namespace HoaDonNuocHaDong.Controllers
                 new SqlParameter("@hoaDonId", HoaDonID)
                 ).FirstOrDefault();
 
-
-            if (obj.ChiSoTruocKiemDinh != null)
+            if (obj.ChiSoTruocKiemDinh != 0)
             {
                 var kiemDinh1 = obj.ChiSoTruocKiemDinh.Value - ChiSoDau.Value;
                 var kiemDinh2 = ChiSoCuoi.Value - obj.ChiSoSauKiemDinh.Value;
                 _tongKiemDinh = kiemDinh1 + kiemDinh2;
                 _TongSoTieuThu = _tongKiemDinh;
             }
-            else
-            {
-                _TongSoTieuThu = TongSoTieuThu.Value;
-            }
-
+           
             if (obj != null)
             {
                 SqlConnection con = new SqlConnection(HoaDonNuocHaDong.Config.DatabaseConfig.getConnectionString());
