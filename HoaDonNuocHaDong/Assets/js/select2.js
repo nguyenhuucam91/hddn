@@ -473,7 +473,7 @@ $(document).ready(function () {
             var truocKD = isToggledCheckbox.data("truockd");
             var sauKD = isToggledCheckbox.data("saukd");
             //lấy hiệu số sau khi kiểm định
-            hieuSo = (truocKD - chiSoCuValue) + (chiSoMoiValue - sauKD);
+            hieuSo = (truocKD - chiSoCuValue) + (chiSoMoiValue - sauKD) + parseInt(soKhoan);
             var sanLuongValue = $(this).parent().next("td").find("input").val(hieuSo);
 
         } else {

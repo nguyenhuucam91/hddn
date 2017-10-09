@@ -326,7 +326,7 @@ namespace HoaDonNuocHaDong.Controllers
             {
                 var kiemDinh1 = obj.ChiSoTruocKiemDinh.Value - ChiSoDau.Value;
                 var kiemDinh2 = ChiSoCuoi.Value - obj.ChiSoSauKiemDinh.Value;
-                _tongKiemDinh = kiemDinh1 + kiemDinh2;
+                _tongKiemDinh = kiemDinh1 + kiemDinh2 + SoKhoan;
                 _TongSoTieuThu = _tongKiemDinh;
             }
            
