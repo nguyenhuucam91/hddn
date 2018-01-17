@@ -506,7 +506,7 @@ namespace HoaDonHaDong.Helper
             var hoaDonThangGanNhat = (from i in db.Hoadonnuocs
                                       join kH in db.Khachhangs on i.KhachhangID equals kH.KhachhangID
                                       join cT in db.Chitiethoadonnuocs on i.HoadonnuocID equals cT.HoadonnuocID
-                                      where kH.TuyenKHID == tuyenKHID && i.Tongsotieuthu > 0
+                                      where kH.TuyenKHID == tuyenKHID 
                                       select new HoaDonNuocHaDong.Models.SoLieuTieuThu.HoaDonNuoc
                                       {
                                           Thang = i.ThangHoaDon.Value,
